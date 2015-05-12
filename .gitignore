@@ -1,0 +1,24 @@
+# Package Files #
+*.jar
+*.war
+*.ear
+*.gz
+
+# Folders
+/bin/*
+/target/*
+
+# Normal Files
+.settings
+.idea
+.project
+.classpath
+*.class
+*.iml
+*.log
+*.pdf
+*.aux
+*.ipr
+*.iws
+~*
+*.ns
