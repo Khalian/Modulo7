@@ -12,6 +12,19 @@ my %note_degree_map_inverse;
 # The number of nodes in western music
 my $num_notes_in_western_music = 12;
 
+# A hash map which contains as key song number and as value interval frequencies of 
+# that song
+my %interval_frequency_map; 
+
+# The number of clusters parameter
+my $num_clusters = 5;
+
+# A hashmap which maps song number with cluster number
+my %cluster_membership;
+
+# Number of songs processed while creating the interval frequency map
+my $song_number;
+
 # Initializes the note degree map
 sub init_note_degree_map {
 
@@ -64,6 +77,13 @@ sub transposeKey {
     
     # The new key of the song to be acheived
     my $transpose_key = $_[2];
+    
+    if (not defined($current_key) or length($current_key) == 0) {
+        # Estimate the key given the data
+        # &estimate_key();
+        # Hack right now, will change after key estimation strategy is defined
+        $current_key = 'c';
+    }
     
     # The interval distance between the new and the old key
     my $interval_distance_of_key = 
@@ -130,11 +150,58 @@ sub constructIntervalVector {
         
         $previousNote = $note;
     }
+    
+    return %interval_frequency_vector;
 }
+
+# Gets the cosine similarity between two vectors
+sub cosine_sim_a {
+
+    my $vec1 = shift;
+    my $vec2 = shift;
+
+    my $num     = 0;
+    my $sum_sq1 = 0;
+    my $sum_sq2 = 0;
+
+    my @val1 = values %{ $vec1 };
+    my @val2 = values %{ $vec2 };
+
+    # determine shortest length vector. This should speed 
+    # things up if one vector is considerable longer than
+    # the other (i.e. query vector to document vector).
+
+    if ((scalar @val1) > (scalar @val2)) {
+	my $tmp  = $vec1;
+	   $vec1 = $vec2;
+	   $vec2 = $tmp;
+    }
+
+    # calculate the cross product
+
+    my $key = undef;
+    my $val = undef;
+
+    while (($key, $val) = each %{ $vec1 }) {
+	$num += $val * ($$vec2{ $key } || 0);
+    }
+
+    # calculate the sum of squares
+
+    my $term = undef;
+
+    foreach $term (@val1) { $sum_sq1 += $term * $term; }
+    foreach $term (@val2) { $sum_sq2 += $term * $term; }
+
+    return ( $num / sqrt( $sum_sq1 * $sum_sq2 ));
+}
+
 
 # Read every note stream files and construct interval vectors and note vectors
 sub readNoteStreamFiles {
     my @notestream_files = glob("*.nsf");
+    
+    $song_number = 1;
     
     foreach my $filename (@notestream_files) {
     
@@ -165,15 +232,48 @@ sub readNoteStreamFiles {
         
         # Transpose the key of the song to key of A as a part of the standardization
         my @normalized_note_stream_of_song  = &transposeKey(\@notestream_of_song, $key_of_song, 'a');
-        
-        # my %intervalFreqs = &constructIntervalVector(\@normalized_note_stream_of_song);
-        &constructIntervalVector(\@normalized_note_stream_of_song);
        
+        my %interval_frequency_vector = &constructIntervalVector(\@normalized_note_stream_of_song);
+      
+        $interval_frequency_vector{$song_number} = %interval_frequency_vector;
+        $song_number += 1; 
     }
 }
+
+# This method performs k means clustering over interval frequencies for all songs
+sub kMeansClusterSongs {
+
+    # A hashmap containing the centroids of the cluster, a centroid has key = centroid number
+    # and value = hashmap of a note stream
+    my %centroids;
+    
+    # Heuristic for initialization, space out the songs into equal width intervals
+    # and choose randomly from these intervals 
+    my $spacing = int($song_number / $num_clusters);
+    
+    my $centroid_number = 1;
+    
+    # Initializing original centroid points
+    for (my $i = 1; $i <= $song_number; $i += $spacing)
+    {
+        my $randomPoint = int(rand($spacing)) + $i;
+        $centroids{$centroid_number} = $interval_frequency_map{$randomPoint};
+        $centroid_number += 1;
+    }
+    
+    # Hacky convergence criteria, will fix this
+    for (my $i = 1; i <= 100; $i++)
+    {
+        while (my ($songNum, $intervalVector) = each(%interval_frequency_map)) {
+            my %intervalFreqVector = %$intervalVector;
+        }
+    }
+}
+
 sub main {
     &init_note_degree_map;
     &readNoteStreamFiles;
+    &kMeansClusterSongs;
 }
 
 &main;
