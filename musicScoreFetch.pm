@@ -1,3 +1,7 @@
+#!/usr/bin/perl
+use strict;
+use warnings;
+
 use HTTP::Request;
 use HTTP::Response;
 use LWP::UserAgent;
@@ -15,9 +19,7 @@ my $key = undef;
 # The song is characterized by the note stream, or the stream of notes
 my @noteStream;
 
-my $ua = new LWP::UserAgent;
-
-my $ROBOT_NAME = 'SheetReader/1.0';
+my $ROBOT_NAME = 'NoteStreamReader/1.0';
 my $ROBOT_MAIL = 'asanyal4@jhu.edu';
 
 my $ua = new LWP::UserAgent;  # create an new LWP::UserAgent
@@ -29,7 +31,7 @@ $ua->from ( $ROBOT_MAIL );    # and give an email address in case anyone would
 my $fileNumber = 0;                              
 open(FILE, "songSources.txt") or die ("Cant open the song listings");
 while(<FILE>){                   
-    $link = $_;
+    my $link = $_;
     chomp $link;
    
     my $request  = new HTTP::Request 'GET' => $link;
@@ -78,7 +80,7 @@ while(<FILE>){
           push @noteStream, lc($elem);
        } elsif (length($elem) == 2 and $elem =~ m/[a-zA-Z]#/) {
           push @noteStream, lcfirst($elem);
-       } elsif ($elem =~ Scale) {
+       } elsif ($elem =~ "Scale") {
           # According to the nature of the inputs, the scale resides in the next line
           $scale_key_info_linenumber = $line_number + 1;
        }
@@ -86,18 +88,19 @@ while(<FILE>){
        $line_number += 1;
     }
 
-    $scaleKeyInfo = $bodyElements[$scale_key_info_linenumber];
+    my $scaleKeyInfo = $bodyElements[$scale_key_info_linenumber];
 
     $key = lc(substr($scaleKeyInfo, 0, 1));
-    $scaleLetter = substr($scaleKeyInfo, 1, 1);
+    my $scaleLetter = substr($scaleKeyInfo, 1, 1);
 
+    # As of this moment i am only supporting minor and major scales
     if ($scaleLetter eq "m") {
         $scale = "MINOR"; 
     } elsif ($scaleLetter eq "M") {
         $scale = "MAJOR";
     }
     
-    open(my $notesFile, ">", "NotesOf".$fileNumber.".ns");
+    open(my $notesFile, ">", "NotesOf".$fileNumber.".nsf");
     
     print $notesFile "Scale:".$scale."\n";
     print $notesFile "Key:".$key."\n";
