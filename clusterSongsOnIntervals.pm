@@ -240,6 +240,13 @@ sub readNoteStreamFiles {
     }
 }
 
+# Assigns the cluster member ship of a given song Num and puts that value in 
+# cluster_membership hashmap
+sub assignClusterMemberShip {
+    my assignedCluster
+
+}
+
 # This method performs k means clustering over interval frequencies for all songs
 sub kMeansClusterSongs {
 
@@ -266,6 +273,8 @@ sub kMeansClusterSongs {
     {
         while (my ($songNum, $intervalVector) = each(%interval_frequency_map)) {
             my %intervalFreqVector = %$intervalVector;
+            @assignClusterMemberShip(\%intervalFreqVector, \%centroids, $songNum);
+            @recomputeClusters(\%centroids);
         }
     }
 }
