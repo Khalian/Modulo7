@@ -28,6 +28,12 @@ my %song_num_name_hash = ();
 # The number of songs in the analysis
 my $song_number = 1;
 
+# The number of relevant documents that the user wishes to view
+my $num_relevant;
+
+# The default number of relevant documents that a user wishes to view
+my $default_num_relevant = 10;
+
 # Construct the stop list hash
 foreach my $word (@stopWords)
 {
@@ -76,6 +82,16 @@ sub readInputSentence {
     print "Please input some text to indicate a lyrical preference: ";
     my $input_line = <STDIN>;
     
+    print "Please input the number of songs you wish to view in rank order:";
+    $num_relevant = <STDIN>;
+    
+    # Cant accept negative numbers so take default value
+    if ($num_relevant < 0) 
+    {
+        print "You input a negative number which is not valid, taking default value ", $default_num_relevant, "\n";
+        $num_relevant = $default_num_relevant;
+    }
+    
     my @input_words = split /\s+/, $input_line;
     
     # Construct the stop list hash
@@ -90,10 +106,18 @@ sub presentRankOrder {
 
     # Sort hashmap based on descending order of values 
     my @simOrderSortedKeys = sort { $similarity_map{$b} <=> $similarity_map{$a} } keys(%similarity_map);
+    
+    # To make the array start from index = 1
+    unshift @simOrderSortedKeys, -1;
 
-    for my $sim (@bestSims) {
-        print $sim." ";
-    } 
+    # You cant view more relevant documents than the number of crawled songs, so take min
+    my $view_relevant = ($song_number - 1, $num_relevant)[$song_number - 1 > $num_relevant];
+    
+    print "The relevant songs are in files: \n";    
+    
+    for my $index(1..$view_relevant) {
+        print $song_num_name_hash{$simOrderSortedKeys[$index]}, "\n";
+    }
 }
 
 # Compute similarities of query with 
@@ -120,6 +144,9 @@ sub cosine_sim_a {
 
     my @val1 = values %{ $vec1 };
     my @val2 = values %{ $vec2 };
+    
+    # For debugging vector lengths passed to similarity measures.
+    # print scalar (@val1), " " ,scalar (@val2), "\n";
 
     # determine shortest length vector. This should speed 
     # things up if one vector is considerable longer than
