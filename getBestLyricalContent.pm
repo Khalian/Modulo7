@@ -73,6 +73,7 @@ sub readLyricsFiles {
 
 # Reads the input sentence and constructs query vector from it
 sub readInputSentence {
+    print "Please input some text to indicate a lyrical preference: ";
     my $input_line = <STDIN>;
     
     my @input_words = split /\s+/, $input_line;
@@ -84,20 +85,27 @@ sub readInputSentence {
     }
 }
 
+# Presents the rank order based on number of preferences given by user
+sub presentRankOrder {
+
+    # Sort hashmap based on descending order of values 
+    my @simOrderSortedKeys = sort { $similarity_map{$b} <=> $similarity_map{$a} } keys(%similarity_map);
+
+    for my $sim (@bestSims) {
+        print $sim." ";
+    } 
+}
+
 # Compute similarities of query with 
 sub computeSimilarities {
 
     for my $index (1..$song_number - 1) {
+       
         my $sim = &cosine_sim_a($lyrics_frequencies[$index], \%input_sentence_hash);
-	    
-	    my $song_name = $song_num_name_hash{$index};
 	   
 	    # Store the similarities along with the song name
-	    $similarity_map{$song_name} = $sim;
-	    
-	    
+	    $similarity_map{$index} = $sim;
     }
-
 }
 
 # Gets the cosine similarity between two vectors
@@ -143,9 +151,11 @@ sub cosine_sim_a {
 }
 
 sub main {
+    print "WELCOME TO THE LYRICAL ANALYSIS COMPONENT \n";
     &readLyricsFiles;
     &readInputSentence;
     &computeSimilarities;
+    &presentRankOrder
 }
 
 &main;
