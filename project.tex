@@ -87,6 +87,7 @@
 \newcommand{\eeao}{\end{eqnarray*}\noindent}
 \newcommand{\beam}{\begin{eqnarray}}
 \newcommand{\eeam}{\end{eqnarray}\noindent}
+\usepackage{hyperref}
 
 \newcommand{\halmos}{\hfill\mbox{\qed}\\}
 \newcommand{\fct}{function}
@@ -123,7 +124,8 @@
 %%%%%%%%%%%%%%%%%%%
 \section*{Abstract}
 The web contains a vast pleathora of music translated into text format. Musical repositories include lyrics, chord charts, note sequences, sheet music etc. Moreover there are many software available on the web to convert songs into frequency distributions, from which we can obtain information on the sound engineering aspects of songs.\\\\
-While individual software exists which addresses some of these issues, there is no holistic framework in existence which addresses all of these concerns to present a comprehensive analysis of music. We present an implementation "Modulo7" which attempts to address some of these issues. You can find the source code of Modulo7 here https://github.com/Khalian/WSDAlphaExpansion \\\\
+While individual software exists which addresses some of these issues, there is no holistic framework in existence which addresses all of these concerns to present a comprehensive analysis of music. We present an implementation "Modulo7" which attempts to address some of these issues. You can find the source code of Modulo7 here \href{https://github.com/Khalian/Modulo7}{\textbf{MODULO 7 SOURCE CODE}}
+ \\\\
 Modulo7 has multiple features. 
 \begin{enumerate}
 \item A crawler which obtains lyrics and note contains by parsing lyrics sites.
@@ -158,17 +160,44 @@ The Crawler works as follows:-
 \end{enumerate}
 
 \section*{Note Analyzer}
-The note analyzer is called via classifySongOnIntervals. It reads the notestream files created by buildSongSources.pm and then generates interval frequency vectors. The description of these vectors are given in the interval analysis subsection.
+The note analyzer is called via note\_analyzer.pm. It reads the notestream files created by buildSongSources.pm and then generates interval frequency vectors. The description of these vectors are given in the interval analysis subsection.
 \subsection*{Interval Analysis}
 Each interval between two notes gives a distinct tone to the song. For instance an interval = 1  is called "minor second" which gives a tense sadness to the tone. Similarly interval = 7 is called a "perfect fifth" which gives a sense of power to the tone. Similarly different intervals express different moods. \\\\
 Our interval analysis part leverages the relative frequencies of the intervals in the song. Given a notestream, we can calculate the intervals between every two successive notes. We then count the frequency of each interval and store it into a interval frequency vector. This creates a basic vector space of songs. 
-\subsection*{Mood Analysis and Song Classification}
+\subsection*{Mood Analysis}
 Now after the interval interval frequency vector space is generated, we can perform various analysis on top of it. For instance we can codify hand crafted rules to ascertain the genre of the song. For instance a prevalance of perfect fifths is a strong indication of the song being a rock song. Similarly a predominance of minor intervals (minor thirds, minor seconds etc) can classify the song as being sad. \\\\
-We also take into account the scale of the song. The scale is directly acquired 
+In order to quantify these analyses we define three objective measures:-
+\begin{enumerate}
+\item Happiness index : The fraction of major intervals in the song. The more major intervals there are (2, 4, 6), the more happier the song sounds. 
+\item Sadness index : The fraction of minor intervals in the song. The more minor intervals there are (1, 3, 5), the more sadder the song sounds. 
+\item Power index : The fraction of perfect intervals in the song. The more perfect intervals there are (7, 8), the more neutral/power the tone projects. For example rock songs have a disproportionately higher number of perfect fifths (interval = 7) in them.
+\item Tension index : The fraction of interval = 6 in songs. This leads to an unresolved, tense tone in the song. This interval is very rarely seen in songs.
+\end{enumerate}
+We also take into account the scale of the song. The scale is directly acquired by the crawler while parsing the lyrics site. However if the scale is not listed, we assume its a minor scalw since it is the most commonly occuring scale in music. (the method required to estimate the key of a song from its note requires advanced concepts of music theory which is out of scope of this project). We add a small weight to the index depending on the scale (for major scale add weight to happiness index and similarly for minor scale add weight to sadness index). \\
+We present this analysis to the user. Qualitatively user can compare the four indices to judge what mood the song present. Note this does not take into account which parts of the song express what mood, its a rather coarse analysis.
 
 \section*{Lyrics Analyzer}
+We have created a lyrics analyzer(lyrics\_analyzer.pm) that acts as a ranking engine/recommender system based on user input. From the output of the ".lyrics" file from the crawler, the note analyzer reads files and constructs the lyrics frequency vectors of the songs. The lyrics frequency vector omits various stop words, which are ad hoc coded by the authors. \\\\
+These frequency vectors form a vector space and are analogues to the doc vectors present from homework 2. Now the program asks from user some input text. These can be lines from a song the user likes or some words that the user prefers to be present in the song. The user also presents the number of relevant songs he/she wishes to see. \\\\
+The lyrics analyzer then computes cosine similarity of all the songs lyrics frequency vectors with the query and then presents the user specified number of relevant songs to the user. 
+
+\section*{Frequency Analyzer}
+Aakash fill this up.
+
+\section*{Experimental Evaluation and Results}
+We have performed the following experiments on the different components of Modulo7.
+\begin{enumerate}
+\item For the crawler we crawled the list on http://keylessonline.com/list/hindi which presents 86 different links to parse. Our crawler then parsed all these into separate notestream and lyrics files. The note stream files are perfectly generated, but the lyrics stream files contains the occasional non lyrics words. This happens as the html page does not distinguish between lyrics and non lyrics words, hence the parser relies on ommitting words like "album" and "copyright" (an analogous to a stopword list for lyrics). The crawler both sets of files in .nsf and .lyrics files.
+\item For the lyrics analyzer, we parsed the set of songs from the .lyrics file and then we provide an interactive querying system. The user can judge subjectively whether the returned results are relevant or not. 
+\item For the notes analyzer, we parsed the set of songs from the .nsf files and then performed mood analysis on it. All 86 songs are bollywood songs (and none of them are rock songs so we dont expect high power indices). From our experiments we are able to ascertain that the power index is low (on average 0.1) which is correct since they are not rock songs. 
+\item For frequency analysis : Aakash fill this up.
+\end{enumerate}
 
 \section*{Contributions by individual members on the project}
+\begin{enumerate}
+\item \textbf{Arunav Sanyal} Created the crawler, lyrics analyzer and frequency analyzer components.
+\item \textbf{Aakash Bhambhani} Created the frequency analyzer component and its integration with the frequency analyzer.  
+\end{enumerate}
 \end{document}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%

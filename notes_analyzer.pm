@@ -205,26 +205,33 @@ sub analyzeSong {
     my $happiness_index = 0;
     my $sadness_index = 0;
     my $power_index = 0;
+    my $tension_index = 0;
     
     # Estimate the best frequency and the corresponding interval 
     while (my ($interval, $frequency) = each(%interval_frequencies))
     {
-        # If a minor interval, then add to sadness index, minor intervals are odd number intervals except 5
-        if ($interval == 1 or $interval == 3 or $interval == 7)
+        # If a minor interval, then add to sadness index, minor intervals are odd number intervals except 7
+        if ($interval == 1 or $interval == 3 or $interval == 5)
         {
             $sadness_index += $frequency;
         } 
         
         # If a major interval, then add to happiness index, major intervals are even number intervals except 8
-        elsif ($interval == 2 or $interval == 4 or $interval == 6)
+        elsif ($interval == 2 or $interval == 4)
         {
             $happiness_index += $frequency;
         }
         
         # If a perfect interval like 5 or 8, use measures that indicate a sense of power to the song
-        elsif ($interval == 5 or $interval == 8)
+        elsif ($interval == 7 or $interval == 8)
         {
             $power_index += $frequency;
+        }
+        
+        # Corresponds to a tense unresolved tone
+        elsif ($interval == 6)
+        {
+            $tension_index += $frequency;
         }
         
         # Anything higher than interval = 8 indicates strong dissonance, does not contribute too highly to 
@@ -237,6 +244,7 @@ sub analyzeSong {
     $sadness_index = $sadness_index / $total_frequency;
     $happiness_index = $happiness_index / $total_frequency;
     $power_index = $power_index / $total_frequency;
+    $tension_index = $tension_index / $total_frequency;
     
     # Check the scale to add to intent of the song, heuristic add by 0.1
     if ($scale_of_song eq "MAJOR") 
@@ -251,8 +259,8 @@ sub analyzeSong {
     }
     
     print "The indices for song :", $song_name, " are happiness index = ", $happiness_index, 
-        " sadness index = ", $sadness_index, " power index = ", $power_index, "\n";
-}
+        " sadness index = ", $sadness_index, " power index = ", $power_index, " tension index = ", $tension_index ,"\n";
+} 
 
 sub main {
     print "WELCOME TO NOTES ANALYZER PART \n";

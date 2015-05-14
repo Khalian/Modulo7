@@ -50,7 +50,7 @@ sub readLyricsFiles {
     foreach my $filename (@notestream_files) {
     
         open(my $fh, $filename) or die "Could not open file '$filename' $!";
-         
+        
         while (my $line = <$fh>) {
             chomp $line;
           
