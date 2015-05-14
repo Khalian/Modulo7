@@ -29,6 +29,31 @@ my $ua = new LWP::UserAgent;  # create an new LWP::UserAgent
 $ua->agent( $ROBOT_NAME );    # identify who we are
 $ua->from ( $ROBOT_MAIL );    # and give an email address in case anyone would
                               # like to complain
+                  
+# A hash map of note corresponding to the set of notes in western classical
+my %note_map;
+            
+# Defines the notes and sharps
+$note_map{'a'} = 1;
+$note_map{'a#'} = 1;
+$note_map{'b'} = 1;
+$note_map{'c'} = 1;
+$note_map{'c#'} = 1;
+$note_map{'d'} = 1;
+$note_map{'d#'} = 1;
+$note_map{'e'} = 1;
+$note_map{'f'} = 1;
+$note_map{'f#'} = 1;
+$note_map{'g'} = 1;
+$note_map{'g#'} = 1;
+
+# Defines the flats as well, to maintain harmonic equivalency
+$note_map{'ab'} = 1;
+$note_map{'bb'} = 1;
+$note_map{'db'} = 1;
+$note_map{'eb'} = 1;
+$note_map{'gb'} = 1;        
+
                               
 # Some phrases and words that are parsed by the crawler which are not part of the lyrics of a song  
 my %metaDataWordHashMap;
@@ -114,9 +139,9 @@ while(<FILE>){
        
        chomp $elem;
        
-       if (length($elem) == 1 and $elem =~ m/[a-zA-Z]/) {
+       if (length($elem) == 1 and $elem =~ m/[a-zA-Z]/ and exists $note_map{lc($elem)}){
           push @noteStream, lc($elem);
-       } elsif (length($elem) == 2 and $elem =~ m/[a-zA-Z]#/) {
+       } elsif (length($elem) == 2 and $elem =~ m/[a-zA-Z]#/ and exists $note_map{lcfirst($elem)}) {
           push @noteStream, lcfirst($elem);
        } elsif (length($elem) == 2 and $elem =~ m/[a-zA-Z]b/) {
           push @noteStream, lcfirst($elem);
@@ -136,9 +161,12 @@ while(<FILE>){
                 my @uncorruptedNotes = split /(?<=\#)/, $elem;
                 foreach (@uncorruptedNotes)
                 {
-                    push @noteStream, lcfirst($_);
+                    my $note = $_;
+                    if (exists $note_map{lc($elem)})
+                    {
+                        push @noteStream, lcfirst($_);
+                    }
                 }
-                
                 next;
              } elsif (length($elem) == 2 and substr($elem, 1, 1) =~ "m") {
                 # Ignore chords, analysis is only on melody lines
