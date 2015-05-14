@@ -1,0 +1,174 @@
+\documentclass[letterpaper, 11pt]{article}
+\usepackage{latexsym}
+\usepackage{amssymb}
+\usepackage{times}
+%\usepackage[in]{fullpage}
+\usepackage{amsmath,amsfonts,amsthm}
+\usepackage{graphicx}
+
+%\documentclass[11pt]{article}
+%\pagestyle{myheadings}
+%\usepackage[ruled,nothing]{algorithm}
+%\usepackage{algorithmic}
+%\usepackage[dvips]{epsfig,graphicx}
+%\numberwithin{equation}{section}
+
+\bibliographystyle{plain}
+
+\newenvironment{newalgo}[2]{\begin{algorithm}
+
+\caption{\textsc{#1}}\label{#2}
+
+\begin{algorithmic}[1]}{\end{algorithmic}\end{algorithm}}
+
+
+
+\newcommand{\gm}{\gamma}
+\newcommand{\wh}{\widehat}
+\newcommand{\rep}{representation}
+\newcommand{\rv}{random variable}
+\newcommand{\la}{\lambda}
+\newcommand{\wt}{\widetilde}
+\newcommand{\st}{such that}
+\newcommand{\slvary}{slowly varying}
+\newcommand{\ma}{moving average}
+\newcommand{\regvary}{regularly varying}
+\newcommand{\asy}{asymptotic}
+\newcommand{\ts}{time series}
+\newcommand{\id}{infinitely divisible}
+\newcommand{\seq}{sequence}
+\newcommand{\fidi}{finite dimensional \ds}
+
+\newcommand{\ble}{\begin{lemma}}
+\newcommand{\ele}{\end{lemma}}
+\newcommand{\bfX}{{\bf X}}
+\newcommand{\pro}{probabilit}
+\newcommand{\BX}{{\bf X}}
+\newcommand{\BY}{{\bf Y}}
+\newcommand{\BZ}{{\bf Z}}
+\newcommand{\BV}{{\bf V}}
+\newcommand{\BW}{{\bf W}}
+\newcommand{\reals}{{\mathbb R}}
+\newcommand{\bbr}{\reals}
+
+\newcommand{\balpha}{\mbox{\boldmath$\alpha$}}
+\newcommand{\bbeta}{\mbox{\boldmath$\beta$}}
+\newcommand{\bmu}{\mbox{\boldmath$\mu$}}
+\newcommand{\tbmu}{\mbox{\boldmath${\tilde \mu}$}}
+\newcommand{\bEta}{\mbox{\boldmath$\eta$}}
+
+
+\def \br#1{\left \{#1 \right \}}
+\def \pr#1{\left (#1 \right)}
+
+\newcommand{\Gm}{\Gamma}
+\newcommand{\ep}{\epsilon}
+
+
+\newtheorem{lemma}{Lemma}[section]
+\newtheorem{figur}[lemma]{Figure}
+\newtheorem{theorem}[lemma]{Theorem}
+\newtheorem{proposition}[lemma]{Proposition}
+\newtheorem{definition}[lemma]{Definition}
+\newtheorem{corollary}[lemma]{Corollary}
+\newtheorem{example}[lemma]{Example}
+\newtheorem{exercise}[lemma]{Exercise}
+\newtheorem{remark}[lemma]{Remark}
+\newtheorem{fig}[lemma]{Figure}
+\newtheorem{tab}[lemma]{Table}
+\newtheorem{fact}[lemma]{Fact}
+\newtheorem{test}{Lemma}
+\newtheorem{algorithm}[lemma]{Algorithm}
+
+\newcommand{\play}{\displaystyle}
+
+\newcommand{\ms}{measure}
+\newcommand{\beao}{\begin{eqnarray*}}
+\newcommand{\eeao}{\end{eqnarray*}\noindent}
+\newcommand{\beam}{\begin{eqnarray}}
+\newcommand{\eeam}{\end{eqnarray}\noindent}
+
+\newcommand{\halmos}{\hfill\mbox{\qed}\\}
+\newcommand{\fct}{function}
+\newcommand{\ins}{insurance}
+\newcommand{\ds}{distribution}
+
+\newcommand{\one}{{\bf 1}}
+\newcommand{\eid}{\buildrel{\rm d}\over {=}}
+\newcommand {\Or}{\rm ORDER}
+\newcommand {\In}{\rm INTER}
+
+\newcommand{\bbd}{{\mathbb D}}
+\newcommand{\vi}{$V_{ij}$ }
+\newcommand{\rr}{R^{\prime\prime}}
+%\newcommand{\R}{R^\prime}
+\newcommand{\ci}{\frac{1}{c}}
+\newcommand{\Vi}{V(n)}
+\newcommand{\dR}{\mathcal R}
+\newcommand{\md}[1]{\left(\ \rm{mod}\ \it{#1}\right)}
+\newcommand{\So}{s}
+%\begin{document}
+%\def\DoubleSpace{\baselineskip=24pt}
+%\DoubleSpace \sloppy
+
+\begin{document}
+
+
+
+\title{Modulo7 - A Semantic and Technical Analysis of Music and Lyrics
+\\} 
+\author{\textbf{Arunav Sanyal, Aakash Bhambhani}}
+\maketitle
+
+%%%%%%%%%%%%%%%%%%%
+\section*{Abstract}
+The web contains a vast pleathora of music translated into text format. Musical repositories include lyrics, chord charts, note sequences, sheet music etc. Moreover there are many software available on the web to convert songs into frequency distributions, from which we can obtain information on the sound engineering aspects of songs.\\\\
+While individual software exists which addresses some of these issues, there is no holistic framework in existence which addresses all of these concerns to present a comprehensive analysis of music. We present an implementation "Modulo7" which attempts to address some of these issues. You can find the source code of Modulo7 here https://github.com/Khalian/WSDAlphaExpansion \\\\
+Modulo7 has multiple features. 
+\begin{enumerate}
+\item A crawler which obtains lyrics and note contains by parsing lyrics sites.
+\item A lyrics analyzer which takes input from user a few sentences and returns a recommendation or a rank ordering of the songs similarity parsed in step one 
+\item A note analyzer which classifies songs into various categories based on music theory concepts.
+\item Aakash : Insert explanation of frequency analysis part. 
+\end{enumerate} 
+
+\section*{Music Theory Concepts}
+Western music is represented by 7 basic notes A B C D E F G and 5 accidentals(notes in between basic notes) A\#, C\#, D\#, F\#, G\#. (No notes in between B,C and E, F) These 12 notes taken together can express almost every piece of western music (we dont consider the exceptions in Modulo7). The following are some terminologies in music theory:
+\begin{enumerate}
+\item The leap/spacing between any two consecutive notes is called a \textbf{semitone}. For example a leap from A to A\# or from B to C is moving one semitone up. 
+\item A note one semitone below a basic note is called a \textbf{flat} denoted by symbol b following the note. This is another kind of accidental .For instance Ab, Db etc. Its important to note that certain notes are "equivalent". For instance G\# is exactly the same as Ab in which pitch it expresses. This is called \textbf{harmonic equivalence}. For the purpose of our analysis we standardized all accidentals to sharps. 
+\item The number of semitones that separate any two arbitrary notes is called the \textbf{interval} between these notes. For example there are two semitones in between A and B so the interval is 2. Similarly there are 3 semitones in between A and C so the interval is 3. In theory these intervals have fancy names(with particular meaning and affect to listener) which we will elaborate of the note engine section.
+\item The \textbf{Key} of a song refers to the base note on which a song is played and only has subjective meaning. Transposing a song to a different key means moving every note of the song across a fixed interval.
+\item The \textbf{Scale} of a song refers a set of sequences (interval distances) between the key and other notes of a song. There are many scales each with its distinctive "emotional" expression.
+\end{enumerate} 
+
+We have made the following assumptions for the purpose of our analysis.
+\begin{enumerate}
+\item We consider simple monotonic melody lines (one note followed by another). Concepts like harmony (notes stacked on each other/ multiple notes played at one) are not taken into account.
+\item We have ignored existence of quarter notes (pitches in between any two notes) to keep analysis of intervals simple.
+\item We use both scale information and interval frequencies (explained in note analyzer part)
+\end{enumerate}
+
+\section*{Crawler}
+Our crawler code fetches links to various lyrics/note pages and then iteratively crawls through each song page to create a notestream file and a lyrics file respectively. Due to the non standardized nature of lyrics sites we have chosen http://keylessonline.com/ for testing. The site provides note and lyrics information in a single page per song, making the job of parsing easier. \\\\
+The Crawler works as follows:-
+\begin{enumerate}
+\item User calls buildSongSources.pm. This will crawl to the root page of the lyrics site and fetch all links. It only keeps the links which point to western music representations of the song. This list is stored in a file called songSources.txt
+\item User then calls musicScoreFetch.pm. This will read songSources.txt and retrieve the pages of the songs. It then extracts the notes and lyrics contents of the file. For each song it generates two file - the notestream file (.nsf) and lyrics file (.lyrics). The note stream file contains the key and the scale of the song followed by the series on notes that the song plays. The lyrics file contains text only pertaining to the lyrics of the song. These files are further used by the note analyzer and lyrics analyzer respectively. 
+\end{enumerate}
+
+\section*{Note Analyzer}
+The note analyzer is called via classifySongOnIntervals. It reads the notestream files created by buildSongSources.pm and then generates interval frequency vectors. The description of these vectors are given in the interval analysis subsection.
+\subsection*{Interval Analysis}
+Each interval between two notes gives a distinct tone to the song. For instance an interval = 1  is called "minor second" which gives a tense sadness to the tone. Similarly interval = 7 is called a "perfect fifth" which gives a sense of power to the tone. Similarly different intervals express different moods. \\\\
+Our interval analysis part leverages the relative frequencies of the intervals in the song. Given a notestream, we can calculate the intervals between every two successive notes. We then count the frequency of each interval and store it into a interval frequency vector. This creates a basic vector space of songs. 
+\subsection*{Mood Analysis and Song Classification}
+Now after the interval interval frequency vector space is generated, we can perform various analysis on top of it. For instance we can codify hand crafted rules to ascertain the genre of the song. For instance a prevalance of perfect fifths is a strong indication of the song being a rock song. Similarly a predominance of minor intervals (minor thirds, minor seconds etc) can classify the song as being sad. \\\\
+We also take into account the scale of the song. The scale is directly acquired 
+
+\section*{Lyrics Analyzer}
+
+\section*{Contributions by individual members on the project}
+\end{document}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%

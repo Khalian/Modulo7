@@ -19,8 +19,9 @@ my %interval_frequency_map;
 # The number of clusters parameter
 my $num_clusters = 5;
 
-# A hashmap which maps song number with cluster number
-my %cluster_membership;
+# A hashmap which maps song number with classification of song based on rudimentary 
+# concepts of 
+my %songtype_membership;
 
 # Number of songs processed while creating the interval frequency map
 my $song_number;
@@ -154,52 +155,11 @@ sub constructIntervalVector {
     return %interval_frequency_vector;
 }
 
-# Gets the cosine similarity between two vectors
-sub cosine_sim_a {
-
-    my $vec1 = shift;
-    my $vec2 = shift;
-
-    my $num     = 0;
-    my $sum_sq1 = 0;
-    my $sum_sq2 = 0;
-
-    my @val1 = values %{ $vec1 };
-    my @val2 = values %{ $vec2 };
-
-    # determine shortest length vector. This should speed 
-    # things up if one vector is considerable longer than
-    # the other (i.e. query vector to document vector).
-
-    if ((scalar @val1) > (scalar @val2)) {
-	my $tmp  = $vec1;
-	   $vec1 = $vec2;
-	   $vec2 = $tmp;
-    }
-
-    # calculate the cross product
-
-    my $key = undef;
-    my $val = undef;
-
-    while (($key, $val) = each %{ $vec1 }) {
-	$num += $val * ($$vec2{ $key } || 0);
-    }
-
-    # calculate the sum of squares
-
-    my $term = undef;
-
-    foreach $term (@val1) { $sum_sq1 += $term * $term; }
-    foreach $term (@val2) { $sum_sq2 += $term * $term; }
-
-    return ( $num / sqrt( $sum_sq1 * $sum_sq2 ));
-}
-
-
 # Read every note stream files and construct interval vectors and note vectors
 sub readNoteStreamFiles {
-    my @notestream_files = glob("*.nsf");
+
+    # Sorted to maintain ordering consistency
+    my @notestream_files = sort glob("*.nsf");
     
     $song_number = 1;
     
@@ -240,49 +200,16 @@ sub readNoteStreamFiles {
     }
 }
 
-# Assigns the cluster member ship of a given song Num and puts that value in 
-# cluster_membership hashmap
-sub assignClusterMemberShip {
-    my assignedCluster
-
-}
-
-# This method performs k means clustering over interval frequencies for all songs
-sub kMeansClusterSongs {
-
-    # A hashmap containing the centroids of the cluster, a centroid has key = centroid number
-    # and value = hashmap of a note stream
-    my %centroids;
+# This method performs classification over interval frequencies for all songs
+sub classifySongs {
     
-    # Heuristic for initialization, space out the songs into equal width intervals
-    # and choose randomly from these intervals 
-    my $spacing = int($song_number / $num_clusters);
-    
-    my $centroid_number = 1;
-    
-    # Initializing original centroid points
-    for (my $i = 1; $i <= $song_number; $i += $spacing)
-    {
-        my $randomPoint = int(rand($spacing)) + $i;
-        $centroids{$centroid_number} = $interval_frequency_map{$randomPoint};
-        $centroid_number += 1;
-    }
-    
-    # Hacky convergence criteria, will fix this
-    for (my $i = 1; i <= 100; $i++)
-    {
-        while (my ($songNum, $intervalVector) = each(%interval_frequency_map)) {
-            my %intervalFreqVector = %$intervalVector;
-            @assignClusterMemberShip(\%intervalFreqVector, \%centroids, $songNum);
-            @recomputeClusters(\%centroids);
-        }
-    }
+  
 }
 
 sub main {
     &init_note_degree_map;
     &readNoteStreamFiles;
-    &kMeansClusterSongs;
+    &classifySongs;
 }
 
 &main;
