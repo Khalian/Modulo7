@@ -89,7 +89,25 @@ while(<FILE>){
 
     my $line_number = 0;
     my $scale_key_info_linenumber = 0;
+    
+    # One pass to get the scale
+    foreach (@bodyElementsScaleRef) {
+       my $elem = $_;
+       
+       chomp $elem;
+       
+       if ($elem =~ "Scale") {
+          # According to the nature of the inputs, the scale resides in the next line
+          $scale_key_info_linenumber = $line_number + 1;
+       }
+       
+       $line_number += 1;
+    }
 
+    # Reset line number for second pass
+    $line_number = 0;
+
+    # Second pass for parsing notestream and lyrics stream
     foreach (@bodyElements)
     {
        my $elem = $_;
@@ -103,8 +121,9 @@ while(<FILE>){
        } elsif (length($elem) == 2 and $elem =~ m/[a-zA-Z]b/) {
           push @noteStream, lcfirst($elem);
        } elsif ($elem =~ "Scale") {
-          # According to the nature of the inputs, the scale resides in the next line
-          $scale_key_info_linenumber = $line_number + 1;
+          # This is done in pass 1 so continue
+          $line_number += 1;
+          next;
        } elsif(!exists $metaDataWordHashMap{$elem}) {
           # If its a component of the lyrics then just add that to the lyrics of the song
           if (length($elem) > 0 and $elem !~ m/[0-9]/) {
@@ -142,6 +161,9 @@ while(<FILE>){
         $scale = "MINOR"; 
     } elsif ($scaleLetter eq "M") {
         $scale = "MAJOR";
+    } else {
+        # Heuristic: Most songs are in minor scale
+        $scale = "MINOR";
     }
     
     open(my $notesFile, ">", "NotesOf".$fileNumber.".nsf");

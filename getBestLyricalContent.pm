@@ -8,7 +8,7 @@ use warnings;
 
 # A hashmap which stores the frequency of the lyrics the key for the data structure is 
 # the song number and the value is 
-my %lyric_frequency_hash = ();
+my @lyrics_frequencies = ();
 
 # Contains both hindi and english stop words
 my @stopWords = ("and", "the", "or", "to", "ki", "tu");
@@ -16,24 +16,32 @@ my @stopWords = ("and", "the", "or", "to", "ki", "tu");
 # A hashmap of all the stop words in songs
 my %stoplist_hash = ();
 
+# This map stores the similarities between songs and query
+my %similarity_map = ();
+
+# Takes an input sentence from user of lyrical content to input query
+my %input_sentence_hash = ();
+
+# Song number song file name map 
+my %song_num_name_hash = ();
+
+# The number of songs in the analysis
+my $song_number = 1;
+
 # Construct the stop list hash
 foreach my $word (@stopWords)
 {
     $stoplist_hash{$word} = 1;
 }
 
-sub readLyricsFile {
+# Method to read the lyrics files and compute the lyrics frequency hash map
+sub readLyricsFiles {
 
     # Sorted to maintain ordering consistency
     my @notestream_files = sort glob("*.lyrics");
     
-    # Counter to keep
-    my $song_number = 1;
-    
     # Read each file and construct the lyric frequency hash
     foreach my $filename (@notestream_files) {
-        # A hash map with key = word and value = frequency with which it occurs
-        my %lyrics_frequencies = ();
     
         open(my $fh, $filename) or die "Could not open file '$filename' $!";
          
@@ -46,20 +54,50 @@ sub readLyricsFile {
             foreach my $word (@lyricsArray)
             {
                 if (! exists $stoplist_hash{ $word }) {
-                    if (!exists $lyrics_frequencies{$word}) {
-                        $lyrics_frequencies{$word} = 1;
+                    if (!exists $lyrics_frequencies[$song_number]{$word}) {
+                        $lyrics_frequencies[$song_number]{$word} = 1;
                     } else {
-                        $lyrics_frequencies{$word} += 1;
+                        $lyrics_frequencies[$song_number]{$word} += 1;
                     }
                 }      
             }
         }
         
-        $lyric_frequency_hash{$song_number} = 
+        $song_num_name_hash{$song_number} = $filename;
+        
+        $song_number += 1;
+        
+        close ($fh);
+    }   
+}
+
+# Reads the input sentence and constructs query vector from it
+sub readInputSentence {
+    my $input_line = <STDIN>;
+    
+    my @input_words = split /\s+/, $input_line;
+    
+    # Construct the stop list hash
+    foreach my $word (@input_words)
+    {
+        $input_sentence_hash{$word} = 1;
     }
-    
-    $song_number += 1;
-    
+}
+
+# Compute similarities of query with 
+sub computeSimilarities {
+
+    for my $index (1..$song_number - 1) {
+        my $sim = &cosine_sim_a($lyrics_frequencies[$index], \%input_sentence_hash);
+	    
+	    my $song_name = $song_num_name_hash{$index};
+	   
+	    # Store the similarities along with the song name
+	    $similarity_map{$song_name} = $sim;
+	    
+	    
+    }
+
 }
 
 # Gets the cosine similarity between two vectors
@@ -106,5 +144,8 @@ sub cosine_sim_a {
 
 sub main {
     &readLyricsFiles;
+    &readInputSentence;
+    &computeSimilarities;
+}
 
 &main;

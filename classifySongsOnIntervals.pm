@@ -12,19 +12,12 @@ my %note_degree_map_inverse;
 # The number of nodes in western music
 my $num_notes_in_western_music = 12;
 
-# A hash map which contains as key song number and as value interval frequencies of 
+# A vector which contains as key song number and as value interval frequencies of 
 # that song
-my %interval_frequency_map; 
-
-# The number of clusters parameter
-my $num_clusters = 5;
-
-# A hashmap which maps song number with classification of song based on rudimentary 
-# concepts of 
-my %songtype_membership;
+my @interval_frequency_vector = ();
 
 # Number of songs processed while creating the interval frequency map
-my $song_number;
+my $song_number = 1;
 
 # Initializes the note degree map
 sub init_note_degree_map {
@@ -80,10 +73,13 @@ sub transposeKey {
     my $transpose_key = $_[2];
     
     if (not defined($current_key) or length($current_key) == 0) {
-        # Estimate the key given the data
-        # &estimate_key();
-        # Hack right now, will change after key estimation strategy is defined
+        # Heuristic : Most keys are in C
         $current_key = 'c';
+    }
+    
+    if (not defined($transpose_key) or length($transpose_key) == 0) {
+        # Heuristic : Most keys are in C
+        $transpose_key = 'c';
     }
     
     # The interval distance between the new and the old key
@@ -121,12 +117,12 @@ sub constructIntervalVector {
     my @noteStream = @{$_[0]};
     
     # Frequencies of the intervals
-    my %interval_frequency_vector;
+    my %interval_frequency_map;
     
     # Initialize the frequencies to 0
     for (my $i = 1; $i <= 12; $i++) 
     {
-        $interval_frequency_vector{$i} = 0;
+        $interval_frequency_map{$i} = 0;
     }   
     
     # A marker note which keeps the previous note position
@@ -147,12 +143,12 @@ sub constructIntervalVector {
         my $note_position = $note_degree_map{$note};
         
         my $interval = ($note_position - $prev_note_position) % $num_notes_in_western_music;
-        $interval_frequency_vector{$interval} += 1;
+        $interval_frequency_map{$interval} += 1;
         
         $previousNote = $note;
     }
     
-    return %interval_frequency_vector;
+    return %interval_frequency_map;
 }
 
 # Read every note stream files and construct interval vectors and note vectors
@@ -160,8 +156,6 @@ sub readNoteStreamFiles {
 
     # Sorted to maintain ordering consistency
     my @notestream_files = sort glob("*.nsf");
-    
-    $song_number = 1;
     
     foreach my $filename (@notestream_files) {
     
@@ -193,10 +187,13 @@ sub readNoteStreamFiles {
         # Transpose the key of the song to key of A as a part of the standardization
         my @normalized_note_stream_of_song  = &transposeKey(\@notestream_of_song, $key_of_song, 'a');
        
-        my %interval_frequency_vector = &constructIntervalVector(\@normalized_note_stream_of_song);
-      
-        $interval_frequency_vector{$song_number} = %interval_frequency_vector;
-        $song_number += 1; 
+        my %interval_frequency_map = &constructIntervalVector(\@normalized_note_stream_of_song);
+        
+        while (my ($interval, $frequency) = each(%interval_frequency_map)) {
+            $interval_frequency_vector[$song_number]{$interval} =  $interval_frequency_map{$interval};
+        }
+        
+        $song_number += 1;
     }
 }
 
