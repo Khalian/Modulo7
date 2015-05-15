@@ -78,10 +78,13 @@ foreach my $word (@metaDataWords)
 
 # Reads the songSources.txt file one by one and get the notestreams
 my $fileNumber = 0;                              
-open(FILE, "songSources.txt") or die ("Cant open the song listings");
+open(FILE, "song_sources.txt") or die ("Cant open the song listings");
+print "Reading lyrics and notes from contents song_sources.txt \n";
 while(<FILE>){                   
     my $link = $_;
     chomp $link;
+    
+    print "Processing link ", $link, "\n";
    
     my $request  = new HTTP::Request 'GET' => $link;
     my $response = $ua->request( $request );
@@ -196,6 +199,8 @@ while(<FILE>){
     
     open(my $notesFile, ">", "NotesOf".$fileNumber.".nsf");
     
+    print "Creating notestream file:", "NotesOf".$fileNumber.".nsf", "\n";
+    
     print $notesFile "Scale:".$scale."\n";
     print $notesFile "Key:".$key."\n";
 
@@ -205,6 +210,8 @@ while(<FILE>){
     }
     
     close($notesFile);
+    
+    print "Creating lyrics file:", "LyricsOf".$fileNumber.".lyrics", "\n";
     
     open(my $lyricsFile, ">", "LyricsOf".$fileNumber.".lyrics");
 

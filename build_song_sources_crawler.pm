@@ -13,6 +13,8 @@ my $ua = new LWP::UserAgent;
 my $ROBOT_NAME = 'URLReader/1.0';
 my $ROBOT_MAIL = 'asanyal4@jhu.edu';
 
+print "Extracting western score song source urls from http://keylessonline.com/list/hindi and putting in song_sources.txt \n";
+
 my $request  = new HTTP::Request 'GET' => "http://keylessonline.com/list/hindi";
 my $response = $ua->request( $request );
 
@@ -20,7 +22,7 @@ my $html_tree = new HTML::TreeBuilder;
 
 $html_tree->parse($response->content);
 
-open(my $fh, ">" ,"songSources.txt") or die "Could not open file songSources.txt'";
+open(my $fh, ">" ,"song_sources.txt") or die "Could not open file songSources.txt'";
 
 foreach my $item (@{$html_tree->extract_links()})
 {
