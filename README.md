@@ -1,6 +1,9 @@
 # Modulo7
 A semantic and technical analysis of musical scores based on Information Retrieval Principles
 
+For the perl modules do : -
+cd src/main/perl
+
 Pipeline Usage:
 
 1. $ perl build_song_sources_crawler.pm
