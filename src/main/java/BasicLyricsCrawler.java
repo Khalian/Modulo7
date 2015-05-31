@@ -3,6 +3,7 @@ import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 
+import java.awt.datatransfer.StringSelection;
 import java.io.*;
 import java.nio.file.Files;
 import java.util.ArrayList;
@@ -11,6 +12,9 @@ import java.util.List;
 import java.util.Set;
 
 public class BasicLyricsCrawler {
+
+    // Maximum crawl depth for urls, so the crawler does not stray and indefinitely run
+    private final int MAX_CRAWL_DEPTH = 3;
 
     // A file which contains words that cannot be part of any lyrics, yet appears
     // in lyrics sites
@@ -32,6 +36,8 @@ public class BasicLyricsCrawler {
 
     private Set<String> lyricsSeed;
 
+    private Set<String> lyricsPages;
+
     /**
      * The constructor loads files and its values and populates them into an instance of the basic crawler
      * @throws FileNotFoundException
@@ -51,24 +57,24 @@ public class BasicLyricsCrawler {
         // Read the various lines
         while ((word = stopWordsFileReader.readLine()) != null) {
             if (!stopList.contains(word))
-                stopList.add(word);
+                stopList.add(word.toLowerCase());
         }
 
         while ((word = nonLyricsFileReader.readLine()) != null) {
-            if (!nonLyricsWords.contains(word))
-                nonLyricsWords.add(word);
+            if (!nonLyricsWords.contains(word.toLowerCase()))
+                nonLyricsWords.add(word.toLowerCase());
         }
 
         while ((word = lyricsSeedFileReader.readLine()) != null) {
-            if (!lyricsSeed.contains(word))
-                lyricsSeed.add(word);
+            if (!lyricsSeed.contains(word.toLowerCase()))
+                lyricsSeed.add(word.toLowerCase());
         }
     }
 
     public static void main(String args[]) throws IOException {
 
         BasicLyricsCrawler crawler = new BasicLyricsCrawler();
-
+        crawler.crawlSeedPages(1);
         crawler.processPage("http://www.mit.edu");
     }
 
@@ -85,11 +91,32 @@ public class BasicLyricsCrawler {
         {
             String[] elementText = ele.text().split("\\s+");
             for (String elementWord : elementText) {
-                if (!(stopList.contains(elementWord) || nonLyricsWords.contains(elementWord)))
-                    lyricsTxt += elementWord + " ";
+                String elementWordLC = elementWord.toLowerCase();
+                if (!(stopList.contains(elementWordLC) || nonLyricsWords.contains(elementWordLC)))
+                    lyricsTxt += elementWordLC + " ";
             }
         }
 
-        System.out.println(lyricsTxt);
+        // Uncomment this for debugging operation of stop words and non lyrics words logic
+        // System.out.println(lyricsTxt);
+    }
+
+    /**
+     * This method gets the seed pages and then crawls them upto a specified depth
+     * @throws IOException
+     */
+    public void crawlSeedPages(final int depth) throws IOException {
+
+        if (depth <= MAX_CRAWL_DEPTH) {
+            for (String url : lyricsSeed) {
+                Document doc = Jsoup.connect(url).get();
+                Elements links = doc.select("a[href]");
+
+                for (Element link : links) {
+                    String relHref = link.attr("href");
+                    System.out.println(relHref);
+                }
+            }
+        }
     }
 }
