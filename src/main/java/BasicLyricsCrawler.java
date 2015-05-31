@@ -5,16 +5,21 @@ import org.jsoup.select.Elements;
 
 import java.awt.datatransfer.StringSelection;
 import java.io.*;
+import java.net.SocketException;
 import java.nio.file.Files;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
+/**
+ * This class processes a set of seed pages and extracts the relevant lyrics
+ * from each of these files
+ */
 public class BasicLyricsCrawler {
 
     // Maximum crawl depth for urls, so the crawler does not stray and indefinitely run
-    private final int MAX_CRAWL_DEPTH = 3;
+    private final int MAX_CRAWL_DEPTH = 50;
 
     // A file which contains words that cannot be part of any lyrics, yet appears
     // in lyrics sites
@@ -38,6 +43,8 @@ public class BasicLyricsCrawler {
 
     private Set<String> lyricsPages;
 
+    private Set<String> crawledLyricsURLs;
+
     /**
      * The constructor loads files and its values and populates them into an instance of the basic crawler
      * @throws FileNotFoundException
@@ -51,6 +58,7 @@ public class BasicLyricsCrawler {
         stopList = new HashSet<>();
         nonLyricsWords = new HashSet<>();
         lyricsSeed = new HashSet<>();
+        crawledLyricsURLs = new HashSet<>();
 
         String word;
 
@@ -74,14 +82,38 @@ public class BasicLyricsCrawler {
     public static void main(String args[]) throws IOException {
 
         BasicLyricsCrawler crawler = new BasicLyricsCrawler();
-        crawler.crawlSeedPages(1);
-        crawler.processPage("http://www.mit.edu");
+        crawler.crawlSeedPages();
+        crawler.processAllPages();
     }
 
-    public void processPage(final String URL) throws IOException {
+    /**
+     * Process all pages for lyrics after crawling them use
+     * this method after running the crawlSeedPages method
+     */
+    private void processAllPages() throws IOException {
+         for (String url : crawledLyricsURLs) {
+             processPage(url);
+         }
+    }
 
-        //get useful information
-        String url = "http://www.azlyrics.com/lyrics/hillsongunited/myredeemerlives.html";
+    /**
+     * Crawls all the seed pages present in the lyrics seed file
+     * @throws IOException
+     */
+    private void crawlSeedPages() throws IOException {
+        for (String url : lyricsSeed) {
+            crawlPage(url, 1);
+        }
+    }
+
+    /**
+     * Process a given page by taking out the body and parsing the lyrics component
+     * @param url
+     * @throws IOException
+     */
+    public void processPage(final String url) throws IOException {
+
+        //get the lyrics component from the html page
         String lyricsTxt = "";
 
         Document doc = Jsoup.connect(url).get();
@@ -105,16 +137,30 @@ public class BasicLyricsCrawler {
      * This method gets the seed pages and then crawls them upto a specified depth
      * @throws IOException
      */
-    public void crawlSeedPages(final int depth) throws IOException {
+    public void crawlPage(final String url, final int depth) throws IOException {
 
         if (depth <= MAX_CRAWL_DEPTH) {
-            for (String url : lyricsSeed) {
-                Document doc = Jsoup.connect(url).get();
+
+            Document doc = null;
+
+            try {
+                doc = Jsoup.connect(url).get();
+            } catch (SocketException exp) {
+                // Do nothing, obviously either dead link or network timeout
+            }
+
+            if (doc != null) {
                 Elements links = doc.select("a[href]");
 
                 for (Element link : links) {
                     String relHref = link.attr("href");
-                    System.out.println(relHref);
+                    if (relHref.startsWith("http") && relHref.endsWith("html")) {
+                        if (!crawledLyricsURLs.contains(relHref)) {
+                            crawledLyricsURLs.add(relHref);
+                            System.out.println(relHref);
+                            crawlPage(relHref, depth + 1);
+                        }
+                    }
                 }
             }
         }
