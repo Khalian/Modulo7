@@ -5,11 +5,32 @@
     <name>Modulo7</name>
     <packaging>jar</packaging>
     <version>1.0</version>
+	<properties>
+		<jsoup.version>1.7.2</jsoup.version>
+		<stanfordnlp.version>3.5.2</stanfordnlp.version>
+		<pdfbox.version>0.7.3</pdfbox.version>
+	</properties>
 	<dependencies>
 		<dependency>
 			<groupId>org.jsoup</groupId>
 			<artifactId>jsoup</artifactId>
-			<version>1.7.2</version>
+			<version>${jsoup.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>edu.stanford.nlp</groupId>
+			<artifactId>stanford-corenlp</artifactId>
+			<version>${stanfordnlp.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>edu.stanford.nlp</groupId>
+			<artifactId>stanford-corenlp</artifactId>
+			<version>${stanfordnlp.version}</version>
+			<classifier>models</classifier>
+		</dependency>
+		<dependency>
+			<groupId>pdfbox</groupId>
+			<artifactId>pdfbox</artifactId>
+			<version>${pdfbox.version}</version>
 		</dependency>
 	</dependencies>
     <build>
