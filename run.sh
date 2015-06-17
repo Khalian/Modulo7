@@ -1,0 +1,1 @@
+export MODULO7_ROOT=`pwd`

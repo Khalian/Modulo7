@@ -2,8 +2,6 @@ import org.pdfbox.pdmodel.PDDocument;
 import org.pdfbox.pdmodel.PDPage;
 
 import javax.imageio.ImageIO;
-import javax.swing.*;
-import javax.swing.filechooser.FileNameExtensionFilter;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.FileInputStream;
@@ -12,17 +10,17 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.logging.Logger;
 
-public class pdfToJPGConvert {
+public class PDFToJPGConverter {
 
-    final static Logger logger = Logger.getLogger(pdfToJPGConvert.class.getName());
+    final static Logger logger = Logger.getLogger(PDFToJPGConverter.class.getName());
 
-    /*
+
     public static void main(String[] args) {
         final String location = System.getenv("MODULO7_ROOT") + File.separator
                 + "resources" + File.separator + "samplesheets" + File.separator  + "jesu-joy-of-mans-desiring-piano-solo.pdf";
-        selectPdf(location);
+        selectPdfAndConvert(location);
     }
-    */
+
 
     //allow images selection for converting
     public static void selectPdfAndConvert(final String location) {
