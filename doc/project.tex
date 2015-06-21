@@ -160,7 +160,7 @@ The Crawler works as follows:-
 \item User then calls music\_source\_crawler.pm. This will read song\_sources.txt and retrieve the pages of the songs. It then extracts the notes and lyrics contents of the file. For each song it generates two files - the notestream file (.nsf) and lyrics file (.lyrics). The note stream file contains the key and the scale of the song followed by the series on notes that the song plays in sequence. The lyrics file contains text only pertaining to the lyrics of the song. These files are further used by the note analyzer and lyrics analyzer respectively. 
 \end{enumerate}
 
-\section*{LineInstant Analyzer}
+\section*{com.modulo7.musicstatmodels.LineInstant Analyzer}
 The note analyzer is called via note\_analyzer.pm. It reads the notestream files created by buildSongSources.pm and then generates interval frequency vectors. The description of these vectors are given in the interval analysis subsection.
 \subsection*{Interval Analysis}
 Each interval between two notes gives a distinct tone to the song. For instance an interval = 1  is called "minor second" which gives a tense sadness to the tone. Similarly interval = 7 is called a "perfect fifth" which gives a sense of power to the tone. Similarly different intervals express different moods. \\\\
@@ -175,7 +175,7 @@ In order to quantify these analyses we define three objective measures:-
 \item Tension index : The fraction of interval = 6 in songs. This leads to an unresolved, tense tone in the song. This interval is very rarely seen in songs.
 \end{enumerate}
 We also take into account the scale of the song. The scale is directly acquired by the crawler while parsing the lyrics site. However if the scale is not listed, we assume its a minor scale since it is the most commonly occurring scale in music. (the method required to estimate the key of a song from its note requires advanced concepts of music theory which is out of scope of this project). We add a small weight to the index depending on the scale (for major scale add weight to happiness index and similarly for minor scale add weight to sadness index). \\\\
-We present this analysis to the user. Qualitatively user can compare the four indices to judge what mood the song presents. LineInstant this does not take into account which parts of the song express what mood, its a rather coarse analysis.
+We present this analysis to the user. Qualitatively user can compare the four indices to judge what mood the song presents. com.modulo7.musicstatmodels.LineInstant this does not take into account which parts of the song express what mood, its a rather coarse analysis.
 
 \subsection*{Song recommendation}
 Based on the interval frequencies we can perform song recommendation. The recommendation follows two steps

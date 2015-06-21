@@ -1,22 +1,20 @@
+package com.modulo7.crawler;
+
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 
-import java.awt.datatransfer.StringSelection;
 import java.io.*;
 import java.net.SocketException;
-import java.nio.file.Files;
-import java.util.ArrayList;
 import java.util.HashSet;
-import java.util.List;
 import java.util.Set;
 
 /**
  * This class processes a set of seed pages and extracts the relevant lyrics
  * from each of these files
  */
-public class BasicLyricsCrawler {
+public class BasicLyricsCrawler implements Runnable {
 
     // Maximum crawl depth for urls, so the crawler does not stray and indefinitely run
     private final int MAX_CRAWL_DEPTH = 50;
@@ -164,5 +162,10 @@ public class BasicLyricsCrawler {
                 }
             }
         }
+    }
+
+    @Override
+    public void run() {
+
     }
 }

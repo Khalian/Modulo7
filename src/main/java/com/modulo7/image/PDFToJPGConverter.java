@@ -1,3 +1,5 @@
+package com.modulo7.image;
+
 import org.pdfbox.pdmodel.PDDocument;
 import org.pdfbox.pdmodel.PDPage;
 
@@ -9,6 +11,8 @@ import java.io.IOException;
 import java.util.Iterator;
 import java.util.List;
 import java.util.logging.Logger;
+import javax.swing.filechooser.FileNameExtensionFilter;
+import javax.swing.JFileChooser;
 
 public class PDFToJPGConverter {
 
@@ -27,7 +31,6 @@ public class PDFToJPGConverter {
 
         convertPDFToJPG(location);
 
-        /*
         JFileChooser chooser = new JFileChooser();
         FileNameExtensionFilter filter = new FileNameExtensionFilter("PDF", "pdf");
         chooser.setFileFilter(filter);
@@ -37,7 +40,7 @@ public class PDFToJPGConverter {
             File file = chooser.getSelectedFile();
             convertPDFToJPG(file.toString());
         }
-        */
+
     }
 
     public static void convertPDFToJPG(final String src) {

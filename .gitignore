@@ -21,6 +21,7 @@
 *.ipr
 *.iws
 *.jpg
+*.gif
 ~*
 *.nsf
 *.lyrics

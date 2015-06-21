@@ -1,3 +1,5 @@
+package com.modulo7.musicstatmodels;
+
 /**
  * Created by asanyal on 6/16/2015.
  *

@@ -1,3 +1,5 @@
+package com.modulo7.musicstatmodels;
+
 import java.util.HashSet;
 import java.util.Set;
 
@@ -9,6 +11,8 @@ import java.util.Set;
  *
  * Typically a song can be expressed with multiple lines being played (an example would be
  * a rock song with 4 lines - a guitar line, a bass line, a vocal line and a drums (percussion line)
+ *
+ * Each line of a song can be distinctly used for custom similarity analysis
  */
 public class LineInstant {
 
