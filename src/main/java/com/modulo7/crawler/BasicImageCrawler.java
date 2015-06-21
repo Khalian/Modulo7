@@ -59,7 +59,7 @@ public class BasicImageCrawler implements Runnable {
         return urlOfSheetFile.substring(indexOfFileNameStart);
     }
 
-    public static void main(String args[]) throws IOException {
+    public static void test() throws IOException {
         BasicImageCrawler crawler = new BasicImageCrawler();
         // Sample test download
         crawler.downloadSheetFile("http://middle-ear-music.com/yahoo_site_admin/assets/images/Valse_et_Tro_Berlioz.58152010.gif");

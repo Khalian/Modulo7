@@ -23,6 +23,7 @@
 		<stanfordnlp.version>3.5.2</stanfordnlp.version>
 		<pdfbox.version>0.7.3</pdfbox.version>
 		<google.translate.version>v2-rev41-1.20.0</google.translate.version>
+		<json.version>20140107</json.version>
 	</properties>
 	<dependencies>
 		<dependency>
@@ -51,14 +52,19 @@
 			<artifactId>google-api-services-translate</artifactId>
 			<version>${google.translate.version}</version>
 		</dependency>
+		<dependency>
+			<groupId>org.json</groupId>
+			<artifactId>json</artifactId>
+			<version>${json.version}</version>
+		</dependency>
 	</dependencies>
     <build>
         <plugins>
             <plugin>
                 <artifactId>maven-compiler-plugin</artifactId>
                 <configuration>
-                    <source>1.7</source>
-                    <target>1.7</target>
+                    <source>1.8</source>
+                    <target>1.8</target>
                 </configuration>
             </plugin>
         </plugins>

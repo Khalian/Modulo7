@@ -22,7 +22,7 @@ public class BasicLyricsCrawler implements Runnable {
     // A file which contains words that cannot be part of any lyrics, yet appears
     // in lyrics sites
     private static final String NON_LYRICS_WORDS_FILE =
-            System.getenv("MODULO7_ROOT") + File.separator + "resources" + File.separator+ "non_lyrics_words";
+            System.getenv("MODULO7_ROOT") + File.separator + "resources" + File.separator + "non_lyrics_words";
 
     // A file which contains the stop words, extremely common words that should not be
     // considered as part of the lyrics
