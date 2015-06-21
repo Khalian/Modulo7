@@ -10,7 +10,9 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.URL;
 import java.net.URLConnection;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 /**
  * Created by asanyal on 6/20/2015.
@@ -22,9 +24,15 @@ import java.util.List;
  */
 public class GoogleQuery {
 
-    private void executeImageSearch(String query) {
-        try {
+    // Set of image URLs
+    private Set<String> imageURLs;
 
+    public GoogleQuery() {
+        imageURLs = new HashSet<>();
+    }
+
+    public void executeImageSearch(String query) {
+        try {
             // Convert query to lowercase
             query = query.toLowerCase();
 
@@ -52,7 +60,7 @@ public class GoogleQuery {
                         for (int i = 0; i < imageObjects.length(); i++) {
                             JSONObject imageObject = imageObjects.getJSONObject(i);
                             String imageUrl = imageObject.getString("url");
-                            System.out.println(imageUrl);
+                            imageURLs.add(imageUrl);
                         }
                     }
                 } catch (JSONException e) {
@@ -60,9 +68,17 @@ public class GoogleQuery {
                     continue;
                 }
             }
-        } catch (Exception e) {
-            e.printStackTrace();
+        } catch (IOException e) {
+           // In case of IO errors dont crash(TODO : Log this), just pass along
         }
+    }
+
+    /**
+     * Getter for the image URLS
+     * @return
+     */
+    public Set<String> getImageURLs() {
+        return imageURLs;
     }
 
     public static void main(String args[]) throws IOException {

@@ -1,9 +1,10 @@
 package com.modulo7.crawler;
 
 import java.io.*;
-import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLConnection;
+import java.util.HashSet;
+import java.util.Set;
 
 /**
  * Created by asanyal on 6/20/2015.
@@ -20,6 +21,52 @@ public class BasicImageCrawler implements Runnable {
     private static String STORAGE_LOCATION =
             System.getenv("MODULO7_ROOT") + File.separator + "resources" + File.separator + "crawledsheets" + File.separator;
 
+    // A file which contains a set of known artists, on which queries can be run
+    private static final String ARTISTS_FILE =
+            System.getenv("MODULO7_ROOT") + File.separator + "resources" + File.separator + "artists";
+
+    // A set of all the artists
+    Set<String> artists;
+
+    // A basic google querier object, used to execute image queries
+    private GoogleQuery querier;
+
+    /**
+     * Basic Image Crawler constructor
+     */
+    public BasicImageCrawler() {
+        artists = new HashSet<>();
+        querier = new GoogleQuery();
+    }
+
+    /**
+     * Method to load contents of artists file into in memory object
+     * s
+     * @throws IOException
+     */
+    private void loadArtistsFile() throws IOException {
+
+        FileInputStream artistsFileStream = new FileInputStream(ARTISTS_FILE);
+        BufferedReader br = new BufferedReader(new InputStreamReader(artistsFileStream));
+
+        String artist;
+
+        //Read artist file Line By Line
+        while ((artist = br.readLine()) != null)   {
+            if (!artists.contains(artist))
+                artists.add(artist);
+        }
+
+        //Close the input stream
+        br.close();
+    }
+
+    /**
+     * Method to download a sheet file given a url of the sheet file, simple
+     * URL classes have been used to acheive the same
+     *
+     * @param urlOfSheetFile
+     */
     private void downloadSheetFile(final String urlOfSheetFile) {
 
         String fileName = extractFileNameFromURL(urlOfSheetFile);
@@ -59,14 +106,33 @@ public class BasicImageCrawler implements Runnable {
         return urlOfSheetFile.substring(indexOfFileNameStart);
     }
 
+    /**
+     * Sample test case
+     * @throws IOException
+     */
     public static void test() throws IOException {
         BasicImageCrawler crawler = new BasicImageCrawler();
+
         // Sample test download
         crawler.downloadSheetFile("http://middle-ear-music.com/yahoo_site_admin/assets/images/Valse_et_Tro_Berlioz.58152010.gif");
     }
 
     @Override
     public void run() {
+        try {
+            loadArtistsFile();
 
+            for (String artist : artists) {
+                // Custom query to look for
+                querier.executeImageSearch(artist + "sheet music");
+                Set<String> imageURLs = querier.getImageURLs();
+                for (String imageURL : imageURLs) {
+                    downloadSheetFile(imageURL);
+                }
+            }
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 }

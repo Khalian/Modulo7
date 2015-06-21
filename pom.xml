@@ -24,6 +24,8 @@
 		<pdfbox.version>0.7.3</pdfbox.version>
 		<google.translate.version>v2-rev41-1.20.0</google.translate.version>
 		<json.version>20140107</json.version>
+		<lucenecore.version>3.4.0</lucenecore.version>
+		<luceneanalyzers.version>3.4.0</luceneanalyzers.version>
 	</properties>
 	<dependencies>
 		<dependency>
@@ -57,6 +59,17 @@
 			<artifactId>json</artifactId>
 			<version>${json.version}</version>
 		</dependency>
+		<dependency>
+			<groupId>org.apache.lucene</groupId>
+			<artifactId>lucene-core</artifactId>
+			<version>${lucenecore.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>org.apache.lucene</groupId>
+			<artifactId>lucene-analyzers</artifactId>
+			<version>${luceneanalyzers.version}</version>
+		</dependency>
+
 	</dependencies>
     <build>
         <plugins>
