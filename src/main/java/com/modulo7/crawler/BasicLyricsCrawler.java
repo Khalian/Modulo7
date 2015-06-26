@@ -1,5 +1,7 @@
 package com.modulo7.crawler;
 
+import com.modulo7.nlp.NLPUtils;
+import org.apache.lucene.queryParser.ParseException;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
@@ -9,6 +11,7 @@ import java.io.*;
 import java.net.SocketException;
 import java.util.HashSet;
 import java.util.Set;
+import java.util.logging.Logger;
 
 /**
  * This class processes a set of seed pages and extracts the relevant lyrics
@@ -16,8 +19,14 @@ import java.util.Set;
  */
 public class BasicLyricsCrawler implements Runnable {
 
+    // Logger for basic lyrics crawler
+    private static final Logger logger = Logger.getLogger(BasicLyricsCrawler.class.getName());
+
     // Maximum crawl depth for urls, so the crawler does not stray and indefinitely run
     private final int MAX_CRAWL_DEPTH = 50;
+
+    // A predicate value that indicates whether stemming is to be performed or not
+    private boolean isStemmingEnabled = false;
 
     // A file which contains words that cannot be part of any lyrics, yet appears
     // in lyrics sites
@@ -45,10 +54,34 @@ public class BasicLyricsCrawler implements Runnable {
 
     /**
      * The constructor loads files and its values and populates them into an instance of the basic crawler
+     *
+     * Takes default value of stemming configuration
+     *
      * @throws FileNotFoundException
      */
     public BasicLyricsCrawler() throws IOException {
         // Loads the non lyrics words, stop words list
+        init();
+    }
+
+    /**
+     *
+     * @param isStemmingEnabled
+     * @throws IOException
+     */
+    public BasicLyricsCrawler(boolean isStemmingEnabled) throws IOException {
+        this.isStemmingEnabled = isStemmingEnabled;
+
+        // Loads the non lyrics words, stop words list
+        init();
+    }
+
+    /**
+     * The init method loads files and its values and populates them into an instance of the basic crawler
+     *
+     * @throws FileNotFoundException
+     */
+    private void init() throws IOException {
         BufferedReader stopWordsFileReader = new BufferedReader(new FileReader(new File(STOP_WORDS_FILE)));
         BufferedReader nonLyricsFileReader = new BufferedReader(new FileReader(new File(NON_LYRICS_WORDS_FILE)));
         BufferedReader lyricsSeedFileReader = new BufferedReader(new FileReader(new File(LYRICS_SEED_FILE)));
@@ -122,8 +155,17 @@ public class BasicLyricsCrawler implements Runnable {
             String[] elementText = ele.text().split("\\s+");
             for (String elementWord : elementText) {
                 String elementWordLC = elementWord.toLowerCase();
-                if (!(stopList.contains(elementWordLC) || nonLyricsWords.contains(elementWordLC)))
-                    lyricsTxt += elementWordLC + " ";
+                if (!(stopList.contains(elementWordLC) || nonLyricsWords.contains(elementWordLC))) {
+                    if (isStemmingEnabled) {
+                        try {
+                            lyricsTxt += NLPUtils.englishStemmer(elementWordLC) + " ";
+                        } catch (ParseException pe) {
+                            logger.fine("Unable to stem due to :" + pe.getMessage());
+                        }
+                    } else {
+                        lyricsTxt += elementWord + " ";
+                    }
+                }
             }
         }
 

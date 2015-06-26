@@ -26,6 +26,8 @@
 		<json.version>20140107</json.version>
 		<lucenecore.version>3.4.0</lucenecore.version>
 		<luceneanalyzers.version>3.4.0</luceneanalyzers.version>
+		<opencvnupatterns.version>2.4.9-4</opencvnupatterns.version>
+		<mavennarplugin.version>20121119</mavennarplugin.version>
 	</properties>
 	<dependencies>
 		<dependency>
@@ -69,17 +71,35 @@
 			<artifactId>lucene-analyzers</artifactId>
 			<version>${luceneanalyzers.version}</version>
 		</dependency>
-
+		<dependency>
+			<groupId>org.codeswarm</groupId>
+			<artifactId>maven-nar-plugin</artifactId>
+			<version>${mavennarplugin.version}</version>
+		</dependency>
 	</dependencies>
     <build>
         <plugins>
             <plugin>
                 <artifactId>maven-compiler-plugin</artifactId>
                 <configuration>
-                    <source>1.8</source>
-                    <target>1.8</target>
+                    <source>1.7</source>
+                    <target>1.7</target>
                 </configuration>
             </plugin>
+			<plugin>
+				<groupId>org.codeswarm</groupId>
+				<artifactId>maven-nar-plugin</artifactId>
+				<version>${mavennarplugin.version}</version>
+				<extensions>true</extensions>
+				<configuration>
+					<layout>NarLayout20</layout>
+					<libraries>
+						<library>
+							<type>shared</type>
+						</library>
+					</libraries>
+				</configuration>
+			</plugin>
         </plugins>
     </build>
 </project>

@@ -52,7 +52,7 @@ public class NLPUtils {
     }
 
     /**
-     * A sample test case for unit testing purposes
+     * A sample test case for unit testing purposes for the english stemmer
      *
      * @throws ParseException
      */
