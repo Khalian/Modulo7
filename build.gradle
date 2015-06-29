@@ -1,0 +1,38 @@
+apply plugin: 'java'
+apply plugin: 'eclipse'
+apply plugin: 'idea'
+apply plugin: 'cpp'
+
+model {
+  components {
+    main(NativeExecutableSpec) {}
+  }
+}
+
+sourceCompatibility = 1.8
+version = '1.0'
+jar {
+    manifest {
+        attributes 'Implementation-Title': 'Modulo7',
+                   'Implementation-Version': 1.0
+    }
+}
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+	compile group: 'org.apache.lucene', name: 'lucene-analyzers', version: '3.4.0'
+	compile group: 'org.jsoup', name: 'jsoup', version: '1.7.2'
+	compile group: 'org.json', name: 'json', version: '20140107'
+	compile group: 'pdfbox', name: 'pdfbox', version: '0.7.3'
+}
+
+uploadArchives {
+    repositories {
+       flatDir {
+           dirs 'repos'
+       }
+    }
+}

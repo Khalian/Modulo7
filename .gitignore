@@ -7,10 +7,12 @@
 # Folders
 /bin/*
 /target/*
+/build/*
 
 # Normal Files
 .settings
 .idea
+.gradle
 .project
 .classpath
 *.class
