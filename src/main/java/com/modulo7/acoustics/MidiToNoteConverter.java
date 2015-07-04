@@ -13,9 +13,13 @@ import javax.sound.midi.*;
  */
 public class MidiToNoteConverter {
 
+    // Midi Byte representation of on note
     public static final int NOTE_ON = 0x90;
+
+    // Midi Byte representation of off note
     public static final int NOTE_OFF = 0x80;
 
+    // Notes in western music
     public static final String[] NOTE_NAMES = {"C", "C#", "D", "D#", "E", "F", "F#", "G", "G#", "A", "A#", "B"};
 
     /**
@@ -74,6 +78,13 @@ public class MidiToNoteConverter {
 
     }
 
+    /**
+     * Test code for Midi converter, taking a basic midi file and converting to
+     * notes
+     *
+     * @param args
+     * @throws Exception
+     */
     public static void main(String[] args) throws Exception {
         MidiToNoteConverter converter = new MidiToNoteConverter();
         converter.getNotesFromMidiFile("C:\\Users\\asanyal\\Downloads\\01A-1__Good_Times_Bad_Times.mid");
