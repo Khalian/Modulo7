@@ -28,20 +28,6 @@ public class BasicLyricsCrawler implements Runnable {
     // A predicate value that indicates whether stemming is to be performed or not
     private boolean isStemmingEnabled = false;
 
-    // A file which contains words that cannot be part of any lyrics, yet appears
-    // in lyrics sites
-    private static final String NON_LYRICS_WORDS_FILE =
-            System.getenv("MODULO7_ROOT") + File.separator + "resources" + File.separator + "non_lyrics_words";
-
-    // A file which contains the stop words, extremely common words that should not be
-    // considered as part of the lyrics
-    private static final String STOP_WORDS_FILE =
-            System.getenv("MODULO7_ROOT") + File.separator + "resources" + File.separator+ "stopwords";
-
-    // A file which contains base urls for various lyrics sites which acts as a seed
-    private static final String LYRICS_SEED_FILE =
-            System.getenv("MODULO7_ROOT") + File.separator + "resources" + File.separator+ "lyrics_seed";
-
     private Set<String> stopList;
 
     private Set<String> nonLyricsWords;
@@ -82,9 +68,14 @@ public class BasicLyricsCrawler implements Runnable {
      * @throws FileNotFoundException
      */
     private void init() throws IOException {
-        BufferedReader stopWordsFileReader = new BufferedReader(new FileReader(new File(STOP_WORDS_FILE)));
-        BufferedReader nonLyricsFileReader = new BufferedReader(new FileReader(new File(NON_LYRICS_WORDS_FILE)));
-        BufferedReader lyricsSeedFileReader = new BufferedReader(new FileReader(new File(LYRICS_SEED_FILE)));
+        BufferedReader stopWordsFileReader =
+                new BufferedReader(new FileReader(new File(CrawlerHelper.STOP_WORDS_FILE)));
+
+        BufferedReader nonLyricsFileReader =
+                new BufferedReader(new FileReader(new File(CrawlerHelper.NON_LYRICS_WORDS_FILE)));
+
+        BufferedReader lyricsSeedFileReader =
+                new BufferedReader(new FileReader(new File(CrawlerHelper.LYRICS_SEED_FILE)));
 
         stopList = new HashSet<>();
         nonLyricsWords = new HashSet<>();

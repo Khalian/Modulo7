@@ -29,14 +29,14 @@ public class BasicImageCrawler implements Runnable {
     Set<String> artists;
 
     // A basic google querier object, used to execute image queries
-    private GoogleQuery querier;
+    private GoogleImageGetQuery querier;
 
     /**
      * Basic Image Crawler constructor
      */
     public BasicImageCrawler() {
         artists = new HashSet<>();
-        querier = new GoogleQuery();
+        querier = new GoogleImageGetQuery();
     }
 
     /**

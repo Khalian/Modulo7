@@ -1,10 +1,53 @@
 # Modulo7
 A semantic and technical analysis of musical scores based on Information Retrieval Principles
 
-For the perl modules do : -
+OVERVIEW: Modulo7 is an research attempt to build a purely objective music analyzer, statistics miner,
+ranking and recommendation engine and genre identifier using music theory and natural language principles. 
+Most music recommendation engines take into account user feedback for recommendation and analysis 
+purpose and does not take into account music theory. Modulo7 allows comparisons based on both 
+simple and complex rules of music theory and would eventually allow extensible rules to be defined 
+by users for comparisons. Standard Users will be able to use simple rules for recommendation and statistics
+mining, and power users would be able to define their own custom rules for ranking
+
+(MODULO7 IS IN ACTIVE DEVELOPMENT AND NOT READY FOR PRODUCTION USAGE).
+
+Modulo7 has the following broad goals:-
+
+1. A crawling engine that acquires information from various recorded form of music
+including acoustic sources (.mp3, .midi etc), sheet music images, lyrics etc. The crawling engine will
+run as a daemon/service and acquire these information. Third party libraries like Echo Nest, Google API
+as well as hand crafted crawling techniques are used for this purpose (STATUS: UNDER CONSTRUCTION)
+
+2. A vector space model for music. These models will represent music in an abstract form
+on which standard and customized rules based on music theory can be applied. Concepts like phrasing analysis,
+timber and pitch analysis and custom rules (e.g - a higher number of power chords implies chances of the music 
+song being a rock or metal song). The vector space model will include custom similarity measure
+and extensible similarity measures based on user input on complex music theory rules(STATUS : UNDER CONSTRUCTION)
+THIS COMPONENT IS THE BULK OF THE WORK AND THE NOVELTY OF THE PROJECT.
+
+3. An acoustics miner component. The acoustic miner takes files like (.mp3, .midi) etc
+and acquires note, pitch, key and other forms of information from the files. These will be then feed 
+to the vector space model component. (STATUS : UNDER CONSTRUCTION)
+
+4. A sheet music miner component. The sheet miner will take western music sheets of the 
+form (.png, .jpeg etc) files and extract the notes, key signature from the images. This information
+can then be used to create a (STATUS : UNDER INVESTIGATION). 
+
+5. A lyrics analyzer : The lyrics analyzer will take its input from the crawling engine and then make objective
+analysis on the lyrics (e.g the vocabulary richness of the song, semantic intent based on context etc).
+(STATUS : UNDER INVESTIGATION)
+
+6. Optional : A machine learning component that will convert the vector space model into a feature space model
+on which standard machine learning techniques like classification (e.g. for supervised genre id) and clustering
+can be applied (STATUS : NOT STARTED)
+
+THE PERL MODULE WAS THE FIRST PROTOTYPE DRAFT OF THE PROJECT AND IS DEPRECATED. THE WHOLE MODULE WILL BE 
+REMOVED IN A FUTURE COMMIT OF THE PROJECT.
+
+For the perl modules do (@Deprecated) : -
 cd src/main/perl
 
-Pipeline Usage:
+Pipeline Usage For Perl:
 
 1. $ perl build_song_sources_crawler.pm
 This creates song_sources.txt

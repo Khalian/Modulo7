@@ -4,14 +4,12 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import javax.swing.*;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.URL;
 import java.net.URLConnection;
 import java.util.HashSet;
-import java.util.List;
 import java.util.Set;
 
 /**
@@ -22,12 +20,12 @@ import java.util.Set;
  * sheet music
  *
  */
-public class GoogleQuery {
+public class GoogleImageGetQuery {
 
     // Set of image URLs
     private Set<String> imageURLs;
 
-    public GoogleQuery() {
+    public GoogleImageGetQuery() {
         imageURLs = new HashSet<>();
     }
 
@@ -40,7 +38,8 @@ public class GoogleQuery {
             query = query.replace(" ", "+");
 
             for (int iter = 0; iter < 100; iter++) {
-                final String GOOGLE_IMAGE_SEARCH = "https://ajax.googleapis.com/ajax/services/search/images?v=1.0&rsz=8&start="+ iter * 8 + "&q=";
+                final String GOOGLE_IMAGE_SEARCH =
+                        "https://ajax.googleapis.com/ajax/services/search/images?v=1.0&rsz=8&start="+ iter * 8 + "&q=";
 
                 URL url = new URL(GOOGLE_IMAGE_SEARCH + query);
                 URLConnection connection = url.openConnection();
@@ -82,7 +81,7 @@ public class GoogleQuery {
     }
 
     public static void main(String args[]) throws IOException {
-        GoogleQuery query = new GoogleQuery();
+        GoogleImageGetQuery query = new GoogleImageGetQuery();
 
         // TODO : Add additional check on query type to contain the keyword sheet music or some variant of the same
         query.executeImageSearch("led zepplin sheet music");

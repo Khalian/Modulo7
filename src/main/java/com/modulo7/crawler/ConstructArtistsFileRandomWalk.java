@@ -3,18 +3,10 @@ package com.modulo7.crawler;
 import com.echonest.api.v4.Artist;
 import com.echonest.api.v4.EchoNestAPI;
 import com.echonest.api.v4.EchoNestException;
-import org.apache.http.HttpHost;
-import org.apache.http.HttpRequest;
 import org.apache.http.HttpResponse;
-import org.apache.http.client.ClientProtocolException;
 import org.apache.http.client.HttpClient;
-import org.apache.http.client.methods.CloseableHttpResponse;
 import org.apache.http.client.methods.HttpGet;
-import org.apache.http.conn.ClientConnectionManager;
-import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.impl.client.HttpClients;
-import org.apache.http.params.HttpParams;
-import org.apache.http.protocol.HttpContext;
 
 import java.io.BufferedWriter;
 import java.io.FileWriter;
@@ -35,16 +27,13 @@ public class ConstructArtistsFileRandomWalk {
     // A handle to the API class
     private EchoNestAPI en;
 
-    // The API key, generally acquired
-    private String ECHO_NEST_API_KEY;
-
     // Whether tracing is enabled for echo nest API
     private static boolean trace = false;
 
     // A list of all the crawled artists
     private Set<String> crawledArtists;
 
-    // Number of iterations for random walks
+    // Number of iterations for random walks, TODO : Externalize this and make it configurable
     private static final int NUM_RANDOM_WALK_ITERS = 50;
 
     /**
@@ -65,7 +54,8 @@ public class ConstructArtistsFileRandomWalk {
      */
     private void acquireRateLimit() throws IOException {
         // TODO : Fix this
-        String queryURL = "http://developer.echonest.com/api/v4/artist/profile?api_key=" + ECHO_NEST_API_KEY + "&name=";
+        String queryURL =
+                "http://developer.echonest.com/api/v4/artist/profile?api_key=" + CrawlerHelper.ECHO_NEST_API_KEY + "&name=";
 
         HttpClient client = HttpClients.createDefault();
         HttpGet httpGet = new HttpGet("http://targethost/homepage");
@@ -85,7 +75,7 @@ public class ConstructArtistsFileRandomWalk {
         // Init all data structures
         init();
 
-        en = new EchoNestAPI(ECHO_NEST_API_KEY);
+        en = new EchoNestAPI(CrawlerHelper.ECHO_NEST_API_KEY);
         en.setTraceSends(trace);
         en.setTraceRecvs(trace);
     }
@@ -94,15 +84,7 @@ public class ConstructArtistsFileRandomWalk {
      * Basic init calls
      */
     private void init() {
-        acquireEchoNestAPIKey();
         crawledArtists = new HashSet<>();
-    }
-
-    /**
-     * Method to acquire API Key
-     */
-    private void acquireEchoNestAPIKey() {
-        ECHO_NEST_API_KEY = "K54MGT0TONSDQDKXE";
     }
 
     /**
@@ -167,5 +149,9 @@ public class ConstructArtistsFileRandomWalk {
         }
 
         out.close();
+    }
+
+    private List<String> readArtistSeedFile() {
+
     }
 }

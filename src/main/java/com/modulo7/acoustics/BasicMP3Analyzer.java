@@ -1,6 +1,7 @@
 package com.modulo7.acoustics;
 
 import com.echonest.api.v4.*;
+import com.modulo7.crawler.CrawlerHelper;
 
 import java.io.File;
 import java.io.IOException;
@@ -21,22 +22,12 @@ public class BasicMP3Analyzer {
     // The echo nest API
     private EchoNestAPI en;
 
-    // The API key, generally acquired
-    private String ECHO_NEST_API_KEY;
-
     // Number of milliseconds given for analysis
     // TODO : Dynamically configure the analysis duration
     private static final int DURATION_OF_ANALYSIS = 30000;
 
-    /**
-     * Method to acquire API Key
-     */
-    private void acquireEchoNestAPIKey() {
-        ECHO_NEST_API_KEY = "K54MGT0TONSDQDKXE";
-    }
-
     private void init() {
-        acquireEchoNestAPIKey();
+
     }
 
 
@@ -48,7 +39,7 @@ public class BasicMP3Analyzer {
     public BasicMP3Analyzer() throws EchoNestException {
 
         init();
-        en = new EchoNestAPI(ECHO_NEST_API_KEY);
+        en = new EchoNestAPI(CrawlerHelper.ECHO_NEST_API_KEY);
     }
 
     /**
