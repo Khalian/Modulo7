@@ -30,7 +30,6 @@ public class BasicMP3Analyzer {
 
     }
 
-
     /**
      * Constructor of the basic MP3 metadata analyzer
      *
@@ -79,7 +78,7 @@ public class BasicMP3Analyzer {
                     }
 
                     for (Segment segment : analysis.getSegments()) {
-                        System.out.println(segment.getPitches().length);
+                        getNoteFromVector(segment.getPitches());
                     }
                 } else {
                     System.err.println("Trouble analysing track " + track.getStatus());
@@ -89,6 +88,21 @@ public class BasicMP3Analyzer {
             }
         }
     }
+
+    /**
+     * This method takes the output of the Echo Nest API's note
+     * vector : which they name as the chroma vector and ascertain the
+     * note or the chord associated with that chroma vector
+     * @param noteChromaVector
+     */
+    private void getNoteFromVector(double[] noteChromaVector) {
+
+        // First check whether the chroma vector is valid
+        assert (noteChromaVector.length == 12);
+
+        System.out.println(noteChromaVector);
+    }
+
 
     public static void main(String[] args) throws EchoNestException {
         BasicMP3Analyzer analyzer = new BasicMP3Analyzer();

@@ -20,7 +20,7 @@ public class MidiToNoteConverter {
     public static final int NOTE_OFF = 0x80;
 
     // Notes in western music
-    public static final String[] NOTE_NAMES = {"C", "C#", "D", "D#", "E", "F", "F#", "G", "G#", "A", "A#", "B"};
+    public static final String[] NOTE_NAMES = {"A", "A#", "B", "C", "C#", "D", "D#", "E", "F", "F#", "G", "G#"};
 
     /**
      * Gets the data from a midi file

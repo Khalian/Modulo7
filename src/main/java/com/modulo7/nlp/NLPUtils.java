@@ -16,7 +16,9 @@ import org.apache.lucene.util.Version;
 import java.io.IOException;
 import java.io.StringReader;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class NLPUtils {
 
@@ -52,6 +54,26 @@ public class NLPUtils {
     }
 
     /**
+     *
+     * Simple helper method that takes a string separated by spaces and
+     * returns the words along with their counts
+     *
+     * @param inputString
+     * @return
+     */
+    public Map<String, Integer> getVocabularyCounts(String inputString) {
+        Map<String, Integer> vocabCounts = new HashMap<>();
+
+        String[] inputConstituents = inputString.split("\\s+");
+
+        for (String inputConstituent : inputConstituents) {
+            addCountToMap(vocabCounts, inputConstituent);
+        }
+
+        return vocabCounts;
+    }
+
+    /**
      * A sample test case for unit testing purposes for the english stemmer
      *
      * @throws ParseException
@@ -64,6 +86,21 @@ public class NLPUtils {
 
         for (String word : stemmedSentence) {
             System.out.print(word + " ");
+        }
+    }
+
+    /**
+     * Unit addition of count to map
+     *
+     * @param map
+     * @param word (Word whose count to increment)
+     */
+    private void addCountToMap(Map<String, Integer> map, String word) {
+        if (map.containsKey(word)) {
+            int currCount = map.get(word);
+            map.put(word, currCount + 1);
+        } else {
+            map.put(word, 1);
         }
     }
 }

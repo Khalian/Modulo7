@@ -151,7 +151,11 @@ public class ConstructArtistsFileRandomWalk {
         out.close();
     }
 
+    /**
+     * TODO : Finish this
+     * @return
+     */
     private List<String> readArtistSeedFile() {
-
+        return null;
     }
 }
