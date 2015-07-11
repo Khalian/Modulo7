@@ -2,12 +2,70 @@ apply plugin: 'java'
 apply plugin: 'eclipse'
 apply plugin: 'idea'
 apply plugin: 'cpp'
+apply plugin: 'windows-resources'
 
-//model {
-//  components {
-//    main(NativeExecutableSpec) {}
-//  }
-//}
+// C++ specific ones
+
+// Acquiring environment variables
+def opencvhome = System.getenv("OPENCV_HOME")
+
+def opencvinclude = opencvhome + "\\include"
+
+// For any shared library binaries built with Visual C++,
+// define the DLL_EXPORT macro
+binaries.withType(NativeLibrarySpec) {
+    if (toolChain in VisualCpp) {
+        cCompiler.include "/I" + includes
+        cCompiler.args "/Zi"
+        cCompiler.define "DLL_EXPORT"
+    }
+    if (toolChain in Gcc && buildType == buildTypes.debug) {
+        cCompiler.include "-I" + includes
+        cppCompiler.args "-g "
+    }
+    if (toolChain in VisualCpp && buildType == buildTypes.debug) {
+
+        cppCompiler.args '/Zi'
+        cppCompiler.define 'DEBUG'
+        linker.args '/DEBUG'
+    }
+}
+
+model {
+    components {
+        main(NativeLibrarySpec) {
+            sources {
+                cpp {
+                    source {
+                        srcDirs "src/main/cpp"
+                        include "**/*.cpp"
+                    }
+                    exportedHeaders {
+                        srcDirs "src/main/include", opencvinclude
+                    }
+                }
+            }
+        }
+    }
+
+    buildTypes {
+        debug
+        release
+    }
+
+    platforms {
+        x86 {
+            architecture "x86"
+        }
+        x64 {
+            architecture "x86_64"
+        }
+        itanium {
+            architecture "ia-64"
+        }
+    }
+}
+// Java specific ones
 
 sourceCompatibility = 1.8
 version = '1.0'
@@ -24,7 +82,7 @@ repositories {
 
 dependencies {
 
-    compile files('./resources/externalDeps/jEN.jar')
+    // compile files('./resources/externalDeps/jEN.jar')
 
 	compile group: 'org.apache.lucene', name: 'lucene-analyzers', version: '3.4.0'
 	compile group: 'org.jsoup', name: 'jsoup', version: '1.7.2'
@@ -33,6 +91,9 @@ dependencies {
     compile group: 'com.googlecode.jen-api', name: 'jen-api', version: '4.x.p'
     compile group: 'com.googlecode.json-simple', name: 'json-simple', version: '1.1.1'
     compile group: 'org.apache.httpcomponents', name: 'httpclient', version: '4.5'
+    compile group: 'com.amazonaws', name: 'aws-java-sdk', version: '1.10.4'
+    compile group: 'com.googlecode.jen-api', name: 'jen-api', version: '4.x.p'
+    compile group: 'org.hibernate', name: 'hibernate-core', version: '4.3.10.Final'
 }
 
 uploadArchives {
