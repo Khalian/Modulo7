@@ -3,34 +3,16 @@ apply plugin: 'eclipse'
 apply plugin: 'idea'
 apply plugin: 'cpp'
 apply plugin: 'windows-resources'
+apply plugin: "visual-studio"
 
-// C++ specific ones
+// C++ specific build configurations
 
 // Acquiring environment variables
 def opencvhome = System.getenv("OPENCV_HOME")
 
 def opencvinclude = opencvhome + "\\include"
 
-// For any shared library binaries built with Visual C++,
-// define the DLL_EXPORT macro
-binaries.withType(NativeLibrarySpec) {
-    if (toolChain in VisualCpp) {
-        cCompiler.include "/I" + includes
-        cCompiler.args "/Zi"
-        cCompiler.define "DLL_EXPORT"
-    }
-    if (toolChain in Gcc && buildType == buildTypes.debug) {
-        cCompiler.include "-I" + includes
-        cppCompiler.args "-g "
-    }
-    if (toolChain in VisualCpp && buildType == buildTypes.debug) {
-
-        cppCompiler.args '/Zi'
-        cppCompiler.define 'DEBUG'
-        linker.args '/DEBUG'
-    }
-}
-
+/**
 model {
     components {
         main(NativeLibrarySpec) {
@@ -38,12 +20,16 @@ model {
                 cpp {
                     source {
                         srcDirs "src/main/cpp"
-                        include "**/*.cpp"
+                        include
                     }
                     exportedHeaders {
                         srcDirs "src/main/include", opencvinclude
                     }
                 }
+            }
+            binaries.all {
+                // Each executable binary produced uses the 'hello' static library binary
+                lib library: 'opencv_world300d', linkage: 'static'
             }
         }
     }
@@ -65,7 +51,30 @@ model {
         }
     }
 }
-// Java specific ones
+
+// For any shared library binaries built with Visual C++,
+// define the DLL_EXPORT macro
+binaries.withType(NativeLibrarySpec) {
+    if (toolChain in VisualCpp) {
+        cCompiler.include "/I" + includes
+        cCompiler.args "/Zi"
+        cCompiler.define "DLL_EXPORT"
+    }
+    if (toolChain in Gcc && buildType == buildTypes.debug) {
+        cCompiler.include "-I" + includes
+        cppCompiler.args "-g "
+    }
+    if (toolChain in VisualCpp && buildType == buildTypes.debug) {
+
+        cppCompiler.args '/Zi'
+        cppCompiler.define 'DEBUG'
+        linker.args '/DEBUG'
+    }
+}
+
+ **/
+
+// Java specific build configurations
 
 sourceCompatibility = 1.8
 version = '1.0'
@@ -94,6 +103,7 @@ dependencies {
     compile group: 'com.amazonaws', name: 'aws-java-sdk', version: '1.10.4'
     compile group: 'com.googlecode.jen-api', name: 'jen-api', version: '4.x.p'
     compile group: 'org.hibernate', name: 'hibernate-core', version: '4.3.10.Final'
+    compile group: 'org.bytedeco', name: 'javacv', version: '1.0'
 }
 
 uploadArchives {
