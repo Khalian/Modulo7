@@ -34,8 +34,7 @@ public class GoogleImageGetQuery {
             // Convert query to lowercase
             query = query.toLowerCase();
 
-            // TODO : find a better regular expression doctor for query processing
-            query = query.replace(" ", "+");
+            query = query.replaceAll("\\s", "+");
 
             for (int iter = 0; iter < 100; iter++) {
                 final String GOOGLE_IMAGE_SEARCH =

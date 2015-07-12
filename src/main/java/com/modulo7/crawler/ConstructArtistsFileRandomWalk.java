@@ -51,6 +51,8 @@ public class ConstructArtistsFileRandomWalk {
      * Acquires the rate limit, to be called when to ascertain how much rate is left and slow down accordingly
      *
      * This method is useful for dynamic adjustment of sleep times for the crawler
+     *
+     * TODO : Fix this class
      */
     private void acquireRateLimit() throws IOException {
         // TODO : Fix this
@@ -152,7 +154,9 @@ public class ConstructArtistsFileRandomWalk {
     }
 
     /**
-     * TODO : Finish this
+     * This method reads the seed file and constructs an initial list from which
+     * to start with the random walk
+     *
      * @return
      */
     private List<String> readArtistSeedFile() {

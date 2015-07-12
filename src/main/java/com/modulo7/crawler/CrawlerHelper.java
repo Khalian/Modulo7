@@ -12,6 +12,7 @@ public class CrawlerHelper {
     // The API key, generally acquired : TODO : Externalize it and make it generic
     public static final String ECHO_NEST_API_KEY = "K54MGT0TONSDQDKXE";
 
+    // Picks up the base directory on which modulo 7 resides
     public static final String MODULO7_ROOT = System.getenv("MODULO7_ROOT");
 
     // A file which contains words that cannot be part of any lyrics, yet appears
