@@ -22,7 +22,7 @@ import java.util.Set;
  */
 public class GoogleImageGetQuery {
 
-    // Set of image URLs
+    // Set of image URLs acquired as a part of the
     private Set<String> imageURLs;
 
     public GoogleImageGetQuery() {

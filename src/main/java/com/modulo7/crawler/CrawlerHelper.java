@@ -35,6 +35,9 @@ public class CrawlerHelper {
     /**
      * Method used to clean up files of the following formats
      *
+     * .lyrics
+     * .
+     *
      */
     public void cleanUpCrawledFiles() {
 

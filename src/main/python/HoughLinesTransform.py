@@ -26,6 +26,21 @@ def getHoughLines(imgFile):
 
     cv2.imwrite('image2.png',img)
 
+def removeLinesFromSheet(imgFile):
+
+    img = cv2.imread(imgFile)
+    gray=cv2.cvtColor(img,cv2.COLOR_BGR2GRAY)
+
+    linek = np.zeros((11,11),dtype=np.uint8)
+    linek[5,...]=1
+
+    x=cv2.morphologyEx(gray, cv2.MORPH_OPEN, linek ,iterations=1)
+
+    gray-=x
+
+    cv2.imshow('gray',gray)
+    cv2.waitKey(0)
+
 # Running a test case
 def main():
     getHoughLines("jinglebells.png")

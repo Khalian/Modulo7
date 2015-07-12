@@ -24,6 +24,9 @@ class LIB_FUNC HoughLinesTransform
 		// Apply the hogue transform on the given file
 		void getLinesFromHogueTransform();
 
+		// Removing
+		void removeLinesFromImage();
+
 	public:
         
 		// Default constructor for the hogue transform

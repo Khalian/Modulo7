@@ -26,7 +26,7 @@ public class BasicImageCrawler implements Runnable {
             System.getenv("MODULO7_ROOT") + File.separator + "resources" + File.separator + "artists";
 
     // A set of all the artists
-    Set<String> artists;
+    private Set<String> artists;
 
     // A basic google querier object, used to execute image queries
     private GoogleImageGetQuery querier;
@@ -40,8 +40,8 @@ public class BasicImageCrawler implements Runnable {
     }
 
     /**
-     * Method to load contents of artists file into in memory object
-     * s
+     * Method to load contents of artists file into in memory objects
+     *
      * @throws IOException
      */
     private void loadArtistsFile() throws IOException {
@@ -63,7 +63,7 @@ public class BasicImageCrawler implements Runnable {
 
     /**
      * Method to download a sheet file given a url of the sheet file, simple
-     * URL classes have been used to acheive the same
+     * URL classes have been used to achieve the same
      *
      * @param urlOfSheetFile
      */
@@ -123,7 +123,7 @@ public class BasicImageCrawler implements Runnable {
             loadArtistsFile();
 
             for (String artist : artists) {
-                // Custom query to look for
+                // Custom query to look for sheet music available on the net
                 querier.executeImageSearch(artist + "sheet music");
                 Set<String> imageURLs = querier.getImageURLs();
                 for (String imageURL : imageURLs) {
