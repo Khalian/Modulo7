@@ -1,36 +1,72 @@
 package com.modulo7.musicstatmodels;
 
+import com.modulo7.common.InvalidOctaveRangeException;
+
 /**
  * Created by asanyal on 6/16/2015.
  *
- * This enum describes the notes available (TODO : Describe a validity check)
+ * This enum describes the notes in the
  */
 public enum Note {
 
-    A("A"),
-    ASHARP("A#"),
-    B("B"),
-    C("C"),
-    CSHARP("C#"),
-    D("D"),
-    DSHARP("D#"),
-    E("E"),
-    F("F"),
-    FSHARP("F#"),
-    G("G"),
-    GSHARP("G#");
+    // All the notes
+    A0("A", 0), ASHARP0("A#", 0), B0("B", 0), C0("C", 0), CSHARP0("C#", 0), D0("D", 0), DSHARP0("D#", 0), E0("E", 0),
+    F0("F", 0), FSHARP0("F#", 0), G0("G", 0), GSHARP0("G#", 0),
 
+    A1("A", 1), ASHARP1("A#", 1), B1("B", 1), C1("C", 1), CSHARP1("C#", 1), D1("D", 1), DSHARP1("D#", 1), E1("E", 1),
+    F1("F", 1), FSHARP1("F#", 1), G1("G", 1), GSHARP1("G#", 1),
+
+    A2("A", 2), ASHARP2("A#", 2), B2("B", 2), C2("C", 2), CSHARP2("C#", 2), D2("D", 2), DSHARP2("D#", 2), E2("E", 2),
+    F2("F", 2), FSHARP2("F#", 2), G2("G", 2), GSHARP2("G#", 2),
+
+    A3("A", 3), ASHARP3("A#", 3), B3("B", 3), C3("C", 3), CSHARP3("C#", 3), D3("D", 3), DSHARP3("D#", 3), E3("E", 3),
+    F3("F", 3), FSHARP3("F#", 3), G3("G", 3), GSHARP3("G#", 3),
+
+    A4("A", 4), ASHARP4("A#", 4), B4("B", 4), C4("C", 4), CSHARP4("C#", 4), D4("D", 4), DSHARP4("D#", 4), E4("E", 4),
+    F4("F", 4), FSHARP4("F#", 4), G4("G", 4), GSHARP4("G#", 4),
+
+    A5("A", 5), ASHARP5("A#", 5), B5("B", 5), C5("C", 5), CSHARP5("C#", 5), D5("D", 5), DSHARP5("D#", 5), E5("E", 5),
+    F5("F", 5), FSHARP5("F#", 5), G5("G", 5), GSHARP5("G#", 5),
+
+    A6("A", 6), ASHARP6("A#", 6), B6("B", 6), C6("C", 6), CSHARP6("C#", 6), D6("D", 6), DSHARP6("D#", 6), E6("E", 6),
+    F6("F", 6), FSHARP6("F#", 6), G6("G", 6), GSHARP6("G#", 6),
+
+    A7("A", 7), ASHARP7("A#", 7), B7("B", 7), C7("C", 7), CSHARP7("C#", 7), D7("D", 7), DSHARP7("D#", 7), E7("E", 7),
+    F7("F", 7), FSHARP7("F#", 7), G7("G", 7), GSHARP7("G#", 7),
+
+    A8("A", 8), ASHARP8("A#", 8), B8("B", 8), C8("C", 8), CSHARP8("C#", 0), D8("D", 8), DSHARP8("D#", 8), E8("E", 8),
+    F8("F", 8), FSHARP8("F#", 8), G8("G", 8), GSHARP8("G#", 8);
+
+    // The value of the node
     private String noteValue;
+
+    // The octave associated with this node
+    private Integer octaveNumber;
 
     /**
      * Default constructor for note
      * @param noteValue
      */
-    Note(String noteValue) {
+    Note(String noteValue, int octaveNumber) throws InvalidOctaveRangeException {
         String baseNoteWithoutAccidental = noteValue.substring(0, 1).toUpperCase();
         String standardizedNode = baseNoteWithoutAccidental + noteValue.substring(1, 2);
         this.noteValue = standardizedNode;
         harmonicEquivalence(noteValue);
+
+        validOctaveNumberCheck(octaveNumber);
+        this.octaveNumber = octaveNumber;
+    }
+
+    /**
+     * Method to check whether the octave number is correct
+     * or not
+     */
+    private void validOctaveNumberCheck(int octaveNumber) throws InvalidOctaveRangeException {
+        if (octaveNumber >= 0 && octaveNumber <= 8) {
+
+        } else {
+            throw new InvalidOctaveRangeException();
+        }
     }
 
     /**
