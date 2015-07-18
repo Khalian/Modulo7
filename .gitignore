@@ -30,3 +30,4 @@
 *.tex.bak
 *.sln*
 *.vcproj*
+*.vcxproj*

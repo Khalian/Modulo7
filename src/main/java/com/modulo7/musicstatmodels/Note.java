@@ -47,13 +47,18 @@ public enum Note {
      * Default constructor for note
      * @param noteValue
      */
-    Note(String noteValue, int octaveNumber) throws InvalidOctaveRangeException {
+    Note(String noteValue, int octaveNumber) {
         String baseNoteWithoutAccidental = noteValue.substring(0, 1).toUpperCase();
         String standardizedNode = baseNoteWithoutAccidental + noteValue.substring(1, 2);
         this.noteValue = standardizedNode;
         harmonicEquivalence(noteValue);
 
-        validOctaveNumberCheck(octaveNumber);
+        try {
+            validOctaveNumberCheck(octaveNumber);
+        } catch (InvalidOctaveRangeException ie) {
+            ie.printStackTrace();
+        }
+
         this.octaveNumber = octaveNumber;
     }
 
@@ -65,7 +70,8 @@ public enum Note {
         if (octaveNumber >= 0 && octaveNumber <= 8) {
 
         } else {
-            throw new InvalidOctaveRangeException();
+            throw new InvalidOctaveRangeException("Octave Number :" + octaveNumber + " is not in range" +
+                    "in between 0 and 8");
         }
     }
 

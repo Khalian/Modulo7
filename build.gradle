@@ -10,9 +10,12 @@ apply plugin: "visual-studio"
 // Acquiring environment variables
 def opencvhome = System.getenv("OPENCV_HOME")
 
+// Include directories
 def opencvinclude = opencvhome + "\\include"
 
-/**
+// Lib directories
+def opencvlibs =    opencvhome + "\\lib"
+
 model {
     components {
         main(NativeLibrarySpec) {
@@ -20,16 +23,14 @@ model {
                 cpp {
                     source {
                         srcDirs "src/main/cpp"
-                        include
+                        include "src/main/include"
                     }
                     exportedHeaders {
-                        srcDirs "src/main/include", opencvinclude
+                        srcDirs "src/main/include"
                     }
                 }
-            }
-            binaries.all {
-                // Each executable binary produced uses the 'hello' static library binary
-                lib library: 'opencv_world300d', linkage: 'static'
+
+                cpp.lib library:'opencv', linkage:'static'
             }
         }
     }
@@ -39,6 +40,18 @@ model {
         release
     }
 
+    repositories {
+        libs(PrebuiltLibraries) {
+            opencv {
+                headers.srcDir opencvinclude
+
+                binaries.withType(StaticLibraryBinary) {
+                    def libName = targetPlatform.operatingSystem.windows ? 'opencv_ts300.lib' : 'libopencv_ts300.a'
+                    staticLibraryFile = file(opencvlibs + "\\" + libName)
+                }
+            }
+        }
+    }
     platforms {
         x86 {
             architecture "x86"
@@ -71,8 +84,6 @@ binaries.withType(NativeLibrarySpec) {
         linker.args '/DEBUG'
     }
 }
-
- **/
 
 // Java specific build configurations
 
