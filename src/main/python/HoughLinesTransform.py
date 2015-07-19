@@ -67,7 +67,7 @@ def removeLinesFromSheet(imgFile):
 
 # Running a test case
 def main():
-    # getHoughLines("jinglebells.png")
+    getHoughLines("jinglebells.png")
     removeLinesFromSheet("jinglebells.png")
 
 main()

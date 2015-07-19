@@ -1,5 +1,7 @@
 package com.modulo7.musicstatmodels;
 
+import com.modulo7.common.InvalidLineInstantSizeException;
+
 import java.util.HashSet;
 import java.util.Set;
 
@@ -39,12 +41,33 @@ public class LineInstant {
     private Set<Note> setOfNotes;
 
     /**
-     * Basic constructor of note
+     * Basic constructor of the line instant class
+     * This class can
+     *
      * @param noteType
      */
     public LineInstant(LineInstantType noteType) {
         this.noteType = noteType;
         setOfNotes = new HashSet<>();
+    }
+
+    /**
+     *
+     * @param noteSet
+     */
+    public LineInstant(Set<Note> noteSet) throws InvalidLineInstantSizeException {
+
+        if (noteSet.size() == 0) {
+            throw new InvalidLineInstantSizeException("Line Instant Cannot be of size" + noteSet.size());
+        }
+
+        setOfNotes = noteSet;
+
+        if (setOfNotes.size() == 1) {
+            noteType = LineInstantType.SINGLE_NOTE;
+        } else {
+            noteType = LineInstantType.CHORD;
+        }
     }
 
     /**

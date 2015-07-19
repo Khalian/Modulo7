@@ -22,10 +22,16 @@ public class FrequencyNoteMap {
     private static final Map<Double, Note> frequencyToNoteMap = new HashMap<>();
 
     // The notes listed in ascending order
-    private static final List<Double> notesInOrder = null;
+    private static final List<Double> notesInOrder = new ArrayList<Double>();
 
     // A singleton instance of the notemap
     private static FrequencyNoteMap frequencyNoteMap = null;
+
+    // Note to position Map
+    private static final Map<Note, Integer> notePositionMap = new HashMap<>();
+
+    // Position to note Map
+    private static final Map<Integer, Note> positionNoteMap = new HashMap<>();
 
     /**
      * Method to acquire the singleton instance of the note map class
@@ -122,5 +128,35 @@ public class FrequencyNoteMap {
         Set<Double> noteValues = frequencyToNoteMap.keySet();
         List<Double> notesInOrder = new ArrayList<>(noteValues);
         Collections.sort(notesInOrder);
+
+        // Temporary, put the note map to note position
+        // TODO : Figure out the actual meaning of the chroma vector
+        notePositionMap.put(Note.A4, 1);
+        notePositionMap.put(Note.ASHARP4, 2);
+        notePositionMap.put(Note.B4, 3);
+        notePositionMap.put(Note.C4, 4);
+        notePositionMap.put(Note.CSHARP4, 5);
+        notePositionMap.put(Note.D4, 6);
+        notePositionMap.put(Note.DSHARP4, 7);
+        notePositionMap.put(Note.E4, 8);
+        notePositionMap.put(Note.F4, 9);
+        notePositionMap.put(Note.FSHARP4, 10);
+        notePositionMap.put(Note.G4, 11);
+        notePositionMap.put(Note.GSHARP4, 12);
+
+        for (Map.Entry<Note, Integer> entry : notePositionMap.entrySet()) {
+            Note note = entry.getKey();
+            Integer position = entry.getValue();
+
+            positionNoteMap.put(position, note);
+        }
+    }
+
+    public Note getNoteGivenPosition(int position) {
+        return positionNoteMap.get(position);
+    }
+
+    public int getPositionGivenNote(Note note) {
+        return notePositionMap.get(note);
     }
 }
