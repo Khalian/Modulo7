@@ -36,7 +36,7 @@ void HoughLinesTransform::getLinesFromHogueTransform() {
 	vector<Vec2f> lines;
 	HoughLines(dst, lines, 1, CV_PI/180, 100, 0, 0 );
 
-	for( size_t i = 0; i < lines.size(); i++ )
+	for (size_t i = 0; i < lines.size(); i++ )
 	{
 		float rho = lines[i][0], theta = lines[i][1];
 		Point pt1, pt2;
@@ -62,4 +62,8 @@ void HoughLinesTransform::getLinesFromHogueTransform() {
 #endif
 	imshow("source", src);
 	imshow("detected lines", cdst);	
+}
+
+int main(int argc, char **argv) {
+	// Do nothing
 }

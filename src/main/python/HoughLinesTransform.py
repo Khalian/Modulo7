@@ -5,7 +5,6 @@ import numpy as np
 
 def getHoughLines(imgFile):
     img = cv2.imread(imgFile)
-    print img.shape
     gray = cv2.cvtColor(img,cv2.COLOR_BGR2GRAY)
     edges = cv2.Canny(gray,50,150,apertureSize = 3)
 
@@ -24,25 +23,51 @@ def getHoughLines(imgFile):
 
             cv2.line(img,(x1,y1),(x2,y2),(0,0,255),2)
 
-    cv2.imwrite('image2.png',img)
+    cv2.imshow('gray',img)
+    cv2.waitKey(0)
 
 def removeLinesFromSheet(imgFile):
 
     img = cv2.imread(imgFile)
-    gray=cv2.cvtColor(img,cv2.COLOR_BGR2GRAY)
 
-    linek = np.zeros((11,11),dtype=np.uint8)
-    linek[5,...]=1
+    gray = cv2.cvtColor(img,cv2.COLOR_BGR2GRAY)
+    adaptiveThreshHoldImage = cv2.adaptiveThreshold(~gray, 255, cv2.ADAPTIVE_THRESH_MEAN_C, cv2.THRESH_BINARY, 15, -2)
 
-    x=cv2.morphologyEx(gray, cv2.MORPH_OPEN, linek ,iterations=1)
+    cv2.imshow('gray', adaptiveThreshHoldImage)
 
-    gray-=x
+    horizontal = adaptiveThreshHoldImage.copy()
+    vertical = adaptiveThreshHoldImage.copy()
 
-    cv2.imshow('gray',gray)
+    (rows, cols) = adaptiveThreshHoldImage.shape
+
+    horizontalSize = cols/30
+    verticalSize = rows/30
+
+    horizontalStructure = cv2.getStructuringElement(cv2.MORPH_RECT,(horizontalSize, 1))
+
+    horizontal = cv2.erode(horizontal, horizontalStructure, iterations = 1)
+    horizontal = cv2.dilate(horizontal, horizontalStructure, iterations = 1)
+
+    cv2.imshow('horizontal', horizontal)
+
+    verticalStructure = cv2.getStructuringElement(cv2.MORPH_RECT,(1, 3))
+
+    vertical = cv2.erode(vertical, verticalStructure, iterations = 1);
+    vertical = cv2.dilate(vertical, verticalStructure, iterations = 1);
+
+    vertical = cv2.bitwise_not(vertical)
+
+    cv2.imshow('vertical', vertical)
+
+    smoothedThreshHoldImg = cv2.adaptiveThreshold(vertical, 255, cv2.ADAPTIVE_THRESH_MEAN_C, cv2.THRESH_BINARY, 3, -2)
+
+    cv2.imshow('edges', smoothedThreshHoldImg)
+
     cv2.waitKey(0)
 
 # Running a test case
 def main():
-    getHoughLines("jinglebells.png")
+    # getHoughLines("jinglebells.png")
+    removeLinesFromSheet("jinglebells.png")
 
 main()

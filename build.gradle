@@ -14,16 +14,38 @@ def opencvhome = System.getenv("OPENCV_HOME")
 def opencvinclude = opencvhome + "\\include"
 
 // Lib directories
-def opencvlibs =    opencvhome + "\\lib"
+def opencvlibs = opencvhome + "\\lib"
 
 model {
+    repositories {
+        libs(PrebuiltLibraries) {
+            opencv {
+                headers.srcDir opencvinclude
+
+                binaries.withType(StaticLibraryBinary) {
+                    def libName = targetPlatform.operatingSystem.windows ? 'opencv_core300.lib' : 'libopencv_core300.a'
+                    staticLibraryFile = file(opencvlibs + "\\" + libName)
+                }
+
+                binaries.withType(SharedLibraryBinary) {
+                    def libDynName = targetPlatform.operatingSystem.windows ? 'opencv_core300.dll' : 'libopencv_core00.so'
+                    def libStaticName = targetPlatform.operatingSystem.windows ? 'opencv_core300.lib' : 'libopencv_core300.a'
+                    // Windows uses a .dll file, with a different link file if it exists (not Cygwin or MinGW)
+                    sharedLibraryFile = file(opencvlibs + "\\" + libDynName)
+                    if (file(opencvlibs + "\\" + libStaticName).exists()) {
+                        sharedLibraryLinkFile = file(opencvlibs + "\\" + libStaticName)
+                    }
+                }
+            }
+        }
+    }
+
     components {
         main(NativeLibrarySpec) {
             sources {
                 cpp {
                     source {
                         srcDirs "src/main/cpp"
-                        include "src/main/include"
                     }
                     exportedHeaders {
                         srcDirs "src/main/include"
@@ -35,32 +57,24 @@ model {
         }
     }
 
+    visualStudio {
+        projects.all {
+            projectFile.location = "vs/${name}.vcxproj"
+            filtersFile.location = "vs/${name}.vcxproj.filters"
+        }
+        solutions.all {
+            solutionFile.location = "vs/${name}.sln"
+        }
+    }
+
     buildTypes {
         debug
         release
     }
 
-    repositories {
-        libs(PrebuiltLibraries) {
-            opencv {
-                headers.srcDir opencvinclude
-
-                binaries.withType(StaticLibraryBinary) {
-                    def libName = targetPlatform.operatingSystem.windows ? 'opencv_ts300.lib' : 'libopencv_ts300.a'
-                    staticLibraryFile = file(opencvlibs + "\\" + libName)
-                }
-            }
-        }
-    }
     platforms {
-        x86 {
-            architecture "x86"
-        }
         x64 {
             architecture "x86_64"
-        }
-        itanium {
-            architecture "ia-64"
         }
     }
 }
