@@ -1,6 +1,6 @@
 package com.modulo7.musicstatmodels;
 
-import com.modulo7.common.InvalidOctaveRangeException;
+import com.modulo7.common.Modulo7InvalidOctaveRangeException;
 
 /**
  * Created by asanyal on 6/16/2015.
@@ -55,7 +55,7 @@ public enum Note {
 
         try {
             validOctaveNumberCheck(octaveNumber);
-        } catch (InvalidOctaveRangeException ie) {
+        } catch (Modulo7InvalidOctaveRangeException ie) {
             ie.printStackTrace();
         }
 
@@ -66,11 +66,11 @@ public enum Note {
      * Method to check whether the octave number is correct
      * or not
      */
-    private void validOctaveNumberCheck(int octaveNumber) throws InvalidOctaveRangeException {
+    private void validOctaveNumberCheck(int octaveNumber) throws Modulo7InvalidOctaveRangeException {
         if (octaveNumber >= 0 && octaveNumber <= 8) {
 
         } else {
-            throw new InvalidOctaveRangeException("Octave Number :" + octaveNumber + " is not in range" +
+            throw new Modulo7InvalidOctaveRangeException("Octave Number :" + octaveNumber + " is not in range" +
                     "in between 0 and 8");
         }
     }

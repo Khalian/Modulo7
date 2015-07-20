@@ -8,16 +8,16 @@ package com.modulo7.common;
  * 0 to 8 for standard musical instruments)
  *
  */
-public class InvalidOctaveRangeException extends Modulo7BaseException {
-    public InvalidOctaveRangeException(String message) {
+public class Modulo7InvalidOctaveRangeException extends Modulo7BaseException {
+    public Modulo7InvalidOctaveRangeException(String message) {
         super(message);
     }
 
-    public InvalidOctaveRangeException(Throwable cause) {
+    public Modulo7InvalidOctaveRangeException(Throwable cause) {
         super(cause);
     }
 
-    public InvalidOctaveRangeException(String message, Throwable cause) {
+    public Modulo7InvalidOctaveRangeException(String message, Throwable cause) {
         super(message, cause);
     }
 }

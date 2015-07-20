@@ -16,6 +16,7 @@ def opencvinclude = opencvhome + "\\include"
 // Lib directories
 def opencvlibs = opencvhome + "\\lib"
 
+/*
 model {
     repositories {
         libs(PrebuiltLibraries) {
@@ -98,6 +99,7 @@ binaries.withType(NativeLibrarySpec) {
         linker.args '/DEBUG'
     }
 }
+*/
 
 // Java specific build configurations
 
@@ -129,6 +131,7 @@ dependencies {
     compile group: 'com.googlecode.jen-api', name: 'jen-api', version: '4.x.p'
     compile group: 'org.hibernate', name: 'hibernate-core', version: '4.3.10.Final'
     compile group: 'org.bytedeco', name: 'javacv', version: '1.0'
+    compile group: 'commons-cli', name: 'commons-cli', version: '1.3.1'
 }
 
 uploadArchives {

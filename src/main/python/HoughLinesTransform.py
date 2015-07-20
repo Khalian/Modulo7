@@ -65,6 +65,36 @@ def removeLinesFromSheet(imgFile):
 
     cv2.waitKey(0)
 
+def read_staff_lines(img):
+	edges = cv2.Canny(img,150,700)
+
+	lines = cv2.HoughLines(edges,1,np.pi/180,200)
+	staff_lines = []
+	for rho,theta in lines[0]:
+	    a = np.cos(theta)
+	    b = np.sin(theta)
+	    x0 = a*rho
+	    y0 = b*rho
+	    x1 = int(x0 + 1000*(-b))
+	    y1 = int(y0 + 1000*(a))
+	    x2 = int(x0 - 1000*(-b))
+	    y2 = int(y0 - 1000*(a))
+
+	    th = 10 #pixels
+	    too_close = False
+
+	    # only appends lines if they're a reasonable distance
+	    # from other lines
+	    # would be better if used averaging between close lines instead of
+	    # just taking the first one we see and tossing the other
+	    for y in staff_lines:
+	      	if abs(y - y1) <= th:
+	    		too_close = True
+	    if not too_close:
+	    	staff_lines.append((y1))
+
+	return staff_lines
+
 # Running a test case
 def main():
     getHoughLines("jinglebells.png")

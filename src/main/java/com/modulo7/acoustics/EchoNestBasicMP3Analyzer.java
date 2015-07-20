@@ -1,7 +1,7 @@
 package com.modulo7.acoustics;
 
 import com.echonest.api.v4.*;
-import com.modulo7.common.InvalidLineInstantSizeException;
+import com.modulo7.common.Modulo7InvalidLineInstantSizeException;
 import com.modulo7.crawler.CrawlerHelper;
 import com.modulo7.musicstatmodels.LineInstant;
 import com.modulo7.musicstatmodels.Note;
@@ -95,7 +95,7 @@ public class EchoNestBasicMP3Analyzer {
                 }
             } catch (IOException e) {
                 System.err.println("Trouble uploading file");
-            } catch (InvalidLineInstantSizeException e) {
+            } catch (Modulo7InvalidLineInstantSizeException e) {
                 e.printStackTrace();
             }
         }
@@ -115,7 +115,7 @@ public class EchoNestBasicMP3Analyzer {
      *
      * @return The line Instant representation of the chroma vector
      */
-    private LineInstant getLineInstantFromVector(double[] noteChromaVector) throws InvalidLineInstantSizeException {
+    private LineInstant getLineInstantFromVector(double[] noteChromaVector) throws Modulo7InvalidLineInstantSizeException {
 
         // First check whether the chroma vector is valid
         assert (noteChromaVector.length == 12);

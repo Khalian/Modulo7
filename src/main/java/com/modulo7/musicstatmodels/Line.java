@@ -14,7 +14,7 @@ import java.util.List;
  * through a riff. Each of those are lines.
  *
  * A song is an interplay of lines. Rules can be specific to a line
- * or can be 
+ * or can be
  */
 public class Line {
 
@@ -46,6 +46,9 @@ public class Line {
 
     /**
      * Dynamically adds a line instant to a line
+     * This method should be used when modolu7 is receiving
+     * a line as being composed on the spotp
+     *
      * @param instant
      */
     public void addLineInstant(LineInstant instant) {

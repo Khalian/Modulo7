@@ -6,16 +6,16 @@ package com.modulo7.common;
  * To be thrown by Modulo7 code when a wrong file format is encountered
  * in method
  */
-public class FileFormatException extends Modulo7BaseException {
-    public FileFormatException (String message) {
+public class Modulo7FileFormatException extends Modulo7BaseException {
+    public Modulo7FileFormatException(String message) {
         super (message);
     }
 
-    public FileFormatException (Throwable cause) {
+    public Modulo7FileFormatException(Throwable cause) {
         super (cause);
     }
 
-    public FileFormatException (String message, Throwable cause) {
+    public Modulo7FileFormatException(String message, Throwable cause) {
         super (message, cause);
     }
 }
