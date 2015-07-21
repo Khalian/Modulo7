@@ -1,4 +1,4 @@
-package com.modulo7.common;
+package com.modulo7.common.exceptions;
 
 /**
  * Created by asanyal on 6/29/2015.

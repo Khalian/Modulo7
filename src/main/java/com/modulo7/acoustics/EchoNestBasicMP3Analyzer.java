@@ -1,7 +1,7 @@
 package com.modulo7.acoustics;
 
 import com.echonest.api.v4.*;
-import com.modulo7.common.Modulo7InvalidLineInstantSizeException;
+import com.modulo7.common.exceptions.Modulo7InvalidLineInstantSizeException;
 import com.modulo7.crawler.CrawlerHelper;
 import com.modulo7.musicstatmodels.LineInstant;
 import com.modulo7.musicstatmodels.Note;

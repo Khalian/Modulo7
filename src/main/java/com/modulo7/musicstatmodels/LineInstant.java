@@ -1,6 +1,6 @@
 package com.modulo7.musicstatmodels;
 
-import com.modulo7.common.Modulo7InvalidLineInstantSizeException;
+import com.modulo7.common.exceptions.Modulo7InvalidLineInstantSizeException;
 
 import java.util.HashSet;
 import java.util.Set;

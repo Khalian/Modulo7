@@ -1,6 +1,6 @@
 package com.modulo7.crawler;
 
-import com.modulo7.common.Modulo7InvalidArgsException;
+import com.modulo7.common.exceptions.Modulo7InvalidArgsException;
 import org.apache.commons.cli.*;
 
 import java.io.IOException;
@@ -39,7 +39,7 @@ public class CrawlMusicSources {
 
     /**
      * Basic constructor for the crawl music sources operation
-     * 
+     *
      * @throws IOException
      */
     private CrawlMusicSources() throws IOException {

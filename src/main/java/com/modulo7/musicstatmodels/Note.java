@@ -1,6 +1,6 @@
 package com.modulo7.musicstatmodels;
 
-import com.modulo7.common.Modulo7InvalidOctaveRangeException;
+import com.modulo7.common.exceptions.Modulo7InvalidOctaveRangeException;
 
 /**
  * Created by asanyal on 6/16/2015.
