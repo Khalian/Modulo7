@@ -13,14 +13,18 @@ import java.util.Set;
  *
  * File Utilities for Modulo7
  */
-public class Modulo7FileUtils {
+public class Modulo7Utils {
 
     /**
+     *
      * Processes a text file and removes duplicates from the file
      *
      * This will be used to remove duplicate artists from crawled artists etc
+     *
+     * @param fileName
+     * @throws IOException
      */
-    public static void removeDuplicateLinesFromFile(String fileName) throws IOException {
+    public static void removeDuplicateLinesFromFile(final String fileName) throws IOException {
         File file = new File(fileName);
 
         List<String> originalLines = FileUtils.readLines(file, "UTF-8");
@@ -39,5 +43,17 @@ public class Modulo7FileUtils {
         for (String newLine : removedDuplicateLines) {
             FileUtils.writeStringToFile(newFile, newLine);
         }
+    }
+
+    /**
+     * Method that removes the duplicate files from a directory
+     *
+     * This is needed as the crawler might accidentally crawl and get a sheet/mp3 etc twice
+     * (or rather different threads of the crawler acquire the same file)
+     *
+     * @param directoryName
+     */
+    public static void removeDuplicateFilesFromDirectory(final String directoryName) {
+
     }
 }

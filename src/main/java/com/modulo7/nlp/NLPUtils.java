@@ -39,7 +39,7 @@ public class NLPUtils {
      * @return
      * @throws ParseException
      */
-    public static List<String> englishStemmer(String... unstemmedText) throws ParseException {
+    public static List<String> englishStemmer(final String... unstemmedText) throws ParseException {
 
         List<String> stemmedText = new ArrayList<>();
 
@@ -61,7 +61,7 @@ public class NLPUtils {
      * @param inputString
      * @return
      */
-    public Map<String, Integer> getVocabularyCounts(String inputString) {
+    public Map<String, Integer> getVocabularyCounts(final String inputString) {
         Map<String, Integer> vocabCounts = new HashMap<>();
 
         String[] inputConstituents = inputString.split("\\s+");
@@ -95,7 +95,7 @@ public class NLPUtils {
      * @param map
      * @param word (Word whose count to increment)
      */
-    private void addCountToMap(Map<String, Integer> map, String word) {
+    private void addCountToMap(final Map<String, Integer> map, final String word) {
         if (map.containsKey(word)) {
             int currCount = map.get(word);
             map.put(word, currCount + 1);

@@ -33,29 +33,25 @@ public class LineInstant {
 
     // An expression of the velocity of the key being struck, or how the
     // string was struck. Attack is a good objective indicator of the loudness of that
-    // particular node
+    // particular note. If the attack is unknown, its assumed a default value
     private double attack;
 
     // This set of notes is an expression of how many notes are present in this instant
     // For example in pure melodies, this set would always
-    private Set<Note> setOfNotes;
+    private Set<Note> setOfNotes = new HashSet<>();
+
+    // Denotes an unknown in either attack or duration
+    private static final double UNKNOWN = -1.0;
 
     /**
-     * Basic constructor of the line instant class
-     * This class can
-     *
-     * @param noteType
-     */
-    public LineInstant(LineInstantType noteType) {
-        this.noteType = noteType;
-        setOfNotes = new HashSet<>();
-    }
-
-    /**
+     * Basic constructor of the line instant class with both the attack and duration clearly defined
      *
      * @param noteSet
+     * @param attack
+     * @param duration
      */
-    public LineInstant(Set<Note> noteSet) throws Modulo7InvalidLineInstantSizeException {
+    public LineInstant(final Set<Note> noteSet, final double duration, final double attack)
+            throws Modulo7InvalidLineInstantSizeException {
 
         if (noteSet.size() == 0) {
             throw new Modulo7InvalidLineInstantSizeException("Line Instant Cannot be of size" + noteSet.size());
@@ -68,6 +64,33 @@ public class LineInstant {
         } else {
             noteType = LineInstantType.CHORD;
         }
+
+        this.duration = duration;
+        this.attack = attack;
+    }
+
+    /**
+     *
+     * This constructor denotes uncertainty in the duration and attack
+     *
+     * @param noteSet
+     */
+    public LineInstant(final Set<Note> noteSet) throws Modulo7InvalidLineInstantSizeException {
+
+        if (noteSet.size() == 0) {
+            throw new Modulo7InvalidLineInstantSizeException("Line Instant Cannot be of size" + noteSet.size());
+        }
+
+        setOfNotes = noteSet;
+
+        if (setOfNotes.size() == 1) {
+            noteType = LineInstantType.SINGLE_NOTE;
+        } else {
+            noteType = LineInstantType.CHORD;
+        }
+
+        duration = UNKNOWN;
+        attack = UNKNOWN;
     }
 
     /**
@@ -82,7 +105,7 @@ public class LineInstant {
         return isSustained;
     }
 
-    public void setIsSustained(boolean isSustained) {
+    public void setIsSustained(final boolean isSustained) {
         this.isSustained = isSustained;
     }
 
@@ -90,7 +113,11 @@ public class LineInstant {
         return noteType;
     }
 
-    public void setNoteType(LineInstantType noteType) {
+    public void setNoteType(final LineInstantType noteType) {
         this.noteType = noteType;
+    }
+
+    public double getAttack() {
+        return attack;
     }
 }

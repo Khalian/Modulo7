@@ -23,13 +23,14 @@ public class MidiToNoteConverter {
     public static final String[] NOTE_NAMES = {"A", "A#", "B", "C", "C#", "D", "D#", "E", "F", "F#", "G", "G#"};
 
     /**
-     * Gets the data from a midi file
+     * Gets the data of the entire song
+     * from a midi file
      *
      * @param midiFileLocation
      * @throws InvalidMidiDataException
      * @throws IOException
      */
-    public void getNotesFromMidiFile(String midiFileLocation) throws InvalidMidiDataException, IOException {
+    public void getNotesFromMidiFile(final String midiFileLocation) throws InvalidMidiDataException, IOException {
 
         Sequence sequence = MidiSystem.getSequence(new File(midiFileLocation));
 
@@ -39,7 +40,6 @@ public class MidiToNoteConverter {
 
             trackNumber++;
             System.out.println("Track " + trackNumber + ": size = " + track.size());
-            System.out.println();
 
             for (int i=0; i < track.size(); i++) {
 
@@ -66,7 +66,7 @@ public class MidiToNoteConverter {
                         int velocity = sm.getData2();
                         System.out.println("Note off, " + noteName + octave + " key=" + key + " velocity: " + velocity);
                     } else {
-                        System.out.println("Command:" + sm.getCommand());
+                        // We ignore the command elements of
                     }
                 } else {
                     System.out.println("Other message: " + message.getClass());

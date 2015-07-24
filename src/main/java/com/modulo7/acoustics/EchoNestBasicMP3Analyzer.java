@@ -5,6 +5,7 @@ import com.modulo7.common.exceptions.Modulo7InvalidLineInstantSizeException;
 import com.modulo7.crawler.CrawlerHelper;
 import com.modulo7.musicstatmodels.LineInstant;
 import com.modulo7.musicstatmodels.Note;
+import org.apache.log4j.Logger;
 
 import java.io.File;
 import java.io.IOException;
@@ -23,6 +24,9 @@ import java.util.Set;
  * 2.
  */
 public class EchoNestBasicMP3Analyzer {
+
+    // Echo nest basic MP3 analyzer logger
+    final static Logger logger = Logger.getLogger(EchoNestBasicMP3Analyzer.class);
 
     // The echo nest API
     private EchoNestAPI en;
@@ -71,13 +75,12 @@ public class EchoNestBasicMP3Analyzer {
                 track.waitForAnalysis(30000);
 
                 if (track.getStatus() == Track.AnalysisStatus.COMPLETE) {
-                    System.out.println("Tempo: " + track.getTempo());
-                    System.out.println("Title: " + track.getTitle());
-                    System.out.println("Time Signature:" + track.getTimeSignature());
-                    System.out.println("Key of the track:" + track.getKey());
-                    System.out.println("Artist" + track.getArtistName());
-                    System.out.println("Loudness" + track.getLoudness());
-                    System.out.println("Beat start times:");
+
+                    final double tempo = track.getTempo();
+                    final String title = track.getTitle();
+                    final int timeSignature = track.getTimeSignature();
+                    final String artistName = track.getArtistName();
+                    final double loudness = track.getLoudness();
 
                     TrackAnalysis analysis = track.getAnalysis();
 
@@ -91,10 +94,10 @@ public class EchoNestBasicMP3Analyzer {
                         LineInstant songInstant = getLineInstantFromVector(segment.getPitches());
                     }
                 } else {
-                    System.err.println("Trouble analysing track " + track.getStatus());
+                    logger.error("Trouble analysing track " + track.getStatus());
                 }
             } catch (IOException e) {
-                System.err.println("Trouble uploading file");
+                logger.error("Trouble uploading file");
             } catch (Modulo7InvalidLineInstantSizeException e) {
                 e.printStackTrace();
             }

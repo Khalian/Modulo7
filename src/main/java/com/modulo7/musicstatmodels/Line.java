@@ -14,7 +14,7 @@ import java.util.List;
  * through a riff. Each of those are lines.
  *
  * A song is an interplay of lines. Rules can be specific to a line
- * or can be
+ * or can be at a song level (also called line interplay rules)
  */
 public class Line {
 
@@ -22,15 +22,30 @@ public class Line {
     // That are being played
     private List<LineInstant> lineSequence;
 
-    // Member indicating how
+    // Member indicating how long the entire line was played
     private double totalLineDuration;
 
     /**
-     * Basic constructor for line instants
+     * Basic constructor for line by accepting a set of line
+     * instants
+     *
      * @param lineSequence
      */
-    public Line(List<LineInstant> lineSequence) {
+    public Line(final List<LineInstant> lineSequence) {
         this.lineSequence = lineSequence;
+        inferTotalLineDuration();
+    }
+
+    /**
+     * Infers the total line duration
+     */
+    private void inferTotalLineDuration() {
+        totalLineDuration = 0.0;
+
+        // Add up the line instant durations one after the other
+        for (LineInstant instant : lineSequence) {
+            totalLineDuration += instant.getDuration();
+        }
     }
 
     /**
@@ -51,7 +66,15 @@ public class Line {
      *
      * @param instant
      */
-    public void addLineInstant(LineInstant instant) {
+    public void addLineInstant(final LineInstant instant) {
         lineSequence.add(instant);
+    }
+
+    /**
+     * Gets the total line duration for this song
+     * @return
+     */
+    public double getTotalLineDuration() {
+        return totalLineDuration;
     }
 }

@@ -24,7 +24,7 @@ public class FrequencyNoteMap {
     // The notes listed in ascending order
     private static final List<Double> notesInOrder = new ArrayList<Double>();
 
-    // A singleton instance of the notemap
+    // A singleton instance of the note map
     private static FrequencyNoteMap frequencyNoteMap = null;
 
     // Note to position Map

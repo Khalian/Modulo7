@@ -1,5 +1,6 @@
 package com.modulo7.image;
 
+import org.apache.log4j.Logger;
 import org.pdfbox.pdmodel.PDDocument;
 import org.pdfbox.pdmodel.PDPage;
 
@@ -10,10 +11,15 @@ import java.io.FileInputStream;
 import java.io.IOException;
 import java.util.Iterator;
 import java.util.List;
-import java.util.logging.Logger;
 import javax.swing.filechooser.FileNameExtensionFilter;
 import javax.swing.JFileChooser;
 
+/**
+ * A basic PDF to JPG Converter
+ *
+ * TODO : Actually find a better library than this for pdf conversion
+ * This library is pretty bad at its job
+ */
 public class PDFToJPGConverter {
 
     final static Logger logger = Logger.getLogger(PDFToJPGConverter.class.getName());
