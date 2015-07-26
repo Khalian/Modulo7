@@ -1,5 +1,6 @@
-package com.modulo7.crawler;
+package com.modulo7.crawler.datacrawler;
 
+import com.modulo7.crawler.utils.CrawlerHelper;
 import com.modulo7.nlp.NLPUtils;
 import org.apache.lucene.queryParser.ParseException;
 import org.jsoup.Jsoup;

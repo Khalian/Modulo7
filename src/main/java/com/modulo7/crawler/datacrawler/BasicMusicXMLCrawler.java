@@ -1,4 +1,4 @@
-package com.modulo7.crawler;
+package com.modulo7.crawler.datacrawler;
 
 /**
  * Created by asanyal on 7/23/2015.

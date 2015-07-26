@@ -1,4 +1,4 @@
-package com.modulo7.crawler;
+package com.modulo7.crawler.utils;
 
 import org.json.JSONArray;
 import org.json.JSONException;

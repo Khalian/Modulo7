@@ -1,6 +1,6 @@
 package com.modulo7.acoustics;
 
-import com.modulo7.musicstatmodels.Note;
+import com.modulo7.musicstatmodels.representation.Note;
 
 import java.util.*;
 

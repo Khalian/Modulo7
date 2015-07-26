@@ -1,4 +1,6 @@
-package com.modulo7.musicstatmodels;
+package com.modulo7.musicstatmodels.representation;
+
+import com.modulo7.musicstatmodels.representation.Line;
 
 import java.util.Set;
 
@@ -22,6 +24,9 @@ public class Song {
     // Name of the artist who wrote this song
     private String artistName;
 
+    // The tempo associated with this song
+    private int tempo;
+
     /**
      * Method to infer the song length as maximum of all the line duration
      * lengths as part of the song
@@ -41,10 +46,27 @@ public class Song {
     }
 
     /**
-     * Basic Constructor for lines of a song
+     * Basic Constructor for a modulo7 song
+     *
+     * This constructor is for unknown pieces of information
+     * regarding the metadata of the song
+     *
      * @param linesOfSong
      */
     public Song(final Set<Line> linesOfSong) {
         this.linesOfSong = linesOfSong;
+        inferSongLength();
+    }
+
+    /**
+     * Basic constructor for a modulo7 song with artist name present
+     *
+     * @param linesOfSong
+     * @param artistName
+     */
+    public Song(final Set<Line> linesOfSong, String artistName) {
+        this.linesOfSong = linesOfSong;
+        inferSongLength();
+        this.artistName = artistName;
     }
 }

@@ -1,4 +1,4 @@
-package com.modulo7.crawler;
+package com.modulo7.crawler.utils;
 
 import java.io.File;
 

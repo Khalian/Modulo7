@@ -1,4 +1,4 @@
-package com.modulo7.crawler;
+package com.modulo7.crawler.utils;
 
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;

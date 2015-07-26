@@ -1,4 +1,6 @@
-package com.modulo7.crawler;
+package com.modulo7.crawler.datacrawler;
+
+import com.modulo7.crawler.utils.GoogleImageGetQuery;
 
 import java.io.*;
 import java.net.URL;

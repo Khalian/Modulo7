@@ -2,10 +2,9 @@ package com.modulo7.othersources;
 
 import java.io.File;
 import java.io.IOException;
-import java.util.HashMap;
 
 import com.modulo7.common.exceptions.Modulo7InvalidMusicXMLFile;
-import com.modulo7.musicstatmodels.Song;
+import com.modulo7.musicstatmodels.representation.Song;
 import org.apache.log4j.Logger;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
@@ -13,14 +12,14 @@ import org.jsoup.nodes.Document;
 /**
  * Created by asanyal on 7/23/2015.
  *
- * A basic music xml parser using simple Jsoup
+ * A basic music xml parser using simple JSOUP
  *
  * Heavily inspired by :
  *
  * https://bitbucket.org/dorienh/musicxmlparserdh/src/
  * 20e1beea207a83140fc4008825760da50f223d26/src/musicXMLparserDH.java?at=master
  *
- * TODO : Stub impl, need to fix this
+ * TODO : Stub impl, need to actually implement this
  */
 public class BasicMusicXMLParser {
 
@@ -44,8 +43,11 @@ public class BasicMusicXMLParser {
         checkIfValidMusicXMLFile(filename);
     }
 
+
     /**
-     * Check if the input music xml file is valid or invalid
+     * Check if the music xml file is valid or not
+     * @param filename
+     * @throws Modulo7InvalidMusicXMLFile
      */
     private void checkIfValidMusicXMLFile(final String filename) throws Modulo7InvalidMusicXMLFile {
         // Check if the document contains notes and is infact a valid music xml file

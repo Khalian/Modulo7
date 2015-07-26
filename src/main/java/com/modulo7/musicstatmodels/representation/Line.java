@@ -1,4 +1,4 @@
-package com.modulo7.musicstatmodels;
+package com.modulo7.musicstatmodels.representation;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -24,6 +24,9 @@ public class Line {
 
     // Member indicating how long the entire line was played
     private double totalLineDuration;
+
+    // The line's scale, major, minor, blues etc
+    private ScaleType scaleOfLine;
 
     /**
      * Basic constructor for line by accepting a set of line

@@ -1,4 +1,4 @@
-package com.modulo7.crawler;
+package com.modulo7.crawler.utils;
 
 /**
  * Created by asanyal on 7/18/2015.
@@ -18,5 +18,8 @@ public enum MusicSources {
     // Acoustic sources
     MP3,
     WAV,
-    MIDI;
+    MIDI,
+
+    // Other kinds of sources
+    MUSIC_XML_FILE;
 }

@@ -1,8 +1,9 @@
-package com.modulo7.crawler;
+package com.modulo7.crawler.metacrawler;
 
 import com.echonest.api.v4.Artist;
 import com.echonest.api.v4.EchoNestAPI;
 import com.echonest.api.v4.EchoNestException;
+import com.modulo7.crawler.utils.CrawlerHelper;
 import org.apache.http.HttpResponse;
 import org.apache.http.client.HttpClient;
 import org.apache.http.client.methods.HttpGet;

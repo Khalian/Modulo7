@@ -1,6 +1,9 @@
-package com.modulo7.crawler;
+package com.modulo7.crawler.engine;
 
 import com.modulo7.common.exceptions.Modulo7InvalidArgsException;
+import com.modulo7.crawler.datacrawler.BasicImageCrawler;
+import com.modulo7.crawler.datacrawler.BasicLyricsCrawler;
+import com.modulo7.crawler.datacrawler.BasicMidiFileCrawler;
 import org.apache.commons.cli.*;
 
 import java.io.IOException;

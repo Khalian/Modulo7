@@ -1,4 +1,4 @@
-package com.modulo7.crawler;
+package com.modulo7.crawler.datacrawler;
 
 /**
  * Created by asanyal on 7/19/2015.
@@ -8,4 +8,6 @@ package com.modulo7.crawler;
  * TODO : Implement this
  */
 public class BasicMidiFileCrawler {
+
+
 }
