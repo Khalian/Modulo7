@@ -5,7 +5,7 @@ import com.modulo7.common.exceptions.Modulo7InvalidOctaveRangeException;
 /**
  * Created by asanyal on 6/16/2015.
  *
- * This enum describes the notes in the
+ * This enum describes the notes in western music theory
  */
 public enum Note {
 
@@ -47,7 +47,7 @@ public enum Note {
      * Default constructor for note
      * @param noteValue
      */
-    Note(String noteValue, int octaveNumber) {
+    Note(final String noteValue, final int octaveNumber) {
         String baseNoteWithoutAccidental = noteValue.substring(0, 1).toUpperCase();
         String standardizedNode = baseNoteWithoutAccidental + noteValue.substring(1, 2);
         this.noteValue = standardizedNode;
@@ -66,7 +66,7 @@ public enum Note {
      * Method to check whether the octave number is correct
      * or not
      */
-    private void validOctaveNumberCheck(int octaveNumber) throws Modulo7InvalidOctaveRangeException {
+    private void validOctaveNumberCheck(final int octaveNumber) throws Modulo7InvalidOctaveRangeException {
         if (octaveNumber >= 0 && octaveNumber <= 8) {
 
         } else {
@@ -76,11 +76,13 @@ public enum Note {
     }
 
     /**
-     * Standarize notes via harmonic equivalence principles to sharps
-     * instead of flats
+     * Standardize notes via harmonic equivalence principles to sharps
+     * instead of flats, allowing for easier processing by catering to
+     * only one standard
+     *
      * @param noteValue
      */
-    private void harmonicEquivalence(String noteValue) {
+    private void harmonicEquivalence(final String noteValue) {
         if (noteValue.equals("Bb"))
             this.noteValue = "A#";
         else if (noteValue.equals("Db"))
@@ -89,5 +91,13 @@ public enum Note {
             this.noteValue = "F#";
         else if (noteValue.equals("Ab"))
             this.noteValue = "G#";
+    }
+
+    /**
+     * Gets the note value associated with note
+     * @return
+     */
+    private String getNoteValue() {
+        return noteValue;
     }
 }

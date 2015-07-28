@@ -2,6 +2,7 @@ package com.modulo7.musicstatmodels.representation;
 
 import com.modulo7.musicstatmodels.representation.Line;
 
+import java.util.HashSet;
 import java.util.Set;
 
 /**
@@ -21,11 +22,8 @@ public class Song {
     // Total duration of the song in question
     private double totalDurationOfSong;
 
-    // Name of the artist who wrote this song
-    private String artistName;
-
-    // The tempo associated with this song
-    private int tempo;
+    // The metadata associated with the song
+    private SongMetadata metadata;
 
     /**
      * Method to infer the song length as maximum of all the line duration
@@ -56,17 +54,27 @@ public class Song {
     public Song(final Set<Line> linesOfSong) {
         this.linesOfSong = linesOfSong;
         inferSongLength();
+
+        // TODO : Whether to put a default value to metadata or declare
+        // Unknowns
     }
 
     /**
-     * Basic constructor for a modulo7 song with artist name present
+     * Basic constructor for a modulo7 song with Song Metadata present
      *
      * @param linesOfSong
-     * @param artistName
+     * @param songMetadata
      */
-    public Song(final Set<Line> linesOfSong, String artistName) {
+    public Song(final Set<Line> linesOfSong, final SongMetadata songMetadata) {
+
         this.linesOfSong = linesOfSong;
-        inferSongLength();
-        this.artistName = artistName;
+        this.metadata = songMetadata;
+    }
+
+    public Song(final Line lineOfSong, final SongMetadata songMetadata) {
+        this.linesOfSong = new HashSet<>();
+        this.linesOfSong.add(lineOfSong);
+
+        this.metadata = songMetadata;
     }
 }

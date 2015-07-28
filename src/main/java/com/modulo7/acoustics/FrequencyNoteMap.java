@@ -21,9 +21,6 @@ public class FrequencyNoteMap {
     // of the map above
     private static final Map<Double, Note> frequencyToNoteMap = new HashMap<>();
 
-    // The notes listed in ascending order
-    private static final List<Double> notesInOrder = new ArrayList<Double>();
-
     // A singleton instance of the note map
     private static FrequencyNoteMap frequencyNoteMap = null;
 
@@ -144,6 +141,7 @@ public class FrequencyNoteMap {
         notePositionMap.put(Note.G4, 11);
         notePositionMap.put(Note.GSHARP4, 12);
 
+        // Invert and acquire the note positions
         for (Map.Entry<Note, Integer> entry : notePositionMap.entrySet()) {
             Note note = entry.getKey();
             Integer position = entry.getValue();

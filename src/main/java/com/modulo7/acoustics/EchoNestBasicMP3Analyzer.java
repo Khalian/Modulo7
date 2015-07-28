@@ -1,10 +1,11 @@
 package com.modulo7.acoustics;
 
 import com.echonest.api.v4.*;
+
 import com.modulo7.common.exceptions.Modulo7InvalidLineInstantSizeException;
 import com.modulo7.crawler.utils.CrawlerHelper;
-import com.modulo7.musicstatmodels.representation.LineInstant;
-import com.modulo7.musicstatmodels.representation.Note;
+import com.modulo7.musicstatmodels.representation.*;
+import com.modulo7.musicstatmodels.representation.Song;
 import org.apache.log4j.Logger;
 
 import java.io.File;
@@ -21,7 +22,8 @@ import java.util.Set;
  * It acquires the following pieces of information
  *
  * 1. Tempo of the track
- * 2.
+ * 2. Title of the track
+ * 3.
  */
 public class EchoNestBasicMP3Analyzer {
 
@@ -56,12 +58,14 @@ public class EchoNestBasicMP3Analyzer {
     }
 
     /**
-     * Method to acquire the the details of an MP3 file
+     * Method to return a modulo7 Song from an MP3 recording using the
+     * Echo Nest API
      *
      * @param filePath
+     * @return
      * @throws EchoNestException
      */
-    private void getMP3MetaDataInfo(String filePath) throws EchoNestException {
+    private Song getMP3MetaDataInfo(final String filePath) throws EchoNestException {
 
         File file = new File(filePath);
 
@@ -84,24 +88,35 @@ public class EchoNestBasicMP3Analyzer {
 
                     TrackAnalysis analysis = track.getAnalysis();
 
-                    System.out.println(analysis.getTimeSignature());
                     for (TimedEvent beat : analysis.getBeats()) {
-                        System.out.println("beat " + beat.getStart());
-                        System.out.println("Beat Duration" + beat.getDuration());
+                        // TODO : Figure out what to do with beats
+
+                        // System.out.println("beat " + beat.getStart());
+                        // System.out.println("Beat Duration" + beat.getDuration());
                     }
+
+                    Line lineOfSong = new Line();
 
                     for (Segment segment : analysis.getSegments()) {
                         LineInstant songInstant = getLineInstantFromVector(segment.getPitches());
+                        lineOfSong.addLineInstant(songInstant);
                     }
+
+                    // TODO : Fix constructor for song metadata to include song metadata info as well
+                    Song inferredSong = new Song(lineOfSong, new SongMetadata(artistName));
+                    return inferredSong;
                 } else {
                     logger.error("Trouble analysing track " + track.getStatus());
+                    return null;
                 }
             } catch (IOException e) {
-                logger.error("Trouble uploading file");
+                logger.error("Trouble uploading file to track analyzer");
             } catch (Modulo7InvalidLineInstantSizeException e) {
                 e.printStackTrace();
             }
         }
+
+        return null;
     }
 
     /**
@@ -118,13 +133,14 @@ public class EchoNestBasicMP3Analyzer {
      *
      * @return The line Instant representation of the chroma vector
      */
-    private LineInstant getLineInstantFromVector(double[] noteChromaVector) throws Modulo7InvalidLineInstantSizeException {
+    private LineInstant getLineInstantFromVector(final double[] noteChromaVector)
+            throws Modulo7InvalidLineInstantSizeException {
 
         // First check whether the chroma vector is valid
         assert (noteChromaVector.length == 12);
 
         // Construct a note Set from a chroma vector
-        Set<Note> chromaNotes = new HashSet<>();
+        final Set<Note> chromaNotes = new HashSet<>();
 
         // Parse through the note Vector to acquire the requisite notes
         for (int i = 0; i < noteChromaVector.length; i++) {

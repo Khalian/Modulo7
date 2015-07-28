@@ -9,15 +9,15 @@ import com.modulo7.common.exceptions.Modulo7BaseException;
  * in method
  */
 public class Modulo7FileFormatException extends Modulo7BaseException {
-    public Modulo7FileFormatException(String message) {
+    public Modulo7FileFormatException(final String message) {
         super (message);
     }
 
-    public Modulo7FileFormatException(Throwable cause) {
+    public Modulo7FileFormatException(final Throwable cause) {
         super (cause);
     }
 
-    public Modulo7FileFormatException(String message, Throwable cause) {
+    public Modulo7FileFormatException(final String message, Throwable cause) {
         super (message, cause);
     }
 }

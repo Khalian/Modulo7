@@ -7,14 +7,21 @@ package com.modulo7.common.utils;
  */
 public class Modulo7Globals {
 
-    private static final String MODULO7_HOST_OS_TYPE;
+    // Acquiring the host type allows for different types of ops
+    public static final String MODULO7_HOST_OS_TYPE;
+
+    // Notes in western music
+    public static final String[] NOTE_NAMES = {"A", "A#", "B", "C", "C#", "D", "D#", "E", "F", "F#", "G", "G#"};
+
+    // A place holder for unknown quantities
+    public static final int UNKNOWN = -1;
 
     /**
      * Static block declaring all the gloabals
      */
     static {
-        String osName = System.getProperty("os.name");
-        String osNameMatch = osName.toLowerCase();
+        final String osName = System.getProperty("os.name");
+        final String osNameMatch = osName.toLowerCase();
         if (osNameMatch.contains("linux")) {
             MODULO7_HOST_OS_TYPE = "LINUX";
         } else if(osNameMatch.contains("windows")) {

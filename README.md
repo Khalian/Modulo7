@@ -1,13 +1,16 @@
 # Modulo7
 A semantic and technical analysis of musical scores based on Information Retrieval Principles
 
-OVERVIEW: Modulo7 is an research attempt to build a purely objective music analyzer, statistics miner,
-ranking and recommendation engine and genre identifier using music theory and natural language principles. 
-Most music recommendation engines take into account user feedback for recommendation and analysis 
+OVERVIEW: Modulo7 is an research attempt to build a purely objective music analyzer Music Information Retrieval Engine
+using music theory and natural language principles.
+
+Most usic recommendation enginmes take into account user feedback for recommendation and analysis
 purpose and does not take into account music theory. Modulo7 allows comparisons based on both 
 simple and complex rules of music theory and would eventually allow extensible rules to be defined 
 by users for comparisons. Standard Users will be able to use simple rules for recommendation and statistics
-mining, and power users would be able to define their own custom rules for ranking
+mining, and power users would be able to define their own custom rules for ranking.
+
+Modulo7 will also support
 
 (MODULO7 IS IN ACTIVE DEVELOPMENT AND NOT READY FOR PRODUCTION USAGE).
 
