@@ -1,4 +1,6 @@
 # Modulo7
+
+[![Join the chat at https://gitter.im/Khalian/Modulo7](https://badges.gitter.im/Join%20Chat.svg)](https://gitter.im/Khalian/Modulo7?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
 A semantic and technical analysis of musical scores based on Information Retrieval Principles
 
 OVERVIEW: Modulo7 is an research attempt to build a purely objective music analyzer Music Information Retrieval Engine
