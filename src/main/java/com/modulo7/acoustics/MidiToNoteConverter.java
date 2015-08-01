@@ -71,10 +71,7 @@ public class MidiToNoteConverter {
                     System.out.println("Other message: " + message.getClass());
                 }
             }
-
-            System.out.println();
         }
-
     }
 
     /**

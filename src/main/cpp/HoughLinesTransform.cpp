@@ -64,6 +64,8 @@ void HoughLinesTransform::getLinesFromHogueTransform() {
 	imshow("detected lines", cdst);	
 }
 
+/*
 int main(int argc, char **argv) {
 	// Do nothing
 }
+*/

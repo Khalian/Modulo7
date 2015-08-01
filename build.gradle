@@ -2,8 +2,10 @@ apply plugin: 'java'
 apply plugin: 'eclipse'
 apply plugin: 'idea'
 apply plugin: 'cpp'
-apply plugin: 'windows-resources'
-apply plugin: "visual-studio"
+if (System.properties['os.name'].toLowerCase().contains('windows')) {
+	apply plugin: 'windows-resources'
+	apply plugin: 'visual-studio'
+}
 
 // C++ specific build configurations
 
@@ -16,7 +18,7 @@ def opencvinclude = opencvhome + "\\include"
 // Lib directories
 def opencvlibs = opencvhome + "\\lib"
 
-/*
+
 model {
     repositories {
         libs(PrebuiltLibraries) {
@@ -24,17 +26,17 @@ model {
                 headers.srcDir opencvinclude
 
                 binaries.withType(StaticLibraryBinary) {
-                    def libName = targetPlatform.operatingSystem.windows ? 'opencv_core300.lib' : 'libopencv_core300.a'
-                    staticLibraryFile = file(opencvlibs + "\\" + libName)
+                    def libName = targetPlatform.operatingSystem.windows ? 'opencv_core300.lib' : 'libopencv_core.a'
+                    staticLibraryFile = file(opencvlibs + File.separator + libName)
                 }
 
                 binaries.withType(SharedLibraryBinary) {
-                    def libDynName = targetPlatform.operatingSystem.windows ? 'opencv_core300.dll' : 'libopencv_core00.so'
-                    def libStaticName = targetPlatform.operatingSystem.windows ? 'opencv_core300.lib' : 'libopencv_core300.a'
+                    def libDynName = targetPlatform.operatingSystem.windows ? 'opencv_core300.dll' : 'libopencv_core.so'
+                    def libStaticName = targetPlatform.operatingSystem.windows ? 'opencv_core300.lib' : 'libopencv_core.a'
                     // Windows uses a .dll file, with a different link file if it exists (not Cygwin or MinGW)
-                    sharedLibraryFile = file(opencvlibs + "\\" + libDynName)
-                    if (file(opencvlibs + "\\" + libStaticName).exists()) {
-                        sharedLibraryLinkFile = file(opencvlibs + "\\" + libStaticName)
+                    sharedLibraryFile = file(opencvlibs + File.separator + libDynName)
+                    if (file(opencvlibs + File.separator + libStaticName).exists()) {
+                        sharedLibraryLinkFile = file(opencvlibs + File.separator + libStaticName)
                     }
                 }
             }
@@ -53,18 +55,20 @@ model {
                     }
                 }
 
-                cpp.lib library:'opencv', linkage:'static'
+                cpp.lib library:'opencv', linkage:'api'
             }
         }
     }
 
-    visualStudio {
-        projects.all {
-            projectFile.location = "vs/${name}.vcxproj"
-            filtersFile.location = "vs/${name}.vcxproj.filters"
-        }
-        solutions.all {
-            solutionFile.location = "vs/${name}.sln"
+    if (System.properties['os.name'].toLowerCase().contains('windows')) {
+        visualStudio {
+            projects.all {
+                projectFile.location = "vs/${name}.vcxproj"
+                filtersFile.location = "vs/${name}.vcxproj.filters"
+            }
+            solutions.all {
+                solutionFile.location = "vs/${name}.sln"
+            }
         }
     }
 
@@ -99,11 +103,11 @@ binaries.withType(NativeLibrarySpec) {
         linker.args '/DEBUG'
     }
 }
-*/
+
 
 // Java specific build configurations
 
-sourceCompatibility = 1.8
+sourceCompatibility = 1.7
 version = '1.0'
 jar {
     manifest {

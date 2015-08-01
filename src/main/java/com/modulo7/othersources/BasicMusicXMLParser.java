@@ -2,12 +2,18 @@ package com.modulo7.othersources;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Map;
+import java.util.Set;
 
 import com.modulo7.common.exceptions.Modulo7InvalidMusicXMLFile;
+import com.modulo7.musicstatmodels.representation.Line;
 import com.modulo7.musicstatmodels.representation.Song;
 import org.apache.log4j.Logger;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
+import org.jsoup.nodes.Element;
 
 /**
  * Created by asanyal on 7/23/2015.
@@ -66,6 +72,25 @@ public class BasicMusicXMLParser {
      * TODO : Implement this
      */
     private Song parse() {
+
+        // The set of lines that describe the song, mapped to line index
+        Map<Integer, Line> lineIndextoLineMap = new HashMap<>();
+
+        // Init the lines as a map between line index (also called voice in music xml jargon)
+        for (Element note : this.doc.getElementsByTag("Note")) {
+            lineIndextoLineMap.put(Integer.valueOf(note.getElementsByTag("voice").text()), new Line());
+        }
+
+
+
         return null;
+    }
+
+    /**
+     * Run test
+     * @param args
+     */
+    public static void main(String args[]) {
+
     }
 }
