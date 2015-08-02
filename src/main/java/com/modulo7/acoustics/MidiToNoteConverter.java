@@ -5,6 +5,8 @@ package com.modulo7.acoustics;
  */
 import com.modulo7.common.utils.Modulo7Globals;
 
+import org.apache.log4j.Logger;
+
 import java.io.File;
 import java.io.IOException;
 
@@ -20,6 +22,8 @@ public class MidiToNoteConverter {
 
     // Midi Byte representation of off note
     public static final int NOTE_OFF = 0x80;
+
+    private static final Logger logger = Logger.getLogger(MidiToNoteConverter.class);
 
     /**
      * Gets the data of the entire song
@@ -56,25 +60,22 @@ public class MidiToNoteConverter {
                         int note = key % 12;
                         String noteName = Modulo7Globals.NOTE_NAMES[note];
                         int velocity = sm.getData2();
-                        System.out.println("Note on, " + noteName + octave + " key=" + key + " velocity: " + velocity);
+                        logger.info("Note on, " + noteName + octave + " key=" + key + " velocity: " + velocity);
                     } else if (sm.getCommand() == NOTE_OFF) {
                         int key = sm.getData1();
                         int octave = (key / 12)-1;
                         int note = key % 12;
                         String noteName = Modulo7Globals.NOTE_NAMES[note];
                         int velocity = sm.getData2();
-                        System.out.println("Note off, " + noteName + octave + " key=" + key + " velocity: " + velocity);
+                        logger.info("Note off, " + noteName + octave + " key=" + key + " velocity: " + velocity);
                     } else {
-                        // We ignore the command elements of
+                        // We ignore the command elements that are neither note on or off
                     }
                 } else {
-                    System.out.println("Other message: " + message.getClass());
+                   logger.info("Other message: " + message.getClass());
                 }
             }
-
-            System.out.println();
         }
-
     }
 
     /**

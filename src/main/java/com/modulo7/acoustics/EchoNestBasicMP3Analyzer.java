@@ -85,6 +85,7 @@ public class EchoNestBasicMP3Analyzer {
                     final int timeSignature = track.getTimeSignature();
                     final String artistName = track.getArtistName();
                     final double loudness = track.getLoudness();
+                    final int key = track.getKey();
 
                     TrackAnalysis analysis = track.getAnalysis();
 
