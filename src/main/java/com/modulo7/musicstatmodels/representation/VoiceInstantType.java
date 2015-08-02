@@ -8,7 +8,7 @@ package com.modulo7.musicstatmodels.representation;
  * two types exist, either a single frequency is played at that moment
  * or an set of notes being stacked on top of each other (called a chord)
  */
-public enum LineInstantType {
+public enum VoiceInstantType {
     SINGLE_NOTE,
     CHORD
 }

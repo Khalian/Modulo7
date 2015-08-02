@@ -9,33 +9,33 @@ import java.util.List;
  * A line is modulo7's representation of what is
  * a sequence of line instants
  *
- * A song is comprised of multiple lines. Think of a rhythm
+ * A song is comprised of multiple voices. Think of a rhythm
  * guitar being played in the background or a lead guitarist going
- * through a riff. Each of those are lines.
+ * through a riff. Each of those are a different voice.
  *
- * A song is an interplay of lines. Rules can be specific to a line
- * or can be at a song level (also called line interplay rules)
+ * A song is an interplay of distinct voices. Rules can be specific to a voice
+ * or can be at a song level (also called voice interplay rules)
  */
-public class Line {
+public class Voice {
 
-    // A line sequence is the sequence of line instances
+    // A voice sequence is the sequence of line instances
     // That are being played
-    private List<LineInstant> lineSequence;
+    private List<VoiceInstant> voiceSequence;
 
-    // Member indicating how long the entire line was played
-    private double totalLineDuration;
+    // Member indicating how long the entire voice was played
+    private double totalVoiceDuration;
 
-    // The line's scale, major, minor, blues etc
+    // The voice's scale, major, minor, blues etc
     private ScaleType scaleOfLine;
 
     /**
      * Basic constructor for line by accepting a set of line
      * instants
      *
-     * @param lineSequence
+     * @param voiceSequence
      */
-    public Line(final List<LineInstant> lineSequence) {
-        this.lineSequence = lineSequence;
+    public Voice(final List<VoiceInstant> voiceSequence) {
+        this.voiceSequence = voiceSequence;
         inferTotalLineDuration();
     }
 
@@ -43,23 +43,23 @@ public class Line {
      * Infers the total line duration
      */
     private void inferTotalLineDuration() {
-        totalLineDuration = 0.0;
+        totalVoiceDuration = 0.0;
 
         // Add up the line instant durations one after the other
-        for (LineInstant instant : lineSequence) {
-            totalLineDuration += instant.getDuration();
+        for (VoiceInstant instant : voiceSequence) {
+            totalVoiceDuration += instant.getDuration();
         }
     }
 
     /**
      * This form of the constuctor should be used when
-     * the line is being constructor via the add LineInstant method
+     * the line is being constructor via the add VoiceInstant method
      *
      * This is discouraged practice if the entire line is known to the
      * crawler before hand
      */
-    public Line() {
-        this.lineSequence = new ArrayList<>();
+    public Voice() {
+        this.voiceSequence = new ArrayList<>();
     }
 
     /**
@@ -69,15 +69,15 @@ public class Line {
      *
      * @param instant
      */
-    public void addLineInstant(final LineInstant instant) {
-        lineSequence.add(instant);
+    public void addLineInstant(final VoiceInstant instant) {
+        voiceSequence.add(instant);
     }
 
     /**
      * Gets the total line duration for this song
      * @return
      */
-    public double getTotalLineDuration() {
-        return totalLineDuration;
+    public double getTotalVoiceDuration() {
+        return totalVoiceDuration;
     }
 }

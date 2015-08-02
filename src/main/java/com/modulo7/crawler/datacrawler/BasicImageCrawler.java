@@ -53,7 +53,7 @@ public class BasicImageCrawler implements Runnable {
 
         String artist;
 
-        //Read artist file Line By Line
+        //Read artist file Voice By Voice
         while ((artist = br.readLine()) != null)   {
             if (!artists.contains(artist))
                 artists.add(artist);

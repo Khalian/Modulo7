@@ -8,10 +8,10 @@ import java.util.Set;
 /**
  * Created by asanyal on 6/16/2015.
  *
- * A line instant is a basic class that encapsulates all the information at a particular
- * instant in a line within a song.
+ * A voice instant is a basic class that encapsulates all the information at a particular
+ * instant in a voice within a song.
  *
- * Typically a song can be expressed with multiple lines being played (an example would be
+ * Typically a song can be expressed with multiple voice being played (an example would be
  * a rock song with 4 lines - a guitar line, a bass line, a vocal line and a drums (percussion line)
  *
  * Each line of a song can be distinctly used for custom similarity analysis
@@ -20,10 +20,10 @@ import java.util.Set;
  * to be percussive sound.
  *
  */
-public class LineInstant {
+public class VoiceInstant {
 
     // Whether the note is a part of a chord or a melody
-    private LineInstantType noteType;
+    private VoiceInstantType noteType;
 
     // Is the instant sustained or played for an imperceptible instant
     private boolean isSustained;
@@ -50,19 +50,19 @@ public class LineInstant {
      * @param attack
      * @param duration
      */
-    public LineInstant(final Set<Note> noteSet, final double duration, final double attack)
+    public VoiceInstant(final Set<Note> noteSet, final double duration, final double attack)
             throws Modulo7InvalidLineInstantSizeException {
 
         if (noteSet.size() == 0) {
-            throw new Modulo7InvalidLineInstantSizeException("Line Instant Cannot be of size" + noteSet.size());
+            throw new Modulo7InvalidLineInstantSizeException("Voice Instant Cannot be of size" + noteSet.size());
         }
 
         setOfNotes = noteSet;
 
         if (setOfNotes.size() == 1) {
-            noteType = LineInstantType.SINGLE_NOTE;
+            noteType = VoiceInstantType.SINGLE_NOTE;
         } else {
-            noteType = LineInstantType.CHORD;
+            noteType = VoiceInstantType.CHORD;
         }
 
         this.duration = duration;
@@ -75,18 +75,18 @@ public class LineInstant {
      *
      * @param noteSet
      */
-    public LineInstant(final Set<Note> noteSet) throws Modulo7InvalidLineInstantSizeException {
+    public VoiceInstant(final Set<Note> noteSet) throws Modulo7InvalidLineInstantSizeException {
 
         if (noteSet.size() == 0) {
-            throw new Modulo7InvalidLineInstantSizeException("Line Instant Cannot be of size" + noteSet.size());
+            throw new Modulo7InvalidLineInstantSizeException("Voice Instant Cannot be of size" + noteSet.size());
         }
 
         setOfNotes = noteSet;
 
         if (setOfNotes.size() == 1) {
-            noteType = LineInstantType.SINGLE_NOTE;
+            noteType = VoiceInstantType.SINGLE_NOTE;
         } else {
-            noteType = LineInstantType.CHORD;
+            noteType = VoiceInstantType.CHORD;
         }
 
         duration = UNKNOWN;
@@ -109,11 +109,11 @@ public class LineInstant {
         this.isSustained = isSustained;
     }
 
-    public LineInstantType getNoteType() {
+    public VoiceInstantType getNoteType() {
         return noteType;
     }
 
-    public void setNoteType(final LineInstantType noteType) {
+    public void setNoteType(final VoiceInstantType noteType) {
         this.noteType = noteType;
     }
 

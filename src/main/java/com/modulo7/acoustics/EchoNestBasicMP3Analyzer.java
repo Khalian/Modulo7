@@ -96,10 +96,10 @@ public class EchoNestBasicMP3Analyzer {
                         // System.out.println("Beat Duration" + beat.getDuration());
                     }
 
-                    Line lineOfSong = new Line();
+                    Voice lineOfSong = new Voice();
 
                     for (Segment segment : analysis.getSegments()) {
-                        LineInstant songInstant = getLineInstantFromVector(segment.getPitches());
+                        VoiceInstant songInstant = getLineInstantFromVector(segment.getPitches());
                         lineOfSong.addLineInstant(songInstant);
                     }
 
@@ -134,7 +134,7 @@ public class EchoNestBasicMP3Analyzer {
      *
      * @return The line Instant representation of the chroma vector
      */
-    private LineInstant getLineInstantFromVector(final double[] noteChromaVector)
+    private VoiceInstant getLineInstantFromVector(final double[] noteChromaVector)
             throws Modulo7InvalidLineInstantSizeException {
 
         // First check whether the chroma vector is valid
@@ -150,7 +150,7 @@ public class EchoNestBasicMP3Analyzer {
             }
         }
 
-        return new LineInstant(chromaNotes);
+        return new VoiceInstant(chromaNotes);
     }
 
 

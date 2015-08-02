@@ -1,7 +1,5 @@
 package com.modulo7.musicstatmodels.representation;
 
-import com.modulo7.musicstatmodels.representation.Line;
-
 import java.util.HashSet;
 import java.util.Set;
 
@@ -17,7 +15,7 @@ import java.util.Set;
 public class Song {
 
     // A description of the length of the song in question
-    private Set<Line> linesOfSong;
+    private Set<Voice> linesOfSong;
 
     // Total duration of the song in question
     private double totalDurationOfSong;
@@ -34,8 +32,8 @@ public class Song {
 
         // From the lines of a song, extract the max duration
         // and call it the duration of the song
-        for (Line line : linesOfSong) {
-            double lineDuration = line.getTotalLineDuration();
+        for (Voice line : linesOfSong) {
+            double lineDuration = line.getTotalVoiceDuration();
 
             if (totalDurationOfSong < lineDuration) {
                 totalDurationOfSong = lineDuration;
@@ -51,7 +49,7 @@ public class Song {
      *
      * @param linesOfSong
      */
-    public Song(final Set<Line> linesOfSong) {
+    public Song(final Set<Voice> linesOfSong) {
         this.linesOfSong = linesOfSong;
         inferSongLength();
 
@@ -65,13 +63,13 @@ public class Song {
      * @param linesOfSong
      * @param songMetadata
      */
-    public Song(final Set<Line> linesOfSong, final SongMetadata songMetadata) {
+    public Song(final Set<Voice> linesOfSong, final SongMetadata songMetadata) {
 
         this.linesOfSong = linesOfSong;
         this.metadata = songMetadata;
     }
 
-    public Song(final Line lineOfSong, final SongMetadata songMetadata) {
+    public Song(final Voice lineOfSong, final SongMetadata songMetadata) {
         this.linesOfSong = new HashSet<>();
         this.linesOfSong.add(lineOfSong);
 
