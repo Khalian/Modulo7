@@ -5,15 +5,24 @@
 A semantic and technical analysis of musical scores based on Information Retrieval Principles
 
 OVERVIEW: Modulo7 is an research attempt to build a purely objective music analyzer Music Information Retrieval Engine
-using music theory and natural language principles.
+using music theory, natural language principles and big data principles. 
 
-Most usic recommendation enginmes take into account user feedback for recommendation and analysis
+Most Music recommendation engines take into account user feedback for recommendation and analysis
 purpose and does not take into account music theory. Modulo7 allows comparisons based on both 
 simple and complex rules of music theory and would eventually allow extensible rules to be defined 
 by users for comparisons. Standard Users will be able to use simple rules for recommendation and statistics
-mining, and power users would be able to define their own custom rules for ranking.
+mining, and power users would be able to define their own custom rules for ranking. I hope this paradigm shift will
+allow a faster recommendation engine, statistics miner and speed. 
 
-Modulo7 will also support
+Modulo7 will also support a query engine and a big data distributed database like format(using HDFS) and a unified representation
+for all forms of music(using a domain specific conversion followed by a serialization via Avro).
+
+Typically a query on this engine will be sql like. An example query will be of the format:-
+
+e.g. ) select sheet_music from MUSIC_DATABASE where melodic_complexity > some value
+
+The measure melodic_complexity is a defined parameter for sheet music format and the above query will acquire all such
+songs from the database.
 
 (MODULO7 IS IN ACTIVE DEVELOPMENT AND NOT READY FOR PRODUCTION USAGE).
 
@@ -47,8 +56,12 @@ analysis on the lyrics (e.g the vocabulary richness of the song, semantic intent
 on which standard machine learning techniques like classification (e.g. for supervised genre id) and clustering
 can be applied (STATUS : NOT STARTED)
 
+7. A query Engine : This engine will parse a query and run it on top of the vector space model.
+
+8. A distributed Database : This engine will support a distributed persistent store of the vector space model.
+
 THE PERL MODULE WAS THE FIRST PROTOTYPE DRAFT OF THE PROJECT AND IS DEPRECATED. THE WHOLE MODULE WILL BE 
-REMOVED IN A FUTURE COMMIT OF THE PROJECT.
+MOVED TO A DIFFERENT PROJECT IN A FUTURE COMMIT OF THE PROJECT.
 
 For the perl modules do (@Deprecated) : -
 cd src/main/perl

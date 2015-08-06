@@ -1,4 +1,4 @@
-package com.modulo7.acoustics;
+package com.modulo7.common.utils;
 
 import com.modulo7.musicstatmodels.representation.Note;
 
@@ -24,7 +24,7 @@ public class FrequencyNoteMap {
     // A singleton instance of the note map
     private static FrequencyNoteMap frequencyNoteMap = null;
 
-    // Note to position Map
+    // Note to position Map as they would appear in a ascending order
     private static final Map<Note, Integer> notePositionMap = new HashMap<>();
 
     // Position to note Map
@@ -128,18 +128,122 @@ public class FrequencyNoteMap {
 
         // Temporary, put the note map to note position
         // TODO : Figure out the actual meaning of the chroma vector
-        notePositionMap.put(Note.A4, 1);
-        notePositionMap.put(Note.ASHARP4, 2);
-        notePositionMap.put(Note.B4, 3);
-        notePositionMap.put(Note.C4, 4);
-        notePositionMap.put(Note.CSHARP4, 5);
-        notePositionMap.put(Note.D4, 6);
-        notePositionMap.put(Note.DSHARP4, 7);
-        notePositionMap.put(Note.E4, 8);
-        notePositionMap.put(Note.F4, 9);
-        notePositionMap.put(Note.FSHARP4, 10);
-        notePositionMap.put(Note.G4, 11);
-        notePositionMap.put(Note.GSHARP4, 12);
+        notePositionMap.put(Note.A0, 1);
+        notePositionMap.put(Note.ASHARP0, 2);
+        notePositionMap.put(Note.B0, 3);
+        notePositionMap.put(Note.C0, 4);
+        notePositionMap.put(Note.CSHARP0, 5);
+        notePositionMap.put(Note.D0, 6);
+        notePositionMap.put(Note.DSHARP0, 7);
+        notePositionMap.put(Note.E0, 8);
+        notePositionMap.put(Note.F0, 9);
+        notePositionMap.put(Note.FSHARP0, 10);
+        notePositionMap.put(Note.G0, 11);
+        notePositionMap.put(Note.GSHARP0, 12);
+
+        notePositionMap.put(Note.A1, 13);
+        notePositionMap.put(Note.ASHARP1, 14);
+        notePositionMap.put(Note.B1, 15);
+        notePositionMap.put(Note.C1, 16);
+        notePositionMap.put(Note.CSHARP1, 17);
+        notePositionMap.put(Note.D1, 18);
+        notePositionMap.put(Note.DSHARP1, 19);
+        notePositionMap.put(Note.E1, 20);
+        notePositionMap.put(Note.F1, 21);
+        notePositionMap.put(Note.FSHARP1, 22);
+        notePositionMap.put(Note.G1, 23);
+        notePositionMap.put(Note.GSHARP1, 24);
+
+        notePositionMap.put(Note.A2, 25);
+        notePositionMap.put(Note.ASHARP2, 26);
+        notePositionMap.put(Note.B2, 27);
+        notePositionMap.put(Note.C2, 28);
+        notePositionMap.put(Note.CSHARP2, 29);
+        notePositionMap.put(Note.D2, 30);
+        notePositionMap.put(Note.DSHARP2, 31);
+        notePositionMap.put(Note.E2, 32);
+        notePositionMap.put(Note.F2, 33);
+        notePositionMap.put(Note.FSHARP2, 34);
+        notePositionMap.put(Note.G2, 35);
+        notePositionMap.put(Note.GSHARP2, 36);
+
+        notePositionMap.put(Note.A3, 37);
+        notePositionMap.put(Note.ASHARP3, 38);
+        notePositionMap.put(Note.B3, 39);
+        notePositionMap.put(Note.C3, 40);
+        notePositionMap.put(Note.CSHARP3, 41);
+        notePositionMap.put(Note.D3, 42);
+        notePositionMap.put(Note.DSHARP3, 43);
+        notePositionMap.put(Note.E3, 44);
+        notePositionMap.put(Note.F3, 45);
+        notePositionMap.put(Note.FSHARP3, 46);
+        notePositionMap.put(Note.G3, 47);
+        notePositionMap.put(Note.GSHARP3, 48);
+
+        notePositionMap.put(Note.A4, 49);
+        notePositionMap.put(Note.ASHARP4, 50);
+        notePositionMap.put(Note.B4, 51);
+        notePositionMap.put(Note.C4, 52);
+        notePositionMap.put(Note.CSHARP4, 53);
+        notePositionMap.put(Note.D4, 54);
+        notePositionMap.put(Note.DSHARP4, 55);
+        notePositionMap.put(Note.E4, 56);
+        notePositionMap.put(Note.F4, 57);
+        notePositionMap.put(Note.FSHARP4, 58);
+        notePositionMap.put(Note.G4, 59);
+        notePositionMap.put(Note.GSHARP4, 60);
+
+        notePositionMap.put(Note.A5, 61);
+        notePositionMap.put(Note.ASHARP5, 62);
+        notePositionMap.put(Note.B5, 63);
+        notePositionMap.put(Note.C5, 64);
+        notePositionMap.put(Note.CSHARP5, 65);
+        notePositionMap.put(Note.D5, 66);
+        notePositionMap.put(Note.DSHARP5, 67);
+        notePositionMap.put(Note.E5, 68);
+        notePositionMap.put(Note.F5, 69);
+        notePositionMap.put(Note.FSHARP5, 70);
+        notePositionMap.put(Note.G5, 71);
+        notePositionMap.put(Note.GSHARP5, 72);
+
+        notePositionMap.put(Note.A6, 73);
+        notePositionMap.put(Note.ASHARP7, 74);
+        notePositionMap.put(Note.B6, 75);
+        notePositionMap.put(Note.C6, 76);
+        notePositionMap.put(Note.CSHARP7, 77);
+        notePositionMap.put(Note.D6, 78);
+        notePositionMap.put(Note.DSHARP7, 79);
+        notePositionMap.put(Note.E6, 80);
+        notePositionMap.put(Note.F6, 81);
+        notePositionMap.put(Note.FSHARP7, 82);
+        notePositionMap.put(Note.G6, 83);
+        notePositionMap.put(Note.GSHARP7, 84);
+
+        notePositionMap.put(Note.A7, 85);
+        notePositionMap.put(Note.ASHARP7, 86);
+        notePositionMap.put(Note.B7, 87);
+        notePositionMap.put(Note.C7, 88);
+        notePositionMap.put(Note.CSHARP7, 89);
+        notePositionMap.put(Note.D7, 90);
+        notePositionMap.put(Note.DSHARP7, 91);
+        notePositionMap.put(Note.E7, 92);
+        notePositionMap.put(Note.F7, 93);
+        notePositionMap.put(Note.FSHARP7, 94);
+        notePositionMap.put(Note.G7, 95);
+        notePositionMap.put(Note.GSHARP7, 96);
+
+        notePositionMap.put(Note.A8, 97);
+        notePositionMap.put(Note.ASHARP8, 98);
+        notePositionMap.put(Note.B8, 99);
+        notePositionMap.put(Note.C8, 100);
+        notePositionMap.put(Note.CSHARP8, 101);
+        notePositionMap.put(Note.D8, 102);
+        notePositionMap.put(Note.DSHARP8, 103);
+        notePositionMap.put(Note.E8, 104);
+        notePositionMap.put(Note.F8, 105);
+        notePositionMap.put(Note.FSHARP8, 106);
+        notePositionMap.put(Note.G8, 107);
+        notePositionMap.put(Note.GSHARP8, 108);
 
         // Invert and acquire the note positions
         for (Map.Entry<Note, Integer> entry : notePositionMap.entrySet()) {
@@ -150,10 +254,20 @@ public class FrequencyNoteMap {
         }
     }
 
+    /**
+     * Gets the note given the position
+     * @param position
+     * @return
+     */
     public Note getNoteGivenPosition(int position) {
         return positionNoteMap.get(position);
     }
 
+    /**
+     * Acquires the position of the note given the note
+     * @param note
+     * @return
+     */
     public int getPositionGivenNote(Note note) {
         return notePositionMap.get(note);
     }

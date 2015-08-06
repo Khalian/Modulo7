@@ -3,6 +3,7 @@ package com.modulo7.acoustics;
 import com.echonest.api.v4.*;
 
 import com.modulo7.common.exceptions.Modulo7InvalidLineInstantSizeException;
+import com.modulo7.common.utils.FrequencyNoteMap;
 import com.modulo7.crawler.utils.CrawlerHelper;
 import com.modulo7.musicstatmodels.representation.*;
 import com.modulo7.musicstatmodels.representation.Song;
