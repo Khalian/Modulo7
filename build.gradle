@@ -116,6 +116,29 @@ jar {
     }
 }
 
+test {
+
+    // show standard out and standard error of the test JVM(s) on the console
+    testLogging.showStandardStreams = true
+
+    // set heap size for the test JVM(s)
+    minHeapSize = "128m"
+    maxHeapSize = "1024m"
+
+    // set JVM arguments for the test JVM(s)
+    jvmArgs '-XX:MaxPermSize=512m'
+
+    // listen to events in the test execution lifecycle
+    beforeTest { descriptor ->
+        logger.lifecycle("Running test: " + descriptor)
+    }
+
+    // listen to standard out and standard error of the test JVM(s)
+    onOutput { descriptor, event ->
+        logger.lifecycle("Test: " + descriptor + " produced standard out/err: " + event.message )
+    }
+}
+
 repositories {
     mavenCentral()
 }
@@ -138,6 +161,9 @@ dependencies {
     compile group: 'commons-io', name: 'commons-io', version: '2.4'
     compile group: 'log4j', name: 'log4j', version: '1.2.17'
     compile group: 'org.apache.avro', name: 'avro', version: '1.7.7'
+
+    // Test compile artifacts
+    testCompile 'junit:junit:4.12'
 }
 
 uploadArchives {

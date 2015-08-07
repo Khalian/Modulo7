@@ -3,6 +3,7 @@ package com.modulo7.acoustics;
 import com.echonest.api.v4.*;
 
 import com.modulo7.common.exceptions.Modulo7InvalidLineInstantSizeException;
+import com.modulo7.common.exceptions.Modulo7NoSuchFileException;
 import com.modulo7.common.utils.FrequencyNoteMap;
 import com.modulo7.crawler.utils.CrawlerHelper;
 import com.modulo7.musicstatmodels.representation.*;
@@ -24,9 +25,10 @@ import java.util.Set;
  *
  * 1. Tempo of the track
  * 2. Title of the track
- * 3.
+ * 3. The loudness of the track
+ * 4. The key signature and time signature of the track
  */
-public class EchoNestBasicMP3Analyzer {
+public class EchoNestBasicMP3Analyzer implements AbstractAcousticsAnalyzer {
 
     // Echo nest basic MP3 analyzer logger
     final static Logger logger = Logger.getLogger(EchoNestBasicMP3Analyzer.class);
@@ -35,16 +37,21 @@ public class EchoNestBasicMP3Analyzer {
     private EchoNestAPI en;
 
     // Number of milliseconds given for analysis
-    // TODO : Dynamically configure the analysis duration
     private static final int DURATION_OF_ANALYSIS = 30000;
 
-    private static FrequencyNoteMap noteMap = null;
+    // An instance of the mp3 File
+    private File mp3File;
+
+    // An instance of the frequency note map
+    private static FrequencyNoteMap noteMap = FrequencyNoteMap.getInstance();
 
     /**
      * Basic init method, all constructors should call it
+     *
+     * TODO : Impl this to check if anything else is needed
      */
     private void init() {
-        noteMap = FrequencyNoteMap.getInstance();
+
     }
 
     /**
@@ -52,75 +59,76 @@ public class EchoNestBasicMP3Analyzer {
      *
      * @throws EchoNestException
      */
-    public EchoNestBasicMP3Analyzer() throws EchoNestException {
+    public EchoNestBasicMP3Analyzer(final String filePath) throws EchoNestException, Modulo7NoSuchFileException {
 
         init();
         en = new EchoNestAPI(CrawlerHelper.ECHO_NEST_API_KEY);
+
+        mp3File = new File(filePath);
+
+        if (!mp3File.exists()) {
+            throw new Modulo7NoSuchFileException("No file :" + filePath);
+        }
     }
 
     /**
      * Method to return a modulo7 Song from an MP3 recording using the
      * Echo Nest API
      *
-     * @param filePath
-     * @return
+     * @return The song representiation of the echo nest Analysis of mp3 file
      * @throws EchoNestException
      */
-    private Song getMP3MetaDataInfo(final String filePath) throws EchoNestException {
+    @Override
+    public Song getSongRepresentation() {
 
-        File file = new File(filePath);
+        try {
+            Track track = en.uploadTrack(mp3File, true);
 
-        if (!file.exists()) {
-            System.err.println("Can't find " + filePath);
-        } else {
-            try {
-                Track track = en.uploadTrack(file, true);
+            // Wait for a predefined period of time in which the track is analyzed
+            track.waitForAnalysis(30000);
 
-                // Wait for a predefined period of time in which the track is analyzed
-                track.waitForAnalysis(30000);
+            if (track.getStatus() == Track.AnalysisStatus.COMPLETE) {
 
-                if (track.getStatus() == Track.AnalysisStatus.COMPLETE) {
+                final double tempo = track.getTempo();
+                final String title = track.getTitle();
+                final int timeSignature = track.getTimeSignature();
+                final String artistName = track.getArtistName();
+                final double loudness = track.getLoudness();
+                final int key = track.getKey();
 
-                    final double tempo = track.getTempo();
-                    final String title = track.getTitle();
-                    final int timeSignature = track.getTimeSignature();
-                    final String artistName = track.getArtistName();
-                    final double loudness = track.getLoudness();
-                    final int key = track.getKey();
+                TrackAnalysis analysis = track.getAnalysis();
 
-                    TrackAnalysis analysis = track.getAnalysis();
+                for (TimedEvent beat : analysis.getBeats()) {
+                    // TODO : Figure out what to do with beats
 
-                    for (TimedEvent beat : analysis.getBeats()) {
-                        // TODO : Figure out what to do with beats
-
-                        // System.out.println("beat " + beat.getStart());
-                        // System.out.println("Beat Duration" + beat.getDuration());
-                    }
-
-                    Voice lineOfSong = new Voice();
-
-                    for (Segment segment : analysis.getSegments()) {
-                        VoiceInstant songInstant = getLineInstantFromVector(segment.getPitches());
-                        lineOfSong.addLineInstant(songInstant);
-                    }
-
-                    // TODO : Fix constructor for song metadata to include song metadata info as well
-                    Song inferredSong = new Song(lineOfSong, new SongMetadata(artistName));
-                    return inferredSong;
-                } else {
-                    logger.error("Trouble analysing track " + track.getStatus());
-                    return null;
+                    // System.out.println("beat " + beat.getStart());
+                    // System.out.println("Beat Duration" + beat.getDuration());
                 }
-            } catch (IOException e) {
-                logger.error("Trouble uploading file to track analyzer");
-            } catch (Modulo7InvalidLineInstantSizeException e) {
-                e.printStackTrace();
+
+                Voice lineOfSong = new Voice();
+
+                for (Segment segment : analysis.getSegments()) {
+                    VoiceInstant songInstant = getLineInstantFromVector(segment.getPitches());
+                    lineOfSong.addLineInstant(songInstant);
+                }
+
+                // TODO : Fix constructor for song metadata to include song metadata info as well
+                Song inferredSong = new Song(lineOfSong, new SongMetadata(artistName));
+                return inferredSong;
+            } else {
+                logger.error("Trouble analysing track " + track.getStatus());
+                return null;
             }
+        } catch (IOException e) {
+            logger.error("Trouble uploading file to track analyzer");
+        } catch (Modulo7InvalidLineInstantSizeException e) {
+            e.printStackTrace();
+        } catch (EchoNestException e) {
+            e.printStackTrace();
         }
 
         return null;
     }
-
     /**
      * This method takes the output of the Echo Nest API's note
      * vector : which they name as the chroma vector and ascertain the
@@ -155,10 +163,10 @@ public class EchoNestBasicMP3Analyzer {
     }
 
 
-    public static void main(String[] args) throws EchoNestException {
-        EchoNestBasicMP3Analyzer analyzer = new EchoNestBasicMP3Analyzer();
+    public static void main(String[] args) throws EchoNestException, Modulo7NoSuchFileException {
+        EchoNestBasicMP3Analyzer analyzer = new EchoNestBasicMP3Analyzer("C:\\Led Zeppelin - Stairway To Heaven.mp3");
 
         // Basic test case
-        analyzer.getMP3MetaDataInfo("C:\\Led Zeppelin - Stairway To Heaven.mp3");
+        analyzer.getSongRepresentation();
     }
 }

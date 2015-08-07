@@ -3,12 +3,10 @@ package com.modulo7.othersources;
 import java.io.File;
 import java.io.IOException;
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.Map;
-import java.util.Set;
 
 import com.modulo7.common.exceptions.Modulo7InvalidMusicXMLFile;
-import com.modulo7.musicstatmodels.representation.Line;
+import com.modulo7.musicstatmodels.representation.Voice;
 import com.modulo7.musicstatmodels.representation.Song;
 import org.apache.log4j.Logger;
 import org.jsoup.Jsoup;
@@ -74,11 +72,11 @@ public class BasicMusicXMLParser {
     private Song parse() {
 
         // The set of lines that describe the song, mapped to line index
-        Map<Integer, Line> lineIndextoLineMap = new HashMap<>();
+        Map<Integer, Voice> lineIndextoLineMap = new HashMap<>();
 
         // Init the lines as a map between line index (also called voice in music xml jargon)
         for (Element note : this.doc.getElementsByTag("Note")) {
-            lineIndextoLineMap.put(Integer.valueOf(note.getElementsByTag("voice").text()), new Line());
+            lineIndextoLineMap.put(Integer.valueOf(note.getElementsByTag("voice").text()), new Voice());
         }
 
 

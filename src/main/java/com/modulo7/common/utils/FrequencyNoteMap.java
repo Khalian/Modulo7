@@ -27,6 +27,9 @@ public class FrequencyNoteMap {
     // Note to position Map as they would appear in a ascending order
     private static final Map<Note, Integer> notePositionMap = new HashMap<>();
 
+    // Note to position map without taking into account the octave number, assumed octave 4 by default
+    private static final Map<Note, Integer> basicNotePositionMap = new HashMap<>();
+
     // Position to note Map
     private static final Map<Integer, Note> positionNoteMap = new HashMap<>();
 
@@ -244,6 +247,19 @@ public class FrequencyNoteMap {
         notePositionMap.put(Note.FSHARP8, 106);
         notePositionMap.put(Note.G8, 107);
         notePositionMap.put(Note.GSHARP8, 108);
+
+        basicNotePositionMap.put(Note.A0, 1);
+        basicNotePositionMap.put(Note.ASHARP0, 2);
+        basicNotePositionMap.put(Note.B0, 3);
+        basicNotePositionMap.put(Note.C0, 4);
+        basicNotePositionMap.put(Note.CSHARP0, 5);
+        basicNotePositionMap.put(Note.D0, 6);
+        basicNotePositionMap.put(Note.DSHARP0, 7);
+        basicNotePositionMap.put(Note.E0, 8);
+        basicNotePositionMap.put(Note.F0, 9);
+        basicNotePositionMap.put(Note.FSHARP0, 10);
+        basicNotePositionMap.put(Note.G0, 11);
+        basicNotePositionMap.put(Note.GSHARP0, 12);
 
         // Invert and acquire the note positions
         for (Map.Entry<Note, Integer> entry : notePositionMap.entrySet()) {
