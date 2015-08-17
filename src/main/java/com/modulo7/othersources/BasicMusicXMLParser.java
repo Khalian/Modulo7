@@ -7,14 +7,12 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import com.modulo7.common.exceptions.Modulo7BadKeyException;
-import com.modulo7.common.exceptions.Modulo7InvalidCircleOfFifthsDistance;
-import com.modulo7.common.exceptions.Modulo7InvalidMusicXMLFile;
+import com.modulo7.common.exceptions.*;
+import com.modulo7.common.utils.FrequencyNoteMap;
+import com.modulo7.common.utils.Modulo7Utils;
 import com.modulo7.musicstatmodels.musictheorymodels.CircleOfFifths;
-import com.modulo7.musicstatmodels.representation.KeySignature;
-import com.modulo7.musicstatmodels.representation.ScaleType;
-import com.modulo7.musicstatmodels.representation.Voice;
-import com.modulo7.musicstatmodels.representation.Song;
+import com.modulo7.musicstatmodels.representation.*;
+import org.apache.commons.lang3.StringUtils;
 import org.apache.log4j.Logger;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
@@ -41,6 +39,15 @@ public class BasicMusicXMLParser {
 
     // Key signature of the song if its present in the music xml encoding
     private KeySignature keySignature = null;
+
+    // The set of lines that describe the song, mapped to line index
+    private Map<Integer, Voice> voiceIndextoVoiceMap = new HashMap<>();
+
+    // Get an instance of frequencies to the notes
+    private FrequencyNoteMap frequencyNoteMap = FrequencyNoteMap.getInstance();
+
+    //
+    private Map<Integer, Integer> divMultiplier = new HashMap<>();
 
     /**
      * Basic constructor which keeps the information on
@@ -80,23 +87,15 @@ public class BasicMusicXMLParser {
      */
     private Song parse() throws Modulo7InvalidCircleOfFifthsDistance, Modulo7BadKeyException {
 
-        // The set of lines that describe the song, mapped to line index
-        Map<Integer, Voice> lineIndextoLineMap = new HashMap<>();
-
         // Init the lines as a map between line index (also called voice in music xml jargon)
         for (Element note : this.doc.getElementsByTag("Note")) {
-            lineIndextoLineMap.put(Integer.valueOf(note.getElementsByTag("voice").text()), new Voice());
+            voiceIndextoVoiceMap.put(Integer.valueOf(note.getElementsByTag("voice").text()), new Voice());
         }
 
-        // get the number of divisions and the change throughout the piece, more often than not its just one
-        // and divisional information does not change over the course of the song
-        final List<Integer> divisions =  new ArrayList();
+        // Gets the number of divisions and a multiplier for the length of the song
+        getDivisionInformation();
 
-        for (Element thisdiv : this.doc.getElementsByTag("divisions")) {
-            divisions.add(Integer.valueOf(thisdiv.text()));
-        }
-
-        // Acquires the key signature from the music xml file
+        // Acquires the key signature from the music xml file and stores as the key signature element
         acquireKeySignatureFromMusicXMLFile();
 
         return null;
@@ -156,8 +155,33 @@ public class BasicMusicXMLParser {
             return CircleOfFifths.getKeyGivenFifthDistance(typeOfScale, fifthsAwayFromMode);
         }
 
-        // Return a null if not key is found
+        // Return a null if no key is found
         return null;
+    }
+
+    /**
+     * Gets the number of divisions and a multiplier for each division in a given
+     * music XML file and populates it
+     */
+    private void getDivisionInformation() {
+        final List<Integer> divisions =  new ArrayList<Integer>();
+
+        for (Element thisdiv : this.doc.getElementsByTag("divisions")) {
+            divisions.add(Integer.valueOf(thisdiv.text()));
+        }
+
+        if (!this.doc.getElementsByTag("divisions").isEmpty()) {
+
+            long lcm = Modulo7Utils.lcm(divisions);
+
+            //set the multiplier for each division.
+            for (Integer i : divisions) {
+                divMultiplier.put(i, (int) lcm/i);
+            }
+        } else {
+
+            divMultiplier.put(1,1);
+        }
     }
 
     /**
@@ -165,6 +189,79 @@ public class BasicMusicXMLParser {
      */
     private void getNotes() {
 
+        // Assume the number of divisions in a song to be 1 by default
+        Integer divisions = 1;
+
+        // Gets the parts in the music xml file
+        for (Element thisPart : this.doc.select("part")) {
+
+            // Gets the measure in each part
+            for (Element thisMeasure : thisPart.getElementsByTag("measure")) {
+
+                if (!thisMeasure.getElementsByTag("divisions").isEmpty()) {
+                    divisions = Integer.valueOf(thisMeasure.getElementsByTag("divisions").text());
+                }
+
+                for (Element thisNote : thisMeasure.children()) {
+                    if (thisNote.tagName().equals("note")) {
+
+                        // Identify to which voice this note belongs to, we will accordingly add the note to the voice
+                        final int currentVoiceIndex = Integer.valueOf(thisNote.getElementsByTag("voice").text());
+
+                        //get the pitch for the given note, by design a correct pitch will always contain the pitch element
+                        if (!thisNote.getElementsByTag("pitch").isEmpty()) {
+                            for (Element thisPitch : thisNote.getElementsByTag("pitch")) {
+
+                                // Acquire the note and the octave infomration, you can construct the note from these two pieces of information
+                                final String note = thisPitch.getElementsByTag("step").text();
+                                final int octave = Integer.parseInt(thisPitch.getElementsByTag("octave").text());
+
+                                // An alteration of the note
+                                final String alter = String.valueOf(thisPitch.getElementsByTag("alter").text());
+
+                                // Gets the note
+                                try {
+                                    Accidental accidental = null;
+
+                                    // Check if an alternation element is present or not
+                                    if (!StringUtils.isEmpty(alter)) {
+                                        if (alter.equals("1")) {
+                                            accidental = Accidental.SHARP;
+                                        } else if (alter.equals("-1")) {
+                                            accidental = Accidental.FLAT;
+                                        } else if (alter.equals("2")) {
+                                            accidental = Accidental.DOUBLESHARP;
+                                        } else if (alter.equals("-2")) {
+                                            accidental = Accidental.DOUBLEFLAT;
+                                        } else if (alter.equals("0")) {
+                                            accidental = Accidental.NONE;
+                                        }
+                                    } else {
+                                        accidental = Accidental.NONE;
+                                    }
+
+                                    final Note baseNote = Note.getNoteValue(note);
+                                    final Note actualNote = frequencyNoteMap.getModifiedNoteGivenAccidental(baseNote, accidental);
+
+                                    // The duration
+                                    final int duration;
+
+                                    // Get the duration of the note
+                                    if (thisNote.getElementsByTag("duration").text().isEmpty()) {
+                                        duration = 0;
+                                    } else {
+                                        duration = Integer.valueOf(thisNote.getElementsByTag("duration").text()) * divMultiplier.get(divisions);
+                                    }
+
+                                } catch (Modulo7BadNoteException | Modulo7BadAccidentalException e) {
+                                    e.printStackTrace();
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
     }
 
     /**

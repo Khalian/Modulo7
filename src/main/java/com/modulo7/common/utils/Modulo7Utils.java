@@ -2,7 +2,6 @@ package com.modulo7.common.utils;
 
 import com.modulo7.musicstatmodels.representation.Note;
 import org.apache.commons.io.FileUtils;
-import org.apache.commons.io.filefilter.IOFileFilter;
 import org.apache.commons.io.filefilter.TrueFileFilter;
 
 import java.io.File;
@@ -100,5 +99,52 @@ public class Modulo7Utils {
      */
     public int intervalDistance(final Note first, final Note second) {
         return Math.abs(noteMap.getPositionGivenNote(first) - noteMap.getPositionGivenNote(second));
+    }
+
+
+    /**
+     * Gets the GCD for an arbitrary number of inputs
+     *
+     * @param input
+     * @return
+     */
+    public static long gcd(long ... input) {
+        long result = input[0];
+
+        for (int i = 1; i < input.length; i++)
+            result = Modulo7Utils.gcd(result, input[i]);
+
+        return result;
+    }
+
+    /**
+     * Gets the lcm for any two numbers
+     * @param a
+     * @param b
+     * @return
+     */
+    public static long lcm(long a, long b) {
+        return a * (b / gcd(a, b));
+    }
+
+    /**
+     * LCM of an arbitrary list of numbers
+     *
+     * @param divisions
+     * @return
+     */
+    public static long lcm(List<Integer> divisions) {
+        long[] input = new long[divisions.size()];
+
+        for (int i = 0; i <  divisions.size(); i++){
+            input[i] = divisions.get(i);
+        }
+
+        long result = input[0];
+
+        for (int i = 1; i < input.length; i++)
+            result = lcm(result, input[i]);
+
+        return ((int) result);
     }
 }

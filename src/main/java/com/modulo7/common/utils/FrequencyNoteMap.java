@@ -1,5 +1,7 @@
 package com.modulo7.common.utils;
 
+import com.modulo7.common.exceptions.Modulo7BadAccidentalException;
+import com.modulo7.musicstatmodels.representation.Accidental;
 import com.modulo7.musicstatmodels.representation.Note;
 
 import java.util.*;
@@ -286,5 +288,16 @@ public class FrequencyNoteMap {
      */
     public int getPositionGivenNote(Note note) {
         return notePositionMap.get(note);
+    }
+
+    /**
+     * Gets a note given an accidental modification to a note
+     *
+     * @param currentNote
+     * @param accidental
+     */
+    public Note getModifiedNoteGivenAccidental(final Note currentNote, final Accidental accidental) throws Modulo7BadAccidentalException {
+        final int position = getPositionGivenNote(currentNote);
+        return getNoteGivenPosition(position + Accidental.getPositionDelta(accidental));
     }
 }

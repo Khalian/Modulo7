@@ -1,11 +1,15 @@
 package com.modulo7.musicstatmodels.representation;
 
+import com.modulo7.common.exceptions.Modulo7BadNoteException;
 import com.modulo7.common.exceptions.Modulo7InvalidOctaveRangeException;
 
 /**
  * Created by asanyal on 6/16/2015.
  *
  * This enum describes the notes in western music theory
+ *
+ * Typically a note is Note is a representation of a set frequency, notes are arranged
+ * in octaves
  */
 public enum Note {
 
@@ -99,5 +103,37 @@ public enum Note {
      */
     private String getNoteValue() {
         return noteValue;
+    }
+
+    public Integer getOctaveNumber() {
+        return octaveNumber;
+    }
+
+    /**
+     * Acquire a note enum given the noteValue, asssume the 4th octave as the default
+     *
+     * TODO : Complete this implementation with a new method which also takes into  account the octave number
+     *
+     * @param noteValue
+     * @return
+     */
+    public static Note getNoteValue (final String noteValue) throws Modulo7BadNoteException {
+        if (noteValue.equalsIgnoreCase("A")) {
+            return Note.A4;
+        } else if (noteValue.equalsIgnoreCase("B")) {
+            return Note.B4;
+        } else if (noteValue.equalsIgnoreCase("C")) {
+            return Note.C4;
+        } else if (noteValue.equalsIgnoreCase("D")) {
+            return Note.D4;
+        } else if (noteValue.equalsIgnoreCase("E")) {
+            return Note.E4;
+        } else if (noteValue.equalsIgnoreCase("F")) {
+            return Note.F4;
+        } else if (noteValue.equalsIgnoreCase("G")) {
+            return Note.G4;
+        } else {
+            throw new Modulo7BadNoteException("Bad note: " + noteValue);
+        }
     }
 }

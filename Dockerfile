@@ -41,8 +41,7 @@ RUN     apt-get -y install openjdk-7-jdk
 RUN     apt-get -y install wget unzip
 RUN     wget https://services.gradle.org/distributions/gradle-2.5-bin.zip
 RUN     unzip gradle-2.5-bin.zip
-RUN     export PATH=$PATH:/gradle-2.5/bin
 
 # Build the Modulo7 project
 RUN     git clone https://github.com/Khalian/Modulo7
-RUN     cd Modulo7 && gradle build
+RUN     export PATH=$PATH:/gradle-2.5/bin && cd Modulo7 && gradle build

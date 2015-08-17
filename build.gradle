@@ -33,6 +33,7 @@ model {
                 binaries.withType(SharedLibraryBinary) {
                     def libDynName = targetPlatform.operatingSystem.windows ? 'opencv_core300.dll' : 'libopencv_core.so'
                     def libStaticName = targetPlatform.operatingSystem.windows ? 'opencv_core300.lib' : 'libopencv_core.a'
+                    
                     // Windows uses a .dll file, with a different link file if it exists (not Cygwin or MinGW)
                     sharedLibraryFile = file(opencvlibs + File.separator + libDynName)
                     if (file(opencvlibs + File.separator + libStaticName).exists()) {
@@ -92,10 +93,12 @@ binaries.withType(NativeLibrarySpec) {
         cCompiler.args "/Zi"
         cCompiler.define "DLL_EXPORT"
     }
+    
     if (toolChain in Gcc && buildType == buildTypes.debug) {
         cCompiler.include "-I" + includes
         cppCompiler.args "-g "
     }
+    
     if (toolChain in VisualCpp && buildType == buildTypes.debug) {
 
         cppCompiler.args '/Zi'
@@ -145,7 +148,6 @@ repositories {
 
 dependencies {
 
-    // compile files('./resources/externalDeps/jEN.jar')
 	compile group: 'org.apache.lucene', name: 'lucene-analyzers', version: '3.4.0'
 	compile group: 'org.jsoup', name: 'jsoup', version: '1.7.2'
 	compile group: 'org.json', name: 'json', version: '20140107'
@@ -161,7 +163,8 @@ dependencies {
     compile group: 'commons-io', name: 'commons-io', version: '2.4'
     compile group: 'log4j', name: 'log4j', version: '1.2.17'
     compile group: 'org.apache.avro', name: 'avro', version: '1.7.7'
-    compile "commons-collections:commons-collections:3.0"
+    compile group: 'commons-collections', name:'commons-collections', version:'3.0'
+    compile group: 'org.apache.commons', name:'commons-lang3', version:'3.1'
 
     // Test compile artifacts
     testCompile 'junit:junit:4.12'
