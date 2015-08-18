@@ -109,7 +109,7 @@ public class EchoNestBasicMP3Analyzer implements AbstractAcousticsAnalyzer {
 
                 for (Segment segment : analysis.getSegments()) {
                     VoiceInstant songInstant = getLineInstantFromVector(segment.getPitches());
-                    lineOfSong.addLineInstant(songInstant);
+                    lineOfSong.addVoiceInstant(songInstant);
                 }
 
                 // TODO : Fix constructor for song metadata to include song metadata info as well

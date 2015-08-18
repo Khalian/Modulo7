@@ -26,7 +26,7 @@ public class Voice {
     private double totalVoiceDuration;
 
     // The voice's scale, major, minor, blues etc
-    private ScaleType scaleOfLine;
+    private ScaleType scaleOfVoice;
 
     /**
      * Basic constructor for line by accepting a set of line
@@ -36,6 +36,19 @@ public class Voice {
      */
     public Voice(final List<VoiceInstant> voiceSequence) {
         this.voiceSequence = voiceSequence;
+        inferTotalLineDuration();
+    }
+
+    /**
+     * Basic Constructor which takes into account the scale of a given voice
+     * as well as the line sequence itself
+     *
+     * @param voiceSequence
+     * @param scaleType
+     */
+    public Voice(final List<VoiceInstant> voiceSequence, final ScaleType scaleType) {
+        this.voiceSequence = voiceSequence;
+        this.scaleOfVoice = scaleType;
         inferTotalLineDuration();
     }
 
@@ -69,7 +82,7 @@ public class Voice {
      *
      * @param instant
      */
-    public void addLineInstant(final VoiceInstant instant) {
+    public void addVoiceInstant(final VoiceInstant instant) {
         voiceSequence.add(instant);
     }
 

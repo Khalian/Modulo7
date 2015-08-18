@@ -148,7 +148,10 @@ repositories {
 
 dependencies {
 
-	compile group: 'org.apache.lucene', name: 'lucene-analyzers', version: '3.4.0'
+	compile group: 'org.apache.lucene', name: 'lucene-analyzers', version: '3.6.2'
+    compile group: 'org.apache.lucene', name : 'lucene-queryparser', version: '4.0.0'
+    compile group: 'org.apache.lucene', name: 'lucene-analyzers-common', version:'4.1.0'
+    compile group: 'org.apache.lucene', name: 'lucene-core', version: '4.1.0'
 	compile group: 'org.jsoup', name: 'jsoup', version: '1.7.2'
 	compile group: 'org.json', name: 'json', version: '20140107'
 	compile group: 'pdfbox', name: 'pdfbox', version: '0.7.3'

@@ -2,7 +2,7 @@ package com.modulo7.crawler.datacrawler;
 
 import com.modulo7.crawler.utils.CrawlerHelper;
 import com.modulo7.nlp.NLPUtils;
-import org.apache.lucene.queryParser.ParseException;
+import org.apache.lucene.queryparser.classic.ParseException;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
@@ -150,7 +150,7 @@ public class BasicLyricsCrawler implements Runnable {
                 if (!(stopList.contains(elementWordLC) || nonLyricsWords.contains(elementWordLC))) {
                     if (isStemmingEnabled) {
                         try {
-                            lyricsTxt += NLPUtils.englishStemmer(elementWordLC) + " ";
+                            lyricsTxt += NLPUtils.stemmer(elementWordLC) + " ";
                         } catch (ParseException pe) {
                             logger.fine("Unable to stem due to :" + pe.getMessage());
                         }

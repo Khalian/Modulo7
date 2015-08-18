@@ -6,7 +6,7 @@ package com.modulo7.nlp;
  * A class for parsing queries provided to the query engine
  * of the
  */
-public class QueryParser {
+public class Modulo7QueryParser {
 
     /**
      * Parses a query given to the query engine

@@ -60,18 +60,24 @@ public class Song {
     /**
      * Basic constructor for a modulo7 song with Song Metadata present
      *
-     * @param linesOfSong
+     * @param voicesOfSong
      * @param songMetadata
      */
-    public Song(final Set<Voice> linesOfSong, final SongMetadata songMetadata) {
+    public Song(final Set<Voice> voicesOfSong, final SongMetadata songMetadata) {
 
-        this.linesOfSong = linesOfSong;
+        this.linesOfSong = voicesOfSong;
         this.metadata = songMetadata;
     }
 
-    public Song(final Voice lineOfSong, final SongMetadata songMetadata) {
+    /**
+     * Constructor with a single voice and metadata present
+     *
+     * @param voiceOfSong
+     * @param songMetadata
+     */
+    public Song(final Voice voiceOfSong, final SongMetadata songMetadata) {
         this.linesOfSong = new HashSet<>();
-        this.linesOfSong.add(lineOfSong);
+        this.linesOfSong.add(voiceOfSong);
 
         this.metadata = songMetadata;
     }

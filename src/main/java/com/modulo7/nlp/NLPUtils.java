@@ -9,10 +9,17 @@ package com.modulo7.nlp;
 
 import org.apache.lucene.analysis.Analyzer;
 import org.apache.lucene.analysis.TokenStream;
-import org.apache.lucene.analysis.en.EnglishAnalyzer;
-import org.apache.lucene.queryParser.ParseException;
-import org.apache.lucene.queryParser.QueryParser;
+import org.apache.lucene.analysis.Tokenizer;
+import org.apache.lucene.analysis.core.StopFilter;
+import org.apache.lucene.analysis.en.PorterStemFilter;
+import org.apache.lucene.analysis.standard.StandardAnalyzer;
+import org.apache.lucene.analysis.standard.StandardTokenizer;
+import org.apache.lucene.analysis.tokenattributes.CharTermAttribute;
+import org.apache.lucene.analysis.tokenattributes.OffsetAttribute;
+import org.apache.lucene.queryparser.classic.ParseException;
 import org.apache.lucene.util.Version;
+import org.apache.lucene.util.packed.PackedInts;
+
 import java.io.IOException;
 import java.io.StringReader;
 import java.util.ArrayList;
@@ -39,18 +46,48 @@ public class NLPUtils {
      * @return
      * @throws ParseException
      */
-    public static List<String> englishStemmer(final String... unstemmedText) throws ParseException {
+    public static String stemmer(final String unstemmedText) throws ParseException, IOException {
 
-        List<String> stemmedText = new ArrayList<>();
+        TokenStream tokenStream = new StandardTokenizer(Version.LUCENE_41, new StringReader(unstemmedText));
+        tokenStream = new StopFilter(Version.LUCENE_41, tokenStream, StandardAnalyzer.STOP_WORDS_SET);
+        tokenStream = new PorterStemFilter(tokenStream);
 
-        EnglishAnalyzer en_an = new EnglishAnalyzer(Version.LUCENE_34);
-        QueryParser parser = new QueryParser(Version.LUCENE_34, "", en_an);
+        StringBuilder sb = new StringBuilder();
+        CharTermAttribute charTermAttr = tokenStream.getAttribute(CharTermAttribute.class);
 
-        for (String unStemmedWord : unstemmedText) {
-            stemmedText.add(parser.parse(unStemmedWord).toString());
+        tokenStream.reset();
+        while (tokenStream.incrementToken()) {
+            if (sb.length() > 0) {
+                sb.append(" ");
+            }
+            sb.append(charTermAttr.toString());
+        }
+        tokenStream.close();
+
+        return sb.toString();
+    }
+
+    /**
+     * A utility method to stem a sentence (argument of the form list or array of
+     * strings) for a list of strings
+     *
+     * @param unstemmedText
+     * @return
+     * @throws ParseException
+     */
+    public static List<String> stemmer(final String ... unstemmedText) throws ParseException {
+
+        List<String> resultList = new ArrayList<>();
+
+        for (String unstemmed : unstemmedText) {
+            try {
+                resultList.add(NLPUtils.stemmer(unstemmed));
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
         }
 
-        return stemmedText;
+        return resultList;
     }
 
     /**
@@ -82,7 +119,7 @@ public class NLPUtils {
 
         String inputSetence = "Hello my name is Arunav Sanyal, I liked horse back riding since I was a child";
         String[] inputSentenceList = inputSetence.split(" ");
-        List<String> stemmedSentence = NLPUtils.englishStemmer(inputSentenceList);
+        List<String> stemmedSentence = NLPUtils.stemmer(inputSentenceList);
 
         for (String word : stemmedSentence) {
             System.out.print(word + " ");
@@ -104,3 +141,4 @@ public class NLPUtils {
         }
     }
 }
+

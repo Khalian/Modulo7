@@ -70,6 +70,32 @@ public class VoiceInstant {
     }
 
     /**
+     * Basic constructor of the line instant class with the duration clearly defined
+     * This constructor asserts the
+     *
+     * @param noteSet
+     * @param duration
+     */
+    public VoiceInstant(final Set<Note> noteSet, final double duration)
+            throws Modulo7InvalidLineInstantSizeException {
+
+        if (noteSet.size() == 0) {
+            throw new Modulo7InvalidLineInstantSizeException("Voice Instant Cannot be of size" + noteSet.size());
+        }
+
+        setOfNotes = noteSet;
+
+        if (setOfNotes.size() == 1) {
+            noteType = VoiceInstantType.SINGLE_NOTE;
+        } else {
+            noteType = VoiceInstantType.CHORD;
+        }
+
+        this.duration = duration;
+        this.attack = UNKNOWN;
+    }
+
+    /**
      *
      * This constructor denotes uncertainty in the duration and attack
      *

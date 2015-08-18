@@ -5,14 +5,14 @@ import org.pdfbox.pdmodel.PDDocument;
 import org.pdfbox.pdmodel.PDPage;
 
 import javax.imageio.ImageIO;
+import javax.swing.*;
+import javax.swing.filechooser.FileNameExtensionFilter;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.util.Iterator;
 import java.util.List;
-import javax.swing.filechooser.FileNameExtensionFilter;
-import javax.swing.JFileChooser;
 
 /**
  * A basic PDF to JPG Converter

@@ -2,10 +2,7 @@ package com.modulo7.othersources;
 
 import java.io.File;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 import com.modulo7.common.exceptions.*;
 import com.modulo7.common.utils.FrequencyNoteMap;
@@ -46,7 +43,7 @@ public class BasicMusicXMLParser {
     // Get an instance of frequencies to the notes
     private FrequencyNoteMap frequencyNoteMap = FrequencyNoteMap.getInstance();
 
-    //
+    // A division multiplier map
     private Map<Integer, Integer> divMultiplier = new HashMap<>();
 
     /**
@@ -253,7 +250,17 @@ public class BasicMusicXMLParser {
                                         duration = Integer.valueOf(thisNote.getElementsByTag("duration").text()) * divMultiplier.get(divisions);
                                     }
 
-                                } catch (Modulo7BadNoteException | Modulo7BadAccidentalException e) {
+                                    Set<Note> setOfNotes = new HashSet<>();
+                                    setOfNotes.add(actualNote);
+
+                                    VoiceInstant voiceInstant = new VoiceInstant(setOfNotes, duration);
+
+                                    Voice voiceToAddNote = voiceIndextoVoiceMap.get(currentVoiceIndex);
+                                    voiceToAddNote.addVoiceInstant(voiceInstant);
+
+
+
+                                } catch (Modulo7BadNoteException | Modulo7BadAccidentalException | Modulo7InvalidLineInstantSizeException e) {
                                     e.printStackTrace();
                                 }
                             }
