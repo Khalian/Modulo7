@@ -14,6 +14,9 @@ public class SongMetadata {
     // Name of the artist who wrote this song
     private String artistName;
 
+    // Title of the track
+    private String titleOfTrack;
+
     // The time signature associated with this song
     private TimeSignature timeSignature;
 
@@ -36,6 +39,17 @@ public class SongMetadata {
     }
 
     /**
+     * Basic constructor with only artist Name and title of track known
+     * @param artistName
+     * @param titleOfTrack
+     */
+    public SongMetadata(final String artistName, final String titleOfTrack)     {
+        this.artistName = artistName;
+        this.titleOfTrack = titleOfTrack;
+    }
+
+
+    /**
      * Basic constructor with only artist Name known
      * @param tempo
      */
@@ -52,5 +66,53 @@ public class SongMetadata {
     public SongMetadata(final KeySignature keySignature, final TimeSignature timeSignature) {
         this.keySignature = keySignature;
         this.timeSignature = timeSignature;
+    }
+
+    /**
+     * Getter for artist Name
+     * @return
+     */
+    public String getArtistName() {
+        return artistName;
+    }
+
+    /**
+     * Getter for title of track
+     * @return
+     */
+    public String getTitleOfTrack() {
+        return titleOfTrack;
+    }
+
+    /**
+     * Getter for time signature
+     * @return
+     */
+    public TimeSignature getTimeSignature() {
+        return timeSignature;
+    }
+
+    /**
+     * Getter for timbre
+     * @return
+     */
+    public double getTimbre() {
+        return timbre;
+    }
+
+    /**
+     * Getter for tempo
+     * @return
+     */
+    public int getTempo() {
+        return tempo;
+    }
+
+    /**
+     * Getter for keysignature
+     * @return
+     */
+    public KeySignature getKeySignature() {
+        return keySignature;
     }
 }

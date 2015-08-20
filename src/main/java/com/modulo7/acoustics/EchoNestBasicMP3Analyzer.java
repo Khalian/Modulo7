@@ -112,21 +112,18 @@ public class EchoNestBasicMP3Analyzer implements AbstractAcousticsAnalyzer {
                     lineOfSong.addVoiceInstant(songInstant);
                 }
 
-                // TODO : Fix constructor for song metadata to include song metadata info as well
-                Song inferredSong = new Song(lineOfSong, new SongMetadata(artistName));
-                return inferredSong;
+                return new Song(lineOfSong, new SongMetadata(artistName));
             } else {
                 logger.error("Trouble analysing track " + track.getStatus());
                 return null;
             }
         } catch (IOException e) {
             logger.error("Trouble uploading file to track analyzer");
-        } catch (Modulo7InvalidLineInstantSizeException e) {
-            e.printStackTrace();
-        } catch (EchoNestException e) {
+        } catch (Modulo7InvalidLineInstantSizeException | EchoNestException e) {
             e.printStackTrace();
         }
 
+        // Return null if no song is inferred
         return null;
     }
     /**

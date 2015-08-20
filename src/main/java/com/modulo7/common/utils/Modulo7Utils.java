@@ -89,20 +89,6 @@ public class Modulo7Utils {
     }
 
     /**
-     * Gets the interval distance between any two notes
-     *
-     * TODO : Check for modulo 128 in case of overflow
-     *
-     * @param first
-     * @param second
-     * @return
-     */
-    public int intervalDistance(final Note first, final Note second) {
-        return Math.abs(noteMap.getPositionGivenNote(first) - noteMap.getPositionGivenNote(second));
-    }
-
-
-    /**
      * Gets the GCD for an arbitrary number of inputs
      *
      * @param input
