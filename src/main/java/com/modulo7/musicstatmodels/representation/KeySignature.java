@@ -39,4 +39,20 @@ public class KeySignature {
         this.key = key.toUpperCase();
         this.scale = scale;
     }
+
+    /**
+     * A getter for the scale
+     * @return
+     */
+    public ScaleType getScale() {
+        return scale;
+    }
+
+    /**
+     * A getter for the key
+     * @return
+     */
+    public String getKey() {
+        return key;
+    }
 }

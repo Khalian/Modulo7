@@ -31,17 +31,23 @@ public class BasicMusicXMLParser {
     // JSoup document element containing the required document entities
     private Document doc;
 
-    // Logger
+    // Logger for the basic Music XML Parser
     final static Logger logger = Logger.getLogger(BasicMusicXMLParser.class.getName());
 
     // Key signature of the song if its present in the music xml encoding
     private KeySignature keySignature = null;
+
+    // The time signature associated with this song
+    private TimeSignature timeSignature = null;
 
     // The set of lines that describe the song, mapped to line index
     private Map<Integer, Voice> voiceIndextoVoiceMap = new HashMap<>();
 
     // Get an instance of frequencies to the notes
     private FrequencyNoteMap frequencyNoteMap = FrequencyNoteMap.getInstance();
+
+    // A list of all the division elements in the music xml document
+    private List<Integer> divisions = new ArrayList<>();
 
     // A division multiplier map
     private Map<Integer, Integer> divMultiplier = new HashMap<>();
@@ -82,11 +88,26 @@ public class BasicMusicXMLParser {
      *
      * TODO : Implement this
      */
-    private Song parse() throws Modulo7InvalidCircleOfFifthsDistance, Modulo7BadKeyException {
+    public Song parse() throws Modulo7InvalidCircleOfFifthsDistance, Modulo7BadKeyException {
 
         // Init the lines as a map between line index (also called voice in music xml jargon)
         for (Element note : this.doc.getElementsByTag("Note")) {
-            voiceIndextoVoiceMap.put(Integer.valueOf(note.getElementsByTag("voice").text()), new Voice());
+
+            // Acquire the voice of the note in question
+            final String voiceOfNote = note.getElementsByTag("voice").text();
+            int voiceNumber;
+
+            // In the voice is not specified for the note, assume voice number = 1
+            if (voiceOfNote.length() == 0) {
+                voiceNumber = 1;
+            } else {
+                voiceNumber = Integer.parseInt(voiceOfNote);
+            }
+
+            // Init a voice associated with a voice number
+            if (voiceIndextoVoiceMap.get(voiceNumber) == null) {
+                voiceIndextoVoiceMap.put(voiceNumber, new Voice());
+            }
         }
 
         // Gets the number of divisions and a multiplier for the length of the song
@@ -95,7 +116,45 @@ public class BasicMusicXMLParser {
         // Acquires the key signature from the music xml file and stores as the key signature element
         acquireKeySignatureFromMusicXMLFile();
 
-        return null;
+        // Acquires the beats information
+        acquireTimeSignature();
+
+        // acquires the notes
+        getNotes();
+
+        // Acquire the voices from a hash set
+        Set<Voice> voiceSet = new HashSet<>(voiceIndextoVoiceMap.values());
+
+        // Construct song meta data object
+        SongMetadata metadata = new SongMetadata(keySignature, timeSignature);
+
+        // Return the modulo7 constructed song from the data
+        return new Song(voiceSet, metadata);
+    }
+
+    /**
+     * Acquires the time signature information from music XML file
+     */
+    private void acquireTimeSignature() {
+        for (Element thisTime : this.doc.getElementsByTag("time")) {
+
+            Integer beat = null;
+            Integer beatType = null;
+
+            for (Element thisBeat : thisTime.getElementsByTag("beats")) {
+                beat = Integer.parseInt(thisBeat.text());
+                break;
+            }
+
+            for (Element thisBeatType : thisTime.getElementsByTag("beat-type")) {
+                beatType = Integer.parseInt(thisBeatType.text());
+                break;
+            }
+
+            // Set the time signature if both beat and beats per divisioninformation exists
+            if (beat != null && beatType != null)
+                timeSignature = new TimeSignature(beat, beatType);
+        }
     }
 
     /**
@@ -106,7 +165,8 @@ public class BasicMusicXMLParser {
      * @throws Modulo7InvalidCircleOfFifthsDistance
      * @throws Modulo7BadKeyException
      */
-    private void acquireKeySignatureFromMusicXMLFile() throws Modulo7InvalidCircleOfFifthsDistance, Modulo7BadKeyException {
+    public void acquireKeySignatureFromMusicXMLFile() throws Modulo7InvalidCircleOfFifthsDistance, Modulo7BadKeyException {
+
         // The type of scale and key in the music xml file
         final ScaleType scaleType = getScaleType();
         final String key = getKey(scaleType);
@@ -121,10 +181,11 @@ public class BasicMusicXMLParser {
      * Gets the type of scale from the music xml file
      * @return The type of scale
      */
-    private ScaleType getScaleType() {
+    public ScaleType getScaleType() {
         // Acquire the scale information
         for (Element thisKey : this.doc.getElementsByTag("mode")) {
             final String mode = thisKey.text();
+            logger.debug("Mode :" + mode);
 
             // TODO : Introduce cases for other scale types
             if (mode.equalsIgnoreCase("minor"))
@@ -149,6 +210,7 @@ public class BasicMusicXMLParser {
         // Acquire the key information from the music xml file
         for (Element thisKey : this.doc.getElementsByTag("fifths")) {
             final int fifthsAwayFromMode = Integer.parseInt(thisKey.text());
+            logger.debug("Fifth : " + fifthsAwayFromMode);
             return CircleOfFifths.getKeyGivenFifthDistance(typeOfScale, fifthsAwayFromMode);
         }
 
@@ -161,8 +223,6 @@ public class BasicMusicXMLParser {
      * music XML file and populates it
      */
     private void getDivisionInformation() {
-        final List<Integer> divisions =  new ArrayList<Integer>();
-
         for (Element thisdiv : this.doc.getElementsByTag("divisions")) {
             divisions.add(Integer.valueOf(thisdiv.text()));
         }
@@ -176,7 +236,6 @@ public class BasicMusicXMLParser {
                 divMultiplier.put(i, (int) lcm/i);
             }
         } else {
-
             divMultiplier.put(1,1);
         }
     }
@@ -202,8 +261,16 @@ public class BasicMusicXMLParser {
                 for (Element thisNote : thisMeasure.children()) {
                     if (thisNote.tagName().equals("note")) {
 
-                        // Identify to which voice this note belongs to, we will accordingly add the note to the voice
-                        final int currentVoiceIndex = Integer.valueOf(thisNote.getElementsByTag("voice").text());
+                        // The voice associated with the note
+                        final String voiceOfNote = thisNote.getElementsByTag("voice").text();
+
+                        int currentVoiceIndex;
+
+                        if (voiceOfNote.length() == 0) {
+                            currentVoiceIndex = 1;
+                        } else {
+                            currentVoiceIndex = Integer.valueOf(voiceOfNote);
+                        }
 
                         //get the pitch for the given note, by design a correct pitch will always contain the pitch element
                         if (!thisNote.getElementsByTag("pitch").isEmpty()) {
@@ -257,9 +324,6 @@ public class BasicMusicXMLParser {
 
                                     Voice voiceToAddNote = voiceIndextoVoiceMap.get(currentVoiceIndex);
                                     voiceToAddNote.addVoiceInstant(voiceInstant);
-
-
-
                                 } catch (Modulo7BadNoteException | Modulo7BadAccidentalException | Modulo7InvalidLineInstantSizeException e) {
                                     e.printStackTrace();
                                 }
@@ -272,10 +336,31 @@ public class BasicMusicXMLParser {
     }
 
     /**
-     * Run test
-     * @param args
+     * Gets the key signature object
+     * @return
      */
-    public static void main(String args[]) {
+    public KeySignature getKeySignature() {
+        return keySignature;
+    }
 
+    /**
+     * Gets the division given the index
+     * A song can contain multiple divisions
+     * so get the division given the position in
+     * which appears in the music xml file
+     *
+     * @param divisionIndex
+     * @return
+     */
+    public int getDivision(final int divisionIndex) {
+        return divisions.get(divisionIndex);
+    }
+
+    /**
+     * Gets the time signature associated
+     * @return
+     */
+    public TimeSignature getTimeSignature() {
+        return timeSignature;
     }
 }

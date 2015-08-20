@@ -69,25 +69,31 @@ public class CircleOfFifths {
 
         int numIterered = 0;
 
+        // If its a major scale process from base
+        if (scaleType.equals(ScaleType.MAJOR)) {
+            numIterered = 0;
+        }
+        // If its a minor scale
+        else if (scaleType.equals(ScaleType.MINOR)) {
+            numIterered = 3;
+        }
+
         // An iterator for circle of fifths
         Iterator cofIter;
 
-        // If its major scale, process from root which is 0
-        if (scaleType.equals(ScaleType.MAJOR)) {
-            if (distanceFromRoot > 0) {
-                cofIter = circleOfFifthsElementClockwise.iterator();
+        if (distanceFromRoot > 0) {
+            cofIter = circleOfFifthsElementClockwise.iterator();
+        } else {
+            cofIter = circleOfFifthsElementAntiClockwise.iterator();
+        }
+
+        while (cofIter.hasNext()) {
+            final String keyAtCFLoc = (String) cofIter.next();
+
+            if (numIterered == Math.abs(distanceFromRoot)) {
+                return keyAtCFLoc;
             } else {
-                cofIter = circleOfFifthsElementAntiClockwise.iterator();
-            }
-
-            while (cofIter.hasNext()) {
-                final String keyAtCFLoc = (String) cofIter.next();
-
-                if (numIterered == distanceFromRoot) {
-                    return keyAtCFLoc;
-                } else {
-                    numIterered ++;
-                }
+                numIterered = (numIterered + 1) % 12;
             }
         }
 

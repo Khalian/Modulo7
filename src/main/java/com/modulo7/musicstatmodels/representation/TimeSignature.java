@@ -3,6 +3,7 @@ package com.modulo7.musicstatmodels.representation;
 /**
  * Created by asanyal on 7/25/2015.
  * <p>
+ *
  * Metadata associated with the time signature of the song
  */
 public class TimeSignature {
@@ -44,5 +45,21 @@ public class TimeSignature {
             timeSignatureType = "Compound_Quadruple_Meter";
         else
             timeSignatureType = "Complex_Meter";
+    }
+
+    /**
+     * Gets which note of the measure is associated with the beat
+     * @return
+     */
+    public int getNoteValIsBeat() {
+        return noteValIsBeat;
+    }
+
+    /**
+     * Gets the number of beats per measure
+     * @return
+     */
+    public int getBeatsPerMeasure() {
+        return beatsPerMeasure;
     }
 }

@@ -53,7 +53,15 @@ public enum Note {
      */
     Note(final String noteValue, final int octaveNumber) {
         String baseNoteWithoutAccidental = noteValue.substring(0, 1).toUpperCase();
-        String standardizedNode = baseNoteWithoutAccidental + noteValue.substring(1, 2);
+        String standardizedNode;
+
+        // Add the accidental if it is present
+        if (noteValue.length() > 1) {
+            standardizedNode = baseNoteWithoutAccidental + noteValue.substring(1, 2);
+        } else {
+            standardizedNode = baseNoteWithoutAccidental;
+        }
+
         this.noteValue = standardizedNode;
         harmonicEquivalence(noteValue);
 

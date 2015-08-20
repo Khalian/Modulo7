@@ -8,4 +8,22 @@
         <beats>3</beats>
         <beat-type>4</beat-type>
     </time>
+    <note>
+        <pitch>
+            <step>G</step>
+            <octave>4</octave>
+        </pitch>
+        <duration>2</duration>
+        <type>eighth</type>
+        <stem>up</stem>
+        <notations>
+            <dynamics>
+                <p/>
+            </dynamics>
+        </notations>
+        <lyric>
+            <syllabic>single</syllabic>
+            <text>W&auml;rst</text>
+        </lyric>
+    </note>
 </attributes>
