@@ -2,10 +2,10 @@
 
 [![Join the chat at https://gitter.im/Khalian/Modulo7](https://badges.gitter.im/Join%20Chat.svg)](https://gitter.im/Khalian/Modulo7?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
 
-A semantic and technical analysis of musical scores based on Information Retrieval Principles
+A semantic and technical analysis of musical scores based on Information Retrieval and SQL principles
 
 OVERVIEW: Modulo7 is an research attempt to build a purely objective music analyzer Music Information Retrieval Engine
-using music theory, natural language principles and big data principles. 
+using music theory, natural language principles and big data principles along with a SQL like querying interface.
 
 Most Music recommendation engines take into account user feedback for recommendation and analysis
 purpose and does not take into account music theory. Modulo7 allows comparisons based on both 
@@ -46,21 +46,23 @@ to the vector space model component. (STATUS : UNDER CONSTRUCTION)
 
 4. A sheet music miner component. The sheet miner will take western music sheets of the 
 form (.png, .jpeg etc) files and extract the notes, key signature from the images. This information
-can then be used to create a (STATUS : UNDER INVESTIGATION). 
+can then be used to create a (STATUS : UNDER CONSTRUCTED)
 
 5. A lyrics analyzer : The lyrics analyzer will take its input from the crawling engine and then make objective
 analysis on the lyrics (e.g the vocabulary richness of the song, semantic intent based on context etc).
-(STATUS : UNDER INVESTIGATION)
+(STATUS : UNDER CONSTRUCTION)
 
 6. Optional : A machine learning component that will convert the vector space model into a feature space model
 on which standard machine learning techniques like classification (e.g. for supervised genre id) and clustering
 can be applied (STATUS : NOT STARTED)
 
-7. A query Engine : This engine will parse a query and run it on top of the vector space model.
+7. A query Engine : This engine will parse a query and run it on top of the vector space model. (STATUS : UNDER
+INVESTIGATION)
 
-8. A distributed Database : This engine will support a distributed persistent store of the vector space model.
+8. A distributed Database : This engine will support a distributed persistent store of the vector space model. (STATUS
+UNDER INVESTIGATION)
 
-THE PERL MODULE WAS THE FIRST PROTOTYPE DRAFT OF THE PROJECT AND IS DEPRECATED. THE WHOLE MODULE WILL BE 
+THE PERL MODULE WAS THE FIRST PROTOTYPE DRAFT OF THE PROJECT AND IS DEPRECATED. THE WHOLE MODULE WILL BE
 MOVED TO A DIFFERENT PROJECT IN A FUTURE COMMIT OF THE PROJECT.
 
 For the perl modules do (@Deprecated) : -
