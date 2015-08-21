@@ -177,3 +177,16 @@ uploadArchives {
        }
     }
 }
+
+buildscript {
+  repositories {
+    maven {
+      url "https://plugins.gradle.org/m2/"
+    }
+  }
+  dependencies {
+    classpath "com.commercehub.gradle.plugin:gradle-avro-plugin:0.4.0"
+  }
+}
+
+apply plugin: "com.commercehub.gradle.plugin.avro-base"
