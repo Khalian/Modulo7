@@ -4,6 +4,7 @@ import java.io.File;
 import java.io.IOException;
 import java.util.*;
 
+import com.modulo7.acoustics.AbstractAnalyzer;
 import com.modulo7.common.exceptions.*;
 import com.modulo7.common.utils.FrequencyNoteMap;
 import com.modulo7.common.utils.Modulo7Utils;
@@ -26,7 +27,7 @@ import org.jsoup.nodes.Element;
  * 20e1beea207a83140fc4008825760da50f223d26/src/musicXMLparserDH.java?at=master
  *
  */
-public class BasicMusicXMLParser {
+public class BasicMusicXMLParser implements AbstractAnalyzer {
 
     // JSoup document element containing the required document entities
     private Document doc;
@@ -53,7 +54,8 @@ public class BasicMusicXMLParser {
     private Map<Integer, Integer> divMultiplier = new HashMap<>();
 
     /**
-     * Basic constructor which keeps the information on
+     * Basic constructor takes as input the filename and applies
+     *
      *
      * @param  filename
      * @throws IOException
@@ -86,9 +88,9 @@ public class BasicMusicXMLParser {
      * Parses the music xml into a modulo7 song
      * @return
      *
-     * TODO : Implement this
      */
-    public Song parse() throws Modulo7InvalidCircleOfFifthsDistance, Modulo7BadKeyException {
+    @Override
+    public Song getSongRepresentation() {
 
         // Init the lines as a map between line index (also called voice in music xml jargon)
         for (Element note : this.doc.getElementsByTag("Note")) {
@@ -114,7 +116,11 @@ public class BasicMusicXMLParser {
         getDivisionInformation();
 
         // Acquires the key signature from the music xml file and stores as the key signature element
-        acquireKeySignatureFromMusicXMLFile();
+        try {
+            acquireKeySignatureFromMusicXMLFile();
+        } catch (Modulo7InvalidCircleOfFifthsDistance | Modulo7BadKeyException e) {
+            e.printStackTrace();
+        }
 
         // Acquires the beats information
         acquireTimeSignature();

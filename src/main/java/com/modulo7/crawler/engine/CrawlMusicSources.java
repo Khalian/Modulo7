@@ -52,7 +52,7 @@ public class CrawlMusicSources {
     }
 
     /**
-     * Simple apache commons cli helper to get the command and parse it
+     * Simple apache commons cli helper to get the command and getSongRepresentation it
      *
      * The options that are supported as of now are
      *

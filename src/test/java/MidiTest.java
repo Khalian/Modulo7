@@ -1,4 +1,4 @@
-import com.modulo7.acoustics.AbstractAcousticsAnalyzer;
+import com.modulo7.acoustics.AbstractAnalyzer;
 import com.modulo7.acoustics.MidiToSongConverter;
 import com.modulo7.musicstatmodels.representation.Song;
 import org.junit.Test;
@@ -22,7 +22,7 @@ public class MidiTest {
     @Test
     public void midiSanityTest() throws InvalidMidiDataException, IOException {
         final String midiLocation = "./src/test/testdata/midi/test.mid";
-        AbstractAcousticsAnalyzer acousticsAnalyzer = new MidiToSongConverter(midiLocation);
+        AbstractAnalyzer acousticsAnalyzer = new MidiToSongConverter(midiLocation);
 
         Song song = acousticsAnalyzer.getSongRepresentation();
     }

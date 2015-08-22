@@ -8,7 +8,7 @@ import com.modulo7.musicstatmodels.representation.Song;
  * An abstract analyzer for acoustic sources
  * All new acoustic sources must implement this interface
  */
-public interface AbstractAcousticsAnalyzer {
+public interface AbstractAnalyzer {
 
     // Acquire the modulo7Song representation
     public Song getSongRepresentation();

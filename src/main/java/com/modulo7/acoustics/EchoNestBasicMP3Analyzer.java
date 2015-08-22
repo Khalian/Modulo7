@@ -28,7 +28,7 @@ import java.util.Set;
  * 3. The loudness of the track
  * 4. The key signature and time signature of the track
  */
-public class EchoNestBasicMP3Analyzer implements AbstractAcousticsAnalyzer {
+public class EchoNestBasicMP3Analyzer implements AbstractAnalyzer {
 
     // Echo nest basic MP3 analyzer logger
     final static Logger logger = Logger.getLogger(EchoNestBasicMP3Analyzer.class);
@@ -160,6 +160,15 @@ public class EchoNestBasicMP3Analyzer implements AbstractAcousticsAnalyzer {
     }
 
 
+    /**
+     * A basic main method to test for echo nest application
+     *
+     * TODO : Remove this and add a test case which does the same thing
+     *
+     * @param args
+     * @throws EchoNestException
+     * @throws Modulo7NoSuchFileException
+     */
     public static void main(String[] args) throws EchoNestException, Modulo7NoSuchFileException {
         EchoNestBasicMP3Analyzer analyzer = new EchoNestBasicMP3Analyzer("C:\\Led Zeppelin - Stairway To Heaven.mp3");
 

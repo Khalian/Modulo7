@@ -9,10 +9,8 @@ package com.modulo7.acoustics;
  */
 import com.modulo7.common.utils.Modulo7Globals;
 
-import com.modulo7.musicstatmodels.representation.Note;
 import com.modulo7.musicstatmodels.representation.Song;
 import com.modulo7.musicstatmodels.representation.Voice;
-import com.modulo7.musicstatmodels.representation.VoiceInstant;
 import org.apache.log4j.Logger;
 
 import java.io.File;
@@ -25,7 +23,7 @@ import javax.sound.midi.*;
 /**
  * A class to convert midi files to Notes
  */
-public class MidiToSongConverter implements AbstractAcousticsAnalyzer {
+public class MidiToSongConverter implements AbstractAnalyzer {
 
     // Midi Byte representation of on note
     public static final int NOTE_ON = 0x90;

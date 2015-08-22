@@ -16,7 +16,6 @@ import junit.framework.Assert;
 import org.junit.Test;
 
 import java.io.IOException;
-import java.sql.Time;
 
 /**
  * Test cases for the music xml parser
@@ -40,7 +39,7 @@ public class MusicXMLTest {
         BasicMusicXMLParser xmlParser = new BasicMusicXMLParser(attributesTestData);
 
         // Acquire the song by parsing the music xml file
-        Song song = xmlParser.parse();
+        Song song = xmlParser.getSongRepresentation();
 
         // Acquire the time signature
         KeySignature keySignature = xmlParser.getKeySignature();
@@ -62,7 +61,7 @@ public class MusicXMLTest {
     }
 
     /**
-     * A test case to check for a sanity parse of a non trivial example for music xml parser
+     * A test case to check for a sanity getSongRepresentation of a non trivial example for music xml parser
      *
      * @throws IOException
      * @throws Modulo7InvalidMusicXMLFile
@@ -76,7 +75,7 @@ public class MusicXMLTest {
         final String basicScoreData = "./src/test/testdata/musicxml/musicXMLTest.xml";
         BasicMusicXMLParser xmlParser = new BasicMusicXMLParser(basicScoreData);
 
-        Song song = xmlParser.parse();
+        Song song = xmlParser.getSongRepresentation();
 
     }
 }

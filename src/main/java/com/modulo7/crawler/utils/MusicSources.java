@@ -12,14 +12,21 @@ package com.modulo7.crawler.utils;
 public enum MusicSources {
 
     // Sheet music sources
-    PNGSHEET,
-    JPEGSHEET,
+    PNGSHEET("png"),
+    JPEGSHEET("jpeg"),
 
     // Acoustic sources
-    MP3,
-    WAV,
-    MIDI,
+    MP3("mp3"),
 
-    // Other kinds of sources
-    MUSIC_XML_FILE;
+    // Symbolic sources
+    MUSIC_XML_FILE("musicxml"),
+    MIDI("midi");
+
+    /**
+     * Basic constructor for music sources
+     * @param png
+     */
+    MusicSources(final String png) {
+
+    }
 }
