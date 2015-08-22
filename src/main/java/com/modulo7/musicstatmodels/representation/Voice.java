@@ -87,10 +87,27 @@ public class Voice {
     }
 
     /**
+     * Basic getter for the voice sequence
+     *
+     * @return
+     */
+    public List<VoiceInstant> getVoiceSequence() {
+        return voiceSequence;
+    }
+
+    /**
      * Gets the total line duration for this song
      * @return
      */
     public double getTotalVoiceDuration() {
         return totalVoiceDuration;
+    }
+
+    /**
+     * Basic getter for acquiring the scale of the song
+     * @return
+     */
+    public ScaleType getScaleOfVoice() {
+        return scaleOfVoice;
     }
 }

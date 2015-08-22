@@ -1,6 +1,7 @@
 package com.modulo7.musicstatmodels.representation;
 
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 /**
@@ -15,7 +16,7 @@ import java.util.Set;
 public class Song {
 
     // A description of the length of the song in question
-    private Set<Voice> linesOfSong;
+    private Set<Voice> voicesOfSong;
 
     // Total duration of the song in question
     private double totalDurationOfSong;
@@ -32,7 +33,7 @@ public class Song {
 
         // From the lines of a song, extract the max duration
         // and call it the duration of the song
-        for (Voice line : linesOfSong) {
+        for (Voice line : voicesOfSong) {
             double lineDuration = line.getTotalVoiceDuration();
 
             if (totalDurationOfSong < lineDuration) {
@@ -47,10 +48,10 @@ public class Song {
      * This constructor is for unknown pieces of information
      * regarding the metadata of the song
      *
-     * @param linesOfSong
+     * @param voicesOfSong
      */
-    public Song(final Set<Voice> linesOfSong) {
-        this.linesOfSong = linesOfSong;
+    public Song(final Set<Voice> voicesOfSong) {
+        this.voicesOfSong = voicesOfSong;
         inferSongLength();
 
         // TODO : Whether to put a default value to metadata or declare
@@ -65,7 +66,7 @@ public class Song {
      */
     public Song(final Set<Voice> voicesOfSong, final SongMetadata songMetadata) {
 
-        this.linesOfSong = voicesOfSong;
+        this.voicesOfSong = voicesOfSong;
         this.metadata = songMetadata;
     }
 
@@ -76,9 +77,25 @@ public class Song {
      * @param songMetadata
      */
     public Song(final Voice voiceOfSong, final SongMetadata songMetadata) {
-        this.linesOfSong = new HashSet<>();
-        this.linesOfSong.add(voiceOfSong);
+        this.voicesOfSong = new HashSet<>();
+        this.voicesOfSong.add(voiceOfSong);
 
         this.metadata = songMetadata;
+    }
+
+    /**
+     * Basic getter for getting voices associated with this song
+     * @return
+     */
+    public Set<Voice> getVoices() {
+        return voicesOfSong;
+    }
+
+    /**
+     * Returns the total song duration
+     * @return
+     */
+    public double getTotalSongDuration() {
+        return totalDurationOfSong;
     }
 }

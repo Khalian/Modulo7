@@ -1,6 +1,7 @@
 package com.modulo7.musicstatmodels.representation;
 
 import com.modulo7.common.exceptions.Modulo7InvalidLineInstantSizeException;
+import com.modulo7.common.exceptions.Modulo7WrongNoteType;
 
 import java.util.HashSet;
 import java.util.Set;
@@ -9,7 +10,7 @@ import java.util.Set;
  * Created by asanyal on 6/16/2015.
  *
  * A voice instant is a basic class that encapsulates all the information at a particular
- * instant in a voice within a song.
+ * instant in a voice within a song. Think of it as taking a snapshot in the song
  *
  * Typically a song can be expressed with multiple voice being played (an example would be
  * a rock song with 4 lines - a guitar line, a bass line, a vocal line and a drums (percussion line)
@@ -23,7 +24,7 @@ import java.util.Set;
 public class VoiceInstant {
 
     // Whether the note is a part of a chord or a melody
-    private VoiceInstantType noteType;
+    private NoteType noteType;
 
     // Is the instant sustained or played for an imperceptible instant
     private boolean isSustained;
@@ -60,9 +61,9 @@ public class VoiceInstant {
         setOfNotes = noteSet;
 
         if (setOfNotes.size() == 1) {
-            noteType = VoiceInstantType.SINGLE_NOTE;
+            noteType = NoteType.MELODIC_NOTE;
         } else {
-            noteType = VoiceInstantType.CHORD;
+            noteType = NoteType.CHORD;
         }
 
         this.duration = duration;
@@ -86,9 +87,9 @@ public class VoiceInstant {
         setOfNotes = noteSet;
 
         if (setOfNotes.size() == 1) {
-            noteType = VoiceInstantType.SINGLE_NOTE;
+            noteType = NoteType.MELODIC_NOTE;
         } else {
-            noteType = VoiceInstantType.CHORD;
+            noteType = NoteType.CHORD;
         }
 
         this.duration = duration;
@@ -110,13 +111,21 @@ public class VoiceInstant {
         setOfNotes = noteSet;
 
         if (setOfNotes.size() == 1) {
-            noteType = VoiceInstantType.SINGLE_NOTE;
+            noteType = NoteType.MELODIC_NOTE;
         } else {
-            noteType = VoiceInstantType.CHORD;
+            noteType = NoteType.CHORD;
         }
 
         duration = UNKNOWN;
         attack = UNKNOWN;
+    }
+
+    /**
+     * Gets the fact that the song
+     * @return
+     */
+    public boolean getIsChord() {
+        return noteType.equals(NoteType.CHORD);
     }
 
     /**
@@ -127,23 +136,42 @@ public class VoiceInstant {
         return duration;
     }
 
+    /**
+     * Getter for the fact whether the note is sustained or not
+     * @return
+     */
     public boolean isSustained() {
         return isSustained;
     }
 
-    public void setIsSustained(final boolean isSustained) {
-        this.isSustained = isSustained;
-    }
-
-    public VoiceInstantType getNoteType() {
+    public NoteType getNoteType() {
         return noteType;
     }
 
-    public void setNoteType(final VoiceInstantType noteType) {
-        this.noteType = noteType;
-    }
-
+    /**
+     * Gets the attack associated with the note
+     * @return
+     */
     public double getAttack() {
         return attack;
+    }
+
+
+    /**
+     * Gets the note value if its a melodic note
+     * @return
+     * @throws Modulo7WrongNoteType
+     */
+    public Note getNote() throws Modulo7WrongNoteType {
+        if (noteType.equals(NoteType.MELODIC_NOTE)) {
+            for (Note note : setOfNotes) {
+                return note;
+            }
+        } else {
+            throw new Modulo7WrongNoteType("Note should be a melodic note and not a chord");
+        }
+
+        // For the sake of complilation, actually dead code
+        return null;
     }
 }

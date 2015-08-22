@@ -11,5 +11,5 @@ import com.modulo7.musicstatmodels.representation.Song;
  */
 public abstract class AbstractStatistic {
 
-    protected abstract void getStatistic(final Song song);
+    public abstract StatisticResult getStatistic(final Song song);
 }

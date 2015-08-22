@@ -26,7 +26,7 @@ public class Interval {
      * @param intervalEnum
      * @param type
      */
-    private Interval(IntervalEnum intervalEnum, IntervalType type) {
+    private Interval(final IntervalEnum intervalEnum, final IntervalType type) {
         this.interval = intervalEnum;
         this.type = type;
     }
