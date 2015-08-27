@@ -68,11 +68,82 @@ public class VoiceInstant {
 
         this.duration = duration;
         this.attack = attack;
+        this.isSustained = false;
+    }
+
+    /**
+     * Basic constructor of the line instant class with both the attack and duration clearly defined
+     * The type is a single note
+     *
+     * @param note
+     * @param attack
+     * @param duration
+     */
+    public VoiceInstant(final Note note, final double duration, final double attack)
+            throws Modulo7InvalidLineInstantSizeException {
+
+        setOfNotes = new HashSet<>();
+        setOfNotes.add(note);
+
+        noteType = NoteType.MELODIC_NOTE;
+
+        this.duration = duration;
+        this.attack = attack;
+        this.isSustained = false;
+    }
+
+    /**
+     * Basic constructor of the line instant class with both the attack and duration and sustain value is
+     * clearly defined
+     *
+     * @param noteSet
+     * @param attack
+     * @param duration
+     */
+    public VoiceInstant(final Set<Note> noteSet, final double duration, final double attack, final boolean isSustained)
+            throws Modulo7InvalidLineInstantSizeException {
+
+        if (noteSet.size() == 0) {
+            throw new Modulo7InvalidLineInstantSizeException("Voice Instant Cannot be of size" + noteSet.size());
+        }
+
+        setOfNotes = noteSet;
+
+        if (setOfNotes.size() == 1) {
+            noteType = NoteType.MELODIC_NOTE;
+        } else {
+            noteType = NoteType.CHORD;
+        }
+
+        this.duration = duration;
+        this.attack = attack;
+        this.isSustained = isSustained;
+    }
+
+    /**
+     * Basic constructor of the line instant class with both the attack and duration and sustain value is
+     * clearly defined, for a single note type
+     *
+     * @param note
+     * @param attack
+     * @param duration
+     */
+    public VoiceInstant(final Note note, final double duration, final double attack, final boolean isSustained)
+            throws Modulo7InvalidLineInstantSizeException {
+
+        setOfNotes = new HashSet<>();
+        setOfNotes.add(note);
+
+        noteType = NoteType.MELODIC_NOTE;
+
+        this.duration = duration;
+        this.attack = attack;
+        this.isSustained = isSustained;
     }
 
     /**
      * Basic constructor of the line instant class with the duration clearly defined
-     * This constructor asserts the
+     * This constructor asserts attack for this instant is unknown
      *
      * @param noteSet
      * @param duration
@@ -97,7 +168,25 @@ public class VoiceInstant {
     }
 
     /**
+     * Basic constructor of the line instant class with the duration clearly defined
+     * This constructor asserts attack for this instant is unknown, and the note type is a single note
      *
+     * @param note
+     * @param duration
+     */
+    public VoiceInstant(final Note note, final double duration)
+            throws Modulo7InvalidLineInstantSizeException {
+
+        setOfNotes = new HashSet<>();
+        setOfNotes.add(note);
+
+        noteType = NoteType.MELODIC_NOTE;
+
+        this.duration = duration;
+        this.attack = UNKNOWN;
+    }
+
+    /**
      * This constructor denotes uncertainty in the duration and attack
      *
      * @param noteSet
@@ -115,6 +204,22 @@ public class VoiceInstant {
         } else {
             noteType = NoteType.CHORD;
         }
+
+        duration = UNKNOWN;
+        attack = UNKNOWN;
+    }
+
+    /**
+     * This constructor denotes uncertainty in the duration and attack and the note type is a single note
+     *
+     * @param note
+     */
+    public VoiceInstant(final Note note) throws Modulo7InvalidLineInstantSizeException {
+
+        setOfNotes = new HashSet<>();
+        setOfNotes.add(note);
+
+        noteType = NoteType.MELODIC_NOTE;
 
         duration = UNKNOWN;
         attack = UNKNOWN;

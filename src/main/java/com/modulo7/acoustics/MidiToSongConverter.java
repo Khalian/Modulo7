@@ -7,16 +7,22 @@ package com.modulo7.acoustics;
  * representation
  *
  */
+import com.modulo7.common.exceptions.Modulo7BadKeyException;
+import com.modulo7.common.exceptions.Modulo7BadNoteException;
+import com.modulo7.common.exceptions.Modulo7InvalidLineInstantSizeException;
 import com.modulo7.common.utils.Modulo7Globals;
 
-import com.modulo7.musicstatmodels.representation.Song;
-import com.modulo7.musicstatmodels.representation.Voice;
+import com.modulo7.common.utils.Modulo7Utils;
+import com.modulo7.crawler.utils.MusicSources;
+import com.modulo7.musicstatmodels.representation.*;
 import org.apache.log4j.Logger;
 
 import java.io.File;
 import java.io.IOException;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Map;
+import java.util.Set;
 
 import javax.sound.midi.*;
 
@@ -46,6 +52,9 @@ public class MidiToSongConverter implements AbstractAnalyzer {
     // Variable to indicate if the key signature has been acquired from the midi file or not
     private boolean keySignatureAcquired = false;
 
+    // The key signature element for this midi recording
+    private KeySignature keySignature = null;
+
     /**
      * Basic constructor for the midi to song converter
      * @param midiFileLocation
@@ -74,7 +83,10 @@ public class MidiToSongConverter implements AbstractAnalyzer {
 
             logger.info("Track " + trackNumber + ": size = " + track.size());
 
-            for (int i=0; i < track.size(); i++) {
+            // Incrementally add voice instants to a voice
+            voiceToChannelMap.put(trackNumber, new Voice());
+
+            for (int i = 0; i < track.size(); i++) {
 
                 MidiEvent event = track.get(i);
                 logger.info("@" + event.getTick() + " ");
@@ -91,6 +103,13 @@ public class MidiToSongConverter implements AbstractAnalyzer {
                         String noteName = Modulo7Globals.NOTE_NAMES[note];
                         int velocity = sm.getData2();
                         logger.debug("Note on, " + noteName + octave + " key=" + key + " velocity: " + velocity);
+                        try {
+                            // TODO : Add the attack and the duration params
+                            VoiceInstant instant = new VoiceInstant(Note.getNoteValue(noteName));
+                            Modulo7Utils.addVoiceInstantToVoiceMap(voiceToChannelMap, instant, trackNumber);
+                        } catch (Modulo7InvalidLineInstantSizeException | Modulo7BadNoteException e) {
+                            logger.error(e.getMessage());
+                        }
                     } else if (sm.getCommand() == NOTE_OFF) {
                         int key = sm.getData1();
                         int octave = (key / 12)-1;
@@ -98,19 +117,30 @@ public class MidiToSongConverter implements AbstractAnalyzer {
                         String noteName = Modulo7Globals.NOTE_NAMES[note];
                         int velocity = sm.getData2();
                         logger.debug("Note off, " + noteName + octave + " key=" + key + " velocity: " + velocity);
+                        try {
+                            // TODO : Add the attack and the duration params
+                            VoiceInstant instant = new VoiceInstant(Note.getNoteValue(noteName));
+                            Modulo7Utils.addVoiceInstantToVoiceMap(voiceToChannelMap, instant, trackNumber);
+                        } catch (Modulo7InvalidLineInstantSizeException | Modulo7BadNoteException e) {
+                            logger.error(e.getMessage());
+                        }
                     } else if (sm.getCommand() == KEY_SIGNATURE_BYTE) {
                         // Acquire the key signature from the midi file
                         if (!keySignatureAcquired) {
                             // Acquire the scale info
                             int scaleMidiInfo = sm.getData1();
                             int keyMidiInfo = sm.getData2();
+                            ScaleType scaleType = null;
 
-                            if (scaleMidiInfo == 0); // major
-                                // meta_data[0] = new Integer(0);
-                            else if (scaleMidiInfo == 1); // minor
-                                // meta_data[0] = new Integer(1);
+                            if (scaleMidiInfo == 0) // major
+                                scaleType = ScaleType.MAJOR;
+                            else if (scaleMidiInfo == 1) // minor
+                                scaleType = ScaleType.MINOR;
 
                             keySignatureAcquired = true;
+
+                            // TODO : Fix this init
+                            //keySignature = new KeySignature(keyMidiInfo, scaleType);
                         }
                     } else {
                         // We ignore the command elements that are neither note on or off
@@ -121,8 +151,11 @@ public class MidiToSongConverter implements AbstractAnalyzer {
             }
         }
 
-        // TODO : Fix this
-        return null;
+        // Acquire the voices from a hash set
+        Set<Voice> voiceSet = new HashSet<>(voiceToChannelMap.values());
+
+        // Returns the song
+        return new Song(voiceSet, MusicSources.MIDI);
     }
 
     /**

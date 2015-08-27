@@ -120,7 +120,210 @@ public enum Note {
     /**
      * Acquire a note enum given the noteValue, asssume the 4th octave as the default
      *
-     * TODO : Complete this implementation with a new method which also takes into  account the octave number
+     * @param noteValue
+     * @param octaveNumber
+     * @return
+     */
+    public static Note getNoteValue(final String noteValue, final int octaveNumber) throws Modulo7BadNoteException {
+        if (noteValue.equalsIgnoreCase("A") && octaveNumber == 1) {
+            return Note.A1;
+        } else if (noteValue.equalsIgnoreCase("A#") && octaveNumber == 1) {
+            return Note.ASHARP1;
+        } else if (noteValue.equalsIgnoreCase("B") && octaveNumber == 1) {
+            return Note.B1;
+        } else if (noteValue.equalsIgnoreCase("C") && octaveNumber == 1) {
+            return Note.C1;
+        } else if (noteValue.equalsIgnoreCase("C#") && octaveNumber == 1) {
+            return Note.CSHARP1;
+        } else if (noteValue.equalsIgnoreCase("D") && octaveNumber == 1) {
+            return Note.D1;
+        }  else if (noteValue.equalsIgnoreCase("D#") && octaveNumber == 1) {
+            return Note.DSHARP1;
+        } else if (noteValue.equalsIgnoreCase("E") && octaveNumber == 1) {
+            return Note.E1;
+        } else if (noteValue.equalsIgnoreCase("F") && octaveNumber == 1) {
+            return Note.F1;
+        } else if (noteValue.equalsIgnoreCase("F#") && octaveNumber == 1) {
+            return Note.FSHARP1;
+        } else if (noteValue.equalsIgnoreCase("G") && octaveNumber == 1) {
+            return Note.G1;
+        } else if (noteValue.equalsIgnoreCase("G#") && octaveNumber == 1) {
+            return Note.GSHARP1;
+        } else if (noteValue.equalsIgnoreCase("A") && octaveNumber == 2) {
+            return Note.A2;
+        } else if (noteValue.equalsIgnoreCase("A#") && octaveNumber == 2) {
+            return Note.ASHARP2;
+        } else if (noteValue.equalsIgnoreCase("B") && octaveNumber == 2) {
+            return Note.B2;
+        } else if (noteValue.equalsIgnoreCase("C") && octaveNumber == 2) {
+            return Note.C2;
+        } else if (noteValue.equalsIgnoreCase("C#") && octaveNumber == 2) {
+            return Note.CSHARP2;
+        } else if (noteValue.equalsIgnoreCase("D") && octaveNumber == 2) {
+            return Note.D2;
+        }  else if (noteValue.equalsIgnoreCase("D#") && octaveNumber == 2) {
+            return Note.DSHARP2;
+        } else if (noteValue.equalsIgnoreCase("E") && octaveNumber == 2) {
+            return Note.E2;
+        } else if (noteValue.equalsIgnoreCase("F") && octaveNumber == 2) {
+            return Note.F2;
+        } else if (noteValue.equalsIgnoreCase("F#") && octaveNumber == 2) {
+            return Note.FSHARP2;
+        } else if (noteValue.equalsIgnoreCase("G") && octaveNumber == 2) {
+            return Note.G2;
+        } else if (noteValue.equalsIgnoreCase("G#") && octaveNumber == 2) {
+            return Note.GSHARP2;
+        } else if (noteValue.equalsIgnoreCase("A") && octaveNumber == 3) {
+            return Note.A3;
+        } else if (noteValue.equalsIgnoreCase("A#") && octaveNumber == 3) {
+            return Note.ASHARP3;
+        } else if (noteValue.equalsIgnoreCase("B") && octaveNumber == 3) {
+            return Note.B3;
+        } else if (noteValue.equalsIgnoreCase("C") && octaveNumber == 3) {
+            return Note.C3;
+        } else if (noteValue.equalsIgnoreCase("C#") && octaveNumber == 3) {
+            return Note.CSHARP3;
+        } else if (noteValue.equalsIgnoreCase("D") && octaveNumber == 3) {
+            return Note.D3;
+        }  else if (noteValue.equalsIgnoreCase("D#") && octaveNumber == 3) {
+            return Note.DSHARP3;
+        } else if (noteValue.equalsIgnoreCase("E") && octaveNumber == 3) {
+            return Note.E3;
+        } else if (noteValue.equalsIgnoreCase("F") && octaveNumber == 3) {
+            return Note.F3;
+        } else if (noteValue.equalsIgnoreCase("F#") && octaveNumber == 3) {
+            return Note.FSHARP3;
+        } else if (noteValue.equalsIgnoreCase("G") && octaveNumber == 3) {
+            return Note.G3;
+        } else if (noteValue.equalsIgnoreCase("G#") && octaveNumber == 3) {
+            return Note.GSHARP3;
+        } else if (noteValue.equalsIgnoreCase("A") && octaveNumber == 4) {
+            return Note.A4;
+        } else if (noteValue.equalsIgnoreCase("A#") && octaveNumber == 4) {
+            return Note.ASHARP4;
+        } else if (noteValue.equalsIgnoreCase("B") && octaveNumber == 4) {
+            return Note.B4;
+        } else if (noteValue.equalsIgnoreCase("C") && octaveNumber == 4) {
+            return Note.C4;
+        } else if (noteValue.equalsIgnoreCase("C#") && octaveNumber == 4) {
+            return Note.CSHARP4;
+        } else if (noteValue.equalsIgnoreCase("D") && octaveNumber == 4) {
+            return Note.D4;
+        }  else if (noteValue.equalsIgnoreCase("D#") && octaveNumber == 4) {
+            return Note.DSHARP4;
+        } else if (noteValue.equalsIgnoreCase("E") && octaveNumber == 4) {
+            return Note.E4;
+        } else if (noteValue.equalsIgnoreCase("F") && octaveNumber == 4) {
+            return Note.F4;
+        } else if (noteValue.equalsIgnoreCase("F#") && octaveNumber == 4) {
+            return Note.FSHARP4;
+        } else if (noteValue.equalsIgnoreCase("G") && octaveNumber == 4) {
+            return Note.G4;
+        } else if (noteValue.equalsIgnoreCase("G#") && octaveNumber == 4) {
+            return Note.GSHARP4;
+        } else if (noteValue.equalsIgnoreCase("A") && octaveNumber == 5) {
+            return Note.A5;
+        } else if (noteValue.equalsIgnoreCase("A#") && octaveNumber == 5) {
+            return Note.ASHARP5;
+        } else if (noteValue.equalsIgnoreCase("B") && octaveNumber == 5) {
+            return Note.B5;
+        } else if (noteValue.equalsIgnoreCase("C") && octaveNumber == 5) {
+            return Note.C5;
+        } else if (noteValue.equalsIgnoreCase("C#") && octaveNumber == 5) {
+            return Note.CSHARP5;
+        } else if (noteValue.equalsIgnoreCase("D") && octaveNumber == 5) {
+            return Note.D5;
+        }  else if (noteValue.equalsIgnoreCase("D#") && octaveNumber == 5) {
+            return Note.DSHARP5;
+        } else if (noteValue.equalsIgnoreCase("E") && octaveNumber == 5) {
+            return Note.E5;
+        } else if (noteValue.equalsIgnoreCase("F") && octaveNumber == 5) {
+            return Note.F5;
+        } else if (noteValue.equalsIgnoreCase("F#") && octaveNumber == 5) {
+            return Note.FSHARP5;
+        } else if (noteValue.equalsIgnoreCase("G") && octaveNumber == 5) {
+            return Note.G5;
+        } else if (noteValue.equalsIgnoreCase("G#") && octaveNumber == 5) {
+            return Note.GSHARP5;
+        } else if (noteValue.equalsIgnoreCase("A") && octaveNumber == 6) {
+            return Note.A6;
+        } else if (noteValue.equalsIgnoreCase("A#") && octaveNumber == 6) {
+            return Note.ASHARP6;
+        } else if (noteValue.equalsIgnoreCase("B") && octaveNumber == 6) {
+            return Note.B6;
+        } else if (noteValue.equalsIgnoreCase("C") && octaveNumber == 6) {
+            return Note.C6;
+        } else if (noteValue.equalsIgnoreCase("C#") && octaveNumber == 6) {
+            return Note.CSHARP6;
+        } else if (noteValue.equalsIgnoreCase("D") && octaveNumber == 6) {
+            return Note.D6;
+        }  else if (noteValue.equalsIgnoreCase("D#") && octaveNumber == 6) {
+            return Note.DSHARP6;
+        } else if (noteValue.equalsIgnoreCase("E") && octaveNumber == 6) {
+            return Note.E6;
+        } else if (noteValue.equalsIgnoreCase("F") && octaveNumber == 6) {
+            return Note.F6;
+        } else if (noteValue.equalsIgnoreCase("F#") && octaveNumber == 6) {
+            return Note.FSHARP6;
+        } else if (noteValue.equalsIgnoreCase("G") && octaveNumber == 6) {
+            return Note.G6;
+        } else if (noteValue.equalsIgnoreCase("G#") && octaveNumber == 6) {
+            return Note.GSHARP6;
+        } else if (noteValue.equalsIgnoreCase("A") && octaveNumber == 7) {
+            return Note.A7;
+        } else if (noteValue.equalsIgnoreCase("A#") && octaveNumber == 7) {
+            return Note.ASHARP7;
+        } else if (noteValue.equalsIgnoreCase("B") && octaveNumber == 7) {
+            return Note.B7;
+        } else if (noteValue.equalsIgnoreCase("C") && octaveNumber == 7) {
+            return Note.C7;
+        } else if (noteValue.equalsIgnoreCase("C#") && octaveNumber == 7) {
+            return Note.CSHARP7;
+        } else if (noteValue.equalsIgnoreCase("D") && octaveNumber == 7) {
+            return Note.D7;
+        }  else if (noteValue.equalsIgnoreCase("D#") && octaveNumber == 7) {
+            return Note.DSHARP7;
+        } else if (noteValue.equalsIgnoreCase("E") && octaveNumber == 7) {
+            return Note.E7;
+        } else if (noteValue.equalsIgnoreCase("F") && octaveNumber == 7) {
+            return Note.F7;
+        } else if (noteValue.equalsIgnoreCase("F#") && octaveNumber == 7) {
+            return Note.FSHARP7;
+        } else if (noteValue.equalsIgnoreCase("G") && octaveNumber == 7) {
+            return Note.G7;
+        } else if (noteValue.equalsIgnoreCase("G#") && octaveNumber == 7) {
+            return Note.GSHARP7;
+        } else if (noteValue.equalsIgnoreCase("A") && octaveNumber == 8) {
+            return Note.A8;
+        } else if (noteValue.equalsIgnoreCase("A#") && octaveNumber == 8) {
+            return Note.ASHARP8;
+        } else if (noteValue.equalsIgnoreCase("B") && octaveNumber == 8) {
+            return Note.B8;
+        } else if (noteValue.equalsIgnoreCase("C") && octaveNumber == 8) {
+            return Note.C8;
+        } else if (noteValue.equalsIgnoreCase("C#") && octaveNumber == 8) {
+            return Note.CSHARP8;
+        } else if (noteValue.equalsIgnoreCase("D") && octaveNumber == 8) {
+            return Note.D8;
+        }  else if (noteValue.equalsIgnoreCase("D#") && octaveNumber == 8) {
+            return Note.DSHARP8;
+        } else if (noteValue.equalsIgnoreCase("E") && octaveNumber == 8) {
+            return Note.E8;
+        } else if (noteValue.equalsIgnoreCase("F") && octaveNumber == 8) {
+            return Note.F8;
+        } else if (noteValue.equalsIgnoreCase("F#") && octaveNumber == 8) {
+            return Note.FSHARP8;
+        } else if (noteValue.equalsIgnoreCase("G") && octaveNumber == 8) {
+            return Note.G8;
+        } else if (noteValue.equalsIgnoreCase("G#") && octaveNumber == 8) {
+            return Note.GSHARP8;
+        } else {
+            throw new Modulo7BadNoteException("Bad note: " + noteValue + "and " + octaveNumber);
+        }
+    }
+
+    /**
+     * Acquire a note enum given the noteValue, asssume the 4th octave as the default
      *
      * @param noteValue
      * @return
@@ -128,18 +331,28 @@ public enum Note {
     public static Note getNoteValue (final String noteValue) throws Modulo7BadNoteException {
         if (noteValue.equalsIgnoreCase("A")) {
             return Note.A4;
+        } else if (noteValue.equalsIgnoreCase("A#")) {
+            return Note.ASHARP4;
         } else if (noteValue.equalsIgnoreCase("B")) {
             return Note.B4;
         } else if (noteValue.equalsIgnoreCase("C")) {
             return Note.C4;
+        } else if (noteValue.equalsIgnoreCase("C#")) {
+            return Note.CSHARP4;
         } else if (noteValue.equalsIgnoreCase("D")) {
             return Note.D4;
+        }  else if (noteValue.equalsIgnoreCase("D#")) {
+            return Note.DSHARP4;
         } else if (noteValue.equalsIgnoreCase("E")) {
             return Note.E4;
         } else if (noteValue.equalsIgnoreCase("F")) {
             return Note.F4;
+        } else if (noteValue.equalsIgnoreCase("F#")) {
+            return Note.FSHARP4;
         } else if (noteValue.equalsIgnoreCase("G")) {
             return Note.G4;
+        }  else if (noteValue.equalsIgnoreCase("G#")) {
+            return Note.GSHARP4;
         } else {
             throw new Modulo7BadNoteException("Bad note: " + noteValue);
         }

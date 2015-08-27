@@ -26,6 +26,8 @@ public class AvroUtils {
      * Method to serialize a modulo7 object, the assumption is that each file
      * has exactly song object stored into it
      *
+     * Prototype taken from :
+     *
      * @param destinationFileName
      * @param song
      */

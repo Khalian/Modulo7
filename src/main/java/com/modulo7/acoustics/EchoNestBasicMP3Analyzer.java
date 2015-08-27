@@ -6,6 +6,7 @@ import com.modulo7.common.exceptions.Modulo7InvalidLineInstantSizeException;
 import com.modulo7.common.exceptions.Modulo7NoSuchFileException;
 import com.modulo7.common.utils.FrequencyNoteMap;
 import com.modulo7.crawler.utils.CrawlerHelper;
+import com.modulo7.crawler.utils.MusicSources;
 import com.modulo7.musicstatmodels.representation.*;
 import com.modulo7.musicstatmodels.representation.Song;
 import org.apache.log4j.Logger;
@@ -112,7 +113,7 @@ public class EchoNestBasicMP3Analyzer implements AbstractAnalyzer {
                     lineOfSong.addVoiceInstant(songInstant);
                 }
 
-                return new Song(lineOfSong, new SongMetadata(artistName));
+                return new Song(lineOfSong, new SongMetadata(artistName), MusicSources.MP3);
             } else {
                 logger.error("Trouble analysing track " + track.getStatus());
                 return null;

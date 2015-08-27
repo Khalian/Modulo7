@@ -8,6 +8,7 @@ import com.modulo7.acoustics.AbstractAnalyzer;
 import com.modulo7.common.exceptions.*;
 import com.modulo7.common.utils.FrequencyNoteMap;
 import com.modulo7.common.utils.Modulo7Utils;
+import com.modulo7.crawler.utils.MusicSources;
 import com.modulo7.musicstatmodels.musictheorymodels.CircleOfFifths;
 import com.modulo7.musicstatmodels.representation.*;
 import org.apache.commons.lang3.StringUtils;
@@ -135,7 +136,7 @@ public class BasicMusicXMLParser implements AbstractAnalyzer {
         SongMetadata metadata = new SongMetadata(keySignature, timeSignature);
 
         // Return the modulo7 constructed song from the data
-        return new Song(voiceSet, metadata);
+        return new Song(voiceSet, metadata, MusicSources.MUSIC_XML_FILE);
     }
 
     /**
@@ -180,7 +181,6 @@ public class BasicMusicXMLParser implements AbstractAnalyzer {
         // If both pieces of information are present than create a key signature element for this piece
         if (scaleType != null && key != null)
             keySignature = new KeySignature(key, scaleType);
-
     }
 
     /**
@@ -328,8 +328,7 @@ public class BasicMusicXMLParser implements AbstractAnalyzer {
 
                                     VoiceInstant voiceInstant = new VoiceInstant(setOfNotes, duration);
 
-                                    Voice voiceToAddNote = voiceIndextoVoiceMap.get(currentVoiceIndex);
-                                    voiceToAddNote.addVoiceInstant(voiceInstant);
+                                    Modulo7Utils.addVoiceInstantToVoiceMap(voiceIndextoVoiceMap, voiceInstant, currentVoiceIndex);
                                 } catch (Modulo7BadNoteException | Modulo7BadAccidentalException | Modulo7InvalidLineInstantSizeException e) {
                                     e.printStackTrace();
                                 }

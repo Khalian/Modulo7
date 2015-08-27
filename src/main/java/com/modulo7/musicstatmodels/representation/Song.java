@@ -1,5 +1,7 @@
 package com.modulo7.musicstatmodels.representation;
 
+import com.modulo7.crawler.utils.MusicSources;
+
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -23,6 +25,10 @@ public class Song {
 
     // The metadata associated with the song
     private SongMetadata metadata;
+
+    // Song source, depending on what medium the song has arisen from, modulo7 can expect certain ideas to work and certain
+    // not to
+    private MusicSources source;
 
     /**
      * Method to infer the song length as maximum of all the line duration
@@ -49,10 +55,13 @@ public class Song {
      * regarding the metadata of the song
      *
      * @param voicesOfSong
+     * @param source
      */
-    public Song(final Set<Voice> voicesOfSong) {
+    public Song(final Set<Voice> voicesOfSong, final MusicSources source) {
         this.voicesOfSong = voicesOfSong;
         inferSongLength();
+
+        this.source = source;
 
         // TODO : Whether to put a default value to metadata or declare
         // Unknowns
@@ -63,11 +72,14 @@ public class Song {
      *
      * @param voicesOfSong
      * @param songMetadata
+     * @param source
      */
-    public Song(final Set<Voice> voicesOfSong, final SongMetadata songMetadata) {
+    public Song(final Set<Voice> voicesOfSong, final SongMetadata songMetadata, final MusicSources source) {
 
         this.voicesOfSong = voicesOfSong;
         this.metadata = songMetadata;
+
+        this.source = source;
     }
 
     /**
@@ -75,12 +87,14 @@ public class Song {
      *
      * @param voiceOfSong
      * @param songMetadata
+     * @param source
      */
-    public Song(final Voice voiceOfSong, final SongMetadata songMetadata) {
+    public Song(final Voice voiceOfSong, final SongMetadata songMetadata, final MusicSources source) {
         this.voicesOfSong = new HashSet<>();
         this.voicesOfSong.add(voiceOfSong);
 
         this.metadata = songMetadata;
+        this.source = source;
     }
 
     /**
@@ -97,5 +111,21 @@ public class Song {
      */
     public double getTotalSongDuration() {
         return totalDurationOfSong;
+    }
+
+    /**
+     * Basic getter for metadata
+     * @return
+     */
+    public SongMetadata getMetadata() {
+        return metadata;
+    }
+
+    /**
+     * Basic getter for source of song
+     * @return
+     */
+    public MusicSources getSource() {
+        return source;
     }
 }

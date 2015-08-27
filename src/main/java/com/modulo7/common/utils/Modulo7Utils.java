@@ -1,6 +1,8 @@
 package com.modulo7.common.utils;
 
 import com.modulo7.musicstatmodels.representation.Note;
+import com.modulo7.musicstatmodels.representation.Voice;
+import com.modulo7.musicstatmodels.representation.VoiceInstant;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.filefilter.TrueFileFilter;
 
@@ -8,6 +10,7 @@ import java.io.File;
 import java.io.IOException;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 
 /**
@@ -132,5 +135,16 @@ public class Modulo7Utils {
             result = lcm(result, input[i]);
 
         return ((int) result);
+    }
+
+    /**
+     * A helper method to add an voice instant to a voice map
+     *
+     * @param voiceMap
+     * @param instant
+     * @param voiceNumber
+     */
+    public static void addVoiceInstantToVoiceMap(final Map<Integer, Voice> voiceMap, final VoiceInstant instant, final int voiceNumber) {
+        voiceMap.get(voiceNumber).addVoiceInstant(instant);
     }
 }

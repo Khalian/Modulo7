@@ -24,5 +24,7 @@ public class NLPUtilsTest {
         String stemmedSentence = NLPUtils.stemmer(inputSetence);
 
         Assert.assertEquals(actualStemmedText, stemmedSentence);
+
+        String nextInputSentence = "Baba black sheep have you any wool, yes sir, yes sir three bags full";
     }
 }

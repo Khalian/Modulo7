@@ -57,7 +57,6 @@ public class MusicXMLTest {
         // Check if the time signature has been correctly acquired from the file
         Assert.assertEquals(timeSignature.getNoteValIsBeat(), 3);
         Assert.assertEquals(timeSignature.getBeatsPerMeasure(), 4);
-
     }
 
     /**
@@ -77,5 +76,6 @@ public class MusicXMLTest {
 
         Song song = xmlParser.getSongRepresentation();
 
+        Assert.assertNotNull(song);
     }
 }
