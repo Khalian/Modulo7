@@ -9,6 +9,7 @@
 /build/*
 /vs/*
 /gradle/*
+/default-lyrics-index-dir/*
 
 # Normal Files
 .settings

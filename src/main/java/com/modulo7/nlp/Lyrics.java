@@ -1,5 +1,7 @@
 package com.modulo7.nlp;
 
+import java.io.*;
+
 /**
  * Created by asanyal on 8/17/15.
  *
@@ -27,6 +29,34 @@ public class Lyrics {
         this.artist = artist;
         this.albumName = album;
         this.lyricsOfSong = lyricsOfSong;
+    }
+
+    /**
+     * Lyrics object parsed from file
+     *
+     * @param artist
+     * @param albumName
+     * @param fileLyrics
+     */
+    public Lyrics(final String artist, final String albumName, final File fileLyrics) throws IOException {
+
+        FileInputStream fstream = new FileInputStream(fileLyrics);
+        BufferedReader br = new BufferedReader(new InputStreamReader(fstream));
+
+        String lyricsInSingleLine = "";
+        String lyricsLine;
+
+        //Read File Line By Line
+        while ((lyricsLine = br.readLine()) != null)   {
+            lyricsInSingleLine += lyricsLine;
+        }
+
+        //Close the input stream
+        br.close();
+
+        this.artist = artist;
+        this.albumName = albumName;
+        this.lyricsOfSong = lyricsInSingleLine;
     }
 
     /**

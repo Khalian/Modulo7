@@ -25,13 +25,33 @@ public class LyricsIndexer {
     // An index writer entity for
     private IndexWriter indexWriter = null;
 
-    /** Creates a new instance of Indexer */
-    public LyricsIndexer() {
+    // the File handle to the location in which index directory will be present
+    private String indexDirLocation = null;
+
+    // Default indexer dir for the lyrics indexer
+    private static final String DEFAULT_INDEX_DIR = "default-lyrics-index-dir";
+
+    /** Creates a new instance of Indexer with custom location for index dir*/
+    public LyricsIndexer(final String indexDir) {
+        this.indexDirLocation = indexDir;
     }
 
-    public IndexWriter getIndexWriter(boolean create) throws IOException {
+    /**
+     * Default constructuror
+     */
+    public LyricsIndexer() {
+        this.indexDirLocation = DEFAULT_INDEX_DIR;
+    }
+
+    /**
+     * Acquires an index writer object for the indexer
+     * @return
+     * @throws IOException
+     */
+    public IndexWriter getIndexWriter() throws IOException {
+
         if (indexWriter == null) {
-            Directory indexDir = FSDirectory.open(new File("index-directory"));
+            Directory indexDir = FSDirectory.open(new File(this.indexDirLocation));
             IndexWriterConfig config = new IndexWriterConfig(Version.LUCENE_41, new StandardAnalyzer(Version.LUCENE_41));
             indexWriter = new IndexWriter(indexDir, config);
         }
@@ -39,11 +59,21 @@ public class LyricsIndexer {
     }
 
     /**
+     * Closes the index writer
+     * @throws IOException
+     */
+    public void closeIndexWriter() throws IOException {
+        if (indexWriter != null) {
+            indexWriter.close();
+        }
+    }
+
+    /**
      * Lucene indexer for the lyrics object
      * @param lyrics
      */
     public void indexLyrics(final Lyrics lyrics) throws IOException {
-        IndexWriter writer = getIndexWriter(false);
+        IndexWriter writer = getIndexWriter();
         Document doc = new Document();
         doc.add(new StringField("artistName", lyrics.getArtist(), Field.Store.YES));
         doc.add(new StringField("albumName", lyrics.getAlbumName(), Field.Store.YES));
@@ -51,5 +81,6 @@ public class LyricsIndexer {
         String fullSearchableText = lyrics.getArtist() + " " + lyrics.getAlbumName() + " " + lyrics.getLyricsOfSong();
         doc.add(new TextField("content", fullSearchableText, Field.Store.NO));
         writer.addDocument(doc);
+        closeIndexWriter();
     }
 }
