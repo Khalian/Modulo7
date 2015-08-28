@@ -18,6 +18,10 @@ public class Lyrics {
     // String representation of the lyrics of a song
     private String lyricsOfSong;
 
+    // A specialized term for denoting terminating phrases, useful for acquring other pieces
+    // of analysis like acquiring the lyrical structure
+    private static final String PHRASETERM = " PHRASETERM ";
+
     /**
      * Basic constructor for the lyrics of the song
      *
@@ -48,7 +52,7 @@ public class Lyrics {
 
         //Read File Line By Line
         while ((lyricsLine = br.readLine()) != null)   {
-            lyricsInSingleLine += lyricsLine;
+            lyricsInSingleLine += lyricsLine + PHRASETERM;
         }
 
         //Close the input stream

@@ -7,24 +7,19 @@ package com.modulo7.acoustics;
  * representation
  *
  */
-import com.modulo7.common.exceptions.Modulo7BadKeyException;
+
 import com.modulo7.common.exceptions.Modulo7BadNoteException;
 import com.modulo7.common.exceptions.Modulo7InvalidLineInstantSizeException;
 import com.modulo7.common.utils.Modulo7Globals;
-
 import com.modulo7.common.utils.Modulo7Utils;
 import com.modulo7.crawler.utils.MusicSources;
 import com.modulo7.musicstatmodels.representation.*;
 import org.apache.log4j.Logger;
 
+import javax.sound.midi.*;
 import java.io.File;
 import java.io.IOException;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Map;
-import java.util.Set;
-
-import javax.sound.midi.*;
+import java.util.*;
 
 /**
  * A class to convert midi files to Notes
@@ -55,6 +50,21 @@ public class MidiToSongConverter implements AbstractAnalyzer {
     // The key signature element for this midi recording
     private KeySignature keySignature = null;
 
+    // Tempo and rhythm information for midi track
+    private Map<Integer, Double> secondsPerTick = new HashMap<>();
+
+    // Average number of ticks per second
+    private double meanTicksPerSec;
+
+    // Total number of ticks for this midi track
+    private double numTicks;
+
+    // Sequence of tracks for this midi file
+    private List<Track> tracks = new ArrayList<>();
+
+    // Number of ticks per beat for this midi track
+    private int ticksPerBeat;
+
     /**
      * Basic constructor for the midi to song converter
      * @param midiFileLocation
@@ -63,6 +73,16 @@ public class MidiToSongConverter implements AbstractAnalyzer {
         // Gets the sequence of events from a midi file, we can then acquire the various parameters from the midi
         // sequences to construct voice instants
         midiSequence = MidiSystem.getSequence(new File(midiFileLocation));
+
+        numTicks = midiSequence.getTickLength();
+
+        // Caclulate timing information, i.e the mean ticks per second for this midi file
+        meanTicksPerSec = (numTicks) / ((double) midiSequence.getMicrosecondLength() / 1000000.0);
+
+        ticksPerBeat = midiSequence.getResolution();
+
+        // Acquire the tracks
+        tracks = Arrays.asList(midiSequence.getTracks());
     }
 
     /**
@@ -75,9 +95,12 @@ public class MidiToSongConverter implements AbstractAnalyzer {
         // Construct a voice to channel map
         final Map<Integer, Voice> voiceToChannelMap = new HashMap<>();
 
+        // Generate the rhythm information first
+        generateTempoMap();
+
         int trackNumber = 0;
 
-        for (Track track : midiSequence.getTracks()) {
+        for (Track track : tracks) {
 
             trackNumber++;
 
@@ -103,23 +126,17 @@ public class MidiToSongConverter implements AbstractAnalyzer {
                         String noteName = Modulo7Globals.NOTE_NAMES[note];
                         int velocity = sm.getData2();
                         logger.debug("Note on, " + noteName + octave + " key=" + key + " velocity: " + velocity);
+
+                        // If the velocity with which this key was pressed was not equal to zero, we now estimate how long the note was played
                         try {
-                            // TODO : Add the attack and the duration params
-                            VoiceInstant instant = new VoiceInstant(Note.getNoteValue(noteName));
-                            Modulo7Utils.addVoiceInstantToVoiceMap(voiceToChannelMap, instant, trackNumber);
-                        } catch (Modulo7InvalidLineInstantSizeException | Modulo7BadNoteException e) {
-                            logger.error(e.getMessage());
-                        }
-                    } else if (sm.getCommand() == NOTE_OFF) {
-                        int key = sm.getData1();
-                        int octave = (key / 12)-1;
-                        int note = key % 12;
-                        String noteName = Modulo7Globals.NOTE_NAMES[note];
-                        int velocity = sm.getData2();
-                        logger.debug("Note off, " + noteName + octave + " key=" + key + " velocity: " + velocity);
-                        try {
-                            // TODO : Add the attack and the duration params
-                            VoiceInstant instant = new VoiceInstant(Note.getNoteValue(noteName));
+                            double noteDuration;
+                            if (velocity != 0) {
+                                noteDuration = getNoteDuration(track, event, i, sm);
+                                noteDuration = Modulo7Globals.UNKNOWN;
+                            } else {
+                                noteDuration = Modulo7Globals.UNKNOWN;
+                            }
+                            VoiceInstant instant = new VoiceInstant(Note.getNoteValue(noteName), noteDuration, velocity);
                             Modulo7Utils.addVoiceInstantToVoiceMap(voiceToChannelMap, instant, trackNumber);
                         } catch (Modulo7InvalidLineInstantSizeException | Modulo7BadNoteException e) {
                             logger.error(e.getMessage());
@@ -156,6 +173,110 @@ public class MidiToSongConverter implements AbstractAnalyzer {
 
         // Returns the song
         return new Song(voiceSet, MusicSources.MIDI);
+    }
+
+
+    /**
+     * Gets the note duration for a particular note
+     *
+     * @param track
+     * @param event
+     * @param currentEventNumber
+     * @param currShortMsg
+     * @return
+     */
+    private double getNoteDuration(final Track track, final MidiEvent event, final int currentEventNumber, final ShortMessage currShortMsg) {
+
+        // Look ahead to find the corresponding note off for this note on
+        int eventStartTick = (int) event.getTick();
+        int eventEndTick = track.size(); // when the note off occurs (default to last tick
+
+        for (int i = currentEventNumber + 1; i < track.size(); i++) {
+            MidiEvent endEvent = track.get(i);
+            MidiMessage endMessage = endEvent.getMessage();
+            if (endMessage instanceof ShortMessage) {
+                ShortMessage endShortMessage = (ShortMessage) endMessage;
+                // sample channel requirement
+                if (endShortMessage.getChannel() == currShortMsg.getChannel()) {
+                    if (endShortMessage.getCommand() == NOTE_OFF) {
+                        // same pitch requirement
+                        if (endShortMessage.getData1() == currShortMsg.getData1()) {
+                            eventEndTick = (int) endEvent.getTick();
+                            i = track.size() + 1; // exit loop
+                        }
+                    }
+                    // note on (with vel 0 is equiv to note off)
+                    if (endShortMessage.getCommand() == NOTE_OFF) {
+
+                        final int noteOffVelocity = endShortMessage.getData2() ;
+
+                        if (noteOffVelocity== 0) {
+                            // same pitch
+                            if (endShortMessage.getData1() == currShortMsg.getData1()) {
+                                eventEndTick = (int) endEvent.getTick();
+                                i = track.size() + 1; // exit loop
+                            }
+                        }
+                    }
+                }
+            }
+        }
+
+        // Calculate duration of note
+        double duration = 0;
+        for (int i = eventStartTick ; i < eventEndTick ; i++)
+            duration += secondsPerTick.get(i);
+
+        return duration;
+    }
+
+    /**
+     * Look through the recording in order to find tempo change messages
+     * Fill in secondsPerTick on these messages.
+     */
+    private void generateTempoMap()
+    {
+        // Instantiate secondsPerTick and initialize entries to the average
+        // number of ticks per second
+        for (int i = 0; i < numTicks; i++)
+            secondsPerTick.put(i, 1.0 / meanTicksPerSec);
+
+        // Fill in tempo changes
+        for (Track track : tracks) {
+            // Go through all the events in the current track, searching for tempo change messages
+            for (int n_event = 0; n_event < track.size(); n_event++) {
+
+                // Get the MIDI message corresponding to the next MIDI event
+                MidiEvent event = track.get(n_event);
+                MidiMessage message = event.getMessage();
+
+                // If message is a MetaMessage (which tempo change messages are)
+                if (message instanceof MetaMessage) {
+                    MetaMessage meta_message = (MetaMessage) message;
+
+                    if (meta_message.getType() == TEMPO_BYTE) {
+
+                        // Find the number of PPQ ticks per beat
+                        int ticks_per_beat = ticksPerBeat;
+
+                        // Find the number of microseconds per beat
+                        byte[] meta_data = meta_message.getData();
+                        int	microseconds_per_beat = ((meta_data[0] & 0xFF) << 16)
+                                | ((meta_data[1] & 0xFF) << 8)
+                                | (meta_data[2] & 0xFF);
+
+                        // Find the number of seconds per tick
+                        double current_seconds_per_tick = ((double) microseconds_per_beat) / ((double) ticks_per_beat);
+                        current_seconds_per_tick = current_seconds_per_tick / 1000000.0;
+
+                        // Make all subsequent tempos be at the current_seconds_per_tick rate
+                        for (int i = (int) event.getTick(); i < secondsPerTick.size(); i++) {
+                            secondsPerTick.put(i, current_seconds_per_tick);
+                        }
+                    }
+                }
+            }
+        }
     }
 
     /**

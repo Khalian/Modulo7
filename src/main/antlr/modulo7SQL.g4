@@ -3,7 +3,7 @@ grammar modulo7SQL;
 // Check out the examples from https://github.com/antlr/grammars-v4/blob/master/mysql/MySQL.g4
 
 options {
-	tokenVocab=modulo7SQLBase;
+	tokenVocab = modulo7SQLBase;
 
 	    // antlr will generate java lexer and parser
     language = Java;
@@ -123,7 +123,6 @@ table_atom:
 	  ( table_name (partition_clause)? (table_alias)? (index_hint_list)? )
 	| ( subquery subquery_alias )
 	| ( LPAREN table_references RPAREN )
-	| ( OJ table_reference LEFT OUTER JOIN table_reference ON expression )
 ;
 
 index_hint_list:

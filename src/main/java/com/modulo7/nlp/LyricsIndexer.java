@@ -13,6 +13,7 @@ import org.apache.lucene.analysis.standard.StandardAnalyzer;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.Set;
 
 /**
  * Created by asanyal on 8/18/15.
@@ -81,6 +82,26 @@ public class LyricsIndexer {
         String fullSearchableText = lyrics.getArtist() + " " + lyrics.getAlbumName() + " " + lyrics.getLyricsOfSong();
         doc.add(new TextField("content", fullSearchableText, Field.Store.NO));
         writer.addDocument(doc);
+        closeIndexWriter();
+    }
+
+    /**
+     * A batch version of the above index lyrics code
+     * @param lyricsSet
+     */
+    public void bulkIndexLyrics(final Set<Lyrics> lyricsSet) throws IOException {
+
+        IndexWriter writer = getIndexWriter();
+
+        for (Lyrics lyrics : lyricsSet) {
+            Document doc = new Document();
+            doc.add(new StringField("artistName", lyrics.getArtist(), Field.Store.YES));
+            doc.add(new StringField("albumName", lyrics.getAlbumName(), Field.Store.YES));
+            doc.add(new StringField("lyricalContent", lyrics.getLyricsOfSong(), Field.Store.YES));
+            String fullSearchableText = lyrics.getArtist() + " " + lyrics.getAlbumName() + " " + lyrics.getLyricsOfSong();
+            doc.add(new TextField("content", fullSearchableText, Field.Store.NO));
+            writer.addDocument(doc);
+        }
         closeIndexWriter();
     }
 }
