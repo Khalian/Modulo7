@@ -37,6 +37,10 @@ RUN	    sh /Install-OpenCV/Ubuntu/2.4/opencv2_4_9.sh
 # Install java
 RUN     apt-get -y install openjdk-7-jdk
 
+# The installation of gamera prototypes work under construction
+RUN     apt-get -y install wget
+RUN     wget http://sourceforge.net/projects/gamera/files/latest/download
+
 # Install the gradle version 2.5 for building modulo7, canonical's distribution for gradle is outdated so gradle is installed manually
 RUN     apt-get -y install wget unzip
 RUN     wget https://services.gradle.org/distributions/gradle-2.5-bin.zip

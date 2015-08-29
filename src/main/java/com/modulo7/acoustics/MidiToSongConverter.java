@@ -79,6 +79,7 @@ public class MidiToSongConverter implements AbstractAnalyzer {
         // Caclulate timing information, i.e the mean ticks per second for this midi file
         meanTicksPerSec = (numTicks) / ((double) midiSequence.getMicrosecondLength() / 1000000.0);
 
+        // Acquire the ticks per beat
         ticksPerBeat = midiSequence.getResolution();
 
         // Acquire the tracks
@@ -132,7 +133,6 @@ public class MidiToSongConverter implements AbstractAnalyzer {
                             double noteDuration;
                             if (velocity != 0) {
                                 noteDuration = getNoteDuration(track, event, i, sm);
-                                noteDuration = Modulo7Globals.UNKNOWN;
                             } else {
                                 noteDuration = Modulo7Globals.UNKNOWN;
                             }

@@ -1,4 +1,4 @@
-package com.modulo7.musicstatmodels.statistics;
+package com.modulo7.musicstatmodels.statistics.statisticscompute;
 
 import com.modulo7.common.exceptions.Modulo7BadIntervalException;
 import com.modulo7.common.exceptions.Modulo7WrongNoteType;
@@ -8,6 +8,7 @@ import com.modulo7.musicstatmodels.representation.Note;
 import com.modulo7.musicstatmodels.representation.Song;
 import com.modulo7.musicstatmodels.representation.Voice;
 import com.modulo7.musicstatmodels.representation.VoiceInstant;
+import com.modulo7.musicstatmodels.statistics.results.TonalHistogramResult;
 
 import java.util.HashMap;
 import java.util.List;
@@ -18,7 +19,7 @@ import java.util.Map;
  *
  * Given a song, the tonal histogram class acquires the intervals
  */
-public class TonalHistogram extends AbstractStatistic {
+public class TonalHistogramStatistic implements AbstractStatistic<TonalHistogramResult> {
 
     // A map of all the intervals to their counts in the song
     private Map<IntervalEnum, Integer> intervalHistogram = new HashMap<>();
@@ -28,7 +29,7 @@ public class TonalHistogram extends AbstractStatistic {
      *
      * Put all histogram counts to zero
      */
-    public TonalHistogram() {
+    public TonalHistogramStatistic() {
         intervalHistogram.put(IntervalEnum.PERFECT_UNISON, 0);
         intervalHistogram.put(IntervalEnum.MINOR_SECOND, 0);
         intervalHistogram.put(IntervalEnum.MAJOR_SECOND, 0);
@@ -50,7 +51,7 @@ public class TonalHistogram extends AbstractStatistic {
      * @return
      */
     @Override
-    public StatisticResult getStatistic(final Song song) {
+    public TonalHistogramResult getStatistic(final Song song) {
         for (Voice voice : song.getVoices()) {
             List<VoiceInstant> voiceInstants = voice.getVoiceSequence();
 
@@ -69,6 +70,7 @@ public class TonalHistogram extends AbstractStatistic {
 
                         // Acquire the interval between two melodic notes
                         IntervalEnum interval = Interval.getInterval(firstNote, secondNote).getInterval();
+                        addIntervalToHistogram(interval);
                     } catch (Modulo7WrongNoteType | Modulo7BadIntervalException e) {
                         e.printStackTrace();
                     }
@@ -76,6 +78,21 @@ public class TonalHistogram extends AbstractStatistic {
             }
         }
 
-        return null;
+        return new TonalHistogramResult(intervalHistogram);
+    }
+
+    /**
+     * Helper method to add interval to histogram
+     *
+     * @param interval
+     */
+    private synchronized void addIntervalToHistogram(final IntervalEnum interval) {
+        Integer count = intervalHistogram.get(interval);
+
+        if (count == null) {
+            count = 0;
+        }
+
+        intervalHistogram.put(interval, count + 1);
     }
 }

@@ -1,4 +1,4 @@
-package com.modulo7.musicstatmodels.rules;
+package com.modulo7.musicstatmodels.similarity;
 
 import com.modulo7.musicstatmodels.representation.Song;
 
