@@ -19,5 +19,6 @@ public class MusicTheoryModelsTest {
     @Test
     public void testIntervals() throws Modulo7BadIntervalException {
         Assert.assertEquals(Interval.getInterval(Note.A0, Note.B0).getInterval(), IntervalEnum.MAJOR_SECOND);
+        Assert.assertEquals(Interval.getInterval(Note.A1, Note.CSHARP1).getInterval(), IntervalEnum.MAJOR_THIRD);
     }
 }

@@ -7,18 +7,14 @@ package com.modulo7.nlp;
  * work
  */
 
-import org.apache.lucene.analysis.Analyzer;
 import org.apache.lucene.analysis.TokenStream;
-import org.apache.lucene.analysis.Tokenizer;
 import org.apache.lucene.analysis.core.StopFilter;
 import org.apache.lucene.analysis.en.PorterStemFilter;
 import org.apache.lucene.analysis.standard.StandardAnalyzer;
 import org.apache.lucene.analysis.standard.StandardTokenizer;
 import org.apache.lucene.analysis.tokenattributes.CharTermAttribute;
-import org.apache.lucene.analysis.tokenattributes.OffsetAttribute;
 import org.apache.lucene.queryparser.classic.ParseException;
 import org.apache.lucene.util.Version;
-import org.apache.lucene.util.packed.PackedInts;
 
 import java.io.IOException;
 import java.io.StringReader;

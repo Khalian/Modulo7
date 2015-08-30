@@ -28,6 +28,9 @@ public enum IntervalEnum {
     // The interval type associated with this interval
     private IntervalType intervalType;
 
+    // The number of distinct intervals that are present in the interval
+    private static final int NUMBER_OF_DISTINCT_INTERVALS = 12;
+
     /**
      * Basic constructor with only interval quantity
      * @param intervalQuantity

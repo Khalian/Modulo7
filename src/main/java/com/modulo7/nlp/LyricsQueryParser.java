@@ -24,9 +24,9 @@ public class LyricsQueryParser {
     private QueryParser parser = null;
 
     /** Creates a new instance of SearchEngine */
-    public LyricsQueryParser() throws IOException {
-        searcher = new IndexSearcher(DirectoryReader.open(FSDirectory.open(new File("index-directory"))));
-        parser = new QueryParser(Version.LUCENE_41, "", new StandardAnalyzer(Version.LUCENE_41));
+    public LyricsQueryParser(final String indexDir) throws IOException {
+        searcher = new IndexSearcher(DirectoryReader.open(FSDirectory.open(new File(indexDir))));
+        parser = new QueryParser(Version.LUCENE_41, "lyrics", new StandardAnalyzer(Version.LUCENE_41));
     }
 
     /**

@@ -104,4 +104,12 @@ public class LyricsIndexer {
         }
         closeIndexWriter();
     }
+
+    /**
+     * Simple getter for the default index dir
+     * @return
+     */
+    public static String getDefaultIndexDir() {
+        return DEFAULT_INDEX_DIR;
+    }
 }

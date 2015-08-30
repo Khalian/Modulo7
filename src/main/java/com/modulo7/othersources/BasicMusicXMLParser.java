@@ -130,10 +130,10 @@ public class BasicMusicXMLParser implements AbstractAnalyzer {
         getNotes();
 
         // Acquire the voices from a hash set
-        Set<Voice> voiceSet = new HashSet<>(voiceIndextoVoiceMap.values());
+        final Set<Voice> voiceSet = new HashSet<>(voiceIndextoVoiceMap.values());
 
         // Construct song meta data object
-        SongMetadata metadata = new SongMetadata(keySignature, timeSignature);
+        final SongMetadata metadata = new SongMetadata(keySignature, timeSignature);
 
         // Return the modulo7 constructed song from the data
         return new Song(voiceSet, metadata, MusicSources.MUSIC_XML_FILE);
@@ -310,7 +310,8 @@ public class BasicMusicXMLParser implements AbstractAnalyzer {
                                         accidental = Accidental.NONE;
                                     }
 
-                                    final Note baseNote = Note.getNoteValue(note);
+                                    // Get the base Note based on both the octave and note value of the music xml parser
+                                    final Note baseNote = Note.getNoteValue(note, octave);
                                     final Note actualNote = frequencyNoteMap.getModifiedNoteGivenAccidental(baseNote, accidental);
 
                                     // The duration

@@ -1,7 +1,11 @@
 package com.modulo7.musicstatmodels.statistics.datatypes;
 
+import com.modulo7.musicstatmodels.musictheorymodels.Interval;
 import com.modulo7.musicstatmodels.musictheorymodels.IntervalEnum;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -53,5 +57,21 @@ public class TonalHistogram {
      */
     public int getCountForInterval(final IntervalEnum intervalEnum) {
         return histogram.get(intervalEnum);
+    }
+
+    /**
+     * Gets the vectorized representation of the tonal histogram concept
+     * as an array of 12 integers
+     *
+     * @return
+     */
+    public List<Integer> getVectorizedRepresentation() {
+        Integer[] array = new Integer[12];
+
+        for (Map.Entry<IntervalEnum, Integer> histogramElem : histogram.entrySet()) {
+            array[histogramElem.getKey().getIntervalQuantity()] = histogramElem.getValue();
+        }
+
+        return Arrays.asList(array);
     }
 }

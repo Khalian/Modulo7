@@ -1,6 +1,6 @@
 package com.modulo7.common.utils;
 
-import com.modulo7.musicstatmodels.representation.Note;
+import com.modulo7.common.exceptions.Modulo7VectorSizeMismatchException;
 import com.modulo7.musicstatmodels.representation.Voice;
 import com.modulo7.musicstatmodels.representation.VoiceInstant;
 import org.apache.commons.io.FileUtils;
@@ -90,6 +90,32 @@ public class Modulo7Utils {
             }
         }
     }
+
+    /**
+     * Acquires the cosine similarity between two vectors
+     *
+     * @param vectorA
+     * @param vectorB
+     * @return
+     */
+    public static double cosineSimilarity(final List<Integer> vectorA, final List<Integer> vectorB)
+            throws Modulo7VectorSizeMismatchException {
+
+        if (vectorA.size() != vectorB.size()) {
+            throw new Modulo7VectorSizeMismatchException(vectorA.size(), vectorB.size());
+        }
+
+        double dotProduct = 0.0;
+        double normA = 0.0;
+        double normB = 0.0;
+        for (int i = 0; i < vectorA.size(); i++) {
+            dotProduct += vectorA.get(i) * vectorB.get(i);
+            normA += Math.pow(vectorA.get(i), 2);
+            normB += Math.pow(vectorB.get(i), 2);
+        }
+        return dotProduct / (Math.sqrt(normA) * Math.sqrt(normB));
+    }
+
 
     /**
      * Gets the GCD for an arbitrary number of inputs

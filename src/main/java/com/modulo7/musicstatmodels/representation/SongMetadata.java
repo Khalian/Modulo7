@@ -7,7 +7,6 @@ package com.modulo7.musicstatmodels.representation;
  *
  * Typically the following pieces of metadata are generally associated with this song:
  *
- * 1. l
  */
 public class SongMetadata {
 
@@ -48,7 +47,6 @@ public class SongMetadata {
         this.titleOfTrack = titleOfTrack;
     }
 
-
     /**
      * Basic constructor with only artist Name known
      * @param tempo
@@ -66,6 +64,20 @@ public class SongMetadata {
     public SongMetadata(final KeySignature keySignature, final TimeSignature timeSignature) {
         this.keySignature = keySignature;
         this.timeSignature = timeSignature;
+    }
+
+    /**
+     * Basic constructor with only timeSignature and key Signature known
+     * @param keySignature
+     * @param timeSignature
+     */
+    public SongMetadata(final KeySignature keySignature, final TimeSignature timeSignature,
+                        final String artistName, final  String titleOfTrack) {
+        this.keySignature = keySignature;
+        this.timeSignature = timeSignature;
+
+        this.artistName = artistName;
+        this.titleOfTrack = titleOfTrack;
     }
 
     /**

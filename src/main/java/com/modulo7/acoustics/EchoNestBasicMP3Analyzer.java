@@ -117,7 +117,7 @@ public class EchoNestBasicMP3Analyzer implements AbstractAnalyzer {
                     voiceOfSong.addVoiceInstant(songInstant);
                 }
 
-                return new Song(voiceOfSong, new SongMetadata(artistName), MusicSources.MP3);
+                return new Song(voiceOfSong, new SongMetadata(artistName, title), MusicSources.MP3);
             } else {
                 logger.error("Trouble analysing track " + track.getStatus());
                 return null;
@@ -139,7 +139,8 @@ public class EchoNestBasicMP3Analyzer implements AbstractAnalyzer {
      * For now I am considering the strong presence of a note if the
      * chroma element associated with is is above 0.75
      *
-     * TODO : Figure out the interpretation of the chroma vector returned by the echo nest API
+     * TODO : Implement the chord detection algorithm properly, either via JNI
+     * or rewrite code in Java
      *
      * @param noteChromaVector
      * @param duration
@@ -157,7 +158,7 @@ public class EchoNestBasicMP3Analyzer implements AbstractAnalyzer {
         double sum = 0.0;
         double maxVal = -Double.MAX_VALUE;
 
-        double maxIndex = 0;
+        int maxIndex = 0;
 
         // Construct a note Set from a chroma vector
         final Set<Note> chromaNotes = new HashSet<>();
@@ -174,6 +175,9 @@ public class EchoNestBasicMP3Analyzer implements AbstractAnalyzer {
         //check whether its correct or not
         // that this chroma vector can be classified as a note
         if (maxVal >= sum - maxIndex)
+            chromaNotes.add(noteMap.getNoteGivenPosition(maxIndex));
+        else
+            // TODO : Estimation of chord code, for now hack and put the note with highest position
             chromaNotes.add(noteMap.getNoteGivenPosition(maxIndex));
 
         return new VoiceInstant(chromaNotes, duration);
