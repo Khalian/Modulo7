@@ -37,9 +37,6 @@ public class EchoNestBasicMP3Analyzer implements AbstractAnalyzer {
     // The echo nest API
     private EchoNestAPI en;
 
-    // Number of milliseconds given for analysis
-    private static final int DURATION_OF_ANALYSIS = 30000;
-
     // An instance of the mp3 File
     private File mp3File;
 
@@ -83,7 +80,7 @@ public class EchoNestBasicMP3Analyzer implements AbstractAnalyzer {
     public Song getSongRepresentation() {
 
         try {
-            Track track = en.uploadTrack(mp3File, true);
+            final Track track = en.uploadTrack(mp3File, true);
 
             // Wait for a predefined period of time in which the track is analyzed
             track.waitForAnalysis(30000);
@@ -92,28 +89,41 @@ public class EchoNestBasicMP3Analyzer implements AbstractAnalyzer {
 
                 final double tempo = track.getTempo();
                 final String title = track.getTitle();
-                final int timeSignature = track.getTimeSignature();
                 final String artistName = track.getArtistName();
-                final double loudness = track.getLoudness();
+
+                // Gets the time signature
+                final int timeSignature = track.getTimeSignature();
+
+                // Getting the key signature information from the echo nest meta data analysis
                 final int key = track.getKey();
+                final int mode = track.getMode();
+
+                // Gets  the duration of the track
+                final double duration = track.getDuration();
 
                 TrackAnalysis analysis = track.getAnalysis();
 
+                /**
+                 * The analysis also acquires the beats, but not sure what to do with them
+                 */
                 for (TimedEvent beat : analysis.getBeats()) {
                     // TODO : Figure out what to do with beats
-
-                    // System.out.println("beat " + beat.getStart());
-                    // System.out.println("Beat Duration" + beat.getDuration());
                 }
 
-                Voice lineOfSong = new Voice();
+                Voice voiceOfSong = new Voice();
 
+                /**
+                 * There is no clear distinguishing way of acquiring timbral approximations
+                 * Hence the only possible approximation I can think of it call the a part of a
+                 * single voice
+                 */
                 for (Segment segment : analysis.getSegments()) {
                     VoiceInstant songInstant = getLineInstantFromVector(segment.getPitches());
-                    lineOfSong.addVoiceInstant(songInstant);
+                    double[] timbreVector = segment.getTimbre();
+                    voiceOfSong.addVoiceInstant(songInstant);
                 }
 
-                return new Song(lineOfSong, new SongMetadata(artistName), MusicSources.MP3);
+                return new Song(voiceOfSong, new SongMetadata(artistName), MusicSources.MP3);
             } else {
                 logger.error("Trouble analysing track " + track.getStatus());
                 return null;
@@ -158,22 +168,5 @@ public class EchoNestBasicMP3Analyzer implements AbstractAnalyzer {
         }
 
         return new VoiceInstant(chromaNotes);
-    }
-
-
-    /**
-     * A basic main method to test for echo nest application
-     *
-     * TODO : Remove this and add a test case which does the same thing
-     *
-     * @param args
-     * @throws EchoNestException
-     * @throws Modulo7NoSuchFileException
-     */
-    public static void main(String[] args) throws EchoNestException, Modulo7NoSuchFileException {
-        EchoNestBasicMP3Analyzer analyzer = new EchoNestBasicMP3Analyzer("C:\\Led Zeppelin - Stairway To Heaven.mp3");
-
-        // Basic test case
-        analyzer.getSongRepresentation();
     }
 }
