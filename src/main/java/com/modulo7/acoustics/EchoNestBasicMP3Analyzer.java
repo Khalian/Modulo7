@@ -103,13 +103,6 @@ public class EchoNestBasicMP3Analyzer implements AbstractAnalyzer {
 
                 TrackAnalysis analysis = track.getAnalysis();
 
-                /**
-                 * The analysis also acquires the beats, but not sure what to do with them
-                 */
-                for (TimedEvent beat : analysis.getBeats()) {
-                    // TODO : Figure out what to do with beats
-                }
-
                 Voice voiceOfSong = new Voice();
 
                 /**
@@ -117,9 +110,10 @@ public class EchoNestBasicMP3Analyzer implements AbstractAnalyzer {
                  * Hence the only possible approximation I can think of it call the a part of a
                  * single voice
                  */
-                for (Segment segment : analysis.getSegments()) {
-                    VoiceInstant songInstant = getLineInstantFromVector(segment.getPitches());
-                    double[] timbreVector = segment.getTimbre();
+                for (final Segment segment : analysis.getSegments()) {
+                    VoiceInstant songInstant = getLineInstantFromVector(segment.getPitches(), segment.getDuration());
+                    // TODO : Figure out what to do with the timbral information
+                    // double[] timbreVector = segment.getTimbre();
                     voiceOfSong.addVoiceInstant(songInstant);
                 }
 
@@ -148,25 +142,40 @@ public class EchoNestBasicMP3Analyzer implements AbstractAnalyzer {
      * TODO : Figure out the interpretation of the chroma vector returned by the echo nest API
      *
      * @param noteChromaVector
+     * @param duration
      *
      * @return The line Instant representation of the chroma vector
      */
-    private VoiceInstant getLineInstantFromVector(final double[] noteChromaVector)
+    private VoiceInstant getLineInstantFromVector(final double[] noteChromaVector, final double duration)
             throws Modulo7InvalidLineInstantSizeException {
 
         // First check whether the chroma vector is valid
         assert (noteChromaVector.length == 12);
 
+        // Conclude a note if one of the vector indices have value higher
+        // than the rest of the vector
+        double sum = 0.0;
+        double maxVal = -Double.MAX_VALUE;
+
+        double maxIndex = 0;
+
         // Construct a note Set from a chroma vector
         final Set<Note> chromaNotes = new HashSet<>();
 
-        // Parse through the note Vector to acquire the requisite notes
+        // Parse through the note Vector to acquire the requisite notes,
         for (int i = 0; i < noteChromaVector.length; i++) {
-            if (noteChromaVector[i] >= 0.8) {
-                chromaNotes.add(noteMap.getNoteGivenPosition(i));
+            sum += noteChromaVector[i];
+            if (noteChromaVector[i] > maxVal) {
+                maxVal = noteChromaVector[i];
+                maxIndex = i;
             }
         }
 
-        return new VoiceInstant(chromaNotes);
+        //check whether its correct or not
+        // that this chroma vector can be classified as a note
+        if (maxVal >= sum - maxIndex)
+            chromaNotes.add(noteMap.getNoteGivenPosition(maxIndex));
+
+        return new VoiceInstant(chromaNotes, duration);
     }
 }
