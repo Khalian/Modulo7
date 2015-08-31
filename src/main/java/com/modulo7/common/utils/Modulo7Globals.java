@@ -38,4 +38,18 @@ public class Modulo7Globals {
             MODULO7_HOST_OS_TYPE = "UNSUPPORTED_OS";
         }
     }
+
+    /**
+     * Assigns unknown if input is string, leaves it unchanged otherwise
+     *
+     * @param argument
+     * @return
+     */
+    public static String stringAssign(final String argument) {
+        if (argument == null) {
+            return Modulo7Globals.UNKNOWNSTRING;
+        }
+
+        return argument;
+    }
 }

@@ -32,6 +32,9 @@ public class AvroUtilsTest {
         AvroUtils.serialize("./src/test/tempMidiFile.avro", song);
 
         Song deserializedSong = AvroUtils.deserialize("./src/test/tempMidiFile.avro");
+
+        // TODO : Write some code for proper equality check on song objects
+        // Assert.assertEquals(song, deserializedSong);
     }
 
     @Test
@@ -45,8 +48,10 @@ public class AvroUtilsTest {
         AvroUtils.serialize("./src/test/tempMp3File.avro", mp3song);
         Song mp3DeserializedSong = AvroUtils.deserialize("./src/test/tempMp3File.avro");
 
-        File theAvroFile = new File("./src/test/testdata/mp3/stairway_to_heaven.mp3");
+        File theAvroFile = new File("./src/test/tempMp3File.avro");
         Assert.assertTrue(theAvroFile.delete());
+
+        // Assert.assertEquals(mp3song, mp3DeserializedSong);
     }
 
     @Test
@@ -57,9 +62,11 @@ public class AvroUtilsTest {
         Song musicXMLSong = analyzer.getSongRepresentation();
 
         AvroUtils.serialize("./src/test/tempXMLFile.avro", musicXMLSong);
-        Song musicXMLDeserializedSong = AvroUtils.deserialize("./src/test/tempMp3File.avro");
+        Song musicXMLDeserializedSong = AvroUtils.deserialize("./src/test/tempXMLFile.avro");
 
         File theAvroFile = new File("./src/test/tempXMLFile.avro");
         Assert.assertTrue(theAvroFile.delete());
+
+        // Assert.assertEquals(musicXMLSong, musicXMLDeserializedSong);
     }
 }

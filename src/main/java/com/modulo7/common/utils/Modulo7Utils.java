@@ -25,9 +25,6 @@ import java.util.Set;
  */
 public class Modulo7Utils {
 
-    // An instance of the frequency note map in the Modulo7 Utils classs
-    private static final FrequencyNoteMap noteMap = FrequencyNoteMap.getInstance();
-
     /**
      * Processes a text file and removes duplicates from the file
      *
@@ -89,6 +86,26 @@ public class Modulo7Utils {
                 file.delete();
             }
         }
+    }
+
+    /**
+     * List all files in a directory recursively and returns their canonical path as a list
+     * @param directoryName
+     */
+    public static Set<String> listAllFiles(final String directoryName) {
+        final File dirFileHandle = new File(directoryName);
+
+        // Gets all the files including the ones in the subdirectory
+        final List<File> files =
+                (List<File>) FileUtils.listFiles(dirFileHandle, TrueFileFilter.INSTANCE, TrueFileFilter.INSTANCE);
+
+        Set<String> newReturnSet = new HashSet<>();
+
+        for (File file : files) {
+            newReturnSet.add(file.getAbsolutePath());
+        }
+
+        return newReturnSet;
     }
 
     /**
@@ -170,7 +187,8 @@ public class Modulo7Utils {
      * @param instant
      * @param voiceNumber
      */
-    public static void addVoiceInstantToVoiceMap(final Map<Integer, Voice> voiceMap, final VoiceInstant instant, final int voiceNumber) {
+    public static void addVoiceInstantToVoiceMap(final Map<Integer, Voice> voiceMap,
+                                                 final VoiceInstant instant, final int voiceNumber) {
         voiceMap.get(voiceNumber).addVoiceInstant(instant);
     }
 }
