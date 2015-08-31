@@ -31,7 +31,7 @@ public class AvroUtils {
      * @param destinationFileName
      * @param song
      */
-    public void serialize(final String destinationFileName, final Song song) throws IOException {
+    public static void serialize(final String destinationFileName, final Song song) throws IOException {
 
         // Acquire the reflective schema from Modulo7 class
         final Schema schema= ReflectData.get().getSchema(Song.class);
@@ -55,15 +55,12 @@ public class AvroUtils {
      * @param sourceFileName
      * @return
      */
-    public Song deserialize(final String sourceFileName) throws IOException {
-
-        // Acquire the reflective schema from Modulo7 class
-        final Schema schema= ReflectData.get().getSchema(Song.class);
+    public static Song deserialize(final String sourceFileName) throws IOException {
 
         File sourceFile = new File(sourceFileName);
 
         DatumReader<Song> reader = new ReflectDatumReader<>(Song.class);
-        DataFileReader<Song> dataFileReader = new DataFileReader<Song>(sourceFile, reader);
+        DataFileReader<Song> dataFileReader = new DataFileReader<>(sourceFile, reader);
 
         /**
          * Since we have only one song object in the file as assumed we return that back

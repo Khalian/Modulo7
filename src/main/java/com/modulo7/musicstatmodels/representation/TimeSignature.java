@@ -1,5 +1,7 @@
 package com.modulo7.musicstatmodels.representation;
 
+import com.modulo7.common.utils.Modulo7Globals;
+
 /**
  * Created by asanyal on 7/25/2015.
  * <p>
@@ -16,7 +18,12 @@ public class TimeSignature {
 
     // A string expression of the type of time signature, also known as the meter
     // of a song
-    private String timeSignatureType;
+    private String timeSignatureType = Modulo7Globals.UNKNOWNSTRING;
+
+
+    public TimeSignature() {
+
+    }
 
     public TimeSignature(final int noteValIsBeat, final int beatsPerMeasure) {
         this.beatsPerMeasure = beatsPerMeasure;

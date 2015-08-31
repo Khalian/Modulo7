@@ -17,6 +17,9 @@ public class Modulo7Globals {
     // A place holder for unknown quantities
     public static final int UNKNOWN = -1;
 
+    // A global place holder for unknown string
+    public static final String UNKNOWNSTRING = "UNKNOWNSTRING";
+
     /**
      * Static block declaring all the gloabals
      */

@@ -1,5 +1,7 @@
 package com.modulo7.musicstatmodels.representation;
 
+import com.modulo7.common.utils.Modulo7Globals;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -18,15 +20,15 @@ import java.util.List;
  */
 public class Voice {
 
-    // A voice sequence is the sequence of line instances
+    // A voice sequence is the sequence of line instance
     // That are being played
-    private List<VoiceInstant> voiceSequence;
+    private ArrayList<VoiceInstant> voiceSequence;
 
     // Member indicating how long the entire voice was played
-    private double totalVoiceDuration;
+    private double totalVoiceDuration = (double) Modulo7Globals.UNKNOWN;
 
     // The voice's scale, major, minor, blues etc
-    private ScaleType scaleOfVoice;
+    private ScaleType scaleOfVoice = ScaleType.UNKNOWN;
 
     /**
      * Basic constructor for line by accepting a set of line
@@ -34,7 +36,7 @@ public class Voice {
      *
      * @param voiceSequence
      */
-    public Voice(final List<VoiceInstant> voiceSequence) {
+    public Voice(final ArrayList<VoiceInstant> voiceSequence) {
         this.voiceSequence = voiceSequence;
         inferTotalLineDuration();
     }
@@ -46,7 +48,7 @@ public class Voice {
      * @param voiceSequence
      * @param scaleType
      */
-    public Voice(final List<VoiceInstant> voiceSequence, final ScaleType scaleType) {
+    public Voice(final ArrayList<VoiceInstant> voiceSequence, final ScaleType scaleType) {
         this.voiceSequence = voiceSequence;
         this.scaleOfVoice = scaleType;
         inferTotalLineDuration();

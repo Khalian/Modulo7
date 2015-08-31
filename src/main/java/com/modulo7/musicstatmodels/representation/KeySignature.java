@@ -15,14 +15,18 @@ import java.util.Set;
 public class KeySignature {
 
     // The key of the key signature
-    private String key;
+    private String key = Modulo7Globals.UNKNOWNSTRING;
 
     // The scale associated with the key signature
-    private ScaleType scale;
+    private ScaleType scale = ScaleType.UNKNOWN;
 
     // Available keys in western music theory
     private static final Set westernKeys =
-            new HashSet<String>(Arrays.asList(Modulo7Globals.NOTE_NAMES));
+            new HashSet<>(Arrays.asList(Modulo7Globals.NOTE_NAMES));
+
+    public KeySignature() {
+
+    }
 
     /**
      * The key and song of the key signature

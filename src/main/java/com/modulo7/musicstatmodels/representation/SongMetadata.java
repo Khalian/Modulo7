@@ -1,5 +1,7 @@
 package com.modulo7.musicstatmodels.representation;
 
+import com.modulo7.common.utils.Modulo7Globals;
+
 /**
  * Created by asanyal on 7/28/2015.
  *
@@ -11,23 +13,27 @@ package com.modulo7.musicstatmodels.representation;
 public class SongMetadata {
 
     // Name of the artist who wrote this song
-    private String artistName;
+    private String artistName = Modulo7Globals.UNKNOWNSTRING;
 
     // Title of the track
-    private String titleOfTrack;
+    private String titleOfTrack = Modulo7Globals.UNKNOWNSTRING;
 
     // The time signature associated with this song
-    private TimeSignature timeSignature;
+    private TimeSignature timeSignature = new TimeSignature();
 
     // The key signature associated with this song
-    private KeySignature keySignature;
+    private KeySignature keySignature = new KeySignature();
 
     // The timbre associated with the song
     // TODO : Find out a better representation of what timbre means, look at echo nest documentation
-    private double timbre;
+    private double timbre = Modulo7Globals.UNKNOWN;
 
     // The beats per minute, or tempo associated with this song
-    private int tempo;
+    private int tempo = Modulo7Globals.UNKNOWN;
+
+    public SongMetadata() {
+
+    }
 
     /**
      * Basic constructor with only artist Name known

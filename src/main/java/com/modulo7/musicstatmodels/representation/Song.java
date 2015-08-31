@@ -1,5 +1,6 @@
 package com.modulo7.musicstatmodels.representation;
 
+import com.modulo7.common.utils.Modulo7Globals;
 import com.modulo7.crawler.utils.MusicSources;
 
 import java.util.HashSet;
@@ -18,24 +19,23 @@ import java.util.Set;
 public class Song {
 
     // A description of the length of the song in question
-    private Set<Voice> voicesOfSong;
+    private HashSet<Voice> voicesOfSong = new HashSet<>();
 
     // Total duration of the song in question
-    private double totalDurationOfSong;
+    private double totalDurationOfSong = Modulo7Globals.UNKNOWN;
 
     // The metadata associated with the song
-    private SongMetadata metadata;
+    private SongMetadata metadata = new SongMetadata();
 
     // Song source, depending on what medium the song has arisen from, modulo7 can expect certain ideas to work and certain
     // not to
-    private MusicSources source;
+    private MusicSources source = MusicSources.UNKNOWN;
 
     /**
      * Method to infer the song length as maximum of all the line duration
      * lengths as part of the song
      */
     private void inferSongLength() {
-        totalDurationOfSong = -1;
 
         // From the lines of a song, extract the max duration
         // and call it the duration of the song
@@ -49,6 +49,13 @@ public class Song {
     }
 
     /**
+     * Basic constructor for deserialization
+     */
+    public Song() {
+
+    }
+
+    /**
      * Basic Constructor for a modulo7 song
      *
      * This constructor is for unknown pieces of information
@@ -57,7 +64,7 @@ public class Song {
      * @param voicesOfSong
      * @param source
      */
-    public Song(final Set<Voice> voicesOfSong, final MusicSources source) {
+    public Song(final HashSet<Voice> voicesOfSong, final MusicSources source) {
         this.voicesOfSong = voicesOfSong;
         inferSongLength();
 
@@ -74,7 +81,7 @@ public class Song {
      * @param songMetadata
      * @param source
      */
-    public Song(final Set<Voice> voicesOfSong, final SongMetadata songMetadata, final MusicSources source) {
+    public Song(final HashSet<Voice> voicesOfSong, final SongMetadata songMetadata, final MusicSources source) {
 
         this.voicesOfSong = voicesOfSong;
         this.metadata = songMetadata;
@@ -90,7 +97,6 @@ public class Song {
      * @param source
      */
     public Song(final Voice voiceOfSong, final SongMetadata songMetadata, final MusicSources source) {
-        this.voicesOfSong = new HashSet<>();
         this.voicesOfSong.add(voiceOfSong);
 
         this.metadata = songMetadata;

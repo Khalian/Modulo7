@@ -25,6 +25,5 @@ public class LyricsIndexerTest {
 
         LyricsQueryParser queryParser = new LyricsQueryParser(LyricsIndexer.getDefaultIndexDir());
         TopDocs docs = queryParser.performSearch("Barbie", 1);
-        System.out.println("Haha");
     }
 }

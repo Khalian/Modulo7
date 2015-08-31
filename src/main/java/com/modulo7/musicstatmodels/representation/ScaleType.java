@@ -5,7 +5,7 @@ package com.modulo7.musicstatmodels.representation;
  *
  * Different types of scales that in existence in western music.
  *
- * Major Scale :
+ * Major Scale : Standard major scale, also called the happy sounding scale
  */
 public enum ScaleType {
 
@@ -13,11 +13,12 @@ public enum ScaleType {
     MINOR("MINOR"),
     BLUES("BLUES"),
     MINOR_PENTATONIC("MINOR PENTATONIC"),
-    MAJOR_PENTATONIC("MAJOR PENTATONIC");
+    MAJOR_PENTATONIC("MAJOR PENTATONIC"),
+    UNKNOWN("UNKNOWN");
 
     private final String scale;
 
-    ScaleType(String scale) {
+    ScaleType(final String scale) {
         this.scale = scale.toUpperCase();
     }
 }

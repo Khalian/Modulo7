@@ -35,6 +35,9 @@ public class FrequencyNoteMap {
     // Position to note Map
     private static final Map<Integer, Note> positionNoteMap = new HashMap<>();
 
+    // Inverse of basic note position map
+    private static final Map<Integer, Note> basicPositionNoteMap = new HashMap<>();
+
     /**
      * Method to acquire the singleton instance of the note map class
      * @return
@@ -250,18 +253,18 @@ public class FrequencyNoteMap {
         notePositionMap.put(Note.G8, 107);
         notePositionMap.put(Note.GSHARP8, 108);
 
-        basicNotePositionMap.put(Note.A0, 1);
-        basicNotePositionMap.put(Note.ASHARP0, 2);
-        basicNotePositionMap.put(Note.B0, 3);
-        basicNotePositionMap.put(Note.C0, 4);
-        basicNotePositionMap.put(Note.CSHARP0, 5);
-        basicNotePositionMap.put(Note.D0, 6);
-        basicNotePositionMap.put(Note.DSHARP0, 7);
-        basicNotePositionMap.put(Note.E0, 8);
-        basicNotePositionMap.put(Note.F0, 9);
-        basicNotePositionMap.put(Note.FSHARP0, 10);
-        basicNotePositionMap.put(Note.G0, 11);
-        basicNotePositionMap.put(Note.GSHARP0, 12);
+        basicNotePositionMap.put(Note.A4, 1);
+        basicNotePositionMap.put(Note.ASHARP4, 2);
+        basicNotePositionMap.put(Note.B4, 3);
+        basicNotePositionMap.put(Note.C4, 4);
+        basicNotePositionMap.put(Note.CSHARP4, 5);
+        basicNotePositionMap.put(Note.D4, 6);
+        basicNotePositionMap.put(Note.DSHARP4, 7);
+        basicNotePositionMap.put(Note.E4, 8);
+        basicNotePositionMap.put(Note.F4, 9);
+        basicNotePositionMap.put(Note.FSHARP4, 10);
+        basicNotePositionMap.put(Note.G4, 11);
+        basicNotePositionMap.put(Note.GSHARP4, 12);
 
         // Invert and acquire the note positions
         for (Map.Entry<Note, Integer> entry : notePositionMap.entrySet()) {
@@ -269,6 +272,14 @@ public class FrequencyNoteMap {
             Integer position = entry.getValue();
 
             positionNoteMap.put(position, note);
+        }
+
+        // Invert and acquire the  basic note positions
+        for (Map.Entry<Note, Integer> entry : basicNotePositionMap.entrySet()) {
+            Note note = entry.getKey();
+            Integer position = entry.getValue();
+
+            basicPositionNoteMap.put(position, note);
         }
     }
 
@@ -279,6 +290,26 @@ public class FrequencyNoteMap {
      */
     public Note getNoteGivenPosition(int position) {
         return positionNoteMap.get(position);
+    }
+
+    /**
+     * Acquires the position of the note given the note from basic map
+     *
+     * @param note
+     * @return
+     */
+    public int getPositionGivenBasicNote(Note note) {
+        return  basicNotePositionMap.get(note);
+    }
+
+    /**
+     * Gets the note given the position from basic map
+     *
+     * @param position
+     * @return
+     */
+    public Note getBasicNoteGivenPosition(int position) {
+        return basicPositionNoteMap.get(position);
     }
 
     /**

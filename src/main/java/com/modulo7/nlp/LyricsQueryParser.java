@@ -20,13 +20,17 @@ import java.io.IOException;
  * A lyrics query parser : Ideas taken from : http://oak.cs.ucla.edu/cs144/projects/lucene/
  */
 public class LyricsQueryParser {
+
+    // A searcher element for the query parser
     private IndexSearcher searcher = null;
+
+    // A parser for a given lucene query
     private QueryParser parser = null;
 
     /** Creates a new instance of SearchEngine */
     public LyricsQueryParser(final String indexDir) throws IOException {
         searcher = new IndexSearcher(DirectoryReader.open(FSDirectory.open(new File(indexDir))));
-        parser = new QueryParser(Version.LUCENE_41, "lyrics", new StandardAnalyzer(Version.LUCENE_41));
+        parser = new QueryParser(Version.LUCENE_41, "lyricalContent", new StandardAnalyzer(Version.LUCENE_41));
     }
 
     /**

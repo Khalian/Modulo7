@@ -2,9 +2,9 @@ package com.modulo7.musicstatmodels.representation;
 
 import com.modulo7.common.exceptions.Modulo7InvalidLineInstantSizeException;
 import com.modulo7.common.exceptions.Modulo7WrongNoteType;
+import com.modulo7.common.utils.Modulo7Globals;
 
 import java.util.HashSet;
-import java.util.Set;
 
 /**
  * Created by asanyal on 6/16/2015.
@@ -24,25 +24,29 @@ import java.util.Set;
 public class VoiceInstant {
 
     // Whether the note is a part of a chord or a melody
-    private NoteType noteType;
+    private NoteType noteType = NoteType.UNKNOWN;
 
     // Is the instant sustained or played for an imperceptible instant
-    private boolean isSustained;
+    private boolean isSustained = false;
 
-    // The duration for which the instant is played
-    private double duration;
+    // The duration for which the instant is actually played
+    private double duration = Modulo7Globals.UNKNOWN;
+
+    // The duration of note that is played according to music theory, by default its unknown
+    private NoteDuration theoreticalDuration = NoteDuration.UNKNOWN;
 
     // An expression of the velocity of the key being struck, or how the
     // string was struck. Attack is a good objective indicator of the loudness of that
     // particular note. If the attack is unknown, its assumed a default value
-    private double attack;
+    private double attack = Modulo7Globals.UNKNOWN;
 
     // This set of notes is an expression of how many notes are present in this instant
     // For example in pure melodies, this set would always
-    private Set<Note> setOfNotes = new HashSet<>();
+    private HashSet<Note> setOfNotes = new HashSet<>();
 
-    // Denotes an unknown in either attack or duration
-    private static final double UNKNOWN = -1.0;
+    public VoiceInstant() {
+
+    }
 
     /**
      * Basic constructor of the line instant class with both the attack and duration clearly defined
@@ -51,7 +55,7 @@ public class VoiceInstant {
      * @param attack
      * @param duration
      */
-    public VoiceInstant(final Set<Note> noteSet, final double duration, final double attack)
+    public VoiceInstant(final HashSet<Note> noteSet, final double duration, final double attack)
             throws Modulo7InvalidLineInstantSizeException {
 
         if (noteSet.size() == 0) {
@@ -82,7 +86,6 @@ public class VoiceInstant {
     public VoiceInstant(final Note note, final double duration, final double attack)
             throws Modulo7InvalidLineInstantSizeException {
 
-        setOfNotes = new HashSet<>();
         setOfNotes.add(note);
 
         noteType = NoteType.MELODIC_NOTE;
@@ -100,7 +103,7 @@ public class VoiceInstant {
      * @param attack
      * @param duration
      */
-    public VoiceInstant(final Set<Note> noteSet, final double duration, final double attack, final boolean isSustained)
+    public VoiceInstant(final HashSet<Note> noteSet, final double duration, final double attack, final boolean isSustained)
             throws Modulo7InvalidLineInstantSizeException {
 
         if (noteSet.size() == 0) {
@@ -148,7 +151,7 @@ public class VoiceInstant {
      * @param noteSet
      * @param duration
      */
-    public VoiceInstant(final Set<Note> noteSet, final double duration)
+    public VoiceInstant(final HashSet<Note> noteSet, final double duration)
             throws Modulo7InvalidLineInstantSizeException {
 
         if (noteSet.size() == 0) {
@@ -164,7 +167,37 @@ public class VoiceInstant {
         }
 
         this.duration = duration;
-        this.attack = UNKNOWN;
+        this.attack = Modulo7Globals.UNKNOWN;
+    }
+
+    /**
+     * Basic constructor of the line instant class with the duration clearly defined
+     * This constructor asserts attack for this instant is unknown
+     * The constructor asserts theoretical note duration is known
+     *
+     * @param noteSet
+     * @param theoreticalDuration
+     * @param duration
+     */
+    public VoiceInstant(final HashSet<Note> noteSet, final NoteDuration theoreticalDuration, final double duration)
+            throws Modulo7InvalidLineInstantSizeException {
+
+        if (noteSet.size() == 0) {
+            throw new Modulo7InvalidLineInstantSizeException("Voice Instant Cannot be of size" + noteSet.size());
+        }
+
+        setOfNotes = noteSet;
+
+        if (setOfNotes.size() == 1) {
+            noteType = NoteType.MELODIC_NOTE;
+        } else {
+            noteType = NoteType.CHORD;
+        }
+
+        this.theoreticalDuration = theoreticalDuration;
+
+        this.duration = duration;
+        this.attack = Modulo7Globals.UNKNOWN;
     }
 
     /**
@@ -177,13 +210,33 @@ public class VoiceInstant {
     public VoiceInstant(final Note note, final double duration)
             throws Modulo7InvalidLineInstantSizeException {
 
-        setOfNotes = new HashSet<>();
         setOfNotes.add(note);
 
         noteType = NoteType.MELODIC_NOTE;
 
         this.duration = duration;
-        this.attack = UNKNOWN;
+        this.attack = Modulo7Globals.UNKNOWN;
+    }
+
+    /**
+     * Basic constructor of the line instant class with the duration clearly defined
+     * This constructor asserts attack for this instant is unknown, and the note type is a single note
+     * This contstructor asserts theoretical note duration is known
+     *
+     * @param note
+     * @param theoreticalDuration
+     * @param duration
+     */
+    public VoiceInstant(final Note note, final NoteDuration theoreticalDuration, final double duration)
+            throws Modulo7InvalidLineInstantSizeException {
+
+        setOfNotes.add(note);
+
+        noteType = NoteType.MELODIC_NOTE;
+
+        this.theoreticalDuration = theoreticalDuration;
+        this.duration = duration;
+        this.attack = Modulo7Globals.UNKNOWN;
     }
 
     /**
@@ -191,7 +244,7 @@ public class VoiceInstant {
      *
      * @param noteSet
      */
-    public VoiceInstant(final Set<Note> noteSet) throws Modulo7InvalidLineInstantSizeException {
+    public VoiceInstant(final HashSet<Note> noteSet) throws Modulo7InvalidLineInstantSizeException {
 
         if (noteSet.size() == 0) {
             throw new Modulo7InvalidLineInstantSizeException("Voice Instant Cannot be of size" + noteSet.size());
@@ -205,8 +258,8 @@ public class VoiceInstant {
             noteType = NoteType.CHORD;
         }
 
-        duration = UNKNOWN;
-        attack = UNKNOWN;
+        duration = Modulo7Globals.UNKNOWN;
+        attack = Modulo7Globals.UNKNOWN;
     }
 
     /**
@@ -221,8 +274,8 @@ public class VoiceInstant {
 
         noteType = NoteType.MELODIC_NOTE;
 
-        duration = UNKNOWN;
-        attack = UNKNOWN;
+        duration = Modulo7Globals.UNKNOWN;
+        attack = Modulo7Globals.UNKNOWN;
     }
 
     /**
@@ -278,5 +331,13 @@ public class VoiceInstant {
 
         // For the sake of complilation, actually dead code
         return null;
+    }
+
+    /**
+     * Getter for theorectical note duration
+     * @return
+     */
+    public NoteDuration getTheoreticalDuration() {
+        return theoreticalDuration;
     }
 }

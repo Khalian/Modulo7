@@ -161,7 +161,7 @@ public class EchoNestBasicMP3Analyzer implements AbstractAnalyzer {
         int maxIndex = 0;
 
         // Construct a note Set from a chroma vector
-        final Set<Note> chromaNotes = new HashSet<>();
+        final HashSet<Note> chromaNotes = new HashSet<>();
 
         // Parse through the note Vector to acquire the requisite notes,
         for (int i = 0; i < noteChromaVector.length; i++) {
@@ -172,13 +172,19 @@ public class EchoNestBasicMP3Analyzer implements AbstractAnalyzer {
             }
         }
 
-        //check whether its correct or not
-        // that this chroma vector can be classified as a note
+        // Sanity check to ensure note ranges go 12 for basic position acquisition
+        assert (maxIndex >= 0 && maxIndex < 12);
+
+
+        final int actualNoteMapMaxIndex = maxIndex + 1;
+
+        //check whether its correct or not that this chroma vector can be classified as a note
         if (maxVal >= sum - maxIndex)
-            chromaNotes.add(noteMap.getNoteGivenPosition(maxIndex));
-        else
+            chromaNotes.add(noteMap.getBasicNoteGivenPosition(maxIndex + 1));
+        else {
             // TODO : Estimation of chord code, for now hack and put the note with highest position
-            chromaNotes.add(noteMap.getNoteGivenPosition(maxIndex));
+            chromaNotes.add(noteMap.getBasicNoteGivenPosition(maxIndex + 1));
+        }
 
         return new VoiceInstant(chromaNotes, duration);
     }

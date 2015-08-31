@@ -20,7 +20,10 @@ public enum MusicSources {
 
     // Symbolic sources
     MUSIC_XML_FILE("musicxml"),
-    MIDI("midi");
+    MIDI("midi"),
+
+    // Unknown Source
+    UNKNOWN("Unknown");
 
     /**
      * Basic constructor for music sources

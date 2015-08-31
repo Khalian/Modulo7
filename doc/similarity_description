@@ -1,0 +1,18 @@
+Similarity measures for Music theoretic criteria
+
+This document consists a description of all the similarity measures that are addressed by Modulo7
+
+In that respect a good vector representation needs to be developed for the same.
+
+Various vector space representation for this regard as the follows :-
+
+1. TonalHistogramVector - A vector representation of a document that considers bins of intervals.
+2. Perfect/Minor/Major triple vector - A condensed vector representation that takes into account
+
+Adopting traditionAal IR approaches to music representation can be difficult. For that a documentation scheme is needed.
+I present my own documentation scheme (depending on tokenization of standard literature)
+
+1. All notes will have their standard meaning. A, A#, B, C, ,C#  D, D#, E, F, F#, G, G#, penalty of transformation is defined based on horizontal
+interval distance
+
+2.

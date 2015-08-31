@@ -169,7 +169,7 @@ public class MidiToSongConverter implements AbstractAnalyzer {
         }
 
         // Acquire the voices from a hash set
-        Set<Voice> voiceSet = new HashSet<>(voiceToChannelMap.values());
+        HashSet<Voice> voiceSet = new HashSet<>(voiceToChannelMap.values());
 
         // Returns the song
         return new Song(voiceSet, MusicSources.MIDI);

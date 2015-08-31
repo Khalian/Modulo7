@@ -14,7 +14,7 @@ Update and upgrade the repositories once
 RUN apt-get update && apt-get -y upgrade
 
 # Installation of the prerequesites
-RUN     apt-get -y install git
+RUN     apt-get -y install git wget
 
 # Install the dependencies of opencv
 RUN apt-get -y remove ffmpeg x264 libx264-dev
@@ -37,9 +37,9 @@ RUN	    sh /Install-OpenCV/Ubuntu/2.4/opencv2_4_9.sh
 # Install java
 RUN     apt-get -y install openjdk-7-jdk
 
-# The installation of gamera prototypes work under construction
-RUN     apt-get -y install wget
-RUN     wget http://sourceforge.net/projects/gamera/files/latest/download
+# The installation of tessaract and audiveris prototypes, under construction
+RUN     apt-get -y install tesseract-ocr liblept4 libtesseract3 tesseract-ocr-deu tesseract-ocr-eng tesseract-ocr-fra tesseract-ocr-ita
+RUN     wget https://kenai.com/projects/audiveris/downloads/download/oldies/audiveris-4.2.3318-ubuntu-amd64.deb -O audiveris.deb
 
 # Install the gradle version 2.5 for building modulo7, canonical's distribution for gradle is outdated so gradle is installed manually
 RUN     apt-get -y install wget unzip

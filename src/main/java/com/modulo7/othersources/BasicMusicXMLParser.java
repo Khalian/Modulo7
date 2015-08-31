@@ -130,7 +130,7 @@ public class BasicMusicXMLParser implements AbstractAnalyzer {
         getNotes();
 
         // Acquire the voices from a hash set
-        final Set<Voice> voiceSet = new HashSet<>(voiceIndextoVoiceMap.values());
+        final HashSet<Voice> voiceSet = new HashSet<>(voiceIndextoVoiceMap.values());
 
         // Construct song meta data object
         final SongMetadata metadata = new SongMetadata(keySignature, timeSignature);
@@ -314,7 +314,7 @@ public class BasicMusicXMLParser implements AbstractAnalyzer {
                                     final Note baseNote = Note.getNoteValue(note, octave);
                                     final Note actualNote = frequencyNoteMap.getModifiedNoteGivenAccidental(baseNote, accidental);
 
-                                    // The duration
+                                    // The duration element parsed from music xml file
                                     final int duration;
 
                                     // Get the duration of the note
@@ -324,10 +324,18 @@ public class BasicMusicXMLParser implements AbstractAnalyzer {
                                         duration = Integer.valueOf(thisNote.getElementsByTag("duration").text()) * divMultiplier.get(divisions);
                                     }
 
-                                    Set<Note> setOfNotes = new HashSet<>();
+                                    // Type of note, if described in the music xml file
+                                    NoteDuration type = NoteDuration.UNKNOWN;
+                                    final String typeOfNote = thisNote.getElementsByTag("type").text();
+
+                                    if (thisNote.getElementsByTag("type").text().isEmpty()) {
+                                        type = NoteDuration.getNoteDurationFromMusicXML(typeOfNote);
+                                    }
+
+                                    HashSet<Note> setOfNotes = new HashSet<>();
                                     setOfNotes.add(actualNote);
 
-                                    VoiceInstant voiceInstant = new VoiceInstant(setOfNotes, duration);
+                                    VoiceInstant voiceInstant = new VoiceInstant(setOfNotes, type, duration);
 
                                     Modulo7Utils.addVoiceInstantToVoiceMap(voiceIndextoVoiceMap, voiceInstant, currentVoiceIndex);
                                 } catch (Modulo7BadNoteException | Modulo7BadAccidentalException | Modulo7InvalidLineInstantSizeException e) {
