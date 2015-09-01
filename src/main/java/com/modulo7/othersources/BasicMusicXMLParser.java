@@ -4,7 +4,7 @@ import java.io.File;
 import java.io.IOException;
 import java.util.*;
 
-import com.modulo7.acoustics.AbstractAnalyzer;
+import com.modulo7.common.interfaces.AbstractAnalyzer;
 import com.modulo7.common.exceptions.*;
 import com.modulo7.common.utils.FrequencyNoteMap;
 import com.modulo7.common.utils.Modulo7Utils;

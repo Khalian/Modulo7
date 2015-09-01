@@ -191,4 +191,26 @@ public class Modulo7Utils {
                                                  final VoiceInstant instant, final int voiceNumber) {
         voiceMap.get(voiceNumber).addVoiceInstant(instant);
     }
+
+    /**
+     * Assigns unknown if input is string, leaves it unchanged otherwise
+     *
+     * @param argument
+     * @return
+     */
+    public static String stringAssign(final String argument) {
+        if (argument == null) {
+            return Modulo7Globals.UNKNOWNSTRING;
+        }
+
+        return argument;
+    }
+
+    /**
+     * Simple helper to get audiveris jar location
+     * @return
+     */
+    public static String getAudiverisJarLocation() {
+        return Modulo7Globals.AUDIVERIS_JAR_LOCATION;
+    }
 }

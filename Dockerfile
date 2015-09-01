@@ -40,6 +40,7 @@ RUN     apt-get -y install openjdk-7-jdk
 # The installation of tessaract and audiveris prototypes, under construction
 RUN     apt-get -y install tesseract-ocr liblept4 libtesseract3 tesseract-ocr-deu tesseract-ocr-eng tesseract-ocr-fra tesseract-ocr-ita
 RUN     wget https://kenai.com/projects/audiveris/downloads/download/oldies/audiveris-4.2.3318-ubuntu-amd64.deb -O audiveris.deb
+RUN     dpkg -i audiveris.deb
 
 # Install the gradle version 2.5 for building modulo7, canonical's distribution for gradle is outdated so gradle is installed manually
 RUN     apt-get -y install wget unzip

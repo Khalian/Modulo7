@@ -2,10 +2,12 @@ package com.modulo7.acoustics;
 
 import com.echonest.api.v4.*;
 
+import com.modulo7.common.interfaces.AbstractAnalyzer;
 import com.modulo7.common.exceptions.Modulo7InvalidLineInstantSizeException;
 import com.modulo7.common.exceptions.Modulo7NoSuchFileException;
 import com.modulo7.common.utils.FrequencyNoteMap;
 import com.modulo7.common.utils.Modulo7Globals;
+import com.modulo7.common.utils.Modulo7Utils;
 import com.modulo7.crawler.utils.CrawlerHelper;
 import com.modulo7.crawler.utils.MusicSources;
 import com.modulo7.musicstatmodels.representation.*;
@@ -15,7 +17,6 @@ import org.apache.log4j.Logger;
 import java.io.File;
 import java.io.IOException;
 import java.util.HashSet;
-import java.util.Set;
 
 /**
  * Created by asanyal on 7/3/2015.
@@ -89,8 +90,8 @@ public class EchoNestBasicMP3Analyzer implements AbstractAnalyzer {
             if (track.getStatus() == Track.AnalysisStatus.COMPLETE) {
 
                 final double tempo = track.getTempo();
-                final String title = Modulo7Globals.stringAssign(track.getTitle());
-                final String artistName = Modulo7Globals.stringAssign(track.getArtistName());
+                final String title = Modulo7Utils.stringAssign(track.getTitle());
+                final String artistName = Modulo7Utils.stringAssign(track.getArtistName());
 
                 // Gets the time signature
                 final int timeSignature = track.getTimeSignature();

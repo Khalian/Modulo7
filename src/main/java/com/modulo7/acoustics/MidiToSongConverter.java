@@ -8,6 +8,7 @@ package com.modulo7.acoustics;
  *
  */
 
+import com.modulo7.common.interfaces.AbstractAnalyzer;
 import com.modulo7.common.exceptions.Modulo7BadNoteException;
 import com.modulo7.common.exceptions.Modulo7InvalidLineInstantSizeException;
 import com.modulo7.common.utils.Modulo7Globals;

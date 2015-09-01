@@ -1,4 +1,4 @@
-import com.modulo7.acoustics.AbstractAnalyzer;
+import com.modulo7.common.interfaces.AbstractAnalyzer;
 import com.modulo7.acoustics.MidiToSongConverter;
 import com.modulo7.musicstatmodels.representation.Song;
 import junit.framework.Assert;

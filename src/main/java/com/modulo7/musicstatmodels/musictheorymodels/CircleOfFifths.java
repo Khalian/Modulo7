@@ -69,12 +69,18 @@ public class CircleOfFifths {
 
         int numIterered = 0;
 
-        // If its a major scale process from base
-        if (scaleType.equals(ScaleType.MAJOR)) {
-            numIterered = 0;
-        }
-        // If its a minor scale
-        else if (scaleType.equals(ScaleType.MINOR)) {
+        if (scaleType != null) {
+            // If its a major scale process from base
+            if (scaleType.equals(ScaleType.MAJOR)) {
+                numIterered = 0;
+            }
+            // If its a minor scale
+            else if (scaleType.equals(ScaleType.MINOR)) {
+                numIterered = 3;
+            }
+        } else {
+            // Most scales are assumed minor scales so if information is not present dont infer
+            // TODO : Key estimation algorithm needed, in particular to differentiate between potential keys
             numIterered = 3;
         }
 

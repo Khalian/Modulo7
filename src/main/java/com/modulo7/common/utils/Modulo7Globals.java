@@ -20,6 +20,9 @@ public class Modulo7Globals {
     // A global place holder for unknown string
     public static final String UNKNOWNSTRING = "UNKNOWNSTRING";
 
+    // Audiveris jar location
+    public static final String AUDIVERIS_JAR_LOCATION = Modulo7Utils.stringAssign(System.getenv("AUDIVERIS_JAR_LOCATION"));
+
     /**
      * Static block declaring all the gloabals
      */
@@ -37,19 +40,5 @@ public class Modulo7Globals {
         } else {
             MODULO7_HOST_OS_TYPE = "UNSUPPORTED_OS";
         }
-    }
-
-    /**
-     * Assigns unknown if input is string, leaves it unchanged otherwise
-     *
-     * @param argument
-     * @return
-     */
-    public static String stringAssign(final String argument) {
-        if (argument == null) {
-            return Modulo7Globals.UNKNOWNSTRING;
-        }
-
-        return argument;
     }
 }

@@ -1,7 +1,7 @@
 package com.modulo7.engine;
 
 import com.echonest.api.v4.EchoNestException;
-import com.modulo7.acoustics.AbstractAnalyzer;
+import com.modulo7.common.interfaces.AbstractAnalyzer;
 import com.modulo7.acoustics.EchoNestBasicMP3Analyzer;
 import com.modulo7.acoustics.MidiToSongConverter;
 import com.modulo7.common.exceptions.Modulo7InvalidMusicXMLFile;
