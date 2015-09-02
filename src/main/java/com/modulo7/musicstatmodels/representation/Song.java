@@ -148,4 +148,12 @@ public class Song {
     public MusicSources getSource() {
         return source;
     }
+
+    /**
+     * Simple getter for number of voices in the song
+     * @return
+     */
+    public int getNumVoices() {
+        return voicesOfSong.size();
+    }
 }

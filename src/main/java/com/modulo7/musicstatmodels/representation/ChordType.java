@@ -16,6 +16,9 @@ import java.util.Set;
  * A chord is a vertical stacking of notes with a specific interval
  * structure with a specific interval structure differentiating different
  * types of chords
+ *
+ * Chords are the basic unit of harmony in western music. Harmonic elements are
+ * constrcuted from chords
  */
 public enum ChordType {
     NOT_A_CHORD,
@@ -30,6 +33,8 @@ public enum ChordType {
     /**
      * A static helper method to estimate what type of chord is being played
      * at this element
+     *
+     * This method is most useful when the set of notes are symbolically given
      *
      * @return
      */

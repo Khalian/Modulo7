@@ -7,15 +7,14 @@
 import com.modulo7.common.exceptions.Modulo7BadKeyException;
 import com.modulo7.common.exceptions.Modulo7InvalidCircleOfFifthsDistance;
 import com.modulo7.common.exceptions.Modulo7InvalidMusicXMLFile;
-import com.modulo7.musicstatmodels.representation.KeySignature;
-import com.modulo7.musicstatmodels.representation.ScaleType;
-import com.modulo7.musicstatmodels.representation.Song;
-import com.modulo7.musicstatmodels.representation.TimeSignature;
+import com.modulo7.musicstatmodels.representation.*;
 import com.modulo7.othersources.BasicMusicXMLParser;
 import junit.framework.Assert;
 import org.junit.Test;
 
 import java.io.IOException;
+import java.util.List;
+import java.util.Set;
 
 /**
  * Test cases for the music xml parser
@@ -77,5 +76,34 @@ public class MusicXMLTest {
         Song song = xmlParser.getSongRepresentation();
 
         Assert.assertNotNull(song);
+    }
+
+    /**
+     * Unit test case to parse whether a chord is present or not
+     */
+    @Test
+    public void musicXMLChordParseTest() throws IOException, Modulo7InvalidMusicXMLFile {
+        final String chordScoreData = "./src/test/testdata/musicxml/chord.xml";
+        BasicMusicXMLParser xmlParser = new BasicMusicXMLParser(chordScoreData);
+
+        Song song = xmlParser.getSongRepresentation();
+
+        Assert.assertNotNull(song);
+
+        Assert.assertEquals(song.getNumVoices(), 1);
+
+        Set<Voice> setOfVoices = song.getVoices();
+
+        // There is only one voice, but still as the representation we have to iterate
+        for (Voice voice : setOfVoices) {
+            List<VoiceInstant> voiceInstantList = voice.getVoiceSequence();
+            Assert.assertEquals(voiceInstantList.size(), 2);
+
+            VoiceInstant firstInstant = voiceInstantList.get(0);
+            VoiceInstant secondInstant = voiceInstantList.get(1);
+
+            Assert.assertEquals(firstInstant.getChordType(), ChordType.MINOR);
+            Assert.assertEquals(secondInstant.getChordType(), ChordType.NOT_A_CHORD);
+        }
     }
 }

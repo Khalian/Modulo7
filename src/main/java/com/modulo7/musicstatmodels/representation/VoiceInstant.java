@@ -1,5 +1,6 @@
 package com.modulo7.musicstatmodels.representation;
 
+import com.modulo7.common.exceptions.Modulo7BadIntervalException;
 import com.modulo7.common.exceptions.Modulo7InvalidLineInstantSizeException;
 import com.modulo7.common.exceptions.Modulo7WrongNoteType;
 import com.modulo7.common.utils.Modulo7Globals;
@@ -47,6 +48,9 @@ public class VoiceInstant {
     // For example in pure melodies, this set would always
     private HashSet<Note> setOfNotes = new HashSet<>();
 
+    /**
+     * Default constructor for avro
+     */
     public VoiceInstant() {
 
     }
@@ -59,7 +63,7 @@ public class VoiceInstant {
      * @param duration
      */
     public VoiceInstant(final HashSet<Note> noteSet, final double duration, final double attack)
-            throws Modulo7InvalidLineInstantSizeException {
+            throws Modulo7InvalidLineInstantSizeException, Modulo7BadIntervalException {
 
         if (noteSet.size() == 0) {
             throw new Modulo7InvalidLineInstantSizeException("Voice Instant Cannot be of size" + noteSet.size());
@@ -71,6 +75,7 @@ public class VoiceInstant {
             noteType = NoteType.MELODIC_NOTE;
         } else {
             noteType = NoteType.CHORD;
+            this.chordType = ChordType.estimateChordType(setOfNotes);
         }
 
         this.duration = duration;
@@ -107,7 +112,7 @@ public class VoiceInstant {
      * @param duration
      */
     public VoiceInstant(final HashSet<Note> noteSet, final double duration, final double attack, final boolean isSustained)
-            throws Modulo7InvalidLineInstantSizeException {
+            throws Modulo7InvalidLineInstantSizeException, Modulo7BadIntervalException {
 
         if (noteSet.size() == 0) {
             throw new Modulo7InvalidLineInstantSizeException("Voice Instant Cannot be of size" + noteSet.size());
@@ -119,6 +124,7 @@ public class VoiceInstant {
             noteType = NoteType.MELODIC_NOTE;
         } else {
             noteType = NoteType.CHORD;
+            this.chordType = ChordType.estimateChordType(setOfNotes);
         }
 
         this.duration = duration;
@@ -155,7 +161,7 @@ public class VoiceInstant {
      * @param duration
      */
     public VoiceInstant(final HashSet<Note> noteSet, final double duration)
-            throws Modulo7InvalidLineInstantSizeException {
+            throws Modulo7InvalidLineInstantSizeException, Modulo7BadIntervalException {
 
         if (noteSet.size() == 0) {
             throw new Modulo7InvalidLineInstantSizeException("Voice Instant Cannot be of size" + noteSet.size());
@@ -167,6 +173,7 @@ public class VoiceInstant {
             noteType = NoteType.MELODIC_NOTE;
         } else {
             noteType = NoteType.CHORD;
+            this.chordType = ChordType.estimateChordType(setOfNotes);
         }
 
         this.duration = duration;
@@ -183,7 +190,7 @@ public class VoiceInstant {
      * @param duration
      */
     public VoiceInstant(final HashSet<Note> noteSet, final NoteDuration theoreticalDuration, final double duration)
-            throws Modulo7InvalidLineInstantSizeException {
+            throws Modulo7InvalidLineInstantSizeException, Modulo7BadIntervalException {
 
         if (noteSet.size() == 0) {
             throw new Modulo7InvalidLineInstantSizeException("Voice Instant Cannot be of size" + noteSet.size());
@@ -195,6 +202,7 @@ public class VoiceInstant {
             noteType = NoteType.MELODIC_NOTE;
         } else {
             noteType = NoteType.CHORD;
+            this.chordType = ChordType.estimateChordType(setOfNotes);
         }
 
         this.theoreticalDuration = theoreticalDuration;
@@ -247,7 +255,7 @@ public class VoiceInstant {
      *
      * @param noteSet
      */
-    public VoiceInstant(final HashSet<Note> noteSet) throws Modulo7InvalidLineInstantSizeException {
+    public VoiceInstant(final HashSet<Note> noteSet) throws Modulo7InvalidLineInstantSizeException, Modulo7BadIntervalException {
 
         if (noteSet.size() == 0) {
             throw new Modulo7InvalidLineInstantSizeException("Voice Instant Cannot be of size" + noteSet.size());
@@ -259,6 +267,7 @@ public class VoiceInstant {
             noteType = NoteType.MELODIC_NOTE;
         } else {
             noteType = NoteType.CHORD;
+            this.chordType = ChordType.estimateChordType(setOfNotes);
         }
 
         duration = Modulo7Globals.UNKNOWN;
@@ -352,5 +361,13 @@ public class VoiceInstant {
      */
     public NoteDuration getTheoreticalDuration() {
         return theoreticalDuration;
+    }
+
+    /**
+     * Acquires the chord type for this instant
+     * @return
+     */
+    public ChordType getChordType() {
+        return chordType;
     }
 }

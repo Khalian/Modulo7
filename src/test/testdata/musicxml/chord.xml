@@ -1,0 +1,35 @@
+<part id="P1">
+    <measure number="0" implicit="yes" width="212">
+        <note>
+            <pitch>
+                <step>C</step>
+                <octave>4</octave>
+            </pitch>
+            <duration>1</duration>
+        </note>
+        <note>
+        <chord/>
+        <pitch>
+            <step>E</step>
+            <alter>-1</alter>
+            <octave>4</octave>
+        </pitch>
+        <duration>1</duration>
+        </note>
+        <note>
+        <chord/>
+        <pitch>
+            <step>G</step>
+            <octave>4</octave>
+        </pitch>
+        <duration>1</duration>
+        </note>
+        <note>
+            <pitch>
+                <step>B</step>
+                <octave>4</octave>
+            </pitch>
+            <duration>1</duration>
+        </note>
+    </measure>
+</part>

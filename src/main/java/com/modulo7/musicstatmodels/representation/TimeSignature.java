@@ -10,7 +10,8 @@ import com.modulo7.common.utils.Modulo7Globals;
  */
 public class TimeSignature {
 
-    // Which note of the measure is the associated with the beat
+    // Which note of the measure is the associated with the beat, e,g
+    // if val = 1 then whole notes get the beat
     private int noteValIsBeat;
 
     // How many beats are there per measure

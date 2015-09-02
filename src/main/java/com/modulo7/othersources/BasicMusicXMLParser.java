@@ -57,6 +57,10 @@ public class BasicMusicXMLParser implements AbstractAnalyzer {
     // in the first place
     private MusicSources actualSource = MusicSources.MUSIC_XML_FILE;
 
+    // Note duality map, used for an expanded representation as melodies, its later crunched together
+    // to include chords
+    private Map<Integer, List<NoteAndIsChordDual>> noteDuals = new HashMap<>();
+
     /**
      * Basic constructor takes as input the filename and applies
      *
@@ -135,6 +139,11 @@ public class BasicMusicXMLParser implements AbstractAnalyzer {
             if (voiceIndextoVoiceMap.get(voiceNumber) == null) {
                 voiceIndextoVoiceMap.put(voiceNumber, new Voice());
             }
+
+            // Populate the note duals data structure
+            if (noteDuals.get(voiceNumber) == null) {
+                noteDuals.put(voiceNumber, new ArrayList<NoteAndIsChordDual>());
+            }
         }
 
         // Gets the number of divisions and a multiplier for the length of the song
@@ -152,6 +161,9 @@ public class BasicMusicXMLParser implements AbstractAnalyzer {
 
         // acquires the notes
         getNotes();
+        
+        // Crunch notestreams into chords
+        crunchChords();
 
         // Acquire the voices from a hash set
         final HashSet<Voice> voiceSet = new HashSet<>(voiceIndextoVoiceMap.values());
@@ -161,6 +173,58 @@ public class BasicMusicXMLParser implements AbstractAnalyzer {
 
         // Return the modulo7 constructed song from the data
         return new Song(voiceSet, metadata, actualSource);
+    }
+
+    /**
+     * Helper method to construct chords from note representations and actually init the voice map
+     */
+    private void crunchChords() {
+        for (Map.Entry<Integer, List<NoteAndIsChordDual>> mapEntry : noteDuals.entrySet()) {
+            final int voiceIndex = mapEntry.getKey();
+            final List<NoteAndIsChordDual> notestream = mapEntry.getValue();
+
+            HashSet<Note> setOfNotes = new HashSet<>();
+
+            for (int i = 0; i < notestream.size(); i++) {
+
+                NoteAndIsChordDual noteDualFirst = notestream.get(i);
+
+                if (!noteDualFirst.isChordElement()) {
+                    setOfNotes.add(noteDualFirst.getNote());
+                } else {
+                    continue;
+                }
+
+                for (int j = i + 1; j < notestream.size(); j++) {
+
+                    NoteAndIsChordDual noteDualSecond = notestream.get(j);
+
+                    if (!noteDualFirst.isChordElement() && noteDualSecond.isChordElement()) {
+                        setOfNotes.add(noteDualSecond.getNote());
+                    } else if (!noteDualFirst.isChordElement() && !noteDualSecond.isChordElement()) {
+                        try {
+                            VoiceInstant newVoiceInstant = new VoiceInstant(setOfNotes);
+                            Modulo7Utils.addVoiceInstantToVoiceMap(voiceIndextoVoiceMap, newVoiceInstant, voiceIndex);
+                            setOfNotes = new HashSet<>();
+                            i = j - 1;
+                            break;
+                        } catch (Modulo7InvalidLineInstantSizeException | Modulo7BadIntervalException e) {
+                            e.printStackTrace();
+                        }
+                    }
+                }
+            }
+
+            // Special case, add the last element
+            if (setOfNotes.size() != 0) {
+                try {
+                    VoiceInstant newVoiceInstant = new VoiceInstant(setOfNotes);
+                    Modulo7Utils.addVoiceInstantToVoiceMap(voiceIndextoVoiceMap, newVoiceInstant, voiceIndex);
+                } catch (Modulo7InvalidLineInstantSizeException | Modulo7BadIntervalException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
     }
 
     /**
@@ -356,13 +420,14 @@ public class BasicMusicXMLParser implements AbstractAnalyzer {
                                         type = NoteDuration.getNoteDurationFromMusicXML(typeOfNote);
                                     }
 
-                                    HashSet<Note> setOfNotes = new HashSet<>();
-                                    setOfNotes.add(actualNote);
+                                    int sizeOfChordElem = thisNote.select("chord").size();
 
-                                    VoiceInstant voiceInstant = new VoiceInstant(setOfNotes, type, duration);
-
-                                    Modulo7Utils.addVoiceInstantToVoiceMap(voiceIndextoVoiceMap, voiceInstant, currentVoiceIndex);
-                                } catch (Modulo7BadNoteException | Modulo7BadAccidentalException | Modulo7InvalidLineInstantSizeException e) {
+                                    if (sizeOfChordElem == 0) {
+                                        Modulo7Utils.addNoteDualToVoiceMap(noteDuals, new NoteAndIsChordDual(actualNote, false, duration, type), currentVoiceIndex);
+                                    } else {
+                                        Modulo7Utils.addNoteDualToVoiceMap(noteDuals, new NoteAndIsChordDual(actualNote, true, duration, type), currentVoiceIndex);
+                                    }
+                                } catch (Modulo7BadNoteException | Modulo7BadAccidentalException e) {
                                     e.printStackTrace();
                                 }
                             }
@@ -402,3 +467,4 @@ public class BasicMusicXMLParser implements AbstractAnalyzer {
         return timeSignature;
     }
 }
+

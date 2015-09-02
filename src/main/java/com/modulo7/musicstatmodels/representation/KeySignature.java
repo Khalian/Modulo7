@@ -10,7 +10,9 @@ import java.util.Set;
 /**
  * Created by asanyal on 7/25/2015.
  *
- * The key signature of the song
+ * The key signature of the songo
+ *
+ * The key signature of the song recoginizes
  */
 public class KeySignature {
 

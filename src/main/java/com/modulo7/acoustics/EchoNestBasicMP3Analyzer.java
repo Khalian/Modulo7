@@ -2,6 +2,7 @@ package com.modulo7.acoustics;
 
 import com.echonest.api.v4.*;
 
+import com.modulo7.common.exceptions.Modulo7BadIntervalException;
 import com.modulo7.common.interfaces.AbstractAnalyzer;
 import com.modulo7.common.exceptions.Modulo7InvalidLineInstantSizeException;
 import com.modulo7.common.exceptions.Modulo7NoSuchFileException;
@@ -125,8 +126,8 @@ public class EchoNestBasicMP3Analyzer implements AbstractAnalyzer {
                 return null;
             }
         } catch (IOException e) {
-            logger.error("Trouble uploading file to track analyzer");
-        } catch (Modulo7InvalidLineInstantSizeException | EchoNestException e) {
+            logger.error("Trouble uploading file to track analyzer" + e.getMessage());
+        } catch (Modulo7InvalidLineInstantSizeException | EchoNestException | Modulo7BadIntervalException e) {
             e.printStackTrace();
         }
 
@@ -150,7 +151,7 @@ public class EchoNestBasicMP3Analyzer implements AbstractAnalyzer {
      * @return The line Instant representation of the chroma vector
      */
     private VoiceInstant getLineInstantFromVector(final double[] noteChromaVector, final double duration)
-            throws Modulo7InvalidLineInstantSizeException {
+            throws Modulo7InvalidLineInstantSizeException, Modulo7BadIntervalException {
 
         // First check whether the chroma vector is valid
         assert (noteChromaVector.length == 12);

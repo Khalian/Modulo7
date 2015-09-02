@@ -1,8 +1,10 @@
 package com.modulo7.common.utils;
 
 import com.modulo7.common.exceptions.Modulo7VectorSizeMismatchException;
+import com.modulo7.musicstatmodels.representation.Note;
 import com.modulo7.musicstatmodels.representation.Voice;
 import com.modulo7.musicstatmodels.representation.VoiceInstant;
+import com.modulo7.othersources.NoteAndIsChordDual;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.filefilter.TrueFileFilter;
 
@@ -190,6 +192,17 @@ public class Modulo7Utils {
     public static void addVoiceInstantToVoiceMap(final Map<Integer, Voice> voiceMap,
                                                  final VoiceInstant instant, final int voiceNumber) {
         voiceMap.get(voiceNumber).addVoiceInstant(instant);
+    }
+
+    /**
+     * A helper method to add an note to note dual map
+     *  @param noteDualMap
+     * @param note
+     * @param voiceNumber
+     */
+    public static void addNoteDualToVoiceMap(final Map<Integer, List<NoteAndIsChordDual>> noteDualMap,
+                                                 final NoteAndIsChordDual note, final int voiceNumber) {
+        noteDualMap.get(voiceNumber).add(note);
     }
 
     /**

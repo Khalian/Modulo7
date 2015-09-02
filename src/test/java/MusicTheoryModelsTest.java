@@ -46,5 +46,14 @@ public class MusicTheoryModelsTest {
         setOfMinorNotes.add(Note.D2);
 
         Assert.assertEquals(ChordType.MINOR, ChordType.estimateChordType(setOfMinorNotes));
+
+        // Construct a bad triad and test it
+        Set<Note> badNotes = new HashSet<>();
+        badNotes.add(Note.A0);
+        badNotes.add(Note.ASHARP0);
+        badNotes.add(Note.B0);
+
+        Assert.assertNotSame(ChordType.MINOR, ChordType.estimateChordType(badNotes));
+        Assert.assertNotSame(ChordType.MAJOR, ChordType.estimateChordType(badNotes));
     }
 }
