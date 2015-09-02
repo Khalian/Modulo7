@@ -26,7 +26,6 @@ import org.jsoup.nodes.Element;
  *
  * https://bitbucket.org/dorienh/musicxmlparserdh/src/
  * 20e1beea207a83140fc4008825760da50f223d26/src/musicXMLparserDH.java?at=master
- *
  */
 public class BasicMusicXMLParser implements AbstractAnalyzer {
 
@@ -54,6 +53,10 @@ public class BasicMusicXMLParser implements AbstractAnalyzer {
     // A division multiplier map
     private Map<Integer, Integer> divMultiplier = new HashMap<>();
 
+    // The actual source could be dependent on how the music xml file was created
+    // in the first place
+    private MusicSources actualSource = MusicSources.MUSIC_XML_FILE;
+
     /**
      * Basic constructor takes as input the filename and applies
      *
@@ -67,6 +70,27 @@ public class BasicMusicXMLParser implements AbstractAnalyzer {
         doc = Jsoup.parse(input, "UTF-8", filename);
 
         checkIfValidMusicXMLFile(filename);
+    }
+
+    /**
+     * Basic constructor takes as input the filename and applies
+     *
+     * This variant assumes the basic music xml parser has been transcribed
+     * by some other process
+     *
+     * e.g audiveris first converts sheet music to music xml which is then parsed further
+     * along
+     *
+     * @param  filename
+     * @throws IOException
+     */
+    public BasicMusicXMLParser(final String filename, final MusicSources source) throws IOException, Modulo7InvalidMusicXMLFile {
+
+        final File input = new File(filename);
+        doc = Jsoup.parse(input, "UTF-8", filename);
+
+        checkIfValidMusicXMLFile(filename);
+        this.actualSource = source;
     }
 
 
@@ -136,7 +160,7 @@ public class BasicMusicXMLParser implements AbstractAnalyzer {
         final SongMetadata metadata = new SongMetadata(keySignature, timeSignature);
 
         // Return the modulo7 constructed song from the data
-        return new Song(voiceSet, metadata, MusicSources.MUSIC_XML_FILE);
+        return new Song(voiceSet, metadata, actualSource);
     }
 
     /**

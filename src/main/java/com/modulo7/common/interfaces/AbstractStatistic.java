@@ -1,4 +1,4 @@
-package com.modulo7.musicstatmodels.statistics.statisticscompute;
+package com.modulo7.common.interfaces;
 
 import com.modulo7.musicstatmodels.representation.Song;
 

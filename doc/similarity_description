@@ -15,4 +15,9 @@ I present my own documentation scheme (depending on tokenization of standard lit
 1. All notes will have their standard meaning. A, A#, B, C, ,C#  D, D#, E, F, F#, G, G#, penalty of transformation is defined based on horizontal
 interval distance
 
-2.
+2. All chords will be note appended by a suffix denoting chord type. The types are maj, min, dim etc. So an example token would be Emaj.
+
+This information Points one and two are per voice. Each voice is a sequence of such voice preceded by a voice index.
+
+3. Title, Artist, Album, Key signature, Time Signature, Tempo and other parameters can be considered as time signature can be considered
+as title and other header information for the document. As such they can be queried separately

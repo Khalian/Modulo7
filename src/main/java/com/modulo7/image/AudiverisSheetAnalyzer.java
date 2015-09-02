@@ -4,6 +4,7 @@ import com.modulo7.common.exceptions.Modulo7InvalidMusicXMLFile;
 import com.modulo7.common.interfaces.AbstractAnalyzer;
 import com.modulo7.common.utils.JarRunner;
 import com.modulo7.common.utils.Modulo7Utils;
+import com.modulo7.crawler.utils.MusicSources;
 import com.modulo7.musicstatmodels.representation.Song;
 import com.modulo7.othersources.BasicMusicXMLParser;
 
@@ -46,19 +47,14 @@ public class AudiverisSheetAnalyzer implements AbstractAnalyzer {
         try {
             jr = new JarRunner(new File(audiverisJar));
             jr.run(new String[]{"-batch", "-input", sheetFileLocation, "-export", intermediateMusicXMLLocation });
-            AbstractAnalyzer musicXXMLAnalyzer = new BasicMusicXMLParser(intermediateMusicXMLLocation);
+            AbstractAnalyzer musicXXMLAnalyzer = new BasicMusicXMLParser(intermediateMusicXMLLocation, MusicSources.SHEET_MUSIC);
             return musicXXMLAnalyzer.getSongRepresentation();
 
         } catch (ClassNotFoundException | IOException | NoSuchMethodException | InvocationTargetException | IllegalAccessException | Modulo7InvalidMusicXMLFile e) {
             e.printStackTrace();
         }
 
-        // TODO : Fix this
+        // Wont reach here but for the sake of completeness
         return null;
-    }
-
-    public static void main(String args[]) {
-        AbstractAnalyzer sheetAnalyzer = new AudiverisSheetAnalyzer("/usr/bin/audiveris/AudiverisApp/examples/allegretto.png");
-        sheetAnalyzer.getSongRepresentation();
     }
 }

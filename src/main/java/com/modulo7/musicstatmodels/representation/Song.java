@@ -104,6 +104,20 @@ public class Song {
     }
 
     /**
+     * Gets the document representation of the song
+     * @return
+     */
+    public Set<String> getDocumentRepresentation() {
+        Set<String> doc = new HashSet<>();
+
+        for (Voice voice : voicesOfSong) {
+            doc.add(voice.getDocumentRepresentation());
+        }
+
+        return doc;
+    }
+
+    /**
      * Basic getter for getting voices associated with this song
      * @return
      */

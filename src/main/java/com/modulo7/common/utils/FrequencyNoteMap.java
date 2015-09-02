@@ -327,7 +327,8 @@ public class FrequencyNoteMap {
      * @param currentNote
      * @param accidental
      */
-    public Note getModifiedNoteGivenAccidental(final Note currentNote, final Accidental accidental) throws Modulo7BadAccidentalException {
+    public Note getModifiedNoteGivenAccidental(final Note currentNote, final Accidental accidental)
+            throws Modulo7BadAccidentalException {
         final int position = getPositionGivenNote(currentNote);
         return getNoteGivenPosition(position + Accidental.getPositionDelta(accidental));
     }

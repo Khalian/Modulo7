@@ -1,9 +1,11 @@
 package com.modulo7.musicstatmodels.representation;
 
+import com.modulo7.common.exceptions.Modulo7WrongNoteType;
 import com.modulo7.common.utils.Modulo7Globals;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 
 /**
  * Created by asanyal on 7/18/2015.
@@ -64,6 +66,35 @@ public class Voice {
         for (VoiceInstant instant : voiceSequence) {
             totalVoiceDuration += instant.getDuration();
         }
+    }
+
+    /**
+     * A document representation for a single voice
+     * with just the note values as a string
+     *
+     * This simple measure gives the notes as a set of
+     * characters
+     *
+     * @return
+     */
+    public String getDocumentRepresentation() {
+
+        String noteString = "";
+
+        for (VoiceInstant instant : voiceSequence) {
+
+            if (!instant.getIsChord()) {
+                try {
+                    final Note note = instant.getNote();
+                    final String noteValue = note.getNoteValue();
+                    noteString += noteValue + " ";
+                } catch (Modulo7WrongNoteType e) {
+                    e.printStackTrace();
+                }
+            }
+        }
+
+        return noteString.trim();
     }
 
     /**

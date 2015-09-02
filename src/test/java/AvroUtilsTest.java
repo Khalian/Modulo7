@@ -33,6 +33,9 @@ public class AvroUtilsTest {
 
         Song deserializedSong = AvroUtils.deserialize("./src/test/tempMidiFile.avro");
 
+        File theAvroFile = new File("./src/test/tempMidiFile.avro");
+        Assert.assertTrue(theAvroFile.delete());
+
         // TODO : Write some code for proper equality check on song objects
         // Assert.assertEquals(song, deserializedSong);
     }

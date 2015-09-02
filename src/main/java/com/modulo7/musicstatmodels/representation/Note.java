@@ -109,10 +109,14 @@ public enum Note {
      * Gets the note value associated with note
      * @return
      */
-    private String getNoteValue() {
+    public String getNoteValue() {
         return noteValue;
     }
 
+    /**
+     * Get the octave number associated with this
+     * @return
+     */
     public Integer getOctaveNumber() {
         return octaveNumber;
     }

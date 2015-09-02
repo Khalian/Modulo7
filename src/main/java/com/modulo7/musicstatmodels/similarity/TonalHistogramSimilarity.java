@@ -1,13 +1,14 @@
 package com.modulo7.musicstatmodels.similarity;
 
 import com.modulo7.common.exceptions.Modulo7VectorSizeMismatchException;
+import com.modulo7.common.interfaces.AbstractSimilarity;
 import com.modulo7.common.utils.Modulo7Globals;
 import com.modulo7.common.utils.Modulo7Utils;
 import com.modulo7.musicstatmodels.representation.Song;
 import com.modulo7.musicstatmodels.statistics.datatypes.TonalHistogram;
 import com.modulo7.musicstatmodels.statistics.results.StatisticResult;
 import com.modulo7.musicstatmodels.statistics.results.TonalHistogramResult;
-import com.modulo7.musicstatmodels.statistics.statisticscompute.AbstractStatistic;
+import com.modulo7.common.interfaces.AbstractStatistic;
 import com.modulo7.musicstatmodels.statistics.statisticscompute.TonalHistogramStatistic;
 
 import java.util.List;

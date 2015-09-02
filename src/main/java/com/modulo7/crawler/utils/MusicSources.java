@@ -11,16 +11,13 @@ package com.modulo7.crawler.utils;
  */
 public enum MusicSources {
 
-    // Sheet music sources
-    PNGSHEET("png"),
-    JPEGSHEET("jpeg"),
-
     // Acoustic sources
     MP3("mp3"),
 
     // Symbolic sources
     MUSIC_XML_FILE("musicxml"),
     MIDI("midi"),
+    SHEET_MUSIC("sheet"),
 
     // Unknown Source
     UNKNOWN("Unknown");

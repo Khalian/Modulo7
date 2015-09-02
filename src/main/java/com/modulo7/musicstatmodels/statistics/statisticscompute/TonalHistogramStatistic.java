@@ -2,6 +2,7 @@ package com.modulo7.musicstatmodels.statistics.statisticscompute;
 
 import com.modulo7.common.exceptions.Modulo7BadIntervalException;
 import com.modulo7.common.exceptions.Modulo7WrongNoteType;
+import com.modulo7.common.interfaces.AbstractStatistic;
 import com.modulo7.musicstatmodels.musictheorymodels.Interval;
 import com.modulo7.musicstatmodels.musictheorymodels.IntervalEnum;
 import com.modulo7.musicstatmodels.representation.Note;

@@ -1,5 +1,6 @@
 package com.modulo7.musicstatmodels.statistics.statisticscompute;
 
+import com.modulo7.common.interfaces.AbstractStatistic;
 import com.modulo7.musicstatmodels.musictheorymodels.IntervalEnum;
 import com.modulo7.musicstatmodels.representation.Song;
 import com.modulo7.musicstatmodels.statistics.datatypes.TonalHistogram;

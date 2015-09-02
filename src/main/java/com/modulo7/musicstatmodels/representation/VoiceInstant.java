@@ -316,6 +316,16 @@ public class VoiceInstant {
 
 
     /**
+     * Returns all the notes associated with this voice
+     * instant
+     *
+     * @return
+     */
+    public HashSet<Note> getAllNotesofInstant() {
+        return setOfNotes;
+    }
+
+    /**
      * Gets the note value if its a melodic note
      * @return
      * @throws Modulo7WrongNoteType
