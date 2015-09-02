@@ -32,6 +32,9 @@ public class VoiceInstant {
     // The duration for which the instant is actually played
     private double duration = Modulo7Globals.UNKNOWN;
 
+    // The type of chord in the event the voice instant is a chord, by default assumed not a chord
+    private ChordType chordType = ChordType.NOT_A_CHORD;
+
     // The duration of note that is played according to music theory, by default its unknown
     private NoteDuration theoreticalDuration = NoteDuration.UNKNOWN;
 

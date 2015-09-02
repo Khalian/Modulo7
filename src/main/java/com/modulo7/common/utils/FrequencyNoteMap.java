@@ -313,6 +313,19 @@ public class FrequencyNoteMap {
     }
 
     /**
+     * Gets the note value given the position from basic map
+     * Does not take into account octave information
+     *
+     * @param position
+     * @return
+     */
+    public String getBasicNoteValueGivenPosition(int position) {
+        return basicPositionNoteMap.get(position).getNoteValue();
+    }
+
+
+
+    /**
      * Acquires the position of the note given the note
      * @param note
      * @return

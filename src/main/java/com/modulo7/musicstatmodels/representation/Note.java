@@ -285,7 +285,7 @@ public enum Note {
             return Note.CSHARP7;
         } else if (noteValue.equalsIgnoreCase("D") && octaveNumber == 7) {
             return Note.D7;
-        }  else if (noteValue.equalsIgnoreCase("D#") && octaveNumber == 7) {
+        } else if (noteValue.equalsIgnoreCase("D#") && octaveNumber == 7) {
             return Note.DSHARP7;
         } else if (noteValue.equalsIgnoreCase("E") && octaveNumber == 7) {
             return Note.E7;

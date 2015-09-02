@@ -1,5 +1,8 @@
 package com.modulo7.common.utils;
 
+import java.util.HashMap;
+import java.util.Map;
+
 /**
  * Created by asanyal on 7/20/2015.
  *

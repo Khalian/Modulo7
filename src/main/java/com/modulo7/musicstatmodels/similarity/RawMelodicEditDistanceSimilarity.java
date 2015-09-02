@@ -11,7 +11,9 @@ import java.util.Set;
  * Created by asanyal on 9/1/15.
  *
  * Raw edit distance between two strings with raw pitch values, returns the average
- * over all the melodic distances
+ * over all the melodic distances computed pariwise between the voices
+ *
+ * TODO : Ascertain a better tokenization scheme
  */
 public class RawMelodicEditDistanceSimilarity extends AbstractSimilarity {
 
@@ -37,6 +39,6 @@ public class RawMelodicEditDistanceSimilarity extends AbstractSimilarity {
             sum += sim;
         }
 
-        return sum/individualSims.size();
+        return sum/Math.pow(individualSims.size(), 2);
     }
 }

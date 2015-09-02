@@ -67,7 +67,7 @@ public class Interval {
      * @param numHalfSteps
      * @return
      */
-    private static IntervalEnum getInterval(final int numHalfSteps) throws Modulo7BadIntervalException {
+    public static IntervalEnum getInterval(final int numHalfSteps) throws Modulo7BadIntervalException {
         if (numHalfSteps % 13 == 0) {
             return IntervalEnum.PERFECT_UNISON;
         } else if (numHalfSteps % 13 == 1) {
