@@ -1,5 +1,7 @@
 package com.modulo7.nlp;
 
+import com.modulo7.common.utils.Modulo7Globals;
+
 import java.io.*;
 
 /**
@@ -10,17 +12,24 @@ import java.io.*;
 public class Lyrics {
 
     // The name of the artist
-    private String artist;
+    private String artist = Modulo7Globals.UNKNOWNSTRING;
 
     // The name of the album from which this song is played
-    private String albumName;
+    private String albumName = Modulo7Globals.UNKNOWNSTRING;
 
     // String representation of the lyrics of a song
-    private String lyricsOfSong;
+    private String lyricsOfSong = Modulo7Globals.UNKNOWNSTRING;
 
     // A specialized term for denoting terminating phrases, useful for acquring other pieces
     // of analysis like acquiring the lyrical structure
     private static final String PHRASETERM = " PHRASETERM ";
+
+    /**
+     * Default constructor
+     */
+    public Lyrics() {
+
+    }
 
     /**
      * Basic constructor for the lyrics of the song
@@ -64,26 +73,38 @@ public class Lyrics {
     }
 
     /**
-     * Gets the artist name for this lyrics object
+     * Basic getter for artist
      * @return
      */
     public String getArtist() {
         return artist;
     }
 
+    public void setArtist(String artist) {
+        this.artist = artist;
+    }
+
     /**
-     * Gets the album name for this lyrics object
+     * Basic getter for album
      * @return
      */
     public String getAlbumName() {
         return albumName;
     }
 
+    public void setAlbumName(String albumName) {
+        this.albumName = albumName;
+    }
+
     /**
-     * Gets the actual lyrics content
+     * Basic getter for lyrics
      * @return
      */
     public String getLyricsOfSong() {
         return lyricsOfSong;
+    }
+
+    public void setLyricsOfSong(String lyricsOfSong) {
+        this.lyricsOfSong = lyricsOfSong;
     }
 }

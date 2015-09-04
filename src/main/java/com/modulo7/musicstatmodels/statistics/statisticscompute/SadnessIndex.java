@@ -3,9 +3,9 @@ package com.modulo7.musicstatmodels.statistics.statisticscompute;
 import com.modulo7.common.interfaces.AbstractStatistic;
 import com.modulo7.musicstatmodels.musictheorymodels.IntervalEnum;
 import com.modulo7.musicstatmodels.representation.Song;
-import com.modulo7.musicstatmodels.statistics.datatypes.TonalHistogram;
-import com.modulo7.musicstatmodels.statistics.results.StatisticResult;
-import com.modulo7.musicstatmodels.statistics.results.TonalHistogramResult;
+import com.modulo7.musicstatmodels.vectorspacemodels.datastructures.TonalHistogramData;
+import com.modulo7.musicstatmodels.vectorspacemodels.vectorspacerepresentations.AbstractVector;
+import com.modulo7.musicstatmodels.vectorspacemodels.vectorspacerepresentations.TonalHistogram;
 
 /**
  * Created by asanyal on 8/29/15.
@@ -29,20 +29,19 @@ public class SadnessIndex implements AbstractStatistic<Double> {
      */
     @Override
     public Double getStatistic(final Song song) {
-        AbstractStatistic<TonalHistogramResult> statistic = new TonalHistogramStatistic();
-        StatisticResult<TonalHistogram> result = statistic.getStatistic(song);
+        AbstractVector<TonalHistogramData> tonalHistogram = new TonalHistogram();
+        tonalHistogram.computeVectorRepresentation(song);
+        TonalHistogramData histogramData = tonalHistogram.getInternalRepresentation();
 
-        TonalHistogram histogram = result.getStatisticResultObject();
-
-        final int totalSum = histogram.getHistogramTotalSum();
+        final int totalSum = histogramData.getHistogramTotalSum();
 
         int minorSum = 0;
 
         // Add perfect intervals to perfect sum
-        minorSum += histogram.getCountForInterval(IntervalEnum.MINOR_SECOND);
-        minorSum += histogram.getCountForInterval(IntervalEnum.MINOR_THIRD);
-        minorSum += histogram.getCountForInterval(IntervalEnum.MINOR_SIXTH);
-        minorSum += histogram.getCountForInterval(IntervalEnum.MINOR_SEVENTH);
+        minorSum += histogramData.getCountForInterval(IntervalEnum.MINOR_SECOND);
+        minorSum += histogramData.getCountForInterval(IntervalEnum.MINOR_THIRD);
+        minorSum += histogramData.getCountForInterval(IntervalEnum.MINOR_SIXTH);
+        minorSum += histogramData.getCountForInterval(IntervalEnum.MINOR_SEVENTH);
 
         return (double)(minorSum / totalSum);
     }

@@ -4,14 +4,13 @@ import com.modulo7.common.exceptions.Modulo7VectorSizeMismatchException;
 import com.modulo7.common.interfaces.AbstractSimilarity;
 import com.modulo7.common.utils.Modulo7Globals;
 import com.modulo7.common.utils.Modulo7Utils;
+import com.modulo7.musicstatmodels.musictheorymodels.IntervalEnum;
 import com.modulo7.musicstatmodels.representation.Song;
-import com.modulo7.musicstatmodels.statistics.datatypes.TonalHistogram;
-import com.modulo7.musicstatmodels.statistics.results.StatisticResult;
-import com.modulo7.musicstatmodels.statistics.results.TonalHistogramResult;
-import com.modulo7.common.interfaces.AbstractStatistic;
-import com.modulo7.musicstatmodels.statistics.statisticscompute.TonalHistogramStatistic;
+import com.modulo7.musicstatmodels.vectorspacemodels.datastructures.TonalHistogramData;
+import com.modulo7.musicstatmodels.vectorspacemodels.vectorspacerepresentations.AbstractVector;
+import com.modulo7.musicstatmodels.vectorspacemodels.vectorspacerepresentations.TonalHistogram;
 
-import java.util.List;
+import java.util.Map;
 
 /**
  * Created by asanyal on 8/30/15.
@@ -24,18 +23,16 @@ public class TonalHistogramSimilarity extends AbstractSimilarity {
 
     @Override
     protected double getSimilarity(final Song first, final Song second) {
-        AbstractStatistic<TonalHistogramResult> statisticOne = new TonalHistogramStatistic();
-        StatisticResult<TonalHistogram> resultOne = statisticOne.getStatistic(first);
+        AbstractVector<TonalHistogramData> tonalHistogram = new TonalHistogram();
+        tonalHistogram.computeVectorRepresentation(first);
+        TonalHistogramData internalVectorOne = tonalHistogram.getInternalRepresentation();
 
-        List<Integer> histogramOneVector = resultOne.getStatisticResultObject().getVectorizedRepresentation();
-
-        AbstractStatistic<TonalHistogramResult> statisticTwo = new TonalHistogramStatistic();
-        StatisticResult<TonalHistogram> resultTwo = statisticTwo.getStatistic(second);
-
-        List<Integer> histogramTwoVector = resultTwo.getStatisticResultObject().getVectorizedRepresentation();
+        AbstractVector<TonalHistogramData> tonalHistogramSecond = new TonalHistogram();
+        tonalHistogramSecond.computeVectorRepresentation(second);
+        TonalHistogramData internalVectorTwo = tonalHistogram.getInternalRepresentation();
 
         try {
-            return Modulo7Utils.cosineSimilarity(histogramOneVector, histogramTwoVector);
+            return Modulo7Utils.cosineSimilarity(internalVectorOne.getArrayRepresentation(), internalVectorTwo.getArrayRepresentation());
         } catch (Modulo7VectorSizeMismatchException e) {
             e.printStackTrace();
         }

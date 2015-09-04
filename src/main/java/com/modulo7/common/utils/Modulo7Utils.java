@@ -1,9 +1,11 @@
 package com.modulo7.common.utils;
 
 import com.modulo7.common.exceptions.Modulo7VectorSizeMismatchException;
+import com.modulo7.musicstatmodels.musictheorymodels.IntervalEnum;
 import com.modulo7.musicstatmodels.representation.Note;
 import com.modulo7.musicstatmodels.representation.Voice;
 import com.modulo7.musicstatmodels.representation.VoiceInstant;
+import com.modulo7.musicstatmodels.vectorspacemodels.datastructures.TonalHistogramData;
 import com.modulo7.othersources.NoteAndIsChordDual;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.filefilter.TrueFileFilter;
@@ -134,7 +136,6 @@ public class Modulo7Utils {
         }
         return dotProduct / (Math.sqrt(normA) * Math.sqrt(normB));
     }
-
 
     /**
      * Gets the GCD for an arbitrary number of inputs

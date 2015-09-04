@@ -18,9 +18,9 @@ import java.util.HashSet;
  *
  * Each line of a song can be distinctly used for custom similarity analysis
  *
- * An instance is either a chord or a melodic note in western music. It only refers
- * to be percussive sound.
+ * An instance is either a chord or a melodic note in western music.
  *
+ * TODO : Rests in western music
  */
 public class VoiceInstant {
 

@@ -279,17 +279,5 @@ public class MidiToSongConverter implements AbstractAnalyzer {
             }
         }
     }
-
-    /**
-     * Test code for Midi converter, taking a basic midi file and converting to
-     * notes
-     *
-     * @param args
-     * @throws Exception
-     */
-    public static void main(String[] args) throws Exception {
-        MidiToSongConverter converter = new MidiToSongConverter("C:\\Users\\asanyal\\Downloads\\01A-1__Good_Times_Bad_Times.mid");
-        converter.getSongRepresentation();
-    }
 }
 

@@ -2,6 +2,7 @@ package com.modulo7.musicstatmodels.representation;
 
 import com.modulo7.common.utils.Modulo7Globals;
 import com.modulo7.crawler.utils.MusicSources;
+import com.modulo7.nlp.Lyrics;
 
 import java.util.HashSet;
 import java.util.List;
@@ -30,6 +31,9 @@ public class Song {
     // Song source, depending on what medium the song has arisen from, modulo7 can expect certain ideas to work and certain
     // not to
     private MusicSources source = MusicSources.UNKNOWN;
+
+    // A basic lyrics object added to the song model    
+    private Lyrics lyrics = new Lyrics();
 
     /**
      * Method to infer the song length as maximum of all the line duration
@@ -155,5 +159,9 @@ public class Song {
      */
     public int getNumVoices() {
         return voicesOfSong.size();
+    }
+
+    public Lyrics getLyrics() {
+        return lyrics;
     }
 }

@@ -11,5 +11,6 @@ package com.modulo7.musicstatmodels.representation;
 public enum NoteType {
     MELODIC_NOTE,
     CHORD,
+    REST,
     UNKNOWN
 }

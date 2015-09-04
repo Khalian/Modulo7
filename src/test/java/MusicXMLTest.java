@@ -56,6 +56,14 @@ public class MusicXMLTest {
         // Check if the time signature has been correctly acquired from the file
         Assert.assertEquals(timeSignature.getNoteValIsBeat(), 3);
         Assert.assertEquals(timeSignature.getBeatsPerMeasure(), 4);
+
+        SongMetadata songMetadata = song.getMetadata();
+
+        KeySignature keySignature1 = songMetadata.getKeySignature();
+
+        // Test if key signature has been correctly acquired
+        Assert.assertEquals(keySignature1.getKey(), "C");
+        Assert.assertEquals(keySignature1.getScale(), ScaleType.MINOR);
     }
 
     /**
