@@ -18,6 +18,7 @@ import org.apache.log4j.Logger;
 import java.io.File;
 import java.io.IOException;
 import java.util.HashSet;
+import java.util.Set;
 
 /**
  * Created by asanyal on 7/3/2015.
@@ -110,7 +111,7 @@ public class EchoNestBasicMP3Analyzer implements AbstractAnalyzer {
                     voiceOfSong.addVoiceInstant(songInstant);
                 }
 
-                return new Song(voiceOfSong, new SongMetadata(artistName, title), MusicSources.MP3);
+                return new Song(voiceOfSong, new SongMetadata(artistName, title), MusicSources.MP3, duration);
             } else {
                 logger.error("Trouble analysing track " + track.getStatus());
                 return null;
@@ -176,6 +177,7 @@ public class EchoNestBasicMP3Analyzer implements AbstractAnalyzer {
         else {
             // TODO : Estimation of chord code, for now hack and put the note with highest position
             ChordEstimator estimator = new ChordEstimator(noteChromaVector);
+            Set<Note> chordNotes = ChordQuality.estimateChordGivenQualityAndRootNote(estimator.getRootNote(), estimator.getQuality());
             chromaNotes.add(noteMap.getBasicNoteGivenPosition(actualNoteMapMaxIndex));
         }
 

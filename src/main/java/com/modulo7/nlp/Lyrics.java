@@ -104,7 +104,15 @@ public class Lyrics {
         return lyricsOfSong;
     }
 
-    public void setLyricsOfSong(String lyricsOfSong) {
-        this.lyricsOfSong = lyricsOfSong;
+    /**
+     * Adds a string element to a lyrics object
+     * @param lyricsElem
+     */
+    public void addLyricsElementToSong(final String lyricsElem) {
+        if (lyricsOfSong.equals(Modulo7Globals.UNKNOWNSTRING)) {
+            lyricsOfSong = lyricsElem;
+        } else {
+            lyricsOfSong += lyricsElem + " ";
+        }
     }
 }

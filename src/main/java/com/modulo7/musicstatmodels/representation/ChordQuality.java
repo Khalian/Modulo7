@@ -183,4 +183,15 @@ public enum ChordQuality {
     public String getStringRepresentation() {
         return val;
     }
+
+    /**
+     * Estimate the notes of a chord given its chord quality and root note of the chord
+     *
+     * @param rootNote
+     * @param quality
+     * @return
+     */
+    public static Set<Note> estimateChordGivenQualityAndRootNote(final int rootNote, final ChordQuality quality) {
+        return null;
+    }
 }

@@ -35,6 +35,9 @@ public class Song {
     // A basic lyrics object added to the song model    
     private Lyrics lyrics = new Lyrics();
 
+    // The song's scale, major, minor, blues etc
+    private ScaleType scaleOfSong = ScaleType.UNKNOWN;
+
     /**
      * Method to infer the song length as maximum of all the line duration
      * lengths as part of the song
@@ -88,6 +91,23 @@ public class Song {
     public Song(final HashSet<Voice> voicesOfSong, final SongMetadata songMetadata, final MusicSources source) {
 
         this.voicesOfSong = voicesOfSong;
+        inferSongLength();
+        this.metadata = songMetadata;
+
+        this.source = source;
+    }
+
+    /**
+     * Basic constructor for a modulo7 song with the song metadata present as well as the total duration is precomputed
+     * @param voicesOfSong
+     * @param songMetadata
+     * @param source
+     * @param totalDurationOfSong
+     */
+    public Song (final HashSet<Voice> voicesOfSong, final SongMetadata songMetadata,
+                 final MusicSources source, final double totalDurationOfSong) {
+        this.voicesOfSong = voicesOfSong;
+        this.totalDurationOfSong = totalDurationOfSong;
         this.metadata = songMetadata;
 
         this.source = source;
@@ -104,6 +124,24 @@ public class Song {
         this.voicesOfSong.add(voiceOfSong);
 
         this.metadata = songMetadata;
+        this.source = source;
+    }
+
+    /**
+     * Basic constructor for a modulo7 song with the song metadata present as well as the total duration is precomputed
+     * This version has only a single voice in its constructor
+     *
+     * @param voice
+     * @param songMetadata
+     * @param source
+     * @param totalDurationOfSong
+     */
+    public Song (final Voice voice, final SongMetadata songMetadata,
+                 final MusicSources source, final double totalDurationOfSong) {
+        this.voicesOfSong.add(voice);
+        this.totalDurationOfSong = totalDurationOfSong;
+        this.metadata = songMetadata;
+
         this.source = source;
     }
 

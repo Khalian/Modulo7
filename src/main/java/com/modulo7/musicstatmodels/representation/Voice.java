@@ -29,9 +29,6 @@ public class Voice {
     // Member indicating how long the entire voice was played
     private double totalVoiceDuration = (double) Modulo7Globals.UNKNOWN;
 
-    // The voice's scale, major, minor, blues etc
-    private ScaleType scaleOfVoice = ScaleType.UNKNOWN;
-
     /**
      * Basic constructor for line by accepting a set of line
      * instants
@@ -40,19 +37,6 @@ public class Voice {
      */
     public Voice(final ArrayList<VoiceInstant> voiceSequence) {
         this.voiceSequence = voiceSequence;
-        inferTotalLineDuration();
-    }
-
-    /**
-     * Basic Constructor which takes into account the scale of a given voice
-     * as well as the line sequence itself
-     *
-     * @param voiceSequence
-     * @param scaleType
-     */
-    public Voice(final ArrayList<VoiceInstant> voiceSequence, final ScaleType scaleType) {
-        this.voiceSequence = voiceSequence;
-        this.scaleOfVoice = scaleType;
         inferTotalLineDuration();
     }
 
@@ -137,10 +121,10 @@ public class Voice {
     }
 
     /**
-     * Basic getter for acquiring the scale of the song
+     * Gets the number of voice instants in the voice
      * @return
      */
-    public ScaleType getScaleOfVoice() {
-        return scaleOfVoice;
+    public int getNumVoiceInstantsofVoice() {
+        return voiceSequence.size();
     }
 }

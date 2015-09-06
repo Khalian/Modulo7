@@ -8,13 +8,17 @@ package com.modulo7.acoustics;
  *
  */
 
+import com.modulo7.common.exceptions.Modulo7BadKeyException;
+import com.modulo7.common.exceptions.Modulo7InvalidCircleOfFifthsDistance;
 import com.modulo7.common.interfaces.AbstractAnalyzer;
 import com.modulo7.common.exceptions.Modulo7BadNoteException;
 import com.modulo7.common.exceptions.Modulo7InvalidLineInstantSizeException;
 import com.modulo7.common.utils.Modulo7Globals;
 import com.modulo7.common.utils.Modulo7Utils;
 import com.modulo7.crawler.utils.MusicSources;
+import com.modulo7.musicstatmodels.musictheorymodels.CircleOfFifths;
 import com.modulo7.musicstatmodels.representation.*;
+import com.modulo7.nlp.Lyrics;
 import org.apache.log4j.Logger;
 
 import javax.sound.midi.*;
@@ -36,8 +40,14 @@ public class MidiToSongConverter implements AbstractAnalyzer {
     // Midi Byte representation of the key signature
     public static final int KEY_SIGNATURE_BYTE = 0x59;
 
+    // Midi byte representation of the time signature of the song
+    public static final byte TIME_SIGNATURE_BYTE = 0x58;
+
     // Midi Byte representation of the tempo
     private static final int TEMPO_BYTE =  0x51;
+
+    // Midi byte representation of the lyric meta event
+    public static final byte LYRIC = 0x05;
 
     // Apache log4j logger representation
     private static final Logger logger = Logger.getLogger(MidiToSongConverter.class);
@@ -45,11 +55,14 @@ public class MidiToSongConverter implements AbstractAnalyzer {
     // The midi sequence of the Midi Song Coverter for a particular midi file
     private Sequence midiSequence;
 
-    // Variable to indicate if the key signature has been acquired from the midi file or not
-    private boolean keySignatureAcquired = false;
-
-    // The key signature element for this midi recording
+    // The scale element for this midi recording
     private KeySignature keySignature = null;
+
+    // The time signature associated with this midi recording
+    private TimeSignature timeSignature = null;
+
+    // Acquire the lyrics from the midi file
+    private Lyrics lyrics = new Lyrics();
 
     // Tempo and rhythm information for midi track
     private Map<Integer, Double> secondsPerTick = new HashMap<>();
@@ -142,26 +155,36 @@ public class MidiToSongConverter implements AbstractAnalyzer {
                         } catch (Modulo7InvalidLineInstantSizeException | Modulo7BadNoteException e) {
                             logger.error(e.getMessage());
                         }
-                    } else if (sm.getCommand() == KEY_SIGNATURE_BYTE) {
-                        // Acquire the key signature from the midi file
-                        if (!keySignatureAcquired) {
-                            // Acquire the scale info
-                            int scaleMidiInfo = sm.getData1();
-                            int keyMidiInfo = sm.getData2();
-                            ScaleType scaleType = null;
-
-                            if (scaleMidiInfo == 0) // major
-                                scaleType = ScaleType.MAJOR;
-                            else if (scaleMidiInfo == 1) // minor
-                                scaleType = ScaleType.MINOR;
-
-                            keySignatureAcquired = true;
-
-                            // TODO : Fix this init
-                            //keySignature = new KeySignature(keyMidiInfo, scaleType);
-                        }
                     } else {
                         // We ignore the command elements that are neither note on or off
+                    }
+                }
+                // Parsing meta events
+                else if (message instanceof MetaMessage) {
+                    MetaMessage metaMessage = (MetaMessage) message;
+
+                    // If you get lyrics event then add it to
+                    if (metaMessage.getType() == LYRIC) {
+                        lyrics.addLyricsElementToSong(new String(metaMessage.getData()));
+                    } else if (metaMessage.getType() == KEY_SIGNATURE_BYTE) {
+                        // Acquire the key signature from the midi file
+                        if (keySignature == null) {
+                            try {
+                                final ScaleType scale = metaMessage.getData()[1] == 0 ? ScaleType.MAJOR : ScaleType.MINOR;
+                                int fifths = new Byte(metaMessage.getData()[0]).intValue();
+                                final String key = CircleOfFifths.getKeyGivenFifthDistance(scale, fifths);
+                                keySignature = new KeySignature(key, scale);
+                            } catch (Modulo7InvalidCircleOfFifthsDistance | Modulo7BadKeyException e) {
+                                logger.error(e.getMessage());
+                            }
+                        }
+                    } else if (metaMessage.getType() == TIME_SIGNATURE_BYTE) {
+
+                        if (timeSignature != null) {
+                            final int noteisBeatVal = new Byte(metaMessage.getData()[0]).intValue();
+                            final int beatsPerMeasure = new Byte(metaMessage.getData()[1]).intValue();
+                            timeSignature = new TimeSignature(noteisBeatVal, beatsPerMeasure);
+                        }
                     }
                 } else {
                    logger.info("Other message: " + message.getClass());
@@ -172,8 +195,19 @@ public class MidiToSongConverter implements AbstractAnalyzer {
         // Acquire the voices from a hash set
         HashSet<Voice> voiceSet = new HashSet<>(voiceToChannelMap.values());
 
-        // Returns the song
-        return new Song(voiceSet, MusicSources.MIDI);
+        HashSet<Voice> nonEmptyVoiceSet = new HashSet<>();
+
+        for (final Voice voice : voiceSet) {
+            if (voice.getNumVoiceInstantsofVoice() > 0) {
+                nonEmptyVoiceSet.add(voice);
+            }
+        }
+
+        if (timeSignature != null && keySignature != null) {
+            return new Song(nonEmptyVoiceSet, new SongMetadata(keySignature, timeSignature), MusicSources.MIDI);
+        } else {
+            return new Song(nonEmptyVoiceSet, MusicSources.MIDI);
+        }
     }
 
 
