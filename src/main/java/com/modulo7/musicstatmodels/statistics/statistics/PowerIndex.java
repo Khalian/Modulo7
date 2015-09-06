@@ -1,4 +1,4 @@
-package com.modulo7.musicstatmodels.statistics.statisticscompute;
+package com.modulo7.musicstatmodels.statistics.statistics;
 
 import com.modulo7.common.interfaces.AbstractStatistic;
 import com.modulo7.musicstatmodels.musictheorymodels.IntervalEnum;

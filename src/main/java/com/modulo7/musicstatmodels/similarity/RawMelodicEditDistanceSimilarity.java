@@ -15,10 +15,10 @@ import java.util.Set;
  *
  * TODO : Ascertain a better tokenization scheme
  */
-public class RawMelodicEditDistanceSimilarity extends AbstractSimilarity {
+public class RawMelodicEditDistanceSimilarity implements AbstractSimilarity {
 
     @Override
-    protected double getSimilarity(final Song first, final Song second) {
+    public double getSimilarity(final Song first, final Song second) {
 
         Set<Double> individualSims = new HashSet<>();
 

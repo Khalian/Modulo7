@@ -22,6 +22,12 @@ import java.io.IOException;
  */
 public class AvroUtilsTest {
 
+    /**
+     * Test if serialization and deserialization for midi files work without throwing exceptions
+     *
+     * @throws InvalidMidiDataException
+     * @throws IOException
+     */
     @Test
     public void testMidiFileSerialization() throws InvalidMidiDataException, IOException {
         final String midiLocation = "./src/test/testdata/midi/test.mid";
@@ -31,7 +37,7 @@ public class AvroUtilsTest {
 
         AvroUtils.serialize("./src/test/tempMidiFile.avro", song);
 
-        Song deserializedSong = AvroUtils.deserialize("./src/test/tempMidiFile.avro");
+        AvroUtils.deserialize("./src/test/tempMidiFile.avro");
 
         File theAvroFile = new File("./src/test/tempMidiFile.avro");
         Assert.assertTrue(theAvroFile.delete());
@@ -40,6 +46,13 @@ public class AvroUtilsTest {
         // Assert.assertEquals(song, deserializedSong);
     }
 
+    /**
+     * Test if serialization and deserialization for mp3 files work without throwing exceptions
+     *
+     * @throws EchoNestException
+     * @throws Modulo7NoSuchFileException
+     * @throws IOException
+     */
     @Test
     public void testMp3FileSerialization() throws EchoNestException, Modulo7NoSuchFileException, IOException {
 
@@ -49,7 +62,7 @@ public class AvroUtilsTest {
         Song mp3song = analyzer.getSongRepresentation();
 
         AvroUtils.serialize("./src/test/tempMp3File.avro", mp3song);
-        Song mp3DeserializedSong = AvroUtils.deserialize("./src/test/tempMp3File.avro");
+       AvroUtils.deserialize("./src/test/tempMp3File.avro");
 
         File theAvroFile = new File("./src/test/tempMp3File.avro");
         Assert.assertTrue(theAvroFile.delete());
@@ -57,6 +70,12 @@ public class AvroUtilsTest {
         // Assert.assertEquals(mp3song, mp3DeserializedSong);
     }
 
+    /**
+     * Test if serialization and deserialization for music xml files work without throwing exceptions
+     *
+     * @throws IOException
+     * @throws Modulo7InvalidMusicXMLFile
+     */
     @Test
     public void testMusicXMLFileSerialization() throws IOException, Modulo7InvalidMusicXMLFile {
         final String musicXMLFileLocation = "./src/test/testdata/musicxml/musicXMLTest.xml";
@@ -65,7 +84,7 @@ public class AvroUtilsTest {
         Song musicXMLSong = analyzer.getSongRepresentation();
 
         AvroUtils.serialize("./src/test/tempXMLFile.avro", musicXMLSong);
-        Song musicXMLDeserializedSong = AvroUtils.deserialize("./src/test/tempXMLFile.avro");
+        AvroUtils.deserialize("./src/test/tempXMLFile.avro");
 
         File theAvroFile = new File("./src/test/tempXMLFile.avro");
         Assert.assertTrue(theAvroFile.delete());

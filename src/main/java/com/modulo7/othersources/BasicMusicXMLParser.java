@@ -11,6 +11,7 @@ import com.modulo7.common.utils.Modulo7Utils;
 import com.modulo7.crawler.utils.MusicSources;
 import com.modulo7.musicstatmodels.musictheorymodels.CircleOfFifths;
 import com.modulo7.musicstatmodels.representation.*;
+import com.modulo7.nlp.Lyrics;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.log4j.Logger;
 import org.jsoup.Jsoup;
@@ -60,6 +61,9 @@ public class BasicMusicXMLParser implements AbstractAnalyzer {
     // Note duality map, used for an expanded representation as melodies, its later crunched together
     // to include chords
     private Map<Integer, List<NoteAndIsChordDual>> noteDuals = new HashMap<>();
+
+    // Lyrics portion of music xml, if its present
+    private Lyrics lyrics = new Lyrics();
 
     /**
      * Basic constructor takes as input the filename and applies
@@ -172,7 +176,7 @@ public class BasicMusicXMLParser implements AbstractAnalyzer {
         final SongMetadata metadata = new SongMetadata(keySignature, timeSignature);
 
         // Return the modulo7 constructed song from the data
-        return new Song(voiceSet, metadata, actualSource);
+        return new Song(voiceSet, metadata, actualSource, lyrics);
     }
 
     /**
@@ -335,7 +339,8 @@ public class BasicMusicXMLParser implements AbstractAnalyzer {
     }
 
     /**
-     * Gets the notes from the song
+     * Gets the notes from the song as a stream of note inputs
+     * The parser then identifies the chords and appropriates handles them
      */
     private void getNotes() {
 
@@ -366,11 +371,18 @@ public class BasicMusicXMLParser implements AbstractAnalyzer {
                             currentVoiceIndex = Integer.valueOf(voiceOfNote);
                         }
 
+                        if (!thisNote.getElementsByTag("lyric").isEmpty()) {
+                            for (Element thisLyric : thisNote.getElementsByTag("lyric")) {
+                                final String lyricsText = thisLyric.getElementsByTag("text").text();
+                                lyrics.addLyricsElementToSong(lyricsText);
+                            }
+                        }
+
                         //get the pitch for the given note, by design a correct pitch will always contain the pitch element
                         if (!thisNote.getElementsByTag("pitch").isEmpty()) {
                             for (Element thisPitch : thisNote.getElementsByTag("pitch")) {
 
-                                // Acquire the note and the octave infomration, you can construct the note from these two pieces of information
+                                // Acquire the note and the octave information, you can construct the note from these two pieces of information
                                 final String note = thisPitch.getElementsByTag("step").text();
                                 final int octave = Integer.parseInt(thisPitch.getElementsByTag("octave").text());
 
@@ -439,14 +451,6 @@ public class BasicMusicXMLParser implements AbstractAnalyzer {
     }
 
     /**
-     * Gets the key signature object
-     * @return
-     */
-    public KeySignature getKeySignature() {
-        return keySignature;
-    }
-
-    /**
      * Gets the division given the index
      * A song can contain multiple divisions
      * so get the division given the position in
@@ -457,14 +461,6 @@ public class BasicMusicXMLParser implements AbstractAnalyzer {
      */
     public int getDivision(final int divisionIndex) {
         return divisions.get(divisionIndex);
-    }
-
-    /**
-     * Gets the time signature associated
-     * @return
-     */
-    public TimeSignature getTimeSignature() {
-        return timeSignature;
     }
 }
 

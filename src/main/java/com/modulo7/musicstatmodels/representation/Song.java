@@ -35,8 +35,7 @@ public class Song {
     // A basic lyrics object added to the song model    
     private Lyrics lyrics = new Lyrics();
 
-    // The song's scale, major, minor, blues etc
-    private ScaleType scaleOfSong = ScaleType.UNKNOWN;
+
 
     /**
      * Method to infer the song length as maximum of all the line duration
@@ -122,6 +121,7 @@ public class Song {
      */
     public Song(final Voice voiceOfSong, final SongMetadata songMetadata, final MusicSources source) {
         this.voicesOfSong.add(voiceOfSong);
+        inferSongLength();
 
         this.metadata = songMetadata;
         this.source = source;
@@ -143,6 +143,21 @@ public class Song {
         this.metadata = songMetadata;
 
         this.source = source;
+    }
+
+    /**
+     * Constructor with the voice set, song metadata source of music and lyrics objects are known
+     *
+     * @param voiceSet
+     * @param metadata
+     * @param actualSource
+     * @param lyrics
+     */
+    public Song(final HashSet<Voice> voiceSet, final SongMetadata metadata, final MusicSources actualSource, final Lyrics lyrics) {
+        this.voicesOfSong = voiceSet;
+        this.metadata = metadata;
+        this.source = actualSource;
+        this.lyrics = lyrics;
     }
 
     /**
@@ -199,6 +214,11 @@ public class Song {
         return voicesOfSong.size();
     }
 
+    /**
+     * Simple getter for the lyrics object
+     *
+     * @return
+     */
     public Lyrics getLyrics() {
         return lyrics;
     }

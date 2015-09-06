@@ -19,10 +19,10 @@ import java.util.Map;
  * can act as an vectorized representation of the song. As such the cosine similarity
  * or any other such measure can also be used
  */
-public class TonalHistogramSimilarity extends AbstractSimilarity {
+public class TonalHistogramSimilarity implements AbstractSimilarity {
 
     @Override
-    protected double getSimilarity(final Song first, final Song second) {
+    public double getSimilarity(final Song first, final Song second) {
         AbstractVector<TonalHistogramData> tonalHistogram = new TonalHistogram();
         tonalHistogram.computeVectorRepresentation(first);
         TonalHistogramData internalVectorOne = tonalHistogram.getInternalRepresentation();

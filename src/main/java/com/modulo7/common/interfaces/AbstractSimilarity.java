@@ -8,10 +8,9 @@ import com.modulo7.musicstatmodels.representation.Song;
  * The base class which denotes an extensible similarity
  * measures are to be used are to be performed
  *
- * TODO : Impl this
  */
-public abstract class AbstractSimilarity {
+public interface AbstractSimilarity {
 
     // Acquire the similarity between any two modulo7 song representations
-    protected abstract double getSimilarity(final Song first, final Song second);
+    public double getSimilarity(final Song first, final Song second);
 }
