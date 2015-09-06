@@ -40,8 +40,10 @@ public class MusicXMLTest {
         // Acquire the song by parsing the music xml file
         Song song = xmlParser.getSongRepresentation();
 
+        SongMetadata metadata = song.getMetadata();
+
         // Acquire the time signature
-        KeySignature keySignature = xmlParser.getKeySignature();
+        KeySignature keySignature = metadata.getKeySignature();
 
         // Test if key signature has been correctly acquired
         Assert.assertEquals(keySignature.getKey(), "C");
@@ -51,7 +53,7 @@ public class MusicXMLTest {
         Assert.assertEquals(xmlParser.getDivision(0), 24);
 
         // Acuire the time signature infomration
-        TimeSignature timeSignature = xmlParser.getTimeSignature();
+        TimeSignature timeSignature = metadata.getTimeSignature();
 
         // Check if the time signature has been correctly acquired from the file
         Assert.assertEquals(timeSignature.getNoteValIsBeat(), 3);
@@ -110,8 +112,8 @@ public class MusicXMLTest {
             VoiceInstant firstInstant = voiceInstantList.get(0);
             VoiceInstant secondInstant = voiceInstantList.get(1);
 
-            Assert.assertEquals(firstInstant.getChordType(), ChordType.MINOR);
-            Assert.assertEquals(secondInstant.getChordType(), ChordType.NOT_A_CHORD);
+            Assert.assertEquals(firstInstant.getChordQuality(), ChordQuality.MINOR);
+            Assert.assertEquals(secondInstant.getChordQuality(), ChordQuality.NOT_A_CHORD);
         }
     }
 }

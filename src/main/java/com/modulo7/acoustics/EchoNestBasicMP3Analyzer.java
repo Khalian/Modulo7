@@ -47,22 +47,12 @@ public class EchoNestBasicMP3Analyzer implements AbstractAnalyzer {
     private static FrequencyNoteMap noteMap = FrequencyNoteMap.getInstance();
 
     /**
-     * Basic init method, all constructors should call it
-     *
-     * TODO : Impl this to check if anything else is needed
-     */
-    private void init() {
-
-    }
-
-    /**
      * Constructor of the basic MP3 metadata analyzer
      *
      * @throws EchoNestException
      */
     public EchoNestBasicMP3Analyzer(final String filePath) throws EchoNestException, Modulo7NoSuchFileException {
 
-        init();
         en = new EchoNestAPI(CrawlerHelper.ECHO_NEST_API_KEY);
 
         mp3File = new File(filePath);
@@ -178,15 +168,15 @@ public class EchoNestBasicMP3Analyzer implements AbstractAnalyzer {
         // Sanity check to ensure note ranges go 12 for basic position acquisition
         assert (maxIndex >= 0 && maxIndex < 12);
 
-
         final int actualNoteMapMaxIndex = maxIndex + 1;
 
         //check whether its correct or not that this chroma vector can be classified as a note
         if (maxVal >= sum - maxIndex)
-            chromaNotes.add(noteMap.getBasicNoteGivenPosition(maxIndex + 1));
+            chromaNotes.add(noteMap.getBasicNoteGivenPosition(actualNoteMapMaxIndex));
         else {
             // TODO : Estimation of chord code, for now hack and put the note with highest position
-            chromaNotes.add(noteMap.getBasicNoteGivenPosition(maxIndex + 1));
+            ChordEstimator estimator = new ChordEstimator(noteChromaVector);
+            chromaNotes.add(noteMap.getBasicNoteGivenPosition(actualNoteMapMaxIndex));
         }
 
         return new VoiceInstant(chromaNotes, duration);

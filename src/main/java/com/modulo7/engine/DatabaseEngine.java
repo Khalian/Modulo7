@@ -7,6 +7,7 @@ import com.modulo7.acoustics.MidiToSongConverter;
 import com.modulo7.common.exceptions.Modulo7InvalidMusicXMLFile;
 import com.modulo7.common.exceptions.Modulo7NoSuchFileException;
 import com.modulo7.common.utils.Modulo7Utils;
+import com.modulo7.image.AudiverisSheetAnalyzer;
 import com.modulo7.musicstatmodels.representation.Song;
 import com.modulo7.othersources.BasicMusicXMLParser;
 
@@ -31,7 +32,7 @@ public class DatabaseEngine {
     // Destination Directory
     private String destinationDirectory;
 
-    // The song set along with a hashmap between location and
+    // The song set along with a hashmap between location and songs and
     private Map<String, Song> songLocationMap = new HashMap<>();
 
     // All song locations
@@ -67,10 +68,12 @@ public class DatabaseEngine {
                 AbstractAnalyzer analyzer = new EchoNestBasicMP3Analyzer(songLocation);
                 final Song song = analyzer.getSongRepresentation();
                 songLocationMap.put(songLocation, song);
-            }
-            // TODO : Fix this, its not correct right now
-            else {
+            } else if (songLocation.endsWith("xml")) {
                 AbstractAnalyzer analyzer = new BasicMusicXMLParser(songLocation);
+                final Song song = analyzer.getSongRepresentation();
+                songLocationMap.put(songLocation, song);
+            } else if (songLocation.endsWith("png") || songLocation.endsWith("jpg")) {
+                AbstractAnalyzer analyzer = new AudiverisSheetAnalyzer(songLocation);
                 final Song song = analyzer.getSongRepresentation();
                 songLocationMap.put(songLocation, song);
             }

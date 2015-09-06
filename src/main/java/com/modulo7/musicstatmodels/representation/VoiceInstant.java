@@ -34,7 +34,7 @@ public class VoiceInstant {
     private double duration = Modulo7Globals.UNKNOWN;
 
     // The type of chord in the event the voice instant is a chord, by default assumed not a chord
-    private ChordType chordType = ChordType.NOT_A_CHORD;
+    private ChordQuality chordQuality = ChordQuality.NOT_A_CHORD;
 
     // The duration of note that is played according to music theory, by default its unknown
     private NoteDuration theoreticalDuration = NoteDuration.UNKNOWN;
@@ -75,7 +75,7 @@ public class VoiceInstant {
             noteType = NoteType.MELODIC_NOTE;
         } else {
             noteType = NoteType.CHORD;
-            this.chordType = ChordType.estimateChordType(setOfNotes);
+            this.chordQuality = ChordQuality.estimateChordType(setOfNotes);
         }
 
         this.duration = duration;
@@ -124,7 +124,7 @@ public class VoiceInstant {
             noteType = NoteType.MELODIC_NOTE;
         } else {
             noteType = NoteType.CHORD;
-            this.chordType = ChordType.estimateChordType(setOfNotes);
+            this.chordQuality = ChordQuality.estimateChordType(setOfNotes);
         }
 
         this.duration = duration;
@@ -173,7 +173,7 @@ public class VoiceInstant {
             noteType = NoteType.MELODIC_NOTE;
         } else {
             noteType = NoteType.CHORD;
-            this.chordType = ChordType.estimateChordType(setOfNotes);
+            this.chordQuality = ChordQuality.estimateChordType(setOfNotes);
         }
 
         this.duration = duration;
@@ -202,7 +202,7 @@ public class VoiceInstant {
             noteType = NoteType.MELODIC_NOTE;
         } else {
             noteType = NoteType.CHORD;
-            this.chordType = ChordType.estimateChordType(setOfNotes);
+            this.chordQuality = ChordQuality.estimateChordType(setOfNotes);
         }
 
         this.theoreticalDuration = theoreticalDuration;
@@ -267,7 +267,7 @@ public class VoiceInstant {
             noteType = NoteType.MELODIC_NOTE;
         } else {
             noteType = NoteType.CHORD;
-            this.chordType = ChordType.estimateChordType(setOfNotes);
+            this.chordQuality = ChordQuality.estimateChordType(setOfNotes);
         }
 
         duration = Modulo7Globals.UNKNOWN;
@@ -367,7 +367,24 @@ public class VoiceInstant {
      * Acquires the chord type for this instant
      * @return
      */
-    public ChordType getChordType() {
-        return chordType;
+    public ChordQuality getChordQuality() {
+        return chordQuality;
+    }
+
+    /**
+     * Get a string representation of the voice instant
+     * @return
+     */
+    public String getTokenRepresentation() throws Modulo7WrongNoteType {
+        // If its a melodic note then just return the note value representation
+        // we eschew octave representation
+        if (noteType.equals(NoteType.MELODIC_NOTE)) {
+            final Note note = getNote();
+
+            return note.getNoteValue();
+        } else {
+            final Note rootNote = ChordQuality.getRootNoteFromChord(this.setOfNotes);
+            return rootNote.getNoteValue() + chordQuality.getStringRepresentation();
+        }
     }
 }

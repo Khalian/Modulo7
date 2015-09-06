@@ -1,7 +1,7 @@
 import com.modulo7.common.exceptions.Modulo7BadIntervalException;
 import com.modulo7.musicstatmodels.musictheorymodels.Interval;
 import com.modulo7.musicstatmodels.musictheorymodels.IntervalEnum;
-import com.modulo7.musicstatmodels.representation.ChordType;
+import com.modulo7.musicstatmodels.representation.ChordQuality;
 import com.modulo7.musicstatmodels.representation.Note;
 import junit.framework.Assert;
 import org.junit.Test;
@@ -37,7 +37,7 @@ public class MusicTheoryModelsTest {
         setOfMajorNotes.add(Note.B2);
         setOfMajorNotes.add(Note.D2);
 
-        Assert.assertEquals(ChordType.MAJOR, ChordType.estimateChordType(setOfMajorNotes));
+        Assert.assertEquals(ChordQuality.MAJOR, ChordQuality.estimateChordType(setOfMajorNotes));
 
         Set<Note> setOfMinorNotes = new HashSet<>();
 
@@ -45,7 +45,7 @@ public class MusicTheoryModelsTest {
         setOfMinorNotes.add(Note.ASHARP2);
         setOfMinorNotes.add(Note.D2);
 
-        Assert.assertEquals(ChordType.MINOR, ChordType.estimateChordType(setOfMinorNotes));
+        Assert.assertEquals(ChordQuality.MINOR, ChordQuality.estimateChordType(setOfMinorNotes));
 
         // Construct a bad triad and test it
         Set<Note> badNotes = new HashSet<>();
@@ -53,7 +53,7 @@ public class MusicTheoryModelsTest {
         badNotes.add(Note.ASHARP0);
         badNotes.add(Note.B0);
 
-        Assert.assertNotSame(ChordType.MINOR, ChordType.estimateChordType(badNotes));
-        Assert.assertNotSame(ChordType.MAJOR, ChordType.estimateChordType(badNotes));
+        Assert.assertNotSame(ChordQuality.MINOR, ChordQuality.estimateChordType(badNotes));
+        Assert.assertNotSame(ChordQuality.MAJOR, ChordQuality.estimateChordType(badNotes));
     }
 }

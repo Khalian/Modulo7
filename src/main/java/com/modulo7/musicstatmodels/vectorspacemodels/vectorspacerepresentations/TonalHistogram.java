@@ -24,6 +24,13 @@ public class TonalHistogram implements AbstractVector<TonalHistogramData> {
     // Internal intervalHistogram representation
     private TonalHistogramData intervalHistogram;
 
+    /**
+     * Default constructor for tonal histogram and the only one present
+     */
+    public TonalHistogram() {
+        intervalHistogram = new TonalHistogramData();
+    }
+
     @Override
     public int getVectorLength() {
         return intervalHistogram.getSize();

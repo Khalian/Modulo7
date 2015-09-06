@@ -18,17 +18,27 @@ import java.util.Set;
  * types of chords
  *
  * Chords are the basic unit of harmony in western music. Harmonic elements are
- * constrcuted from chords
+ * constructed from chords
  */
-public enum ChordType {
-    NOT_A_CHORD,
-    MAJOR,
-    MINOR,
-    DIMINISHED,
-    AUGMENTED;
+public enum ChordQuality {
+    NOT_A_CHORD("not_a_chord"),
+    UNKNOWN("unknown"),
+    MAJOR("maj"),
+    MINOR("min"),
+    DOMINANT("dom"),
+    DIMINISHED5th("dim5th"),
+    SUSPENDED("sus"),
+    AUGMENTED5th("aug");
 
     // Frequency note map instance associated with the chord type to ascertain absolute positions
     private static final FrequencyNoteMap noteMap = FrequencyNoteMap.getInstance();
+
+    // String representation of chordtype
+    private String val;
+
+    ChordQuality(String val) {
+        this.val = val;
+    }
 
     /**
      * A static helper method to estimate what type of chord is being played
@@ -38,7 +48,7 @@ public enum ChordType {
      *
      * @return
      */
-    public static ChordType estimateChordType(final Set<Note> noteSet) throws Modulo7BadIntervalException {
+    public static ChordQuality estimateChordType(final Set<Note> noteSet) throws Modulo7BadIntervalException {
 
         if (noteSet.size() == 1) {
             return NOT_A_CHORD;
@@ -52,6 +62,25 @@ public enum ChordType {
         } else {
             return NOT_A_CHORD;
         }
+    }
+
+    /**
+     * Gets the root note associated with the chord
+     * @return
+     */
+    public static Note getRootNoteFromChord(final Set<Note> noteSet) {
+
+        // Position the array
+        List<Integer> notePositionArray = new ArrayList<>();
+
+        for (final Note note : noteSet) {
+            int positionOnKeyboard = noteMap.getPositionGivenNote(note);
+            notePositionArray.add(positionOnKeyboard);
+        }
+
+        Collections.sort(notePositionArray);
+
+        return noteMap.getNoteGivenPosition(notePositionArray.get(0));
     }
 
     /**
@@ -112,6 +141,9 @@ public enum ChordType {
     }
 
     /**
+     * Gets the interval spacings between the notes in ascending order
+     *
+     * This method is used as a helper class to facilitate acquiring interval spacings for analysis
      *
      * @param noteSet
      * @return
@@ -142,5 +174,13 @@ public enum ChordType {
         }
 
         return intervalsList;
+    }
+
+    /**
+     * Gets the string representation of the chord type
+     * @return
+     */
+    public String getStringRepresentation() {
+        return val;
     }
 }
