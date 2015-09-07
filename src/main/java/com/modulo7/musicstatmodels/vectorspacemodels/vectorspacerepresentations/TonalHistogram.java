@@ -49,7 +49,7 @@ public class TonalHistogram implements AbstractVector<TonalHistogramData> {
                 VoiceInstant nextInstant = voiceInstants.get(i + 1);
 
                 // Intervals are only truly defined if both voice Instants are melodic pieces
-                if (!instant.getIsChord() && !nextInstant.getIsChord()) {
+                if (!instant.isChord() && !nextInstant.isChord()) {
                     try {
                         Note firstNote = instant.getNote();
                         Note secondNote = instant.getNote();

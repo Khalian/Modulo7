@@ -5,7 +5,6 @@ import com.modulo7.common.utils.Modulo7Globals;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Set;
 
 /**
  * Created by asanyal on 7/18/2015.
@@ -67,7 +66,7 @@ public class Voice {
 
         for (VoiceInstant instant : voiceSequence) {
 
-            if (!instant.getIsChord()) {
+            if (!instant.isChord()) {
                 try {
                     final Note note = instant.getNote();
                     final String noteValue = note.getNoteValue();
@@ -124,7 +123,16 @@ public class Voice {
      * Gets the number of voice instants in the voice
      * @return
      */
-    public int getNumVoiceInstantsofVoice() {
+    public int getNumVoiceInstantsOfVoice() {
         return voiceSequence.size();
+    }
+
+    /**
+     * Gets the voice instant at a given position in the voice
+     * @param pos
+     * @return
+     */
+    public VoiceInstant getVoiceInstantAtPostion(final int pos) {
+        return voiceSequence.get(pos);
     }
 }

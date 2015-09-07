@@ -2,6 +2,7 @@ package com.modulo7.musicstatmodels.representation;
 
 import com.modulo7.common.exceptions.Modulo7BadNoteException;
 import com.modulo7.common.exceptions.Modulo7InvalidOctaveRangeException;
+import com.modulo7.common.utils.FrequencyNoteMap;
 
 /**
  * Created by asanyal on 6/16/2015.
@@ -46,6 +47,9 @@ public enum Note {
 
     // The octave associated with this node
     private Integer octaveNumber;
+
+    // An instance of the frequency note map object
+    private static FrequencyNoteMap noteMap = FrequencyNoteMap.getInstance();
 
     /**
      * Default constructor for note
@@ -361,4 +365,35 @@ public enum Note {
             throw new Modulo7BadNoteException("Bad note: " + noteValue);
         }
     }
+
+    /**
+     * Method to ascertain whether the first argument pitch is higher than the
+     * second argument pitch
+     *
+     * @param thisNote
+     * @param thatNote
+     * @return
+     */
+    public static boolean isHigherPitch(final Note thisNote, final Note thatNote) {
+        final int positionOne = noteMap.getPositionGivenNote(thisNote);
+        final int positionTwo = noteMap.getPositionGivenNote(thatNote);
+
+        return positionOne > positionTwo;
+    }
+
+    /**
+     * Method to ascertain whether the first argument pitch is lower than the
+     * second argument pitch
+     *
+     * @param thisNote
+     * @param thatNote
+     * @return
+     */
+    public static boolean isLowerPitch(final Note thisNote, final Note thatNote) {
+        final int positionOne = noteMap.getPositionGivenNote(thisNote);
+        final int positionTwo = noteMap.getPositionGivenNote(thatNote);
+
+        return positionOne < positionTwo;
+    }
+
 }

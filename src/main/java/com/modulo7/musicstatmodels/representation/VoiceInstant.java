@@ -236,10 +236,12 @@ public class VoiceInstant {
     }
 
     /**
-     * Gets the fact that the song
+     * Gets the fact that the voice instant is actually
+     * a chord or not
+     *
      * @return
      */
-    public boolean getIsChord() {
+    public boolean isChord() {
         return noteType.equals(NoteType.CHORD);
     }
 
@@ -294,7 +296,9 @@ public class VoiceInstant {
     }
 
     /**
-     * Getter for theorectical note duration
+     * Getter for theorectical note duration, as is it should be played by performer
+     * and not how it is actually played
+     *
      * @return
      */
     public NoteDuration getTheoreticalDuration() {
@@ -324,5 +328,63 @@ public class VoiceInstant {
             final Note rootNote = ChordQuality.getRootNoteFromChord(this.setOfNotes);
             return rootNote.getNoteValue() + chordQuality.getStringRepresentation();
         }
+    }
+
+    /**
+     * Similar to is higher pitch in note module, for chords considers the
+     *
+     * @param thisInstant
+     * @param thatInstant
+     * @return
+     * @throws Modulo7WrongNoteType
+     */
+    public static boolean isHigherPitch(final VoiceInstant thisInstant, final VoiceInstant thatInstant) throws Modulo7WrongNoteType {
+
+        final Note thisNote;
+
+        if (thisInstant.isChord()) {
+            thisNote = ChordQuality.getRootNoteFromChord(thisInstant.setOfNotes);
+        } else {
+            thisNote = thisInstant.getNote();
+        }
+
+        final Note thatNote;
+
+        if (thatInstant.isChord()) {
+            thatNote = ChordQuality.getRootNoteFromChord(thisInstant.setOfNotes);
+        } else {
+            thatNote = thisInstant.getNote();
+        }
+
+        return Note.isHigherPitch(thisNote, thatNote);
+    }
+
+    /**
+     * Similar to is lower pitch in note module, for chords considers the
+     *
+     * @param thisInstant
+     * @param thatInstant
+     * @return
+     * @throws Modulo7WrongNoteType
+     */
+    public static boolean isLowerPitch(final VoiceInstant thisInstant, final VoiceInstant thatInstant) throws Modulo7WrongNoteType {
+
+        final Note thisNote;
+
+        if (thisInstant.isChord()) {
+            thisNote = ChordQuality.getRootNoteFromChord(thisInstant.setOfNotes);
+        } else {
+            thisNote = thisInstant.getNote();
+        }
+
+        final Note thatNote;
+
+        if (thatInstant.isChord()) {
+            thatNote = ChordQuality.getRootNoteFromChord(thisInstant.setOfNotes);
+        } else {
+            thatNote = thisInstant.getNote();
+        }
+
+        return Note.isLowerPitch(thisNote, thatNote);
     }
 }

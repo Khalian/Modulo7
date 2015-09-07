@@ -198,7 +198,7 @@ public class MidiToSongConverter implements AbstractAnalyzer {
         HashSet<Voice> nonEmptyVoiceSet = new HashSet<>();
 
         for (final Voice voice : voiceSet) {
-            if (voice.getNumVoiceInstantsofVoice() > 0) {
+            if (voice.getNumVoiceInstantsOfVoice() > 0) {
                 nonEmptyVoiceSet.add(voice);
             }
         }

@@ -35,8 +35,6 @@ public class Song {
     // A basic lyrics object added to the song model    
     private Lyrics lyrics = new Lyrics();
 
-
-
     /**
      * Method to infer the song length as maximum of all the line duration
      * lengths as part of the song
