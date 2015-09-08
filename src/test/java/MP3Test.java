@@ -3,6 +3,7 @@ import com.modulo7.common.interfaces.AbstractAnalyzer;
 import com.modulo7.acoustics.EchoNestBasicMP3Analyzer;
 import com.modulo7.common.exceptions.Modulo7NoSuchFileException;
 import com.modulo7.musicstatmodels.representation.Song;
+import junit.framework.Assert;
 import org.junit.Test;
 
 /**
@@ -19,6 +20,7 @@ public class MP3Test {
         try {
             AbstractAnalyzer analyzer = new EchoNestBasicMP3Analyzer(mp3Location);
             Song song = analyzer.getSongRepresentation();
+            Assert.assertNotNull(song);
         } catch (EchoNestException | Modulo7NoSuchFileException e) {
             e.printStackTrace();
         }

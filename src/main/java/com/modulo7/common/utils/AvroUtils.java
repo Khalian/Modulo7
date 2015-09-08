@@ -1,5 +1,6 @@
 package com.modulo7.common.utils;
 
+import com.modulo7.common.exceptions.Modulo7NoSuchFileException;
 import com.modulo7.musicstatmodels.representation.Song;
 import org.apache.avro.Schema;
 import org.apache.avro.file.CodecFactory;
@@ -31,7 +32,7 @@ public class AvroUtils {
      * @param destinationFileName
      * @param song
      */
-    public static void serialize(final String destinationFileName, final Song song) throws IOException {
+    public static void serialize(final String destinationFileName, final Song song) throws Modulo7NoSuchFileException {
 
         // Acquire the reflective schema from Modulo7 class
         final Schema schema= ReflectData.get().getSchema(Song.class);
@@ -40,10 +41,13 @@ public class AvroUtils {
         DataFileWriter<Song> fileWriter = new DataFileWriter<>(writer);
 
         fileWriter.setCodec(CodecFactory.deflateCodec(5));
-        fileWriter.create(schema, new File(destinationFileName));
-
-        fileWriter.append(song);
-        fileWriter.close();
+        try {
+            fileWriter.create(schema, new File(destinationFileName));
+            fileWriter.append(song);
+            fileWriter.close();
+        } catch (IOException e) {
+            throw new Modulo7NoSuchFileException("Cant create file in location :" + destinationFileName);
+        }
     }
 
     /**
@@ -55,12 +59,17 @@ public class AvroUtils {
      * @param sourceFileName
      * @return
      */
-    public static Song deserialize(final String sourceFileName) throws IOException {
+    public static Song deserialize(final String sourceFileName) throws Modulo7NoSuchFileException {
 
         File sourceFile = new File(sourceFileName);
 
         DatumReader<Song> reader = new ReflectDatumReader<>(Song.class);
-        DataFileReader<Song> dataFileReader = new DataFileReader<>(sourceFile, reader);
+        DataFileReader<Song> dataFileReader;
+        try {
+            dataFileReader = new DataFileReader<>(sourceFile, reader);
+        } catch (IOException e) {
+            throw new Modulo7NoSuchFileException("No such file" + sourceFileName);
+        }
 
         /**
          * Since we have only one song object in the file as assumed we return that back

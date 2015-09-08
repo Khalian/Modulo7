@@ -1,3 +1,4 @@
+import com.modulo7.common.exceptions.Modulo7NoSuchFileException;
 import com.modulo7.common.interfaces.AbstractAnalyzer;
 import com.modulo7.acoustics.MidiToSongConverter;
 import com.modulo7.musicstatmodels.representation.Song;
@@ -17,11 +18,11 @@ public class MidiTest {
     /**
      * A basic test to sanity test whether a midi parser works or not
      *
+     * @throws Modulo7NoSuchFileException
      * @throws InvalidMidiDataException
-     * @throws IOException
      */
     @Test
-    public void midiSanityTest() throws InvalidMidiDataException, IOException {
+    public void midiSanityTest() throws InvalidMidiDataException, Modulo7NoSuchFileException {
         final String midiLocation = "./src/test/testdata/midi/test.mid";
         AbstractAnalyzer midiAnalyzer = new MidiToSongConverter(midiLocation);
 

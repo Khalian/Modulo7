@@ -20,18 +20,22 @@ public class SteinbeckContour implements AbstractContour {
 
     @Override
     public Voice getContourRepresentaionOfVoice(final Voice voice) {
+
+        AbstractContour naturalContour = new NaturalContour();
+        Voice extemumNotes = naturalContour.getContourRepresentaionOfVoice(voice);
+
         Set<VoiceInstant> changingNoteIndices = new HashSet<>();
 
         int voiceInstantIndex = 0;
-        final int maxVoiceInstantIndex = voice.getNumVoiceInstantsOfVoice();
+        final int maxVoiceInstantIndex = extemumNotes.getNumVoiceInstantsOfVoice();
 
-        for (final VoiceInstant voiceInstant : voice.getVoiceSequence()) {
+        for (final VoiceInstant voiceInstant : extemumNotes.getVoiceSequence()) {
 
-            if (voiceInstantIndex >= 2 || voiceInstantIndex <= maxVoiceInstantIndex - 2) {
-                final VoiceInstant nMinusTwo = voice.getVoiceInstantAtPostion(voiceInstantIndex - 2);
-                final VoiceInstant nMinusOne = voice.getVoiceInstantAtPostion(voiceInstantIndex - 1);
-                final VoiceInstant nPlusOne = voice.getVoiceInstantAtPostion(voiceInstantIndex + 1);
-                final VoiceInstant nPlusTwo = voice.getVoiceInstantAtPostion(voiceInstantIndex + 2);
+            if (voiceInstantIndex >= 2 && voiceInstantIndex < maxVoiceInstantIndex - 2) {
+                final VoiceInstant nMinusTwo = extemumNotes.getVoiceInstantAtPostion(voiceInstantIndex - 2);
+                final VoiceInstant nMinusOne = extemumNotes.getVoiceInstantAtPostion(voiceInstantIndex - 1);
+                final VoiceInstant nPlusOne = extemumNotes.getVoiceInstantAtPostion(voiceInstantIndex + 1);
+                final VoiceInstant nPlusTwo = extemumNotes.getVoiceInstantAtPostion(voiceInstantIndex + 2);
 
                 try {
                     final boolean isAllBelow = VoiceInstant.isLowerPitch(voiceInstant, nMinusTwo) && VoiceInstant.isLowerPitch(voiceInstant, nMinusOne) &&
@@ -52,7 +56,7 @@ public class SteinbeckContour implements AbstractContour {
 
         Voice contourizedVoice = new Voice();
 
-        for (final VoiceInstant voiceInstant : voice.getVoiceSequence()) {
+        for (final VoiceInstant voiceInstant : extemumNotes.getVoiceSequence()) {
             if (!changingNoteIndices.contains(voiceInstant)) {
                 contourizedVoice.addVoiceInstant(voiceInstant);
             }

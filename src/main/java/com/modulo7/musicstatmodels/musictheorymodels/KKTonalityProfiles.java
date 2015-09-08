@@ -2,6 +2,7 @@ package com.modulo7.musicstatmodels.musictheorymodels;
 
 import com.modulo7.common.utils.FrequencyNoteMap;
 import com.modulo7.common.utils.Modulo7Globals;
+import com.modulo7.musicstatmodels.representation.KeySignature;
 
 import java.util.*;
 
@@ -56,7 +57,7 @@ public class KKTonalityProfiles {
             // Compute Major KK Profiles
             List<Double> copyOfCMinorProfile = new ArrayList<>(CMINOR_CHORD_PROFILE);
             Collections.rotate(copyOfCMinorProfile, i - 3);
-            MAJOR_CHORD_PROFILES.put(noteValue, copyOfCMinorProfile);
+            MINOR_CHORD_PROFILES.put(noteValue, copyOfCMinorProfile);
         }
     }
 }

@@ -29,14 +29,13 @@ public class AvroUtilsTest {
      * @throws IOException
      */
     @Test
-    public void testMidiFileSerialization() throws InvalidMidiDataException, IOException {
+    public void testMidiFileSerialization() throws InvalidMidiDataException, Modulo7NoSuchFileException {
         final String midiLocation = "./src/test/testdata/midi/test.mid";
         AbstractAnalyzer midiAnalyzer = new MidiToSongConverter(midiLocation);
 
         Song song = midiAnalyzer.getSongRepresentation();
 
         AvroUtils.serialize("./src/test/tempMidiFile.avro", song);
-
         AvroUtils.deserialize("./src/test/tempMidiFile.avro");
 
         File theAvroFile = new File("./src/test/tempMidiFile.avro");
@@ -54,14 +53,14 @@ public class AvroUtilsTest {
      * @throws IOException
      */
     @Test
-    public void testMp3FileSerialization() throws EchoNestException, Modulo7NoSuchFileException, IOException {
+    public void testMp3FileSerialization() throws EchoNestException, Modulo7NoSuchFileException {
 
         final String mp3Location = "./src/test/testdata/mp3/stairway_to_heaven.mp3";
 
         AbstractAnalyzer analyzer = new EchoNestBasicMP3Analyzer(mp3Location);
         Song mp3song = analyzer.getSongRepresentation();
 
-        AvroUtils.serialize("./src/test/tempMp3File.avro", mp3song);
+       AvroUtils.serialize("./src/test/tempMp3File.avro", mp3song);
        AvroUtils.deserialize("./src/test/tempMp3File.avro");
 
         File theAvroFile = new File("./src/test/tempMp3File.avro");
@@ -77,7 +76,7 @@ public class AvroUtilsTest {
      * @throws Modulo7InvalidMusicXMLFile
      */
     @Test
-    public void testMusicXMLFileSerialization() throws IOException, Modulo7InvalidMusicXMLFile {
+    public void testMusicXMLFileSerialization() throws Modulo7InvalidMusicXMLFile, Modulo7NoSuchFileException {
         final String musicXMLFileLocation = "./src/test/testdata/musicxml/musicXMLTest.xml";
 
         AbstractAnalyzer analyzer = new BasicMusicXMLParser(musicXMLFileLocation);

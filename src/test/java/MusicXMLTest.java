@@ -7,6 +7,7 @@
 import com.modulo7.common.exceptions.Modulo7BadKeyException;
 import com.modulo7.common.exceptions.Modulo7InvalidCircleOfFifthsDistance;
 import com.modulo7.common.exceptions.Modulo7InvalidMusicXMLFile;
+import com.modulo7.common.exceptions.Modulo7NoSuchFileException;
 import com.modulo7.musicstatmodels.representation.*;
 import com.modulo7.othersources.BasicMusicXMLParser;
 import junit.framework.Assert;
@@ -31,8 +32,8 @@ public class MusicXMLTest {
      * @throws Modulo7BadKeyException
      */
     @Test
-    public void musicXMLMetaDataAcquisitionTest() throws IOException, Modulo7InvalidMusicXMLFile,
-            Modulo7InvalidCircleOfFifthsDistance, Modulo7BadKeyException {
+    public void musicXMLMetaDataAcquisitionTest() throws Modulo7InvalidMusicXMLFile,
+            Modulo7InvalidCircleOfFifthsDistance, Modulo7BadKeyException, Modulo7NoSuchFileException {
 
         final String attributesTestData = "./src/test/testdata/musicxml/attributesTestData.xml";
         BasicMusicXMLParser xmlParser = new BasicMusicXMLParser(attributesTestData);
@@ -77,8 +78,8 @@ public class MusicXMLTest {
      * @throws Modulo7BadKeyException
      */
     @Test
-    public void musicXMLSanityParseTest() throws IOException, Modulo7InvalidMusicXMLFile,
-            Modulo7InvalidCircleOfFifthsDistance, Modulo7BadKeyException {
+    public void musicXMLSanityParseTest() throws Modulo7InvalidMusicXMLFile,
+            Modulo7InvalidCircleOfFifthsDistance, Modulo7BadKeyException, Modulo7NoSuchFileException {
 
         final String basicScoreData = "./src/test/testdata/musicxml/musicXMLTest.xml";
         BasicMusicXMLParser xmlParser = new BasicMusicXMLParser(basicScoreData);
@@ -92,7 +93,7 @@ public class MusicXMLTest {
      * Unit test case to parse whether a chord is present or not
      */
     @Test
-    public void musicXMLChordParseTest() throws IOException, Modulo7InvalidMusicXMLFile {
+    public void musicXMLChordParseTest() throws Modulo7InvalidMusicXMLFile, Modulo7NoSuchFileException {
         final String chordScoreData = "./src/test/testdata/musicxml/chord.xml";
         BasicMusicXMLParser xmlParser = new BasicMusicXMLParser(chordScoreData);
 

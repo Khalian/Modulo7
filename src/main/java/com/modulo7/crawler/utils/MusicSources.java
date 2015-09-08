@@ -1,5 +1,12 @@
 package com.modulo7.crawler.utils;
 
+import org.apache.commons.compress.compressors.FileNameUtil;
+import org.apache.commons.io.FilenameUtils;
+
+import java.util.Arrays;
+import java.util.HashSet;
+import java.util.Set;
+
 /**
  * Created by asanyal on 7/18/2015.
  *
@@ -7,7 +14,9 @@ package com.modulo7.crawler.utils;
  * can be acquired via modulo7
  *
  * As such a crawler can be configured to obtain a subset
- * of these sources for its processing
+ * of these sources for its processing or the database engine can
+ * will be able to filter out only the songs that it needs based
+ * on the extensions
  */
 public enum MusicSources {
 
@@ -28,5 +37,17 @@ public enum MusicSources {
      */
     MusicSources(final String png) {
 
+    }
+
+    // Supported file extenstions for the modulo7 platform
+    private static Set<String> SUPPORTED_FILE_EXTENSIONS = new HashSet<>(Arrays.asList("mid", "midi", ".mp3", "png", "pdf", "jpeg", "xml"));
+
+    /**
+     * Check if modulo7 allows a particular file extension for
+     * @param fileName
+     * @return
+     */
+    public static boolean checkIfSupportedExtension(final String fileName) {
+        return SUPPORTED_FILE_EXTENSIONS.contains((FilenameUtils.getExtension(fileName).toLowerCase()));
     }
 }

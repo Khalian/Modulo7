@@ -24,13 +24,16 @@ public class MusicTheoryModelsTest {
     public void testIntervals() throws Modulo7BadIntervalException {
         Assert.assertEquals(Interval.getInterval(Note.A0, Note.B0).getInterval(), IntervalEnum.MAJOR_SECOND);
         Assert.assertEquals(Interval.getInterval(Note.A1, Note.CSHARP1).getInterval(), IntervalEnum.MAJOR_THIRD);
+        Assert.assertEquals(Interval.getInterval(Note.A2, Note.DSHARP2).getInterval(), IntervalEnum.AUGMENTED_FOURTH);
+        Assert.assertEquals(Interval.getInterval(Note.B0, Note.B0).getInterval(), IntervalEnum.PERFECT_UNISON);
+        Assert.assertEquals(Interval.getInterval(Note.CSHARP4, Note.GSHARP4).getInterval(), IntervalEnum.PERFECT_FIFTH);
     }
 
     /**
-     * Unit test cases to test for chord
+     * Unit test cases to test for chord auality identification
      */
     @Test
-    public void testChordID() throws Modulo7BadIntervalException {
+    public void testChordQualityID() throws Modulo7BadIntervalException {
         Set<Note> setOfMajorNotes = new HashSet<>();
 
         setOfMajorNotes.add(Note.G1);

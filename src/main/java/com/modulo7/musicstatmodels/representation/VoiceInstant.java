@@ -420,7 +420,7 @@ public class VoiceInstant {
         if (thatInstant.isChord()) {
             thatNote = ChordQuality.getRootNoteFromChord(thisInstant.setOfNotes);
         } else {
-            thatNote = thisInstant.getNote();
+            thatNote = thatInstant.getNote();
         }
 
         return Note.isHigherPitch(thisNote, thatNote);
@@ -449,7 +449,7 @@ public class VoiceInstant {
         if (thatInstant.isChord()) {
             thatNote = ChordQuality.getRootNoteFromChord(thisInstant.setOfNotes);
         } else {
-            thatNote = thisInstant.getNote();
+            thatNote = thatInstant.getNote();
         }
 
         return Note.isLowerPitch(thisNote, thatNote);

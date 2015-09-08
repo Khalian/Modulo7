@@ -8,11 +8,8 @@ package com.modulo7.acoustics;
  *
  */
 
-import com.modulo7.common.exceptions.Modulo7BadKeyException;
-import com.modulo7.common.exceptions.Modulo7InvalidCircleOfFifthsDistance;
+import com.modulo7.common.exceptions.*;
 import com.modulo7.common.interfaces.AbstractAnalyzer;
-import com.modulo7.common.exceptions.Modulo7BadNoteException;
-import com.modulo7.common.exceptions.Modulo7InvalidLineInstantSizeException;
 import com.modulo7.common.utils.Modulo7Globals;
 import com.modulo7.common.utils.Modulo7Utils;
 import com.modulo7.crawler.utils.MusicSources;
@@ -83,10 +80,14 @@ public class MidiToSongConverter implements AbstractAnalyzer {
      * Basic constructor for the midi to song converter
      * @param midiFileLocation
      */
-    public MidiToSongConverter(final String midiFileLocation) throws InvalidMidiDataException, IOException {
+    public MidiToSongConverter(final String midiFileLocation) throws InvalidMidiDataException, Modulo7NoSuchFileException {
         // Gets the sequence of events from a midi file, we can then acquire the various parameters from the midi
         // sequences to construct voice instants
-        midiSequence = MidiSystem.getSequence(new File(midiFileLocation));
+        try {
+            midiSequence = MidiSystem.getSequence(new File(midiFileLocation));
+        } catch (IOException e) {
+            throw new Modulo7NoSuchFileException("No such file found in location:" + midiFileLocation);
+        }
 
         numTicks = midiSequence.getTickLength();
 

@@ -1,14 +1,16 @@
 package com.modulo7.common.utils;
 
+import com.modulo7.common.exceptions.Modulo7BadKeyException;
 import com.modulo7.common.exceptions.Modulo7VectorSizeMismatchException;
-import com.modulo7.musicstatmodels.musictheorymodels.IntervalEnum;
-import com.modulo7.musicstatmodels.representation.Note;
+import com.modulo7.musicstatmodels.musictheorymodels.KKTonalityProfiles;
+import com.modulo7.musicstatmodels.representation.KeySignature;
+import com.modulo7.musicstatmodels.representation.ScaleType;
 import com.modulo7.musicstatmodels.representation.Voice;
 import com.modulo7.musicstatmodels.representation.VoiceInstant;
-import com.modulo7.musicstatmodels.vectorspacemodels.datastructures.TonalHistogramData;
 import com.modulo7.othersources.NoteAndIsChordDual;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.filefilter.TrueFileFilter;
+import org.apache.commons.math3.stat.correlation.PearsonsCorrelation;
 
 import java.io.File;
 import java.io.IOException;
@@ -181,6 +183,64 @@ public class Modulo7Utils {
             result = lcm(result, input[i]);
 
         return ((int) result);
+    }
+
+    /**
+     * Estimate key signature based on weighted tonality histogram and its correlation to the KK best
+     * tonality profile
+     *
+     * @param weightedTonalHistogram
+     * @return
+     */
+    public static KeySignature estimateKeySignatureOnKKProfile(final double[] weightedTonalHistogram) throws Modulo7BadKeyException {
+
+        assert (weightedTonalHistogram.length == 12);
+
+        double bestCorrelation = -Double.MAX_VALUE;
+        String bestKey = "C";
+        ScaleType bestScaleType = ScaleType.MINOR;
+
+        // Iterate over the major chord profiles and choose the best one of the lot
+        for (Map.Entry<String, List<Double>> entry : KKTonalityProfiles.MAJOR_CHORD_PROFILES.entrySet()) {
+
+            final String key = entry.getKey();
+            final List<Double> profile = entry.getValue();
+
+            double[] targetProfile = new double[profile.size()];
+            for (int i = 0; i < targetProfile.length; i++) {
+                targetProfile[i] = profile.get(i);
+            }
+
+            final double correlation = new PearsonsCorrelation().correlation(weightedTonalHistogram, targetProfile);
+
+            if (correlation > bestCorrelation) {
+                bestCorrelation = correlation;
+                bestKey = key;
+                bestScaleType = ScaleType.MAJOR;
+            }
+        }
+
+        // Iterates over the minor chord profiles and choose the best one of the lot
+        for (Map.Entry<String, List<Double>> entry : KKTonalityProfiles.MINOR_CHORD_PROFILES.entrySet()) {
+
+            final String key = entry.getKey();
+            final List<Double> profile = entry.getValue();
+
+            double[] targetProfile = new double[profile.size()];
+            for (int i = 0; i < targetProfile.length; i++) {
+                targetProfile[i] = profile.get(i);
+            }
+
+            final double correlation = new PearsonsCorrelation().correlation(weightedTonalHistogram, targetProfile);
+
+            if (correlation > bestCorrelation) {
+                bestCorrelation = correlation;
+                bestKey = key;
+                bestScaleType = ScaleType.MINOR;
+            }
+        }
+
+        return new KeySignature(bestKey, bestScaleType);
     }
 
     /**
