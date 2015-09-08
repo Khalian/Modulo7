@@ -135,7 +135,6 @@ public class FrequencyNoteMap {
         Collections.sort(notesInOrder);
 
         // Temporary, put the note map to note position
-        // TODO : Figure out the actual meaning of the chroma vector
         notePositionMap.put(Note.A0, 1);
         notePositionMap.put(Note.ASHARP0, 2);
         notePositionMap.put(Note.B0, 3);
@@ -253,18 +252,18 @@ public class FrequencyNoteMap {
         notePositionMap.put(Note.G8, 107);
         notePositionMap.put(Note.GSHARP8, 108);
 
-        basicNotePositionMap.put(Note.A4, 1);
-        basicNotePositionMap.put(Note.ASHARP4, 2);
-        basicNotePositionMap.put(Note.B4, 3);
-        basicNotePositionMap.put(Note.C4, 4);
-        basicNotePositionMap.put(Note.CSHARP4, 5);
-        basicNotePositionMap.put(Note.D4, 6);
-        basicNotePositionMap.put(Note.DSHARP4, 7);
-        basicNotePositionMap.put(Note.E4, 8);
-        basicNotePositionMap.put(Note.F4, 9);
-        basicNotePositionMap.put(Note.FSHARP4, 10);
-        basicNotePositionMap.put(Note.G4, 11);
-        basicNotePositionMap.put(Note.GSHARP4, 12);
+        basicNotePositionMap.put(Note.A4, 0);
+        basicNotePositionMap.put(Note.ASHARP4, 1);
+        basicNotePositionMap.put(Note.B4, 2);
+        basicNotePositionMap.put(Note.C4, 3);
+        basicNotePositionMap.put(Note.CSHARP4, 4);
+        basicNotePositionMap.put(Note.D4, 5);
+        basicNotePositionMap.put(Note.DSHARP4, 6);
+        basicNotePositionMap.put(Note.E4, 7);
+        basicNotePositionMap.put(Note.F4, 8);
+        basicNotePositionMap.put(Note.FSHARP4, 9);
+        basicNotePositionMap.put(Note.G4, 10);
+        basicNotePositionMap.put(Note.GSHARP4, 11);
 
         // Invert and acquire the note positions
         for (Map.Entry<Note, Integer> entry : notePositionMap.entrySet()) {
@@ -288,7 +287,7 @@ public class FrequencyNoteMap {
      * @param position
      * @return
      */
-    public Note getNoteGivenPosition(int position) {
+    public Note getNoteGivenPosition(final int position) {
         return positionNoteMap.get(position);
     }
 
@@ -298,8 +297,8 @@ public class FrequencyNoteMap {
      * @param note
      * @return
      */
-    public int getPositionGivenBasicNote(Note note) {
-        return  basicNotePositionMap.get(note);
+    public int getPositionGivenBasicNote(final Note note) {
+        return  basicNotePositionMap.get(note) % 11;
     }
 
     /**
@@ -308,8 +307,8 @@ public class FrequencyNoteMap {
      * @param position
      * @return
      */
-    public Note getBasicNoteGivenPosition(int position) {
-        return basicPositionNoteMap.get(position);
+    public Note getBasicNoteGivenPosition(final int position) {
+        return basicPositionNoteMap.get(position % 11);
     }
 
     /**
@@ -319,7 +318,7 @@ public class FrequencyNoteMap {
      * @param position
      * @return
      */
-    public String getBasicNoteValueGivenPosition(int position) {
+    public String getBasicNoteValueGivenPosition(final int position) {
         return basicPositionNoteMap.get(position).getNoteValue();
     }
 

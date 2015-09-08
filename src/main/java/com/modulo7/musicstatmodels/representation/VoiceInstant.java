@@ -90,12 +90,22 @@ public class VoiceInstant {
     public VoiceInstant(final Note note, final double duration, final double attack)
             throws Modulo7InvalidLineInstantSizeException {
 
+        checkIfValidNote(note);
+
         setOfNotes.add(note);
 
         noteType = NoteType.MELODIC_NOTE;
 
         this.duration = duration;
         this.attack = attack;
+    }
+
+    /**
+     * Check if a single note is valid or not
+     * @param note
+     */
+    private void checkIfValidNote(final Note note) {
+        assert (note != null);
     }
 
     /**
@@ -112,6 +122,8 @@ public class VoiceInstant {
             throw new Modulo7InvalidLineInstantSizeException("Voice Instant Cannot be of size" + noteSet.size());
         }
 
+        checkIfAllValidNotes(noteSet);
+
         setOfNotes = noteSet;
 
         if (setOfNotes.size() == 1) {
@@ -119,6 +131,37 @@ public class VoiceInstant {
         } else {
             noteType = NoteType.CHORD;
             this.chordQuality = ChordQuality.estimateChordType(setOfNotes);
+        }
+
+        this.duration = duration;
+        this.attack = Modulo7Globals.UNKNOWN;
+    }
+
+    /**
+     * Basic constructor of the line instant class with the duration clearly defined
+     * This constructor asserts attack for this instant is unknown but the chord quality is
+     * apriori
+     *
+     * @param noteSet
+     * @param duration
+     * @param chordQuality
+     */
+    public VoiceInstant(final HashSet<Note> noteSet, final double duration, final ChordQuality chordQuality)
+            throws Modulo7InvalidLineInstantSizeException, Modulo7BadIntervalException {
+
+        if (noteSet.size() == 0) {
+            throw new Modulo7InvalidLineInstantSizeException("Voice Instant Cannot be of size" + noteSet.size());
+        }
+
+        checkIfAllValidNotes(noteSet);
+
+        setOfNotes = noteSet;
+
+        if (setOfNotes.size() == 1) {
+            noteType = NoteType.MELODIC_NOTE;
+        } else {
+            noteType = NoteType.CHORD;
+            this.chordQuality = chordQuality;
         }
 
         this.duration = duration;
@@ -140,6 +183,8 @@ public class VoiceInstant {
         if (noteSet.size() == 0) {
             throw new Modulo7InvalidLineInstantSizeException("Voice Instant Cannot be of size" + noteSet.size());
         }
+
+        checkIfAllValidNotes(noteSet);
 
         setOfNotes = noteSet;
 
@@ -166,6 +211,8 @@ public class VoiceInstant {
     public VoiceInstant(final Note note, final double duration)
             throws Modulo7InvalidLineInstantSizeException {
 
+        checkIfValidNote(note);
+
         setOfNotes.add(note);
 
         noteType = NoteType.MELODIC_NOTE;
@@ -185,6 +232,8 @@ public class VoiceInstant {
      */
     public VoiceInstant(final Note note, final NoteDuration theoreticalDuration, final double duration)
             throws Modulo7InvalidLineInstantSizeException {
+
+        checkIfValidNote(note);
 
         setOfNotes.add(note);
 
@@ -206,6 +255,8 @@ public class VoiceInstant {
             throw new Modulo7InvalidLineInstantSizeException("Voice Instant Cannot be of size" + noteSet.size());
         }
 
+        checkIfAllValidNotes(noteSet);
+
         setOfNotes = noteSet;
 
         if (setOfNotes.size() == 1) {
@@ -225,6 +276,8 @@ public class VoiceInstant {
      * @param note
      */
     public VoiceInstant(final Note note) throws Modulo7InvalidLineInstantSizeException {
+
+        checkIfValidNote(note);
 
         setOfNotes = new HashSet<>();
         setOfNotes.add(note);
@@ -293,6 +346,20 @@ public class VoiceInstant {
 
         // For the sake of complilation, actually dead code
         return null;
+    }
+
+    /**
+     * Check if all valid notes are present, i.e sanity test for notes being not null
+     * @param notes
+     */
+    private void checkIfAllValidNotes(HashSet<Note> notes) {
+       for (Note note : notes) {
+
+           if (note == null) {
+               System.out.println("Haha");
+           }
+           assert (note != null);
+       }
     }
 
     /**

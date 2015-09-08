@@ -2,6 +2,7 @@ package com.modulo7.acoustics;
 
 import com.echonest.api.v4.*;
 
+import com.modulo7.common.exceptions.Modulo7BadChordException;
 import com.modulo7.common.exceptions.Modulo7BadIntervalException;
 import com.modulo7.common.interfaces.AbstractAnalyzer;
 import com.modulo7.common.exceptions.Modulo7InvalidLineInstantSizeException;
@@ -169,16 +170,22 @@ public class EchoNestBasicMP3Analyzer implements AbstractAnalyzer {
         // Sanity check to ensure note ranges go 12 for basic position acquisition
         assert (maxIndex >= 0 && maxIndex < 12);
 
-        final int actualNoteMapMaxIndex = maxIndex + 1;
-
         //check whether its correct or not that this chroma vector can be classified as a note
         if (maxVal >= sum - maxIndex)
-            chromaNotes.add(noteMap.getBasicNoteGivenPosition(actualNoteMapMaxIndex));
+            chromaNotes.add(noteMap.getBasicNoteGivenPosition(maxIndex));
         else {
-            // TODO : Estimation of chord code, for now hack and put the note with highest position
             ChordEstimator estimator = new ChordEstimator(noteChromaVector);
-            Set<Note> chordNotes = ChordQuality.estimateChordGivenQualityAndRootNote(estimator.getRootNote(), estimator.getQuality());
-            chromaNotes.add(noteMap.getBasicNoteGivenPosition(actualNoteMapMaxIndex));
+            HashSet<Note> chordNotes;
+            try {
+                chordNotes = ChordEstimator.estimateChordGivenQualityAndRootNote(estimator.getRootNote(), estimator.getQuality(), estimator.getIntervals());
+                for (final Note noteInChord : chordNotes) {
+                    chromaNotes.add(noteInChord);
+                }
+                return new VoiceInstant(chromaNotes, duration, estimator.getQuality());
+            } catch (Modulo7BadChordException e) {
+                logger.error(e.getMessage());
+            }
+
         }
 
         return new VoiceInstant(chromaNotes, duration);

@@ -1,20 +1,26 @@
 package com.modulo7.acoustics;
 
+import com.modulo7.common.utils.FrequencyNoteMap;
+import com.modulo7.common.exceptions.Modulo7BadChordException;
+import com.modulo7.musicstatmodels.musictheorymodels.IntervalEnum;
 import com.modulo7.musicstatmodels.representation.ChordQuality;
+import com.modulo7.musicstatmodels.representation.Note;
+
+import java.util.HashSet;
 
 /**
  * Created by asanyal on 9/5/15.
  * <p/>
  * A chord estimation algorithm from chroma vector output by echo nest
- * Once we have chromagram from echo nest
- *
+ * Once we have chromagram from echo nest we can use this template based
+ * chord estimation code to estimate chords
  */
 public class ChordEstimator {
 
     /**
      * The root note of the detected chord
      */
-    private int rootNote;
+    private Note rootNote;
 
     /**
      * The quality of the detected chord (Major, Minor, etc)
@@ -23,8 +29,9 @@ public class ChordEstimator {
 
     /**
      * Any other intervals that describe the chord, e.g. 7th
+     * TODO : Convert to intervals structure
      */
-    private int intervals;
+    private IntervalEnum intervals;
 
     // Bias parameter
     private double bias = 1.06;
@@ -38,10 +45,15 @@ public class ChordEstimator {
     // An array reprentation of the chord profiles computed by the algorithm
     private static double[][] chordProfiles = new double[108][12];
 
+    // Frequency note map instance
+    private static final FrequencyNoteMap noteMap = FrequencyNoteMap.getInstance();
+
     // The chord profiles are a global descriptor, make it static
     static {
         makeChordProfiles();
     }
+
+    private int chordIndex;
 
     /**
      * Basic constructor
@@ -51,6 +63,10 @@ public class ChordEstimator {
 
         this.chromagram = chromagram;
         classifyChromagram();
+
+        assert (rootNote != null);
+        assert (quality != null);
+        assert (intervals != null);
     }
 
     private static void makeChordProfiles() {
@@ -199,7 +215,6 @@ public class ChordEstimator {
         int i;
         int j;
         int fifth;
-        int chordindex;
 
         // remove some of the 5th note energy from chromagram
         for (i = 0; i < 12; i++) {
@@ -257,69 +272,69 @@ public class ChordEstimator {
             chord[j] = calculateChordScore(chromagram, chordProfiles[j], bias, 4);
         }
 
-        chordindex = minimumIndex(chord, 108);
+        chordIndex = minimumIndex(chord, 108);
 
         // major
-        if (chordindex < 12) {
-            rootNote = chordindex;
+        if (chordIndex < 12) {
+            rootNote = noteMap.getBasicNoteGivenPosition(chordIndex);
             quality = ChordQuality.MAJOR;
-            intervals = 0;
+            intervals = IntervalEnum.PERFECT_UNISON;
         }
 
         // minor
-        if ((chordindex >= 12) && (chordindex < 24)) {
-            rootNote = chordindex - 12;
+        if ((chordIndex >= 12) && (chordIndex < 24)) {
+            rootNote = noteMap.getBasicNoteGivenPosition(chordIndex - 12);
             quality = ChordQuality.MINOR;
-            intervals = 0;
+            intervals = IntervalEnum.PERFECT_UNISON;
         }
 
         // diminished 5th
-        if ((chordindex >= 24) && (chordindex < 36)) {
-            rootNote = chordindex - 24;
+        if ((chordIndex >= 24) && (chordIndex < 36)) {
+            rootNote = noteMap.getBasicNoteGivenPosition(chordIndex - 24);
             quality = ChordQuality.DIMINISHED5th;
-            intervals = 0;
+            intervals = IntervalEnum.PERFECT_UNISON;
         }
 
         // augmented 5th
-        if ((chordindex >= 36) && (chordindex < 48)) {
-            rootNote = chordindex - 36;
+        if ((chordIndex >= 36) && (chordIndex < 48)) {
+            rootNote = noteMap.getBasicNoteGivenPosition(chordIndex - 36);
             quality = ChordQuality.AUGMENTED5th;
-            intervals = 0;
+            intervals = IntervalEnum.PERFECT_UNISON;
         }
 
         // sus2
-        if ((chordindex >= 48) && (chordindex < 60)) {
-            rootNote = chordindex - 48;
+        if ((chordIndex >= 48) && (chordIndex < 60)) {
+            rootNote = noteMap.getBasicNoteGivenPosition(chordIndex - 48);
             quality = ChordQuality.SUSPENDED;
-            intervals = 2;
+            intervals = IntervalEnum.MAJOR_SECOND;
         }
 
         // sus4
-        if ((chordindex >= 60) && (chordindex < 72)) {
-            rootNote = chordindex - 60;
+        if ((chordIndex >= 60) && (chordIndex < 72)) {
+            rootNote = noteMap.getBasicNoteGivenPosition(chordIndex - 60);
             quality = ChordQuality.SUSPENDED;
-            intervals = 4;
+            intervals = IntervalEnum.MAJOR_THIRD;
         }
 
         // major 7th
-        if ((chordindex >= 72) && (chordindex < 84)) {
-            rootNote = chordindex - 72;
+        if ((chordIndex >= 72) && (chordIndex < 84)) {
+            rootNote = noteMap.getBasicNoteGivenPosition(chordIndex - 72);
             quality = ChordQuality.MAJOR;
-            intervals = 7;
+            intervals = IntervalEnum.MAJOR_SEVENTH;
         }
 
         // minor 7th
-        if ((chordindex >= 84) && (chordindex < 96)) {
-            rootNote = chordindex - 84;
+        if ((chordIndex >= 84) && (chordIndex < 96)) {
+            rootNote = noteMap.getBasicNoteGivenPosition(chordIndex - 84);
             quality = ChordQuality.MINOR;
-            intervals = 7;
+            intervals = IntervalEnum.MINOR_SEVENTH;
         }
 
         // dominant 7th
-        if ((chordindex >= 96) && (chordindex < 108)) {
-            rootNote = chordindex - 96;
+        if ((chordIndex >= 96) && (chordIndex < 108)) {
+            rootNote = noteMap.getBasicNoteGivenPosition(chordIndex - 96);
             quality = ChordQuality.DOMINANT;
-            intervals = 7;
+            intervals = IntervalEnum.MINOR_SEVENTH;
         }
     }
 
@@ -360,16 +375,148 @@ public class ChordEstimator {
         return minIndex;
     }
 
+    /**
+     * Estimate the notes of a chord given its chord quality and root note of the chord
+     *
+     * @param rootNote
+     * @param quality
+     * @return
+     */
+    public static HashSet<Note> estimateChordGivenQualityAndRootNote(final Note rootNote, final ChordQuality quality, final IntervalEnum additionalInterval)
+            throws Modulo7BadChordException {
 
-    public int getRootNote() {
+        final int rootPosition = noteMap.getPositionGivenBasicNote(rootNote);
+
+        if (quality.equals(ChordQuality.MAJOR)) {
+            final int thirdPosition = rootPosition + IntervalEnum.MAJOR_THIRD.getIntervalQuantity();
+            final int fifthPosition = rootPosition + IntervalEnum.PERFECT_FIFTH.getIntervalQuantity();
+
+            final Note thirdNote = noteMap.getBasicNoteGivenPosition(thirdPosition);
+            final Note fifthNote = noteMap.getBasicNoteGivenPosition(fifthPosition);
+            final Note additionalNote = getAdditionalNote(rootPosition, additionalInterval);
+
+            HashSet<Note> newSet = new HashSet<>();
+            assert (rootNote != null); assert (thirdNote != null); assert (fifthNote != null);
+
+            newSet.add(rootNote); newSet.add(thirdNote); newSet.add(fifthNote);
+
+            if (additionalNote != null)
+                newSet.add(additionalNote);
+
+            return newSet;
+        } else if (quality.equals(ChordQuality.MINOR)) {
+            final int thirdPosition = rootPosition + IntervalEnum.MINOR_THIRD.getIntervalQuantity();
+            final int fifthPosition = rootPosition + IntervalEnum.PERFECT_FIFTH.getIntervalQuantity();
+
+            final Note thirdNote = noteMap.getBasicNoteGivenPosition(thirdPosition);
+            final Note fifthNote = noteMap.getBasicNoteGivenPosition(fifthPosition);
+            final Note additionalNote = getAdditionalNote(rootPosition, additionalInterval);
+
+            assert (rootNote != null); assert (thirdNote != null); assert (fifthNote != null);
+
+            HashSet<Note> newSet = new HashSet<>();
+            newSet.add(rootNote); newSet.add(thirdNote); newSet.add(fifthNote);
+
+            if (additionalNote != null)
+                newSet.add(additionalNote);
+
+            return newSet;
+        } else if (quality.equals(ChordQuality.DIMINISHED5th)) {
+            final int thirdPosition = rootPosition + IntervalEnum.MINOR_THIRD.getIntervalQuantity();
+            final int fifthPosition = rootPosition + IntervalEnum.DIMINISHED_FIFTH.getIntervalQuantity();
+
+            final Note thirdNote = noteMap.getBasicNoteGivenPosition(thirdPosition);
+            final Note fifthNote = noteMap.getBasicNoteGivenPosition(fifthPosition);
+
+            assert (rootNote != null); assert (thirdNote != null); assert (fifthNote != null);
+
+            HashSet<Note> newSet = new HashSet<>();
+            newSet.add(rootNote); newSet.add(thirdNote); newSet.add(fifthNote);
+
+            return newSet;
+        } else if (quality.equals(ChordQuality.AUGMENTED5th)) {
+            final int thirdPosition = rootPosition + IntervalEnum.MINOR_THIRD.getIntervalQuantity();
+            final int fifthPosition = rootPosition + IntervalEnum.AUGMENTED_FIFTH.getIntervalQuantity();
+
+            final Note thirdNote = noteMap.getBasicNoteGivenPosition(thirdPosition);
+            final Note fifthNote = noteMap.getBasicNoteGivenPosition(fifthPosition);
+
+            assert (rootNote != null); assert (thirdNote != null); assert (fifthNote != null);
+
+            HashSet<Note> newSet = new HashSet<>();
+            newSet.add(rootNote); newSet.add(thirdNote); newSet.add(fifthNote);
+
+            return newSet;
+        } else if (quality.equals(ChordQuality.SUSPENDED)) {
+            final int fifthPosition = rootPosition + IntervalEnum.PERFECT_FIFTH.getIntervalQuantity();
+
+            final Note fifthNote = noteMap.getBasicNoteGivenPosition(fifthPosition);
+            final Note suspendedNote = getAdditionalNote(rootPosition, additionalInterval);
+
+            assert (rootNote != null); assert (suspendedNote != null); assert (fifthNote != null);
+
+            HashSet<Note> newSet = new HashSet<>();
+            newSet.add(rootNote); newSet.add(suspendedNote); newSet.add(fifthNote);
+
+            return newSet;
+        } else if (quality.equals(ChordQuality.DOMINANT)) {
+            final int thirdPosition = rootPosition + IntervalEnum.MAJOR_THIRD.getIntervalQuantity();
+            final int fifthPosition = rootPosition + IntervalEnum.PERFECT_FIFTH.getIntervalQuantity();
+
+            final Note thirdNote = noteMap.getBasicNoteGivenPosition(thirdPosition);
+            final Note fifthNote = noteMap.getBasicNoteGivenPosition(fifthPosition);
+            final Note additionalNote = getAdditionalNote(rootPosition, additionalInterval);
+
+            assert (rootNote != null); assert (thirdNote != null); assert (additionalNote != null);
+
+            HashSet<Note> newSet = new HashSet<>();
+            newSet.add(rootNote); newSet.add(thirdNote); newSet.add(fifthNote);
+
+            return newSet;
+        } else {
+            throw new Modulo7BadChordException("No chord can be formed from rootNote :" + rootNote.getNoteValue() + "and quality:" + quality.getStringRepresentation());
+        }
+    }
+
+    /**
+     * Gets the additional interval note given the root note
+     *
+     * @param rootPosition
+     * @param additionalInterval
+     * @return
+     */
+    public static Note getAdditionalNote(final int rootPosition, final IntervalEnum additionalInterval) {
+        if (!additionalInterval.equals(IntervalEnum.PERFECT_UNISON)) {
+            final int additionalPosition = rootPosition + additionalInterval.getIntervalQuantity();
+            return noteMap.getBasicNoteGivenPosition(additionalPosition);
+        } else {
+            return null;
+        }
+    }
+
+
+    /**
+     * Getter for the root note of the chord
+     * @return
+     */
+    public Note getRootNote() {
         return rootNote;
     }
 
+    /**
+     * Gets the chordquality associated with the chord
+     * @return
+     */
     public ChordQuality getQuality() {
         return quality;
     }
 
-    public int getIntervals() {
+    /**
+     * Gets the additional interval component associated with
+     * the interval structure
+     * @return
+     */
+    public IntervalEnum getIntervals() {
         return intervals;
     }
 }
