@@ -122,6 +122,9 @@ jar {
 
 test {
 
+    // Setup the audiveris jar location in gradle build
+    environment 'AUDIVERIS_JAR_LOCATION', '/usr/bin/audiveris/AudiverisApp/dist'
+
     // show standard out and standard error of the test JVM(s) on the console
     testLogging.showStandardStreams = true
 

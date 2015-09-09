@@ -13,7 +13,9 @@ import java.util.HashSet;
  * <p/>
  * A chord estimation algorithm from chroma vector output by echo nest
  * Once we have chromagram from echo nest we can use this template based
- * chord estimation code to estimate chords
+ * chord estimation algorithm to estimate chords including tough ones like
+ *
+ * Ideas taken from but reimplemented : https://github.com/adamstark/Chord-Detector-and-Chromagram
  */
 public class ChordEstimator {
 
@@ -29,7 +31,7 @@ public class ChordEstimator {
 
     /**
      * Any other intervals that describe the chord, e.g. 7th
-     * TODO : Convert to intervals structure
+     * This methodoloty is useful for
      */
     private IntervalEnum intervals;
 

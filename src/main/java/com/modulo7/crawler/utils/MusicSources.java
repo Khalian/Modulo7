@@ -43,7 +43,7 @@ public enum MusicSources {
     }
 
     // Supported file extenstions for the modulo7 platform
-    private static Set<String> SUPPORTED_FILE_EXTENSIONS = new HashSet<>(Arrays.asList("mid", "midi", ".mp3", "png", "pdf", "jpeg", "xml"));
+    private static Set<String> SUPPORTED_FILE_EXTENSIONS = new HashSet<>(Arrays.asList("mid", "midi", "mp3", "png", "pdf", "jpeg", "xml", "h5"));
 
     /**
      * Check if modulo7 allows a particular file extension for
@@ -51,6 +51,7 @@ public enum MusicSources {
      * @return
      */
     public static boolean checkIfSupportedExtension(final String fileName) {
-        return SUPPORTED_FILE_EXTENSIONS.contains((FilenameUtils.getExtension(fileName).toLowerCase()));
+        final String fileExtension = FilenameUtils.getExtension(fileName);
+        return SUPPORTED_FILE_EXTENSIONS.contains(fileExtension.toLowerCase());
     }
 }

@@ -37,10 +37,10 @@ public class BasicMusicXMLParser implements AbstractAnalyzer {
     final static Logger logger = Logger.getLogger(BasicMusicXMLParser.class.getName());
 
     // Key signature of the song if its present in the music xml encoding
-    private KeySignature keySignature = null;
+    private KeySignature keySignature = new KeySignature();
 
     // The time signature associated with this song
-    private TimeSignature timeSignature = null;
+    private TimeSignature timeSignature = new TimeSignature();
 
     // The set of lines that describe the song, mapped to line index
     private Map<Integer, Voice> voiceIndextoVoiceMap = new HashMap<>();

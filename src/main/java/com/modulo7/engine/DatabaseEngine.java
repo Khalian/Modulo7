@@ -71,7 +71,7 @@ public class DatabaseEngine {
 
         for (final String location : allSongLocations) {
             if (MusicSources.checkIfSupportedExtension(location)) {
-                allSongLocations.add(location);
+                songLocations.add(location);
             }
         }
     }

@@ -29,7 +29,6 @@ public class Song {
     private SongMetadata metadata = new SongMetadata();
 
     // Song source, depending on what medium the song has arisen from, modulo7 can expect certain ideas to work and certain
-    // not to
     private MusicSources source = MusicSources.UNKNOWN;
 
     // A basic lyrics object added to the song model    

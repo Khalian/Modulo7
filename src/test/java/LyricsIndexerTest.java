@@ -55,6 +55,5 @@ public class LyricsIndexerTest {
         lyricsSet.add(betterLyrics);
 
         indexer.bulkIndexLyrics(lyricsSet);
-
     }
 }

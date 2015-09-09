@@ -11,7 +11,8 @@ import com.modulo7.common.utils.Modulo7Globals;
 public class TimeSignature {
 
     // Which note of the measure is the associated with the beat, e,g
-    // if val = 1 then whole notes get the beat
+    // if val = 1 then whole notes get the beat, if val = 4, then quarter note gets
+    // the beat
     private int noteValIsBeat;
 
     // How many beats are there per measure
@@ -20,7 +21,6 @@ public class TimeSignature {
     // A string expression of the type of time signature, also known as the meter
     // of a song
     private String timeSignatureType = Modulo7Globals.UNKNOWNSTRING;
-
 
     public TimeSignature() {
 

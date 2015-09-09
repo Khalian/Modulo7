@@ -19,10 +19,15 @@ public class MSDSongParser implements AbstractAnalyzer {
     // The hdf5 file that is taken as an input from the MSD Dataset
     private H5File hdf5File;
 
+    /**
+     * Basic song parser object constructor
+     * @param filename
+     */
     public MSDSongParser(final String filename) {
         this.hdf5File = HDF5_GETTERS.hdf5_open_readonly(filename);
     }
 
+    // Key signature parsed from the msd data
     private KeySignature keySignature = null;
 
     // Logger for MSDSongparser
