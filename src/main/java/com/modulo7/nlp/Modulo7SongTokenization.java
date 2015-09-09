@@ -11,6 +11,8 @@ import java.util.Map;
  * This class can be used to create a string representation of
  * the input
  *
+ * TODO : Finish this implementation
+ *
  */
 public class Modulo7SongTokenization {
 
@@ -35,7 +37,6 @@ public class Modulo7SongTokenization {
      * Init constructor for the note map
      */
     private Modulo7SongTokenization() {
-
 
     }
 }

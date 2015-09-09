@@ -1,7 +1,8 @@
-package com.modulo7.musicstatmodels.vectorspacemodels.vectorspacerepresentations;
+package com.modulo7.musicstatmodels.vectorspacemodels.vectorspacerepresentations.songvectors;
 
 import com.modulo7.common.exceptions.Modulo7BadIntervalException;
 import com.modulo7.common.exceptions.Modulo7WrongNoteType;
+import com.modulo7.common.interfaces.AbstractSongVector;
 import com.modulo7.musicstatmodels.musictheorymodels.Interval;
 import com.modulo7.musicstatmodels.musictheorymodels.IntervalEnum;
 import com.modulo7.musicstatmodels.representation.Note;
@@ -19,7 +20,7 @@ import java.util.List;
  * of a tonal intervalHistogram
  *
  */
-public class TonalHistogram implements AbstractVector<TonalHistogramData> {
+public class TonalHistogram implements AbstractSongVector<TonalHistogramData> {
 
     // Internal intervalHistogram representation
     private TonalHistogramData intervalHistogram;
@@ -29,11 +30,6 @@ public class TonalHistogram implements AbstractVector<TonalHistogramData> {
      */
     public TonalHistogram() {
         intervalHistogram = new TonalHistogramData();
-    }
-
-    @Override
-    public int getVectorLength() {
-        return intervalHistogram.getSize();
     }
 
     @Override
@@ -48,18 +44,12 @@ public class TonalHistogram implements AbstractVector<TonalHistogramData> {
                 VoiceInstant instant = voiceInstants.get(i);
                 VoiceInstant nextInstant = voiceInstants.get(i + 1);
 
-                // Intervals are only truly defined if both voice Instants are melodic pieces
-                if (!instant.isChord() && !nextInstant.isChord()) {
-                    try {
-                        Note firstNote = instant.getNote();
-                        Note secondNote = instant.getNote();
-
-                        // Acquire the interval between two melodic notes
-                        IntervalEnum interval = Interval.getInterval(firstNote, secondNote).getInterval();
-                        addIntervalToHistogram(interval);
-                    } catch (Modulo7WrongNoteType | Modulo7BadIntervalException e) {
-                        e.printStackTrace();
-                    }
+                try {
+                    // Compute intervals
+                    IntervalEnum intervalEnum = Interval.getInterval(instant, nextInstant).getIntervalEnum();
+                    addIntervalToHistogram(intervalEnum);
+                } catch (Modulo7WrongNoteType | Modulo7BadIntervalException e) {
+                    e.printStackTrace();
                 }
             }
         }

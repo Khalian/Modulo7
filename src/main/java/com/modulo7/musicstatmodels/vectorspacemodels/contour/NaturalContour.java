@@ -14,11 +14,15 @@ import java.util.Set;
  * Contour extremum notes are computed and returned as elements of the contour
  * consider three voice instants : n_i , n_{i-1} and n_{i+1}, natural contour elements
  * are those in which n_i is either higher or lower than both n_{i-1} and n_{i+1} simultaneously
- *
  */
 public class NaturalContour implements AbstractContour {
 
-    //
+    /**
+     * Gets the voice representation of the natural contour only exressing the
+     * contour extremum notes
+     * @param voice
+     * @return
+     */
     @Override
     public Voice getContourRepresentaionOfVoice(final Voice voice) {
         Set<VoiceInstant> contourExtemum = new HashSet<>();

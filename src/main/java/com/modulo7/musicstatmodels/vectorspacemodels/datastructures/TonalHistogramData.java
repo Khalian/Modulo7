@@ -2,10 +2,7 @@ package com.modulo7.musicstatmodels.vectorspacemodels.datastructures;
 
 import com.modulo7.musicstatmodels.musictheorymodels.IntervalEnum;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 /**
  * Created by asanyal on 9/4/15.
@@ -16,9 +13,6 @@ public class TonalHistogramData {
 
     // Internal intervalHistogram representation
     private Map<IntervalEnum, Integer> intervalHistogram = new HashMap<>();
-
-    // A private member which keeps track of total intervalHistogram count
-    private int histogramTotalSum = 0;
 
     /**
      * Tonal Histogram scratch representation
@@ -45,25 +39,16 @@ public class TonalHistogramData {
      * @return
      */
     public List<Integer> getArrayRepresentation() {
-        List<Integer> array = new ArrayList<>();
+        Integer[] array = new Integer[13];
 
         for (Map.Entry<IntervalEnum, Integer> histogramElem : intervalHistogram.entrySet()) {
-            Integer index = histogramElem.getKey().getIntervalQuantity();
-            Integer value = histogramElem.getValue();
+            final Integer index = histogramElem.getKey().getIntervalQuantity();
+            final Integer value = histogramElem.getValue();
 
-            array.add(index, value);
+            array[index] = value;
         }
 
-        return array;
-    }
-
-    /**
-     * Internal helper method to compute total sum over intervalHistogram
-     */
-    private void computeHistogramTotalSum() {
-        for (Integer count : intervalHistogram.values()) {
-            histogramTotalSum += count;
-        }
+        return Arrays.asList(array);
     }
 
     /**
@@ -71,6 +56,13 @@ public class TonalHistogramData {
      * @return
      */
     public int getHistogramTotalSum() {
+
+        int histogramTotalSum = 0;
+
+        for (Integer count : intervalHistogram.values()) {
+            histogramTotalSum += count;
+        }
+
         return histogramTotalSum;
     }
 

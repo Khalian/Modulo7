@@ -1,11 +1,11 @@
 package com.modulo7.musicstatmodels.statistics.statistics;
 
+import com.modulo7.common.interfaces.AbstractSongVector;
 import com.modulo7.common.interfaces.AbstractStatistic;
 import com.modulo7.musicstatmodels.musictheorymodels.IntervalEnum;
 import com.modulo7.musicstatmodels.representation.Song;
 import com.modulo7.musicstatmodels.vectorspacemodels.datastructures.TonalHistogramData;
-import com.modulo7.musicstatmodels.vectorspacemodels.vectorspacerepresentations.AbstractVector;
-import com.modulo7.musicstatmodels.vectorspacemodels.vectorspacerepresentations.TonalHistogram;
+import com.modulo7.musicstatmodels.vectorspacemodels.vectorspacerepresentations.songvectors.TonalHistogram;
 
 /**
  * Created by asanyal on 8/29/15.
@@ -29,7 +29,7 @@ public class HappinessIndex implements AbstractStatistic<Double> {
      */
     @Override
     public Double getStatistic(final Song song) {
-        AbstractVector<TonalHistogramData> tonalHistogram = new TonalHistogram();
+        AbstractSongVector<TonalHistogramData> tonalHistogram = new TonalHistogram();
         tonalHistogram.computeVectorRepresentation(song);
         TonalHistogramData histogramData = tonalHistogram.getInternalRepresentation();
 

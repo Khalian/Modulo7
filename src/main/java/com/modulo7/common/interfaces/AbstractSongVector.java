@@ -1,4 +1,4 @@
-package com.modulo7.musicstatmodels.vectorspacemodels.vectorspacerepresentations;
+package com.modulo7.common.interfaces;
 
 import com.modulo7.musicstatmodels.representation.Song;
 
@@ -8,13 +8,7 @@ import com.modulo7.musicstatmodels.representation.Song;
  * An abstraction of the vector space model in Modulo7's vector
  * space model definitions
  */
-public interface AbstractVector<T> {
-
-    /**
-     * Getter for the vector length associated with this vector
-     * @return
-     */
-    public int getVectorLength();
+public interface AbstractSongVector<T> {
 
     /**
      * Computes the vector representation from the elements in

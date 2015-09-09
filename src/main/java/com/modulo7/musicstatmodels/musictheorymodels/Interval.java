@@ -1,8 +1,11 @@
 package com.modulo7.musicstatmodels.musictheorymodels;
 
 import com.modulo7.common.exceptions.Modulo7BadIntervalException;
+import com.modulo7.common.exceptions.Modulo7WrongNoteType;
 import com.modulo7.common.utils.FrequencyNoteMap;
+import com.modulo7.musicstatmodels.representation.ChordQuality;
 import com.modulo7.musicstatmodels.representation.Note;
+import com.modulo7.musicstatmodels.representation.VoiceInstant;
 
 /**
  * Created by asanyal on 8/20/15.
@@ -68,31 +71,31 @@ public class Interval {
      * @return
      */
     public static IntervalEnum getInterval(final int numHalfSteps) throws Modulo7BadIntervalException {
-        if (numHalfSteps % 13 == 0) {
+        if (numHalfSteps % 12 == 0 && numHalfSteps == 0) {
             return IntervalEnum.PERFECT_UNISON;
-        } else if (numHalfSteps % 13 == 1) {
+        } else if (numHalfSteps % 12 == 1) {
             return IntervalEnum.MINOR_SECOND;
-        } else if (numHalfSteps % 13 == 2) {
+        } else if (numHalfSteps % 12 == 2) {
             return IntervalEnum.MAJOR_SECOND;
-        } else if (numHalfSteps % 13 == 3) {
+        } else if (numHalfSteps % 12 == 3) {
             return IntervalEnum.MINOR_THIRD;
-        } else if (numHalfSteps % 13 == 4) {
+        } else if (numHalfSteps % 12 == 4) {
             return IntervalEnum.MAJOR_THIRD;
-        } else if (numHalfSteps % 13 == 5) {
+        } else if (numHalfSteps % 12 == 5) {
             return IntervalEnum.PERFECT_FOURTH;
-        } else if (numHalfSteps % 13 == 6) {
+        } else if (numHalfSteps % 12 == 6) {
             return IntervalEnum.AUGMENTED_FOURTH;
-        } else if (numHalfSteps % 13 == 7) {
+        } else if (numHalfSteps % 12 == 7) {
             return IntervalEnum.PERFECT_FIFTH;
-        } else if (numHalfSteps % 13 == 8) {
+        } else if (numHalfSteps % 12 == 8) {
             return IntervalEnum.MINOR_SIXTH;
-        } else if (numHalfSteps % 13 == 9) {
+        } else if (numHalfSteps % 12 == 9) {
             return IntervalEnum.MAJOR_SIXTH;
-        } else if (numHalfSteps % 13 == 10) {
+        } else if (numHalfSteps % 12 == 10) {
             return IntervalEnum.MINOR_SEVENTH;
-        } else if (numHalfSteps % 13 == 11) {
+        } else if (numHalfSteps % 12 == 11) {
             return IntervalEnum.MAJOR_SEVENTH;
-        } else if (numHalfSteps % 13 == 12) {
+        } else if (numHalfSteps % 12 == 12) {
             return IntervalEnum.PERFECT_OCTAVE;
         } else {
             throw new Modulo7BadIntervalException("No interval associated with half step distance " + numHalfSteps);
@@ -103,7 +106,7 @@ public class Interval {
      * Basic getter for interval
      * @return
      */
-    public IntervalEnum getInterval() {
+    public IntervalEnum getIntervalEnum() {
         return interval;
     }
 
@@ -113,6 +116,42 @@ public class Interval {
      */
     public IntervalType getType() {
         return type;
+    }
+
+    /**
+     * Get interval between current and next voice instant
+     *
+     * If the instant is a chord the root note is ascertained as interval is
+     * calculated with respect to that note
+     *
+     * @param thisInstant
+     * @param thatInstant
+     *
+     * @throws Modulo7WrongNoteType
+     * @throws Modulo7BadIntervalException
+     *
+     * @return
+     */
+    public static Interval getInterval(final VoiceInstant thisInstant, final VoiceInstant thatInstant)
+            throws Modulo7WrongNoteType, Modulo7BadIntervalException {
+
+        final Note firstNote;
+
+        if (thisInstant.isChord()) {
+            firstNote = ChordQuality.getRootNoteFromChord(thatInstant.getAllNotesofInstant());
+        } else {
+            firstNote = thisInstant.getNote();
+        }
+
+        final Note secondNote;
+
+        if (thatInstant.isChord()) {
+            secondNote = ChordQuality.getRootNoteFromChord(thatInstant.getAllNotesofInstant());
+        } else {
+            secondNote = thatInstant.getNote();
+        }
+
+        return Interval.getInterval(firstNote, secondNote);
     }
 }
 

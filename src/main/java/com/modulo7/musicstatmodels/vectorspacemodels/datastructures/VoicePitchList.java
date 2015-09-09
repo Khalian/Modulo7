@@ -22,7 +22,7 @@ public class VoicePitchList {
      * Computes the voice pitches in sequence
      * @param voice
      */
-    private void computeVoicePitchSet(final Voice voice) throws Modulo7WrongNoteType {
+    public void computeVoicePitchSet(final Voice voice) throws Modulo7WrongNoteType {
 
         // Iterate through the voice instants and acquire the necessary
         for (final VoiceInstant instant : voice.getVoiceSequence()) {
@@ -36,5 +36,13 @@ public class VoicePitchList {
      */
     private List<String> getPitchesInSequenceOfVoice() {
         return pitchesInSequenceOfVoice;
+    }
+
+    /**
+     * Length of the voice pitch sequence
+     * @return
+     */
+    public int length() {
+        return pitchesInSequenceOfVoice.size();
     }
 }

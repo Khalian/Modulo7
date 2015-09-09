@@ -298,7 +298,7 @@ public class FrequencyNoteMap {
      * @return
      */
     public int getPositionGivenBasicNote(final Note note) {
-        return  basicNotePositionMap.get(note) % 11;
+        return  basicNotePositionMap.get(note) % 12;
     }
 
     /**
@@ -308,7 +308,7 @@ public class FrequencyNoteMap {
      * @return
      */
     public Note getBasicNoteGivenPosition(final int position) {
-        return basicPositionNoteMap.get(position % 11);
+        return basicPositionNoteMap.get(position % 12);
     }
 
     /**

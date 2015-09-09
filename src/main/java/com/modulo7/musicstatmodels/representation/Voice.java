@@ -25,6 +25,8 @@ public class Voice {
     // That are being played
     private ArrayList<VoiceInstant> voiceSequence;
 
+    private VoiceTag voiceTag = new VoiceTag();
+
     // Member indicating how long the entire voice was played
     private double totalVoiceDuration = (double) Modulo7Globals.UNKNOWN;
 

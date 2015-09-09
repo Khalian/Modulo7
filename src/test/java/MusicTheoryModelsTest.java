@@ -22,11 +22,11 @@ public class MusicTheoryModelsTest {
      */
     @Test
     public void testIntervals() throws Modulo7BadIntervalException {
-        Assert.assertEquals(Interval.getInterval(Note.A0, Note.B0).getInterval(), IntervalEnum.MAJOR_SECOND);
-        Assert.assertEquals(Interval.getInterval(Note.A1, Note.CSHARP1).getInterval(), IntervalEnum.MAJOR_THIRD);
-        Assert.assertEquals(Interval.getInterval(Note.A2, Note.DSHARP2).getInterval(), IntervalEnum.AUGMENTED_FOURTH);
-        Assert.assertEquals(Interval.getInterval(Note.B0, Note.B0).getInterval(), IntervalEnum.PERFECT_UNISON);
-        Assert.assertEquals(Interval.getInterval(Note.CSHARP4, Note.GSHARP4).getInterval(), IntervalEnum.PERFECT_FIFTH);
+        Assert.assertEquals(Interval.getInterval(Note.A0, Note.B0).getIntervalEnum(), IntervalEnum.MAJOR_SECOND);
+        Assert.assertEquals(Interval.getInterval(Note.A1, Note.CSHARP1).getIntervalEnum(), IntervalEnum.MAJOR_THIRD);
+        Assert.assertEquals(Interval.getInterval(Note.A2, Note.DSHARP2).getIntervalEnum(), IntervalEnum.AUGMENTED_FOURTH);
+        Assert.assertEquals(Interval.getInterval(Note.B0, Note.B0).getIntervalEnum(), IntervalEnum.PERFECT_UNISON);
+        Assert.assertEquals(Interval.getInterval(Note.CSHARP4, Note.GSHARP4).getIntervalEnum(), IntervalEnum.PERFECT_FIFTH);
     }
 
     /**

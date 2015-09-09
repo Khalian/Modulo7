@@ -9,6 +9,7 @@ import com.modulo7.common.exceptions.Modulo7InvalidCircleOfFifthsDistance;
 import com.modulo7.common.exceptions.Modulo7InvalidMusicXMLFile;
 import com.modulo7.common.exceptions.Modulo7NoSuchFileException;
 import com.modulo7.musicstatmodels.representation.*;
+import com.modulo7.nlp.Lyrics;
 import com.modulo7.othersources.BasicMusicXMLParser;
 import junit.framework.Assert;
 import org.junit.Test;
@@ -26,7 +27,6 @@ public class MusicXMLTest {
     /**
      * Check for the correct acquisition of metadata from the music xml file
      *
-     * @throws IOException
      * @throws Modulo7InvalidMusicXMLFile
      * @throws Modulo7InvalidCircleOfFifthsDistance
      * @throws Modulo7BadKeyException
@@ -116,5 +116,23 @@ public class MusicXMLTest {
             Assert.assertEquals(firstInstant.getChordQuality(), ChordQuality.MINOR);
             Assert.assertEquals(secondInstant.getChordQuality(), ChordQuality.NOT_A_CHORD);
         }
+    }
+
+    /**
+     * Test if the music xml parser is able to correctly acquire the
+     *
+     * @throws Modulo7InvalidMusicXMLFile
+     * @throws Modulo7NoSuchFileException
+     */
+    @Test
+    public void musicXMLLyricsParseTest() throws Modulo7InvalidMusicXMLFile, Modulo7NoSuchFileException {
+
+        final String basicScoreData = "./src/test/testdata/musicxml/musicXMLTest.xml";
+        BasicMusicXMLParser xmlParser = new BasicMusicXMLParser(basicScoreData);
+
+        Song song = xmlParser.getSongRepresentation();
+
+        Lyrics lyrics = song.getLyrics();
+        Assert.assertEquals(lyrics.getLyricsOfSong().split("\\s+").length, 4);
     }
 }
