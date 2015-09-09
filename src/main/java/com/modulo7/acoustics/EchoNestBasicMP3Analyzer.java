@@ -1,12 +1,11 @@
 package com.modulo7.acoustics;
 
 import com.echonest.api.v4.*;
-
-import com.modulo7.common.exceptions.Modulo7BadChordException;
 import com.modulo7.common.exceptions.Modulo7BadIntervalException;
-import com.modulo7.common.interfaces.AbstractAnalyzer;
+import com.modulo7.common.exceptions.Modulo7BadKeyException;
 import com.modulo7.common.exceptions.Modulo7InvalidLineInstantSizeException;
 import com.modulo7.common.exceptions.Modulo7NoSuchFileException;
+import com.modulo7.common.interfaces.AbstractAnalyzer;
 import com.modulo7.common.utils.FrequencyNoteMap;
 import com.modulo7.common.utils.Modulo7Globals;
 import com.modulo7.common.utils.Modulo7Utils;
@@ -18,8 +17,6 @@ import org.apache.log4j.Logger;
 
 import java.io.File;
 import java.io.IOException;
-import java.util.HashSet;
-import java.util.Set;
 
 /**
  * Created by asanyal on 7/3/2015.
@@ -47,6 +44,8 @@ public class EchoNestBasicMP3Analyzer implements AbstractAnalyzer {
 
     // An instance of the frequency note map
     private static FrequencyNoteMap noteMap = FrequencyNoteMap.getInstance();
+
+    private KeySignature keySignature = null;
 
     /**
      * Constructor of the basic MP3 metadata analyzer
@@ -89,9 +88,16 @@ public class EchoNestBasicMP3Analyzer implements AbstractAnalyzer {
                 // Gets the time signature
                 final int timeSignature = track.getTimeSignature();
 
-                // Getting the key signature information from the echo nest meta data analysis
+                // TODO : Figure out what an internal representation of key means in echo nest
+                // Getting the key signature information from the echo nest meta data analysis in integer format
                 final int key = track.getKey();
                 final int mode = track.getMode();
+
+                try {
+                    keySignature = EchoNestKeySignatureEstimator.estimateKeySignature(key, mode);
+                } catch (Modulo7BadKeyException e) {
+                    logger.error(e.getMessage());
+                }
 
                 // Gets  the duration of the track
                 final double duration = track.getDuration();
@@ -106,13 +112,17 @@ public class EchoNestBasicMP3Analyzer implements AbstractAnalyzer {
                  * single voice
                  */
                 for (final Segment segment : analysis.getSegments()) {
-                    VoiceInstant songInstant = getLineInstantFromVector(segment.getPitches(), segment.getDuration());
+                    VoiceInstant songInstant = ChromaAnalysis.getLineInstantFromVector(segment.getPitches(), segment.getDuration());
                     // TODO : Figure out what to do with the timbral information
                     // double[] timbreVector = segment.getTimbre();
                     voiceOfSong.addVoiceInstant(songInstant);
                 }
+                if (keySignature == null) {
+                    return new Song(voiceOfSong, new SongMetadata(artistName, title), MusicSources.MP3, duration);
+                } else {
+                    return new Song(voiceOfSong, new SongMetadata(keySignature, artistName, title), MusicSources.MP3, duration);
+                }
 
-                return new Song(voiceOfSong, new SongMetadata(artistName, title), MusicSources.MP3, duration);
             } else {
                 logger.error("Trouble analysing track " + track.getStatus());
                 return null;
@@ -125,69 +135,5 @@ public class EchoNestBasicMP3Analyzer implements AbstractAnalyzer {
 
         // Return null if no song is inferred
         return null;
-    }
-    /**
-     * This method takes the output of the Echo Nest API's note
-     * vector : which they name as the chroma vector and ascertain the
-     * note or the chord associated with that chroma vector
-     *
-     * For now I am considering the strong presence of a note if the
-     * chroma element associated with is is above 0.75
-     *
-     * TODO : Implement the chord detection algorithm properly, either via JNI
-     * or rewrite code in Java
-     *
-     * @param noteChromaVector
-     * @param duration
-     *
-     * @return The line Instant representation of the chroma vector
-     */
-    private VoiceInstant getLineInstantFromVector(final double[] noteChromaVector, final double duration)
-            throws Modulo7InvalidLineInstantSizeException, Modulo7BadIntervalException {
-
-        // First check whether the chroma vector is valid
-        assert (noteChromaVector.length == 12);
-
-        // Conclude a note if one of the vector indices have value higher
-        // than the rest of the vector
-        double sum = 0.0;
-        double maxVal = -Double.MAX_VALUE;
-
-        int maxIndex = 0;
-
-        // Construct a note Set from a chroma vector
-        final HashSet<Note> chromaNotes = new HashSet<>();
-
-        // Parse through the note Vector to acquire the requisite notes,
-        for (int i = 0; i < noteChromaVector.length; i++) {
-            sum += noteChromaVector[i];
-            if (noteChromaVector[i] > maxVal) {
-                maxVal = noteChromaVector[i];
-                maxIndex = i;
-            }
-        }
-
-        // Sanity check to ensure note ranges go 12 for basic position acquisition
-        assert (maxIndex >= 0 && maxIndex < 12);
-
-        //check whether its correct or not that this chroma vector can be classified as a note
-        if (maxVal >= sum - maxIndex)
-            chromaNotes.add(noteMap.getBasicNoteGivenPosition(maxIndex));
-        else {
-            ChordEstimator estimator = new ChordEstimator(noteChromaVector);
-            HashSet<Note> chordNotes;
-            try {
-                chordNotes = ChordEstimator.estimateChordGivenQualityAndRootNote(estimator.getRootNote(), estimator.getQuality(), estimator.getIntervals());
-                for (final Note noteInChord : chordNotes) {
-                    chromaNotes.add(noteInChord);
-                }
-                return new VoiceInstant(chromaNotes, duration, estimator.getQuality());
-            } catch (Modulo7BadChordException e) {
-                logger.error(e.getMessage());
-            }
-
-        }
-
-        return new VoiceInstant(chromaNotes, duration);
     }
 }

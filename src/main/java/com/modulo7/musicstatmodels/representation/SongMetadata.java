@@ -87,6 +87,18 @@ public class SongMetadata {
     }
 
     /**
+     * Basic constructor with time signature unknown but key signature, artist and title of track are know params
+     * @param keySignature
+     * @param artistName
+     * @param title
+     */
+    public SongMetadata(final KeySignature keySignature, final String artistName, final String title) {
+        this.keySignature = keySignature;
+        this.artistName = artistName;
+        this.titleOfTrack = title;
+    }
+
+    /**
      * Getter for artist Name
      * @return
      */

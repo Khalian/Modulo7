@@ -28,6 +28,9 @@ public enum MusicSources {
     MIDI("midi"),
     SHEET_MUSIC("sheet"),
 
+    // Archaic research sources
+    MSD("million_song_dataset"),
+
     // Unknown Source
     UNKNOWN("Unknown");
 

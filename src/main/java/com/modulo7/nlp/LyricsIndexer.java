@@ -76,17 +76,20 @@ public class LyricsIndexer {
     public void indexLyrics(final Lyrics lyrics) throws IOException {
         IndexWriter writer = getIndexWriter();
         Document doc = new Document();
+        doc.add(new StringField("songName", lyrics.getArtist(), Field.Store.YES));
         doc.add(new StringField("artistName", lyrics.getArtist(), Field.Store.YES));
         doc.add(new StringField("albumName", lyrics.getAlbumName(), Field.Store.YES));
-        doc.add(new StringField("lyricalContent", lyrics.getLyricsOfSong(), Field.Store.YES));
-        String fullSearchableText = lyrics.getArtist() + " " + lyrics.getAlbumName() + " " + lyrics.getLyricsOfSong();
+        doc.add(new TextField("lyricalContent", lyrics.getLyricsOfSong(), Field.Store.YES));
+        String fullSearchableText = lyrics.getSongName() + lyrics.getArtist() + " " + lyrics.getAlbumName() + " " + lyrics.getLyricsOfSong();
         doc.add(new TextField("content", fullSearchableText, Field.Store.NO));
         writer.addDocument(doc);
         closeIndexWriter();
     }
 
     /**
-     * A batch version of the above index lyrics code
+     * A batch version of the above index lyrics code to index a large number
+     * of lyrics objects at the same time
+     *
      * @param lyricsSet
      */
     public void bulkIndexLyrics(final Set<Lyrics> lyricsSet) throws IOException {
@@ -111,5 +114,13 @@ public class LyricsIndexer {
      */
     public static String getDefaultIndexDir() {
         return DEFAULT_INDEX_DIR;
+    }
+
+    /**
+     * Getter for index dir location
+     * @return
+     */
+    public String getIndexDirLocation() {
+        return indexDirLocation;
     }
 }
