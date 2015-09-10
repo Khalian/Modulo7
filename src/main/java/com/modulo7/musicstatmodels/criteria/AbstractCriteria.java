@@ -16,5 +16,5 @@ public abstract class AbstractCriteria {
      * @param song
      * @return
      */
-    protected abstract  boolean getCriteriaEvaluation(final Song song);
+    protected abstract boolean getCriteriaEvaluation(final Song song);
 }

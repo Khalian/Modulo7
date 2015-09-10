@@ -29,7 +29,7 @@ public class DatabaseEngineTest {
             Modulo7DataBaseNotSerializedException, IOException {
         File file = new File("./src/test/testdataSerialization/");
         file.mkdir();
-        DatabaseEngine engine = new DatabaseEngine("./src/test/testdata", "./src/test/testdata", "./src/test/testdataSerialization/");
+        DatabaseEngine engine = new DatabaseEngine("./src/test/testdata", "./src/test/testdataSerialization/");
         engine.buildInMemoryDataBaseFromScratch();
         engine.serializeDataSetAndMoveToDisk();
         engine.deserializeDataSetAndBuildInMemory(true);

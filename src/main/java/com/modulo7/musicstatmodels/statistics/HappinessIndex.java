@@ -1,4 +1,4 @@
-package com.modulo7.musicstatmodels.statistics.statistics;
+package com.modulo7.musicstatmodels.statistics;
 
 import com.modulo7.common.interfaces.AbstractSongVector;
 import com.modulo7.common.interfaces.AbstractStatistic;
@@ -10,15 +10,15 @@ import com.modulo7.musicstatmodels.vectorspacemodels.vectorspacerepresentations.
 /**
  * Created by asanyal on 8/29/15.
  *
- * Similar to power index but counts the minor intervals and divides by total number
+ * Similar to power index but counts the major intervals and divides by total number
  *
  * Similar weighting scheme could be done as power index
  */
-public class SadnessIndex implements AbstractStatistic<Double> {
+public class HappinessIndex implements AbstractStatistic<Double> {
     /**
      * Default constructor of power index
      */
-    public SadnessIndex() {
+    public HappinessIndex() {
 
     }
 
@@ -35,14 +35,14 @@ public class SadnessIndex implements AbstractStatistic<Double> {
 
         final int totalSum = histogramData.getHistogramTotalSum();
 
-        int minorSum = 0;
+        int majorSum = 0;
 
         // Add perfect intervals to perfect sum
-        minorSum += histogramData.getCountForInterval(IntervalEnum.MINOR_SECOND);
-        minorSum += histogramData.getCountForInterval(IntervalEnum.MINOR_THIRD);
-        minorSum += histogramData.getCountForInterval(IntervalEnum.MINOR_SIXTH);
-        minorSum += histogramData.getCountForInterval(IntervalEnum.MINOR_SEVENTH);
+        majorSum += histogramData.getCountForInterval(IntervalEnum.MAJOR_SECOND);
+        majorSum += histogramData.getCountForInterval(IntervalEnum.MAJOR_THIRD);
+        majorSum += histogramData.getCountForInterval(IntervalEnum.MAJOR_SIXTH);
+        majorSum += histogramData.getCountForInterval(IntervalEnum.MAJOR_SEVENTH);
 
-        return (double)(minorSum / totalSum);
+        return (double)(majorSum / totalSum);
     }
 }

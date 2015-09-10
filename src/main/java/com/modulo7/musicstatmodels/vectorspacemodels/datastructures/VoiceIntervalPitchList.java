@@ -41,7 +41,7 @@ public class VoiceIntervalPitchList {
      * Getter for pitches in sequence of voice
      * @return
      */
-    private List<IntervalEnum> getPitcheIntervalsInSequenceOfVoice() {
+    private List<IntervalEnum> getPitchIntervalsInSequenceOfVoice() {
         return pitcheIntervalsInSequenceOfVoice;
     }
 

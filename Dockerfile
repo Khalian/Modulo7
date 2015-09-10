@@ -1,6 +1,9 @@
 # This is the docker file for the Modulo7 project
 FROM    ubuntu:14.04
 
+# Basic message
+RUN echo "Building docker image"
+
 # Install installer helper tools
 RUN apt-get install -y software-properties-common
 
@@ -12,9 +15,6 @@ RUN add-apt-repository -y "deb http://archive.ubuntu.com/ubuntu precise universe
 
 Update and upgrade the repositories once
 RUN apt-get update && apt-get -y upgrade
-
-# Installation of the prerequesites
-RUN     apt-get -y install git wget
 
 # Install the dependencies of opencv
 RUN apt-get -y remove ffmpeg x264 libx264-dev

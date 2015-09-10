@@ -4,10 +4,7 @@
  * Test cases for music xml related operations and the parser in general
  */
 
-import com.modulo7.common.exceptions.Modulo7BadKeyException;
-import com.modulo7.common.exceptions.Modulo7InvalidCircleOfFifthsDistance;
-import com.modulo7.common.exceptions.Modulo7InvalidMusicXMLFile;
-import com.modulo7.common.exceptions.Modulo7NoSuchFileException;
+import com.modulo7.common.exceptions.*;
 import com.modulo7.musicstatmodels.representation.*;
 import com.modulo7.nlp.Lyrics;
 import com.modulo7.othersources.BasicMusicXMLParser;
@@ -118,8 +115,50 @@ public class MusicXMLTest {
         }
     }
 
+
     /**
-     * Test if the music xml parser is able to correctly acquire the
+     * A more complicated music xml parser test, involving melody along with harmony elements like chords interspersed
+     * together
+     *
+     * @throws Modulo7InvalidMusicXMLFile
+     * @throws Modulo7NoSuchFileException
+     * @throws Modulo7WrongNoteType
+     */
+    @Test
+    public void musicXMLComplicatedChordParseTest() throws Modulo7InvalidMusicXMLFile, Modulo7NoSuchFileException, Modulo7WrongNoteType {
+        final String chordScoreData = "./src/test/testdata/musicxml/complicatedChord.xml";
+        BasicMusicXMLParser xmlParser = new BasicMusicXMLParser(chordScoreData);
+
+        Song song = xmlParser.getSongRepresentation();
+
+        Assert.assertNotNull(song);
+
+        Assert.assertEquals(song.getNumVoices(), 1);
+
+        Set<Voice> setOfVoices = song.getVoices();
+
+        for (Voice voice : setOfVoices) {
+            List<VoiceInstant> voiceInstantList = voice.getVoiceSequence();
+
+            Assert.assertEquals(voiceInstantList.size(), 7);
+
+            VoiceInstant firstInstant = voiceInstantList.get(0);
+
+            Assert.assertEquals(firstInstant.getChordQuality(), ChordQuality.MINOR);
+
+            VoiceInstant secondInstant = voiceInstantList.get(1);
+
+            Assert.assertEquals(secondInstant.getNote(), Note.B4);
+
+            VoiceInstant thirdInstant = voiceInstantList.get(2);
+
+            Assert.assertEquals(thirdInstant.getChordQuality(), ChordQuality.MINOR);
+        }
+    }
+
+    /**
+     * Test if the music xml parser is able to correctly acquire the lyrics tags from the music
+     * xml file
      *
      * @throws Modulo7InvalidMusicXMLFile
      * @throws Modulo7NoSuchFileException

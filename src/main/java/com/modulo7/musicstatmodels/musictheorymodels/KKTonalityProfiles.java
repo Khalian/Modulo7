@@ -60,4 +60,18 @@ public class KKTonalityProfiles {
             MINOR_CHORD_PROFILES.put(noteValue, copyOfCMinorProfile);
         }
     }
+
+    /**
+     * In certain cases (for example when only the number of flats or sharps are known)
+     * Modulo7 faces a choice between two a major and a minor key. This method resolves
+     *
+     * TODO : Implement this
+     *
+     * @param thisOne
+     * @param thatOne
+     * @return true if thisOne is a better profile than that one
+     */
+    public static boolean estimateBetterProfile(final KeySignature thisOne, final KeySignature thatOne) {
+        return false;
+    }
 }

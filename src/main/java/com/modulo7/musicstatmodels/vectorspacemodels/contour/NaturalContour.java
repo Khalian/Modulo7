@@ -53,7 +53,7 @@ public class NaturalContour implements AbstractContour {
             voiceInstantIndex++;
         }
 
-        Voice contourizedVoice = new Voice();
+        final Voice contourizedVoice = new Voice();
 
         for (final VoiceInstant voiceInstant : voice.getVoiceSequence()) {
             if (contourExtemum.contains(voiceInstant)) {

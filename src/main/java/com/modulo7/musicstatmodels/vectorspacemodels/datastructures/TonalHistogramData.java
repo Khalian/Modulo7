@@ -98,7 +98,7 @@ public class TonalHistogramData {
      * @param interval
      * @param value
      */
-    public void setData(final IntervalEnum interval, int value) {
+    public void setData(final IntervalEnum interval, final int value) {
         intervalHistogram.put(interval, value);
     }
 }

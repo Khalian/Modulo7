@@ -128,6 +128,6 @@ public class VectorSpaceModelsTest {
         List<Integer> intervalArrayRep = data.getArrayRepresentation();
         Assert.assertEquals(intervalArrayRep.size(), 13);
         Assert.assertEquals(data.getCountForInterval(IntervalEnum.MINOR_SECOND), 6);
-        Assert.assertEquals(data.getHistogramTotalSum(), 8);
+        Assert.assertEquals(data.getHistogramTotalSum(), 8);    
     }
 }

@@ -1,4 +1,4 @@
-package com.modulo7.musicstatmodels.statistics.statistics;
+package com.modulo7.musicstatmodels.statistics;
 
 import com.modulo7.common.interfaces.AbstractSongVector;
 import com.modulo7.common.interfaces.AbstractStatistic;

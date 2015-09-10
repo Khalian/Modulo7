@@ -72,9 +72,6 @@ public class Song {
         inferSongLength();
 
         this.source = source;
-
-        // TODO : Whether to put a default value to metadata or declare
-        // Unknowns
     }
 
     /**
@@ -152,6 +149,7 @@ public class Song {
      */
     public Song(final HashSet<Voice> voiceSet, final SongMetadata metadata, final MusicSources actualSource, final Lyrics lyrics) {
         this.voicesOfSong = voiceSet;
+        inferSongLength();
         this.metadata = metadata;
         this.source = actualSource;
         this.lyrics = lyrics;

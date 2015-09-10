@@ -29,11 +29,8 @@ public class DatabaseEngine {
     // Source Directory or base location from all types of files are loaded by the parsers
     private String sourceDirectory;
 
-    // Destination Directory
+    // Destination Directory in which the serialization results are finally stored
     private String destinationDirectory;
-
-    // Directory in which contents are serialized
-    private String serializationDirectory;
 
     // The song set along with a hashmap between location and songs and
     private Map<String, Song> songLocationMap = new HashMap<>();
@@ -54,15 +51,16 @@ public class DatabaseEngine {
     private boolean isDataBasePresentOnDisk = false;
 
     /**
-     * Basic directory
+     * Basic database engine constructor, this constructors accepts a source directory
+     * which is a root directory from all the required files  are fetched. Once its fetched
+     *
+     *
      * @param sourceDirectory
      * @param destinationDirectory
-     * @param serializationDirectory
      */
-    public DatabaseEngine(final String sourceDirectory, final String destinationDirectory, final String serializationDirectory) {
+    public DatabaseEngine(final String sourceDirectory, final String destinationDirectory) {
         this.destinationDirectory = destinationDirectory;
         this.sourceDirectory = sourceDirectory;
-        this.serializationDirectory = serializationDirectory;
 
         Modulo7Utils.removeDuplicateFilesFromDirectory(sourceDirectory);
 
@@ -113,7 +111,9 @@ public class DatabaseEngine {
     /**
      * Serialize the contents and dump database to a serialized location
      */
-    public synchronized void serializeDataSetAndMoveToDisk() throws Modulo7NoSuchFileException, InvalidMidiDataException, Modulo7InvalidMusicXMLFile, EchoNestException {
+    public synchronized void serializeDataSetAndMoveToDisk() throws Modulo7NoSuchFileException, InvalidMidiDataException,
+            Modulo7InvalidMusicXMLFile, EchoNestException {
+
         if (!isDataBaseConstructedInMemory) {
             buildInMemoryDataBaseFromScratch();
         }
@@ -123,7 +123,7 @@ public class DatabaseEngine {
             final String fullLocation = entry.getKey();
             final Song song = entry.getValue();
 
-            final String finalSerializedLocation = serializationDirectory + File.separator + FilenameUtils.getBaseName(fullLocation) + ".m7";
+            final String finalSerializedLocation = destinationDirectory + File.separator + FilenameUtils.getBaseName(fullLocation) + ".m7";
             AvroUtils.serialize(finalSerializedLocation, song);
             serializedSongLocationSet.put(fullLocation, finalSerializedLocation);
         }
@@ -203,14 +203,37 @@ public class DatabaseEngine {
     }
 
     /**
-     * Gets the source directory
+     * Gets the source directory in which input sources are stored
      * @return
      */
     public String getSourceDirectory() {
         return sourceDirectory;
     }
 
+    /**
+     * Gets the destination directory in which all the indexed data is stored
+     * @return
+     */
     public String getDestinationDirectory() {
         return destinationDirectory;
+    }
+
+    /**
+     * Getter for the song location mapping
+     * @return
+     */
+    public Set<String> getSongLocationSet() {
+        return songLocationMap.keySet();
+    }
+
+    /**
+     * Same as getSongGivenLocation, but without the constraint of having serialized
+     * the whole database
+     *
+     * @param location
+     * @return
+     */
+    public Song getSongGivenLocationInMemoryVersion(final String location) {
+        return songLocationMap.get(location);
     }
 }
