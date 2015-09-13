@@ -344,4 +344,12 @@ public class FrequencyNoteMap {
         final int position = getPositionGivenNote(currentNote);
         return getNoteGivenPosition(position + Accidental.getPositionDelta(accidental));
     }
+
+    /**
+     * Gets all the notes associated with the notemap
+     * @return
+     */
+    public Set<Note> getAllNotes() {
+        return notePositionMap.keySet();
+    }
 }

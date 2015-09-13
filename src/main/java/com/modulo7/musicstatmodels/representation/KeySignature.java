@@ -26,6 +26,25 @@ public class KeySignature {
     private static final Set westernKeys =
             new HashSet<>(Arrays.asList(Modulo7Globals.NOTE_NAMES));
 
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof KeySignature)) return false;
+
+        KeySignature signature = (KeySignature) o;
+
+        if (!key.equals(signature.key)) return false;
+        return scale == signature.scale;
+
+    }
+
+    @Override
+    public int hashCode() {
+        int result = key.hashCode();
+        result = 31 * result + scale.hashCode();
+        return result;
+    }
+
     public KeySignature() {
 
     }

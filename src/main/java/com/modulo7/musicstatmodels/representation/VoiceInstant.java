@@ -389,7 +389,6 @@ public class VoiceInstant {
         // we eschew octave representation
         if (noteType.equals(NoteType.MELODIC_NOTE)) {
             final Note note = getNote();
-
             return note.getNoteValue();
         } else {
             final Note rootNote = ChordQuality.getRootNoteFromChord(this.setOfNotes);

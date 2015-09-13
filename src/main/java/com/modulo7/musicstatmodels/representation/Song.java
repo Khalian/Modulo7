@@ -37,13 +37,16 @@ public class Song {
     /**
      * Method to infer the song length as maximum of all the line duration
      * lengths as part of the song
+     *
+     * Since voices are interplayed with each other, the song's length
+     * is maximum of all the voices
      */
     private void inferSongLength() {
 
-        // From the lines of a song, extract the max duration
+        // From the voices of a song, extract the max duration
         // and call it the duration of the song
-        for (Voice line : voicesOfSong) {
-            double lineDuration = line.getTotalVoiceDuration();
+        for (Voice voice : voicesOfSong) {
+            double lineDuration = voice.getTotalVoiceDuration();
 
             if (totalDurationOfSong < lineDuration) {
                 totalDurationOfSong = lineDuration;
@@ -136,6 +139,18 @@ public class Song {
         this.totalDurationOfSong = totalDurationOfSong;
         this.metadata = songMetadata;
 
+        this.source = source;
+    }
+
+    /**
+     * Constructor which takes a single voice and its source as arugments
+     *
+     * @param voice
+     * @param source
+     */
+    public Song(final Voice voice, final MusicSources source) {
+        this.voicesOfSong.add(voice);
+        inferSongLength();
         this.source = source;
     }
 

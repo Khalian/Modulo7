@@ -70,4 +70,35 @@ public class TimeSignature {
     public int getBeatsPerMeasure() {
         return beatsPerMeasure;
     }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof TimeSignature)) return false;
+
+        TimeSignature that = (TimeSignature) o;
+
+        if (beatsPerMeasure != that.beatsPerMeasure) return false;
+        if (noteValIsBeat != that.noteValIsBeat) return false;
+        if (!timeSignatureType.equals(that.timeSignatureType)) return false;
+
+        return true;
+    }
+
+    @Override
+    public int hashCode() {
+        int result = noteValIsBeat;
+        result = 31 * result + beatsPerMeasure;
+        result = 31 * result + timeSignatureType.hashCode();
+        return result;
+    }
+
+    /**
+     * Getter for time signature type
+
+     * @return
+     */
+    public String getTimeSignatureType() {
+        return timeSignatureType;
+    }
 }

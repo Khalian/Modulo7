@@ -33,14 +33,17 @@ public class LyricsIndexerTest {
         indexer.indexLyrics(lyrics);
 
         LyricsQueryParser queryParser = new LyricsQueryParser(LyricsIndexer.getDefaultIndexDir());
-        TopDocs docs = queryParser.performSearch("Barbie", 1);
+        TopDocs docs = queryParser.performLyricsSearch("Barbie", 1);
         Assert.assertEquals(docs.totalHits, 1);
 
         FileUtils.deleteDirectory(new File(indexer.getIndexDirLocation()));
     }
 
     /**
-     * A slightly more involved lyrics indexer test
+     * A slightly more involved lyrics indexer test which involves two file to index instead of one
+     * in the sanity test case
+     *
+     * @throws IOException
      */
     @Test
     public void lyricsIndexerTest() throws IOException {

@@ -1,11 +1,11 @@
 package com.modulo7.engine;
 
 import com.echonest.api.v4.EchoNestException;
-import com.modulo7.common.exceptions.Modulo7DataBaseNotSerializedException;
 import com.modulo7.common.exceptions.Modulo7InvalidMusicXMLFile;
 import com.modulo7.common.exceptions.Modulo7NoSuchFileException;
 import com.modulo7.musicstatmodels.representation.KeySignature;
 import com.modulo7.musicstatmodels.representation.Song;
+import com.modulo7.musicstatmodels.representation.TimeSignature;
 
 import javax.sound.midi.InvalidMidiDataException;
 import java.util.HashMap;
@@ -24,8 +24,11 @@ public class Modulo7Indexer {
     // Database engine
     private DatabaseEngine engine;
 
-    // Songs indexed on key signature
+    // Songs indexed on key signaturee
     private Map<KeySignature, Set<Song>> keySignatureIndex = new HashMap<>();
+
+    // Songs indexed on time signature
+    private Map<TimeSignature, Set<Song>> timeSignatureIndex = new HashMap<>();
 
     /**
      * Default constructor for modulo7 indexer
@@ -45,6 +48,7 @@ public class Modulo7Indexer {
         engine.buildInMemoryDataBaseFromScratch();
 
         indexKeySignatures();
+        indexTimeSignatures();
     }
 
     /**
@@ -56,7 +60,20 @@ public class Modulo7Indexer {
         for (final String songLocation : songLocations) {
             final Song song = engine.getSongGivenLocationInMemoryVersion(songLocation);
             final KeySignature signature = song.getMetadata().getKeySignature();
-            addSongToKeySignatureToIndex(signature, song);  
+            addSongToKeySignatureIndex(signature, song);
+        }
+    }
+
+    /**
+     * Helper method to index all the time signatures
+     */
+    private void indexTimeSignatures() {
+        final Set<String> songLocations = engine.getSongLocationSet();
+
+        for (final String songLocation : songLocations) {
+            final Song song = engine.getSongGivenLocationInMemoryVersion(songLocation);
+            final TimeSignature signature = song.getMetadata().getTimeSignature();
+            addSongToTimeSignatureIndex(signature, song);
         }
     }
 
@@ -65,7 +82,7 @@ public class Modulo7Indexer {
      * @param keySignature
      * @param song
      */
-    private void addSongToKeySignatureToIndex(final KeySignature keySignature, final Song song) {
+    private void addSongToKeySignatureIndex(final KeySignature keySignature, final Song song) {
         Set<Song> songSet = keySignatureIndex.get(keySignature);
 
         if (songSet == null)
@@ -73,5 +90,39 @@ public class Modulo7Indexer {
 
         songSet.add(song);
         keySignatureIndex.put(keySignature, songSet);
+    }
+
+
+    /**
+     * Helper method that adds song to key signature
+     * @param timeSignature
+     * @param song
+     */
+    private void addSongToTimeSignatureIndex(final TimeSignature timeSignature, final Song song) {
+        Set<Song> songSet = timeSignatureIndex.get(timeSignature);
+
+        if (songSet == null)
+            songSet = new HashSet<>();
+
+        songSet.add(song);
+        timeSignatureIndex.put(timeSignature, songSet);
+    }
+
+    /**
+     * Gets the time signature indexed set of songs given a time signature element
+     * @param signature
+     * @return
+     */
+    public Set<Song> getTimeSignatureIndexedSet(final TimeSignature signature) {
+        return timeSignatureIndex.get(signature);
+    }
+
+    /**
+     * Gets the key signature set of songs given a key signature element
+     * @param signature
+     * @return
+     */
+    public Set<Song> getKeySignatureIndexedSet(final KeySignature signature) {
+        return keySignatureIndex.get(signature);
     }
 }

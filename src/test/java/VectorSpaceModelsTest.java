@@ -9,7 +9,9 @@ import com.modulo7.musicstatmodels.representation.Song;
 import com.modulo7.musicstatmodels.representation.Voice;
 import com.modulo7.musicstatmodels.representation.VoiceInstant;
 import com.modulo7.musicstatmodels.vectorspacemodels.contour.SteinbeckContour;
+import com.modulo7.musicstatmodels.vectorspacemodels.datastructures.TonalDurationHistogramData;
 import com.modulo7.musicstatmodels.vectorspacemodels.datastructures.TonalHistogramData;
+import com.modulo7.musicstatmodels.vectorspacemodels.vectorspacerepresentations.songvectors.TonalDurationHistogram;
 import com.modulo7.musicstatmodels.vectorspacemodels.vectorspacerepresentations.songvectors.TonalHistogram;
 import com.modulo7.musicstatmodels.vectorspacemodels.vectorspacerepresentations.voicevectors.VoiceIntervalPitchVector;
 import com.modulo7.musicstatmodels.vectorspacemodels.vectorspacerepresentations.voicevectors.VoiceRawPitchVector;
@@ -129,5 +131,43 @@ public class VectorSpaceModelsTest {
         Assert.assertEquals(intervalArrayRep.size(), 13);
         Assert.assertEquals(data.getCountForInterval(IntervalEnum.MINOR_SECOND), 6);
         Assert.assertEquals(data.getHistogramTotalSum(), 8);    
+    }
+
+    /**
+     * This method tests the tonal duration histogram vector model
+     * and sanity tests whether the cumulative durations are properly accounted for
+     */
+    @Test
+    public void tonalDurationHistogramDataSanityTest() throws Modulo7InvalidLineInstantSizeException {
+        Voice testVoice1 = new Voice();
+
+        testVoice1.addVoiceInstant(new VoiceInstant(Note.ASHARP1, 1.0));
+        testVoice1.addVoiceInstant(new VoiceInstant(Note.B1, 1.0));
+        testVoice1.addVoiceInstant(new VoiceInstant(Note.C0, 1.0));
+        testVoice1.addVoiceInstant(new VoiceInstant(Note.CSHARP1, 1.0));
+        testVoice1.addVoiceInstant(new VoiceInstant(Note.D1, 1.0));
+
+        Voice testVoice2 = new Voice();
+
+        testVoice2.addVoiceInstant(new VoiceInstant(Note.ASHARP1, 1.0));
+        testVoice2.addVoiceInstant(new VoiceInstant(Note.B1, 1.0));
+        testVoice2.addVoiceInstant(new VoiceInstant(Note.C0, 1.0));
+        testVoice2.addVoiceInstant(new VoiceInstant(Note.CSHARP1, 1.0));
+        testVoice2.addVoiceInstant(new VoiceInstant(Note.D1, 1.0));
+
+        HashSet<Voice> setOfVoices = new HashSet<>();
+        setOfVoices.add(testVoice1);
+        setOfVoices.add(testVoice2);
+
+        final Song song = new Song(setOfVoices, MusicSources.UNKNOWN);
+
+        AbstractSongVector<TonalDurationHistogramData> histogram = new TonalDurationHistogram();
+        histogram.computeVectorRepresentation(song);
+
+        TonalDurationHistogramData data = histogram.getInternalRepresentation();
+        Assert.assertEquals(data.getCumulativeDuration(), 8.0);
+
+        // Max of both is voice lenths = max (4, 4)
+        Assert.assertEquals(song.getTotalSongDuration(), 4.0);
     }
 }

@@ -25,6 +25,8 @@ public class Voice {
     // That are being played
     private ArrayList<VoiceInstant> voiceSequence;
 
+    // Metadata specific to a voice independent of metadata with other
+    // voices in teh song
     private VoiceTag voiceTag = new VoiceTag();
 
     // Member indicating how long the entire voice was played
@@ -49,7 +51,11 @@ public class Voice {
 
         // Add up the line instant durations one after the other
         for (VoiceInstant instant : voiceSequence) {
-            totalVoiceDuration += instant.getDuration();
+
+            double duration = instant.getDuration();
+
+            if (duration != -1.0)
+                totalVoiceDuration += instant.getDuration();
         }
     }
 
@@ -102,6 +108,21 @@ public class Voice {
      */
     public void addVoiceInstant(final VoiceInstant instant) {
         voiceSequence.add(instant);
+        addDurationToTotal(instant);
+    }
+
+    /**
+     * While incrementally building voices, add the duration as well
+     * add the duration only if its known beforehand
+     *
+     * @param instant
+     */
+    private void addDurationToTotal(final VoiceInstant instant) {
+        double duration = instant.getDuration();
+
+        if (duration != -1.0) {
+            totalVoiceDuration += duration;
+        }
     }
 
     /**
@@ -115,7 +136,7 @@ public class Voice {
 
     /**
      * Gets the total line duration for this song
-     * @return
+     * x`@return
      */
     public double getTotalVoiceDuration() {
         return totalVoiceDuration;

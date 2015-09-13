@@ -9,7 +9,7 @@ import org.junit.Test;
  *
  * Audiveris test cases for Optical Music recognition
  *
- * TODO : Fix it
+ * TODO : Fix this
  */
 public class AudiverisMusicSheetXMLTest {
 

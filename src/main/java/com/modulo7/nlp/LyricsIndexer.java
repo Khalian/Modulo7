@@ -99,6 +99,7 @@ public class LyricsIndexer {
         for (Lyrics lyrics : lyricsSet) {
             Document doc = new Document();
             doc.add(new StringField("artistName", lyrics.getArtist(), Field.Store.YES));
+            doc.add(new StringField("songName", lyrics.getArtist(), Field.Store.YES));
             doc.add(new StringField("albumName", lyrics.getAlbumName(), Field.Store.YES));
             doc.add(new StringField("lyricalContent", lyrics.getLyricsOfSong(), Field.Store.YES));
             String fullSearchableText = lyrics.getArtist() + " " + lyrics.getAlbumName() + " " + lyrics.getLyricsOfSong();

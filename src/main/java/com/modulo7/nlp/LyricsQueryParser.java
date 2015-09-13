@@ -34,16 +34,31 @@ public class LyricsQueryParser {
     }
 
     /**
-     * Performs a search on the query string
+     * Performs a search on the query string based on the lyrics field, which is also the default
+     *
      * @param queryString
-     * @param n
+     * @param numTopDocs
      * @return
      * @throws IOException
      * @throws ParseException
      */
-    public TopDocs performSearch(String queryString, int n) throws IOException, ParseException {
+    public TopDocs performLyricsSearch(final String queryString, final int numTopDocs) throws IOException, ParseException {
         Query query = parser.parse(queryString);
-        return searcher.search(query, n);
+        return searcher.search(query, numTopDocs);
+    }
+
+    /**
+     * Performs a search on the query string on the song name field
+     *
+     * @param queryString
+     * @param numTopDocs
+     * @return
+     * @throws IOException
+     * @throws ParseException
+     */
+    public TopDocs performSongNameSearch(final String queryString, final int numTopDocs) throws IOException, ParseException {
+        Query query = parser.parse("songName: " + queryString);
+        return searcher.search(query, numTopDocs);
     }
 
     /**

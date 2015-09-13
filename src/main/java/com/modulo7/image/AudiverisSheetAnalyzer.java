@@ -7,6 +7,8 @@ import com.modulo7.common.utils.Modulo7Utils;
 import com.modulo7.crawler.utils.MusicSources;
 import com.modulo7.musicstatmodels.representation.Song;
 import com.modulo7.othersources.BasicMusicXMLParser;
+import org.apache.commons.io.FileUtils;
+import org.apache.commons.io.FilenameUtils;
 
 import java.io.File;
 import java.io.IOException;
@@ -28,7 +30,10 @@ public class AudiverisSheetAnalyzer implements AbstractAnalyzer {
     private String sheetFileLocation;
 
     // Intermediate location for the music XML File
-    private String intermediateMusicXMLLocation = "/home/asanyal/mySheet.xml";
+    private String intermediateMusicXMLLocation;
+
+    // Loaded audiveris jar
+    private static JarRunner jr;
 
     /**
      * Sheet file location
@@ -36,22 +41,32 @@ public class AudiverisSheetAnalyzer implements AbstractAnalyzer {
      */
     public AudiverisSheetAnalyzer(final String sheetFileLocation) {
         this.sheetFileLocation = sheetFileLocation;
+        intermediateMusicXMLLocation = FileUtils.getTempDirectoryPath() + File.separator + FilenameUtils.getBaseName(sheetFileLocation) + ".xml";
+    }
+
+    /*
+     * The jar needs to be loaded exactly once on the class path
+     */
+    static {
+        final String audiverisJarLocation = Modulo7Utils.getAudiverisJarLocation() + File.separator + "audiveris.jar";
+        try {
+            jr = new JarRunner(new File(audiverisJarLocation));
+        } catch (ClassNotFoundException | IOException | NoSuchMethodException e) {
+            e.printStackTrace();
+        }
     }
 
     @Override
     public Song getSongRepresentation() {
-        final String audiverisJar = Modulo7Utils.getAudiverisJarLocation() + File.separator + "audiveris.jar";
-
-        JarRunner jr;
-
         try {
-            jr = new JarRunner(new File(audiverisJar));
             jr.run(new String[]{"-batch", "-input", sheetFileLocation, "-export", intermediateMusicXMLLocation });
             AbstractAnalyzer musicXXMLAnalyzer = new BasicMusicXMLParser(intermediateMusicXMLLocation, MusicSources.SHEET_MUSIC);
             return musicXXMLAnalyzer.getSongRepresentation();
 
-        } catch (ClassNotFoundException | IOException | NoSuchMethodException | InvocationTargetException | IllegalAccessException | Modulo7InvalidMusicXMLFile e) {
+        } catch (IOException | InvocationTargetException | IllegalAccessException | Modulo7InvalidMusicXMLFile e) {
             e.printStackTrace();
+        } finally {
+             FileUtils.deleteQuietly(new File(intermediateMusicXMLLocation));
         }
 
         // Wont reach here but for the sake of completeness

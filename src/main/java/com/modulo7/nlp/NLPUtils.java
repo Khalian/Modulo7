@@ -25,15 +25,6 @@ import java.util.Map;
 
 public class NLPUtils {
 
-    /*
-    public static String translateToEnglish(String sourceString) {
-        Translator translate = Translator.getInstance();
-        String text = translate.translate("Hello!", Language.ENGLISH, Language.ROMANIAN);
-        System.out.println(text); // "Bun? ziua!"
-        return null;
-    }
-    */
-
     /**
      * A utility method to stem a sentence (argument of the form list or array of
      * strings)
