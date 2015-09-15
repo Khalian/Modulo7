@@ -109,6 +109,62 @@ public class DatabaseEngine {
     }
 
     /**
+     * Method to incrementally build a dataset by creating both serialized version and in memory version for each song one by one
+     * @throws Modulo7InvalidMusicXMLFile
+     * @throws Modulo7NoSuchFileException
+     * @throws EchoNestException
+     * @throws InvalidMidiDataException
+     */
+    public synchronized void dynamicBuildDataSet() throws Modulo7InvalidMusicXMLFile,
+            Modulo7NoSuchFileException, EchoNestException, InvalidMidiDataException {
+        for (final String songLocation : songLocations) {
+            if (songLocation.endsWith("midi") || songLocation.endsWith("mid")) {
+                AbstractAnalyzer analyzer = new MidiToSongConverter(songLocation);
+                final Song song = analyzer.getSongRepresentation();
+                inverseSongLocationMap.put(song, songLocation);
+                songLocationMap.put(songLocation, song);
+
+                final String finalSerializedLocation = destinationDirectory + File.separator + FilenameUtils.getBaseName(songLocation) + ".m7";
+                AvroUtils.serialize(finalSerializedLocation, song);
+                serializedSongLocationSet.put(songLocation, finalSerializedLocation);
+
+            } else if (songLocation.endsWith("mp3")) {
+                AbstractAnalyzer analyzer = new EchoNestBasicMP3Analyzer(songLocation);
+                final Song song = analyzer.getSongRepresentation();
+                inverseSongLocationMap.put(song, songLocation);
+                songLocationMap.put(songLocation, song);
+
+                final String finalSerializedLocation = destinationDirectory + File.separator + FilenameUtils.getBaseName(songLocation) + ".m7";
+                AvroUtils.serialize(finalSerializedLocation, song);
+                serializedSongLocationSet.put(songLocation, finalSerializedLocation);
+
+            } else if (songLocation.endsWith("xml")) {
+                AbstractAnalyzer analyzer = new BasicMusicXMLParser(songLocation);
+                final Song song = analyzer.getSongRepresentation();
+                inverseSongLocationMap.put(song, songLocation);
+                songLocationMap.put(songLocation, song);
+
+                final String finalSerializedLocation = destinationDirectory + File.separator + FilenameUtils.getBaseName(songLocation) + ".m7";
+                AvroUtils.serialize(finalSerializedLocation, song);
+                serializedSongLocationSet.put(songLocation, finalSerializedLocation);
+
+            } else if (songLocation.endsWith("png") || songLocation.endsWith("jpg")) {
+                AbstractAnalyzer analyzer = new AudiverisSheetAnalyzer(songLocation);
+                final Song song = analyzer.getSongRepresentation();
+                inverseSongLocationMap.put(song, songLocation);
+                songLocationMap.put(songLocation, song);
+
+                final String finalSerializedLocation = destinationDirectory + File.separator + FilenameUtils.getBaseName(songLocation) + ".m7";
+                AvroUtils.serialize(finalSerializedLocation, song);
+                serializedSongLocationSet.put(songLocation, finalSerializedLocation);
+            }
+        }
+
+        isDataBasePresentOnDisk = true;
+        isDataBaseConstructedInMemory = false;
+    }
+
+    /**
      * Serialize the contents and dump database to a serialized location
      */
     public synchronized void serializeDataSetAndMoveToDisk() throws Modulo7NoSuchFileException, InvalidMidiDataException,

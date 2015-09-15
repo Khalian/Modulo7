@@ -1,6 +1,7 @@
 import com.modulo7.common.exceptions.Modulo7NoSuchFileException;
 import com.modulo7.common.interfaces.AbstractAnalyzer;
 import com.modulo7.acoustics.MidiToSongConverter;
+import com.modulo7.crawler.utils.MusicSources;
 import com.modulo7.musicstatmodels.representation.Song;
 import junit.framework.Assert;
 import org.junit.Test;
@@ -29,5 +30,6 @@ public class MidiTest {
         Song song = midiAnalyzer.getSongRepresentation();
 
         Assert.assertNotNull(song);
+        Assert.assertEquals(song.getSource(), MusicSources.MIDI);
     }
 }

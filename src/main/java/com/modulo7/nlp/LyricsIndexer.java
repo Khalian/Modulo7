@@ -1,5 +1,6 @@
 package com.modulo7.nlp;
 
+import com.modulo7.common.exceptions.Modulo7IndexingDirError;
 import org.apache.lucene.document.Document;
 import org.apache.lucene.document.Field;
 import org.apache.lucene.document.StringField;
@@ -49,12 +50,17 @@ public class LyricsIndexer {
      * @return
      * @throws IOException
      */
-    public IndexWriter getIndexWriter() throws IOException {
+    public IndexWriter getIndexWriter() throws Modulo7IndexingDirError {
 
         if (indexWriter == null) {
-            Directory indexDir = FSDirectory.open(new File(this.indexDirLocation));
-            IndexWriterConfig config = new IndexWriterConfig(Version.LUCENE_41, new StandardAnalyzer(Version.LUCENE_41));
-            indexWriter = new IndexWriter(indexDir, config);
+            Directory indexDir;
+            try {
+                indexDir = FSDirectory.open(new File(indexDirLocation));
+                IndexWriterConfig config = new IndexWriterConfig(Version.LUCENE_41, new StandardAnalyzer(Version.LUCENE_41));
+                indexWriter = new IndexWriter(indexDir, config);
+            } catch (IOException e) {
+                throw new Modulo7IndexingDirError("Cant create lyrics index dir at location" + indexDirLocation);
+            }
         }
         return indexWriter;
     }
@@ -71,9 +77,10 @@ public class LyricsIndexer {
 
     /**
      * Lucene indexer for the lyrics object
+     * @throws Modulo7IndexingDirError
      * @param lyrics
      */
-    public void indexLyrics(final Lyrics lyrics) throws IOException {
+    public void indexLyrics(final Lyrics lyrics) throws Modulo7IndexingDirError {
         IndexWriter writer = getIndexWriter();
         Document doc = new Document();
         doc.add(new StringField("songName", lyrics.getArtist(), Field.Store.YES));
@@ -82,8 +89,12 @@ public class LyricsIndexer {
         doc.add(new TextField("lyricalContent", lyrics.getLyricsOfSong(), Field.Store.YES));
         String fullSearchableText = lyrics.getSongName() + lyrics.getArtist() + " " + lyrics.getAlbumName() + " " + lyrics.getLyricsOfSong();
         doc.add(new TextField("content", fullSearchableText, Field.Store.NO));
-        writer.addDocument(doc);
-        closeIndexWriter();
+        try {
+            writer.addDocument(doc);
+            closeIndexWriter();
+        } catch (IOException e) {
+           throw new Modulo7IndexingDirError("Unable to add doc to index at location :" + indexDirLocation);
+        }
     }
 
     /**
@@ -92,7 +103,7 @@ public class LyricsIndexer {
      *
      * @param lyricsSet
      */
-    public void bulkIndexLyrics(final Set<Lyrics> lyricsSet) throws IOException {
+    public void bulkIndexLyrics(final Set<Lyrics> lyricsSet) throws Modulo7IndexingDirError {
 
         IndexWriter writer = getIndexWriter();
 
@@ -104,9 +115,17 @@ public class LyricsIndexer {
             doc.add(new StringField("lyricalContent", lyrics.getLyricsOfSong(), Field.Store.YES));
             String fullSearchableText = lyrics.getArtist() + " " + lyrics.getAlbumName() + " " + lyrics.getLyricsOfSong();
             doc.add(new TextField("content", fullSearchableText, Field.Store.NO));
-            writer.addDocument(doc);
+            try {
+                writer.addDocument(doc);
+            } catch (IOException e) {
+                throw new Modulo7IndexingDirError("Cant index at location" + indexDirLocation);
+            }
         }
-        closeIndexWriter();
+        try {
+            closeIndexWriter();
+        } catch (IOException e) {
+            throw new Modulo7IndexingDirError("Cant close index writer at location" + indexDirLocation);
+        }
     }
 
     /**

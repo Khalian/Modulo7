@@ -5,6 +5,7 @@
  */
 
 import com.modulo7.common.exceptions.*;
+import com.modulo7.crawler.utils.MusicSources;
 import com.modulo7.musicstatmodels.representation.*;
 import com.modulo7.nlp.Lyrics;
 import com.modulo7.othersources.BasicMusicXMLParser;
@@ -84,6 +85,7 @@ public class MusicXMLTest {
         Song song = xmlParser.getSongRepresentation();
 
         Assert.assertNotNull(song);
+        Assert.assertEquals(song.getSource(), MusicSources.MUSIC_XML_FILE);
     }
 
     /**

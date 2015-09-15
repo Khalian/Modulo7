@@ -26,7 +26,7 @@ public class AvroUtilsTest {
      * Test if serialization and deserialization for midi files work without throwing exceptions
      *
      * @throws InvalidMidiDataException
-     * @throws IOException
+     * @throws Modulo7NoSuchFileException
      */
     @Test
     public void testMidiFileSerialization() throws InvalidMidiDataException, Modulo7NoSuchFileException {
@@ -50,7 +50,7 @@ public class AvroUtilsTest {
      *
      * @throws EchoNestException
      * @throws Modulo7NoSuchFileException
-     * @throws IOException
+     * @throws Modulo7NoSuchFileException
      */
     @Test
     public void testMp3FileSerialization() throws EchoNestException, Modulo7NoSuchFileException {
@@ -72,7 +72,7 @@ public class AvroUtilsTest {
     /**
      * Test if serialization and deserialization for music xml files work without throwing exceptions
      *
-     * @throws IOException
+     * @throws Modulo7NoSuchFileException
      * @throws Modulo7InvalidMusicXMLFile
      */
     @Test

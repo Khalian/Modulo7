@@ -11,9 +11,6 @@ public enum ScaleType {
 
     MAJOR("MAJOR"),
     MINOR("MINOR"),
-    BLUES("BLUES"),
-    MINOR_PENTATONIC("MINOR PENTATONIC"),
-    MAJOR_PENTATONIC("MAJOR PENTATONIC"),
     UNKNOWN("UNKNOWN");
 
     private final String scale;

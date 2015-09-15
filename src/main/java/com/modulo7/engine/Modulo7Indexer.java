@@ -1,13 +1,17 @@
 package com.modulo7.engine;
 
 import com.echonest.api.v4.EchoNestException;
+import com.modulo7.common.exceptions.Modulo7IndexingDirError;
 import com.modulo7.common.exceptions.Modulo7InvalidMusicXMLFile;
 import com.modulo7.common.exceptions.Modulo7NoSuchFileException;
 import com.modulo7.musicstatmodels.representation.KeySignature;
 import com.modulo7.musicstatmodels.representation.Song;
 import com.modulo7.musicstatmodels.representation.TimeSignature;
+import com.modulo7.nlp.Lyrics;
+import com.modulo7.nlp.LyricsIndexer;
 
 import javax.sound.midi.InvalidMidiDataException;
+import java.io.IOException;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
@@ -24,11 +28,17 @@ public class Modulo7Indexer {
     // Database engine
     private DatabaseEngine engine;
 
-    // Songs indexed on key signaturee
+    // Songs indexed on key signature
     private Map<KeySignature, Set<Song>> keySignatureIndex = new HashMap<>();
 
     // Songs indexed on time signature
     private Map<TimeSignature, Set<Song>> timeSignatureIndex = new HashMap<>();
+
+    // Songs indexed on artists playing
+    private Map<String, Set<Song>> artistIndex = new HashMap<>();
+
+    // Lyrics indexer for all the sub components
+    private LyricsIndexer lyricsIndexer;
 
     /**
      * Default constructor for modulo7 indexer
@@ -41,14 +51,64 @@ public class Modulo7Indexer {
      * @throws Modulo7InvalidMusicXMLFile
      * @throws EchoNestException
      * @throws Modulo7NoSuchFileException
+     * @throws Modulo7IndexingDirError
      */
     public Modulo7Indexer(final String srcDir, final String dstDir) throws InvalidMidiDataException, Modulo7InvalidMusicXMLFile,
-            EchoNestException, Modulo7NoSuchFileException {
+            EchoNestException, Modulo7NoSuchFileException, Modulo7IndexingDirError {
         engine = new DatabaseEngine(srcDir, dstDir);
         engine.buildInMemoryDataBaseFromScratch();
+        lyricsIndexer = new LyricsIndexer();
+    }
 
+    /**
+     * Constructor which takes argument whether to persist models on to disk
+     *
+     * @param srcDir
+     * @param dstDir
+     * @param persistOnDisk
+     * @throws InvalidMidiDataException
+     * @throws Modulo7InvalidMusicXMLFile
+     * @throws EchoNestException
+     * @throws Modulo7NoSuchFileException
+     */
+    public Modulo7Indexer(final String srcDir, final String dstDir, final boolean persistOnDisk) throws InvalidMidiDataException,
+            Modulo7InvalidMusicXMLFile, EchoNestException, Modulo7NoSuchFileException {
+        engine = new DatabaseEngine(srcDir, dstDir);
+        engine.buildInMemoryDataBaseFromScratch();
+        lyricsIndexer = new LyricsIndexer();
+
+        if (persistOnDisk) {
+            engine.serializeDataSetAndMoveToDisk();
+        }
+    }
+
+    /**
+     * Method to initiate indexing of data and help build the indexed data structures
+     *
+     * @throws Modulo7IndexingDirError
+     */
+    public void indexData() throws Modulo7IndexingDirError {
         indexKeySignatures();
         indexTimeSignatures();
+        indexLyrics();
+    }
+
+
+    /**
+     * Helper method to index lyrics on apache lucene
+     * @throws Modulo7IndexingDirError
+     */
+    private void indexLyrics() throws Modulo7IndexingDirError {
+
+        final Set<String> songLocations = engine.getSongLocationSet();
+        final Set<Lyrics> newLyricsSet = new HashSet<>();
+
+        for (final String songLocation : songLocations) {
+            final Song song = engine.getSongGivenLocationInMemoryVersion(songLocation);
+            newLyricsSet.add(song.getLyrics());
+        }
+
+        lyricsIndexer.bulkIndexLyrics(newLyricsSet);
     }
 
     /**
@@ -61,6 +121,19 @@ public class Modulo7Indexer {
             final Song song = engine.getSongGivenLocationInMemoryVersion(songLocation);
             final KeySignature signature = song.getMetadata().getKeySignature();
             addSongToKeySignatureIndex(signature, song);
+        }
+    }
+
+    /**
+     * Helper method that indexes based on artist
+     */
+    private void indexArtists() {
+        final Set<String> songLocations = engine.getSongLocationSet();
+
+        for (final String songLocation : songLocations) {
+            final Song song = engine.getSongGivenLocationInMemoryVersion(songLocation);
+            final String artist = song.getMetadata().getArtistName();
+            addSongToArtistIndex(artist, song);
         }
     }
 
@@ -82,7 +155,7 @@ public class Modulo7Indexer {
      * @param keySignature
      * @param song
      */
-    private void addSongToKeySignatureIndex(final KeySignature keySignature, final Song song) {
+    private synchronized void addSongToKeySignatureIndex(final KeySignature keySignature, final Song song) {
         Set<Song> songSet = keySignatureIndex.get(keySignature);
 
         if (songSet == null)
@@ -98,7 +171,7 @@ public class Modulo7Indexer {
      * @param timeSignature
      * @param song
      */
-    private void addSongToTimeSignatureIndex(final TimeSignature timeSignature, final Song song) {
+    private synchronized void addSongToTimeSignatureIndex(final TimeSignature timeSignature, final Song song) {
         Set<Song> songSet = timeSignatureIndex.get(timeSignature);
 
         if (songSet == null)
@@ -106,6 +179,16 @@ public class Modulo7Indexer {
 
         songSet.add(song);
         timeSignatureIndex.put(timeSignature, songSet);
+    }
+
+    private synchronized void addSongToArtistIndex(final String artist, final Song song) {
+        Set<Song> songSet = artistIndex.get(artist);
+
+        if (songSet == null)
+            songSet = new HashSet<>();
+
+        songSet.add(song);
+        artistIndex.put(artist, songSet);
     }
 
     /**

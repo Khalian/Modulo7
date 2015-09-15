@@ -26,8 +26,7 @@ import java.util.Map;
 public class NLPUtils {
 
     /**
-     * A utility method to stem a sentence (argument of the form list or array of
-     * strings)
+     * A utility method to stem a sentence (argument of the form list or array of strings)
      *
      * @param unstemmedText
      * @return

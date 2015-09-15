@@ -5,7 +5,6 @@ import com.modulo7.crawler.utils.MusicSources;
 import com.modulo7.nlp.Lyrics;
 
 import java.util.HashSet;
-import java.util.List;
 import java.util.Set;
 
 /**
@@ -45,7 +44,7 @@ public class Song {
 
         // From the voices of a song, extract the max duration
         // and call it the duration of the song
-        for (Voice voice : voicesOfSong) {
+        for (final Voice voice : voicesOfSong) {
             double lineDuration = voice.getTotalVoiceDuration();
 
             if (totalDurationOfSong < lineDuration) {

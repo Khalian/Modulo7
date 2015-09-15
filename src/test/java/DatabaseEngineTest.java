@@ -1,8 +1,5 @@
 import com.echonest.api.v4.EchoNestException;
-import com.modulo7.common.exceptions.Modulo7BadKeyException;
-import com.modulo7.common.exceptions.Modulo7DataBaseNotSerializedException;
-import com.modulo7.common.exceptions.Modulo7InvalidMusicXMLFile;
-import com.modulo7.common.exceptions.Modulo7NoSuchFileException;
+import com.modulo7.common.exceptions.*;
 import com.modulo7.engine.DatabaseEngine;
 import com.modulo7.engine.Modulo7Indexer;
 import com.modulo7.musicstatmodels.representation.KeySignature;
@@ -43,15 +40,25 @@ public class DatabaseEngineTest {
         FileUtils.deleteDirectory(file);
     }
 
+
     /**
-     * Sanity test for the m7 indexer
+     * Sanity testing for the modulo 7 indexer engine
+     *
+     * @throws InvalidMidiDataException
+     * @throws Modulo7InvalidMusicXMLFile
+     * @throws EchoNestException
+     * @throws Modulo7NoSuchFileException
+     * @throws Modulo7BadKeyException
+     * @throws Modulo7IndexingDirError
+     * @throws IOException
      */
     @Test
     public void m7IndexerSanityTest() throws InvalidMidiDataException, Modulo7InvalidMusicXMLFile, EchoNestException,
-            Modulo7NoSuchFileException, IOException, Modulo7BadKeyException {
+            Modulo7NoSuchFileException, Modulo7BadKeyException, Modulo7IndexingDirError, IOException {
         File file = new File("./src/test/testdataSerialization/");
         file.mkdir();
         Modulo7Indexer indexer = new Modulo7Indexer("./src/test/testdata", "./src/test/testdataSerialization/");
+        indexer.indexData();
 
         KeySignature keySignature = new KeySignature("C#", ScaleType.MINOR);
 

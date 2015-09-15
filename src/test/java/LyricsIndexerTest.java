@@ -1,3 +1,4 @@
+import com.modulo7.common.exceptions.Modulo7IndexingDirError;
 import com.modulo7.nlp.Lyrics;
 import com.modulo7.nlp.LyricsIndexer;
 import com.modulo7.nlp.LyricsQueryParser;
@@ -25,7 +26,7 @@ public class LyricsIndexerTest {
      * @throws ParseException
      */
     @Test
-    public void lyricsIndexerSanityTest() throws IOException, ParseException {
+    public void lyricsIndexerSanityTest() throws IOException, ParseException, Modulo7IndexingDirError {
         LyricsIndexer indexer = new LyricsIndexer();
 
         Lyrics lyrics = new Lyrics("Barbie girl", "aqua", new File("./src/test/testdata/lyrics/barbie_girl"));
@@ -46,7 +47,7 @@ public class LyricsIndexerTest {
      * @throws IOException
      */
     @Test
-    public void lyricsIndexerTest() throws IOException {
+    public void lyricsIndexerTest() throws IOException, Modulo7IndexingDirError {
         LyricsIndexer indexer = new LyricsIndexer();
 
         Lyrics lyrics = new Lyrics("Barbie girl", "aqua", new File("./src/test/testdata/lyrics/barbie_girl"));

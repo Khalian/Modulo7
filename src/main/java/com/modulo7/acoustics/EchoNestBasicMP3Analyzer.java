@@ -118,9 +118,9 @@ public class EchoNestBasicMP3Analyzer implements AbstractAnalyzer {
                     voiceOfSong.addVoiceInstant(songInstant);
                 }
                 if (keySignature == null) {
-                    return new Song(voiceOfSong, new SongMetadata(artistName, title), MusicSources.MP3, duration);
+                    return new Song(voiceOfSong, new SongMetadata(artistName, title, (int) tempo), MusicSources.MP3, duration);
                 } else {
-                    return new Song(voiceOfSong, new SongMetadata(keySignature, artistName, title), MusicSources.MP3, duration);
+                    return new Song(voiceOfSong, new SongMetadata(keySignature, artistName, title, (int) tempo), MusicSources.MP3, duration);
                 }
 
             } else {

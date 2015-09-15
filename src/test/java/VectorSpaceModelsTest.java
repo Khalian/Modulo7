@@ -169,5 +169,8 @@ public class VectorSpaceModelsTest {
 
         // Max of both is voice lenths = max (4, 4)
         Assert.assertEquals(song.getTotalSongDuration(), 4.0);
+
+        // The minor seconds have a total tonal histogram duration of 6.0 in the above test creation
+        Assert.assertEquals(histogram.getInternalRepresentation().getData(IntervalEnum.MINOR_SECOND), 6.0);
     }
 }

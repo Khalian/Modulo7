@@ -10,6 +10,7 @@
 /vs/*
 /gradle/*
 /default-lyrics-index-dir/*
+/src/test/researchData/*
 
 # Normal Files
 .settings

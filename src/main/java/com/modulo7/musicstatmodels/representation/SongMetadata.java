@@ -1,6 +1,9 @@
 package com.modulo7.musicstatmodels.representation;
 
+import com.modulo7.common.exceptions.Modulo7BadKeyException;
 import com.modulo7.common.utils.Modulo7Globals;
+import com.modulo7.musicstatmodels.musictheorymodels.KKTonalityProfiles;
+import com.modulo7.musicstatmodels.vectorspacemodels.vectorspacerepresentations.songvectors.TonalDurationHistogram;
 
 /**
  * Created by asanyal on 7/28/2015.
@@ -9,6 +12,11 @@ import com.modulo7.common.utils.Modulo7Globals;
  *
  * Typically the following pieces of metadata are generally associated with this song:
  *
+ * Artist name
+ * Title of track
+ * Time Signature
+ * Key Signature
+ * Tempo of a song (or Beats per minute on the song)
  */
 public class SongMetadata {
 
@@ -23,10 +31,6 @@ public class SongMetadata {
 
     // The key signature associated with this song
     private KeySignature keySignature = new KeySignature();
-
-    // The timbre associated with the song
-    // TODO : Find out a better representation of what timbre means, look at echo nest documentation
-    private double timbre = Modulo7Globals.UNKNOWN;
 
     // The beats per minute, or tempo associated with this song
     private int tempo = Modulo7Globals.UNKNOWN;
@@ -48,18 +52,9 @@ public class SongMetadata {
      * @param artistName
      * @param titleOfTrack
      */
-    public SongMetadata(final String artistName, final String titleOfTrack)     {
+    public SongMetadata(final String artistName, final String titleOfTrack) {
         this.artistName = artistName;
         this.titleOfTrack = titleOfTrack;
-    }
-
-    /**
-     * Basic constructor with only artist Name known
-     * @param tempo
-     */
-    public SongMetadata(final int tempo, final double timbre) {
-        this.tempo = tempo;
-        this.timbre = timbre;
     }
 
     /**
@@ -76,9 +71,10 @@ public class SongMetadata {
      * Basic constructor with only timeSignature and key Signature known
      * @param keySignature
      * @param timeSignature
+     * @param titleOfTrack
      */
     public SongMetadata(final KeySignature keySignature, final TimeSignature timeSignature,
-                        final String artistName, final  String titleOfTrack) {
+                        final String artistName, final String titleOfTrack) {
         this.keySignature = keySignature;
         this.timeSignature = timeSignature;
 
@@ -96,6 +92,41 @@ public class SongMetadata {
         this.keySignature = keySignature;
         this.artistName = artistName;
         this.titleOfTrack = title;
+    }
+
+    /**
+     * Basic constructor with time signature unknown but key signature, artist, title of track and tempo are know params
+     * @param keySignature
+     * @param artistName
+     * @param title
+     * @param tempo
+     */
+    public SongMetadata(final KeySignature keySignature, final String artistName, final String title, final int tempo) {
+        this.keySignature = keySignature;
+        this.artistName = artistName;
+        this.titleOfTrack = title;
+        this.tempo = tempo;
+    }
+
+    /**
+     * Basic constructor with artist name, title of track and tempo of track known
+     * @param artistName
+     * @param title
+     * @param tempo
+     */
+    public SongMetadata(final String artistName, final String title, final int tempo) {
+        this.artistName = artistName;
+        this.titleOfTrack = title;
+        this.tempo = tempo;
+    }
+
+    /**
+     * This method is called by song to infer key signature
+     * based on correlated template matching on the KK tonality profile
+     */
+    private void inferKeySignature() throws Modulo7BadKeyException {
+        TonalDurationHistogram histogram = new TonalDurationHistogram();
+        keySignature = KKTonalityProfiles.estimateBestKeySignature(histogram);
     }
 
     /**
@@ -120,14 +151,6 @@ public class SongMetadata {
      */
     public TimeSignature getTimeSignature() {
         return timeSignature;
-    }
-
-    /**
-     * Getter for timbre
-     * @return
-     */
-    public double getTimbre() {
-        return timbre;
     }
 
     /**

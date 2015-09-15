@@ -1,8 +1,13 @@
 package com.modulo7.musicstatmodels.musictheorymodels;
 
+import com.modulo7.common.exceptions.Modulo7BadKeyException;
 import com.modulo7.common.utils.FrequencyNoteMap;
 import com.modulo7.common.utils.Modulo7Globals;
 import com.modulo7.musicstatmodels.representation.KeySignature;
+import com.modulo7.musicstatmodels.representation.ScaleType;
+import com.modulo7.musicstatmodels.vectorspacemodels.vectorspacerepresentations.songvectors.TonalDurationHistogram;
+import org.apache.commons.lang3.ArrayUtils;
+import org.apache.commons.math3.stat.correlation.PearsonsCorrelation;
 
 import java.util.*;
 
@@ -62,16 +67,106 @@ public class KKTonalityProfiles {
     }
 
     /**
+     * Best profile match for tonal duration histogram to all the key profiles
+     * precomputed using the KK probe tone method
+     *
+     * @param tonalDurations
+     * @return
+     */
+    public static KeySignature estimateBestKeySignature(final TonalDurationHistogram tonalDurations) throws Modulo7BadKeyException {
+
+        final List<Double> tonalDurationsList = tonalDurations.getInternalRepresentation().getArrayRepresentation();
+        Double[] tonalDurationsHistogramArray = tonalDurationsList.toArray(new Double[tonalDurationsList.size()]);
+        double[] tonalDurationsArray = ArrayUtils.toPrimitive(tonalDurationsHistogramArray);
+        assert (tonalDurationsArray.length == 12);
+
+        double bestCorrelation = -Double.MAX_VALUE;
+        String bestKey = "C";
+        ScaleType bestScaleType = ScaleType.MINOR;
+
+        // Iterate over the major chord profiles and choose the best one of the lot
+        for (Map.Entry<String, List<Double>> entry : KKTonalityProfiles.MAJOR_CHORD_PROFILES.entrySet()) {
+
+            final String key = entry.getKey();
+            final List<Double> profile = entry.getValue();
+
+            double[] targetProfile = new double[profile.size()];
+            for (int i = 0; i < targetProfile.length; i++) {
+                targetProfile[i] = profile.get(i);
+            }
+
+            final double correlation = new PearsonsCorrelation().correlation(tonalDurationsArray, targetProfile);
+
+            if (correlation > bestCorrelation) {
+                bestCorrelation = correlation;
+                bestKey = key;
+                bestScaleType = ScaleType.MAJOR;
+            }
+        }
+
+        // Iterates over the minor chord profiles and choose the best one of the lot
+        for (Map.Entry<String, List<Double>> entry : KKTonalityProfiles.MINOR_CHORD_PROFILES.entrySet()) {
+
+            final String key = entry.getKey();
+            final List<Double> profile = entry.getValue();
+
+            double[] targetProfile = new double[profile.size()];
+            for (int i = 0; i < targetProfile.length; i++) {
+                targetProfile[i] = profile.get(i);
+            }
+
+            final double correlation = new PearsonsCorrelation().correlation(tonalDurationsArray, targetProfile);
+
+            if (correlation > bestCorrelation) {
+                bestCorrelation = correlation;
+                bestKey = key;
+                bestScaleType = ScaleType.MINOR;
+            }
+        }
+
+        return new KeySignature(bestKey, bestScaleType);
+    }
+
+    /**
      * In certain cases (for example when only the number of flats or sharps are known)
      * Modulo7 faces a choice between two a major and a minor key. This method resolves
-     *
-     * TODO : Implement this
+     * that choice
      *
      * @param thisOne
      * @param thatOne
+     * @param tonalDurations
      * @return true if thisOne is a better profile than that one
      */
-    public static boolean estimateBetterProfile(final KeySignature thisOne, final KeySignature thatOne) {
-        return false;
+    public static boolean estimateBetterProfile(final KeySignature thisOne, final KeySignature thatOne,
+           final TonalDurationHistogram tonalDurations) {
+
+        final List<Double> tonalDurationsList = tonalDurations.getInternalRepresentation().getArrayRepresentation();
+        Double[] tonalDurationsHistogramArray = tonalDurationsList.toArray(new Double[tonalDurationsList.size()]);
+        double[] tonalDurationsArray = ArrayUtils.toPrimitive(tonalDurationsHistogramArray);
+        assert (tonalDurationsArray.length == 12);
+
+        final double thisScore, thatScore;
+
+        if (thisOne.getScale().equals(ScaleType.MAJOR)) {
+            List<Double> thisProfileList = KKTonalityProfiles.MAJOR_CHORD_PROFILES.get(thisOne.getKey());
+            double[] thisProfileArray = ArrayUtils.toPrimitive(thisProfileList.toArray(new Double[thisProfileList.size()]));
+            thisScore = new PearsonsCorrelation().correlation(thisProfileArray, tonalDurationsArray);
+        } else {
+            List<Double> thisProfileList = KKTonalityProfiles.MINOR_CHORD_PROFILES.get(thisOne.getKey());
+            double[] thisProfileArray = ArrayUtils.toPrimitive(thisProfileList.toArray(new Double[thisProfileList.size()]));
+            thisScore = new PearsonsCorrelation().correlation(thisProfileArray, tonalDurationsArray);
+        }
+
+        if (thatOne.getScale().equals(ScaleType.MAJOR)) {
+            List<Double> thisProfileList = KKTonalityProfiles.MAJOR_CHORD_PROFILES.get(thatOne.getKey());
+            double[] thisProfileArray = ArrayUtils.toPrimitive(thisProfileList.toArray(new Double[thisProfileList.size()]));
+            thatScore = new PearsonsCorrelation().correlation(thisProfileArray, tonalDurationsArray);
+        } else {
+            List<Double> thisProfileList = KKTonalityProfiles.MINOR_CHORD_PROFILES.get(thatOne.getKey());
+            double[] thisProfileArray = ArrayUtils.toPrimitive(thisProfileList.toArray(new Double[thisProfileList.size()]));
+            thatScore = new PearsonsCorrelation().correlation(thisProfileArray, tonalDurationsArray);
+        }
+
+        return thisScore > thatScore;
     }
 }
