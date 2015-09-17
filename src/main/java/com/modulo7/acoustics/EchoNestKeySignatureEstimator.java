@@ -2,8 +2,8 @@ package com.modulo7.acoustics;
 
 import com.modulo7.common.exceptions.Modulo7BadKeyException;
 import com.modulo7.common.utils.Modulo7Globals;
-import com.modulo7.musicstatmodels.representation.KeySignature;
-import com.modulo7.musicstatmodels.representation.ScaleType;
+import com.modulo7.musicstatmodels.representation.metadata.KeySignature;
+import com.modulo7.musicstatmodels.representation.metadata.ScaleType;
 
 /**
  * Created by asanyal on 9/9/15.

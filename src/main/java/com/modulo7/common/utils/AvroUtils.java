@@ -1,7 +1,8 @@
 package com.modulo7.common.utils;
 
 import com.modulo7.common.exceptions.Modulo7NoSuchFileException;
-import com.modulo7.musicstatmodels.representation.Song;
+import com.modulo7.musicstatmodels.representation.polyphonic.Song;
+import com.modulo7.nlp.Lyrics;
 import org.apache.avro.Schema;
 import org.apache.avro.file.CodecFactory;
 import org.apache.avro.file.DataFileReader;
@@ -20,14 +21,21 @@ import java.io.IOException;
  *
  * Avro utility class for serializing and deserializing
  * avro files given a schema
+ *
+ * These utils can be used for serializing and deserializing songs and independent lyrics
+ * objects.
+ *
+ * Right now the utils use java reflection. This is because the models are not yet stable
+ * by that I mean new elements can be inserted or removed dependent on design changes
+ *
+ * Once the models are considered relatively stable, I will remove the reflection to accomodate
+ * a non code gen schema version of operation
  */
 public class AvroUtils {
 
     /**
      * Method to serialize a modulo7 object, the assumption is that each file
      * has exactly song object stored into it
-     *
-     * Prototype taken from :
      *
      * @param destinationFileName
      * @param song
@@ -76,6 +84,59 @@ public class AvroUtils {
          */
         for (Song song : dataFileReader) {
             return song;
+        }
+
+        // Return null if nothing appears
+        return null;
+    }
+
+    /**
+     * Serialize an independent lyrics object
+     *
+     * @param destinationFileName
+     * @param lyrics
+     * @throws Modulo7NoSuchFileException
+     */
+    public static void serialize(final String destinationFileName, final Lyrics lyrics) throws Modulo7NoSuchFileException {
+        // Acquire the reflective schema from Modulo7 class
+        final Schema schema= ReflectData.get().getSchema(Lyrics.class);
+
+        DatumWriter<Lyrics> writer = new ReflectDatumWriter<>(Lyrics.class);
+        DataFileWriter<Lyrics> fileWriter = new DataFileWriter<>(writer);
+
+        fileWriter.setCodec(CodecFactory.deflateCodec(5));
+        try {
+            fileWriter.create(schema, new File(destinationFileName));
+            fileWriter.append(lyrics);
+            fileWriter.close();
+        } catch (IOException e) {
+            throw new Modulo7NoSuchFileException("Cant create file in location :" + destinationFileName);
+        }
+    }
+
+    /**
+     * Deserializer for an independent lyrics object
+     *
+     * @param sourceFileName
+     * @return
+     * @throws Modulo7NoSuchFileException
+     */
+    public static Lyrics deserializeLyricsObject(final String sourceFileName) throws Modulo7NoSuchFileException {
+        File sourceFile = new File(sourceFileName);
+
+        DatumReader<Lyrics> reader = new ReflectDatumReader<>(Lyrics.class);
+        DataFileReader<Lyrics> dataFileReader;
+        try {
+            dataFileReader = new DataFileReader<>(sourceFile, reader);
+        } catch (IOException e) {
+            throw new Modulo7NoSuchFileException("No such file" + sourceFileName);
+        }
+
+        /**
+         * Since we have only one song object in the file by design as assumed we return that back
+         */
+        for (Lyrics lyrics : dataFileReader) {
+            return lyrics;
         }
 
         // Return null if nothing appears

@@ -1,8 +1,10 @@
-//import com.echonest.api.v4.EchoNestException;
-//import com.modulo7.common.exceptions.Modulo7InvalidMusicXMLFile;
-//import com.modulo7.common.exceptions.Modulo7NoSuchFileException;
-//import com.modulo7.engine.DatabaseEngine;
-//import org.junit.Test;
+import com.modulo7.common.interfaces.AbstractAnalyzer;
+import com.modulo7.common.utils.Modulo7Utils;
+import com.modulo7.musicstatmodels.representation.polyphonic.Song;
+import com.modulo7.pureresearch.MSDSongParser;
+import org.junit.Test;
+
+import java.util.Set;
 
 // import javax.sound.midi.InvalidMidiDataException;
 
@@ -22,6 +24,20 @@ public class ResearchTestCase {
         final String smdDir = "./src/test/researchData";
         DatabaseEngine engine = new DatabaseEngine(smdDir, smdDir);
         engine.dynamicBuildDataSet();
+    }
+    */
+
+    /*
+    @Test
+    public void msdSubSetTest() {
+        final String msdDir = "./src/test/researchData/msd";
+        Set<String> allLocations = Modulo7Utils.listAllFiles(msdDir);
+
+        for (final String location : allLocations) {
+            AbstractAnalyzer analyzer = new MSDSongParser(location);
+            final Song song = analyzer.getSongRepresentation();
+            // AvroUtils.serialize(song, );
+        }
     }
     */
 }

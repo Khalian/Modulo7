@@ -1,8 +1,8 @@
 import com.modulo7.common.exceptions.Modulo7BadIntervalException;
 import com.modulo7.musicstatmodels.musictheorymodels.Interval;
 import com.modulo7.musicstatmodels.musictheorymodels.IntervalEnum;
-import com.modulo7.musicstatmodels.representation.ChordQuality;
-import com.modulo7.musicstatmodels.representation.Note;
+import com.modulo7.musicstatmodels.representation.buildingblocks.ChordQuality;
+import com.modulo7.musicstatmodels.representation.buildingblocks.Note;
 import junit.framework.Assert;
 import org.junit.Test;
 

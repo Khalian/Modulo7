@@ -1,7 +1,7 @@
 package com.modulo7.othersources;
 
-import com.modulo7.musicstatmodels.representation.Note;
-import com.modulo7.musicstatmodels.representation.NoteDuration;
+import com.modulo7.musicstatmodels.representation.buildingblocks.Note;
+import com.modulo7.musicstatmodels.representation.buildingblocks.NoteDuration;
 
 /**
  * A helper class for crunching in basic XML

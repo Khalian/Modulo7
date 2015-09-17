@@ -4,8 +4,8 @@ import com.modulo7.common.exceptions.Modulo7BadChordException;
 import com.modulo7.common.exceptions.Modulo7BadIntervalException;
 import com.modulo7.common.exceptions.Modulo7InvalidLineInstantSizeException;
 import com.modulo7.common.utils.FrequencyNoteMap;
-import com.modulo7.musicstatmodels.representation.Note;
-import com.modulo7.musicstatmodels.representation.VoiceInstant;
+import com.modulo7.musicstatmodels.representation.buildingblocks.Note;
+import com.modulo7.musicstatmodels.representation.monophonic.VoiceInstant;
 import org.apache.log4j.Logger;
 
 import java.util.HashSet;

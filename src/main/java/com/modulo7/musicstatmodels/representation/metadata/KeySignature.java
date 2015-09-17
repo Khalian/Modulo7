@@ -1,4 +1,4 @@
-package com.modulo7.musicstatmodels.representation;
+package com.modulo7.musicstatmodels.representation.metadata;
 
 import com.modulo7.common.exceptions.Modulo7BadKeyException;
 import com.modulo7.common.utils.Modulo7Globals;

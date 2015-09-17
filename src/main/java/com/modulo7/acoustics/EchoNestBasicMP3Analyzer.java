@@ -7,12 +7,14 @@ import com.modulo7.common.exceptions.Modulo7InvalidLineInstantSizeException;
 import com.modulo7.common.exceptions.Modulo7NoSuchFileException;
 import com.modulo7.common.interfaces.AbstractAnalyzer;
 import com.modulo7.common.utils.FrequencyNoteMap;
-import com.modulo7.common.utils.Modulo7Globals;
 import com.modulo7.common.utils.Modulo7Utils;
 import com.modulo7.crawler.utils.CrawlerHelper;
 import com.modulo7.crawler.utils.MusicSources;
-import com.modulo7.musicstatmodels.representation.*;
-import com.modulo7.musicstatmodels.representation.Song;
+import com.modulo7.musicstatmodels.representation.polyphonic.Song;
+import com.modulo7.musicstatmodels.representation.metadata.KeySignature;
+import com.modulo7.musicstatmodels.representation.metadata.SongMetadata;
+import com.modulo7.musicstatmodels.representation.monophonic.Voice;
+import com.modulo7.musicstatmodels.representation.monophonic.VoiceInstant;
 import org.apache.log4j.Logger;
 
 import java.io.File;
@@ -88,7 +90,6 @@ public class EchoNestBasicMP3Analyzer implements AbstractAnalyzer {
                 // Gets the time signature
                 final int timeSignature = track.getTimeSignature();
 
-                // TODO : Figure out what an internal representation of key means in echo nest
                 // Getting the key signature information from the echo nest meta data analysis in integer format
                 final int key = track.getKey();
                 final int mode = track.getMode();

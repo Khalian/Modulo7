@@ -1,5 +1,5 @@
 import com.modulo7.common.interfaces.AbstractAnalyzer;
-import com.modulo7.musicstatmodels.representation.Song;
+import com.modulo7.musicstatmodels.representation.polyphonic.Song;
 import com.modulo7.pureresearch.MSDSongParser;
 import junit.framework.Assert;
 import org.junit.Test;

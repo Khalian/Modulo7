@@ -5,7 +5,7 @@ grammar modulo7SQL;
 options {
 	tokenVocab = modulo7SQLBase;
 
-	    // antlr will generate java lexer and parser
+	// antlr will generate java lexer and parser
     language = Java;
 
     // generated parser should create abstract syntax tree

@@ -2,7 +2,7 @@ package com.modulo7.musicstatmodels.musictheorymodels;
 
 
 import com.modulo7.common.exceptions.Modulo7InvalidCircleOfFifthsDistance;
-import com.modulo7.musicstatmodels.representation.ScaleType;
+import com.modulo7.musicstatmodels.representation.metadata.ScaleType;
 import org.apache.commons.collections.Buffer;
 import org.apache.commons.collections.BufferUtils;
 import org.apache.commons.collections.buffer.CircularFifoBuffer;

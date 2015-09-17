@@ -1,16 +1,11 @@
 package com.modulo7.common.utils;
 
-import com.modulo7.common.exceptions.Modulo7BadKeyException;
 import com.modulo7.common.exceptions.Modulo7VectorSizeMismatchException;
-import com.modulo7.musicstatmodels.musictheorymodels.KKTonalityProfiles;
-import com.modulo7.musicstatmodels.representation.KeySignature;
-import com.modulo7.musicstatmodels.representation.ScaleType;
-import com.modulo7.musicstatmodels.representation.Voice;
-import com.modulo7.musicstatmodels.representation.VoiceInstant;
+import com.modulo7.musicstatmodels.representation.monophonic.Voice;
+import com.modulo7.musicstatmodels.representation.monophonic.VoiceInstant;
 import com.modulo7.othersources.NoteAndIsChordDual;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.filefilter.TrueFileFilter;
-import org.apache.commons.math3.stat.correlation.PearsonsCorrelation;
 
 import java.io.File;
 import java.io.IOException;

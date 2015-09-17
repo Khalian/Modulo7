@@ -1,11 +1,13 @@
 import com.echonest.api.v4.EchoNestException;
+import com.modulo7.common.exceptions.Modulo7InvalidFIleOperationExeption;
 import com.modulo7.common.interfaces.AbstractAnalyzer;
 import com.modulo7.acoustics.EchoNestBasicMP3Analyzer;
 import com.modulo7.acoustics.MidiToSongConverter;
 import com.modulo7.common.exceptions.Modulo7InvalidMusicXMLFile;
 import com.modulo7.common.exceptions.Modulo7NoSuchFileException;
 import com.modulo7.common.utils.AvroUtils;
-import com.modulo7.musicstatmodels.representation.Song;
+import com.modulo7.musicstatmodels.representation.polyphonic.Song;
+import com.modulo7.nlp.Lyrics;
 import com.modulo7.othersources.BasicMusicXMLParser;
 import org.junit.Assert;
 import org.junit.Test;
@@ -17,8 +19,8 @@ import java.io.IOException;
 /**
  * Created by asanyal on 8/31/15.
  *
- * Avro utility test case, sanity test for serialize and deserialize of the
- * Song class
+ * Avro utility test case, Sanity tests for serialization and deserialization of the
+ * Song and Lyrics classes
  */
 public class AvroUtilsTest {
 
@@ -35,10 +37,11 @@ public class AvroUtilsTest {
 
         Song song = midiAnalyzer.getSongRepresentation();
 
-        AvroUtils.serialize("./src/test/tempMidiFile.avro", song);
-        AvroUtils.deserialize("./src/test/tempMidiFile.avro");
+        AvroUtils.serialize("./src/test/tempMidiFile.m7", song);
+        Song deserializedSong = AvroUtils.deserialize("./src/test/tempMidiFile.m7");
+        Assert.assertNotNull(deserializedSong);
 
-        File theAvroFile = new File("./src/test/tempMidiFile.avro");
+        File theAvroFile = new File("./src/test/tempMidiFile.m7");
         Assert.assertTrue(theAvroFile.delete());
 
         // TODO : Write some code for proper equality check on song objects
@@ -60,10 +63,11 @@ public class AvroUtilsTest {
         AbstractAnalyzer analyzer = new EchoNestBasicMP3Analyzer(mp3Location);
         Song mp3song = analyzer.getSongRepresentation();
 
-       AvroUtils.serialize("./src/test/tempMp3File.avro", mp3song);
-       AvroUtils.deserialize("./src/test/tempMp3File.avro");
+        AvroUtils.serialize("./src/test/tempMp3File.m7", mp3song);
+        Song song = AvroUtils.deserialize("./src/test/tempMp3File.m7");
+        Assert.assertNotNull(song);
 
-        File theAvroFile = new File("./src/test/tempMp3File.avro");
+        File theAvroFile = new File("./src/test/tempMp3File.m7");
         Assert.assertTrue(theAvroFile.delete());
 
         // Assert.assertEquals(mp3song, mp3DeserializedSong);
@@ -82,12 +86,29 @@ public class AvroUtilsTest {
         AbstractAnalyzer analyzer = new BasicMusicXMLParser(musicXMLFileLocation);
         Song musicXMLSong = analyzer.getSongRepresentation();
 
-        AvroUtils.serialize("./src/test/tempXMLFile.avro", musicXMLSong);
-        AvroUtils.deserialize("./src/test/tempXMLFile.avro");
+        AvroUtils.serialize("./src/test/tempXMLFile.m7", musicXMLSong);
+        Song song = AvroUtils.deserialize("./src/test/tempXMLFile.m7");
+        Assert.assertNotNull(song);
 
-        File theAvroFile = new File("./src/test/tempXMLFile.avro");
+        File theAvroFile = new File("./src/test/tempXMLFile.m7");
         Assert.assertTrue(theAvroFile.delete());
 
         // Assert.assertEquals(musicXMLSong, musicXMLDeserializedSong);
+    }
+
+    /**
+     * A test case in an independent lyrics object can be serialized and deserialized correctly
+     * @throws Modulo7InvalidFIleOperationExeption
+     * @throws Modulo7NoSuchFileException
+     */
+    @Test
+    public void testLyricsSerialization() throws Modulo7NoSuchFileException, Modulo7InvalidFIleOperationExeption {
+
+         Lyrics lyrics = new Lyrics("Barbie girl", "aqua", new File("./src/test/testdata/lyrics/barbie_girl"));
+         AvroUtils.serialize("./src/test/tempLyrics.m7Lyrics", lyrics);
+         AvroUtils.deserializeLyricsObject("./src/test/tempLyrics.m7Lyrics");
+
+         File theAvroFile = new File("./src/test/tempLyrics.m7Lyrics");
+         Assert.assertTrue(theAvroFile.delete());
     }
 }

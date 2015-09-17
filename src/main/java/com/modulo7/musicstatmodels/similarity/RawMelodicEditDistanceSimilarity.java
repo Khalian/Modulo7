@@ -1,7 +1,7 @@
 package com.modulo7.musicstatmodels.similarity;
 
 import com.modulo7.common.interfaces.AbstractSimilarity;
-import com.modulo7.musicstatmodels.representation.Song;
+import com.modulo7.musicstatmodels.representation.polyphonic.Song;
 import org.apache.lucene.search.spell.LevensteinDistance;
 
 import java.util.HashSet;

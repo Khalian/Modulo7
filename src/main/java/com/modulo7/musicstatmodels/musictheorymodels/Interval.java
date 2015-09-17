@@ -3,9 +3,9 @@ package com.modulo7.musicstatmodels.musictheorymodels;
 import com.modulo7.common.exceptions.Modulo7BadIntervalException;
 import com.modulo7.common.exceptions.Modulo7WrongNoteType;
 import com.modulo7.common.utils.FrequencyNoteMap;
-import com.modulo7.musicstatmodels.representation.ChordQuality;
-import com.modulo7.musicstatmodels.representation.Note;
-import com.modulo7.musicstatmodels.representation.VoiceInstant;
+import com.modulo7.musicstatmodels.representation.buildingblocks.ChordQuality;
+import com.modulo7.musicstatmodels.representation.buildingblocks.Note;
+import com.modulo7.musicstatmodels.representation.monophonic.VoiceInstant;
 
 /**
  * Created by asanyal on 8/20/15.

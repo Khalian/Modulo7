@@ -1,4 +1,4 @@
-package com.modulo7.musicstatmodels.representation;
+package com.modulo7.musicstatmodels.representation.buildingblocks;
 
 /**
  * Created by asanyal on 8/31/15.

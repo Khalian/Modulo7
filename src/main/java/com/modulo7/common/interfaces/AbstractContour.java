@@ -1,6 +1,6 @@
 package com.modulo7.common.interfaces;
 
-import com.modulo7.musicstatmodels.representation.Voice;
+import com.modulo7.musicstatmodels.representation.monophonic.Voice;
 
 /**
  * Created by asanyal on 9/6/15.

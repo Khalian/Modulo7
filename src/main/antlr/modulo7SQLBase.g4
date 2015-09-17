@@ -1,6 +1,7 @@
 lexer grammar modulo7SQLBase;
 
 @header {
+    package  com.modulo7.modulo7SQL;
 }
 
 SELECT: 'select';

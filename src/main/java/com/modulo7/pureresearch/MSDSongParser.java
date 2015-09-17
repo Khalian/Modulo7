@@ -3,7 +3,11 @@ package com.modulo7.pureresearch;
 import com.modulo7.acoustics.ChromaAnalysis;
 import com.modulo7.common.interfaces.AbstractAnalyzer;
 import com.modulo7.crawler.utils.MusicSources;
-import com.modulo7.musicstatmodels.representation.*;
+import com.modulo7.musicstatmodels.representation.metadata.KeySignature;
+import com.modulo7.musicstatmodels.representation.metadata.SongMetadata;
+import com.modulo7.musicstatmodels.representation.monophonic.Voice;
+import com.modulo7.musicstatmodels.representation.monophonic.VoiceInstant;
+import com.modulo7.musicstatmodels.representation.polyphonic.Song;
 import ncsa.hdf.object.h5.H5File;
 import org.apache.log4j.Logger;
 

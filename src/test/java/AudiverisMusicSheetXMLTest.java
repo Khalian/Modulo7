@@ -1,7 +1,5 @@
 import com.modulo7.common.interfaces.AbstractAnalyzer;
 import com.modulo7.image.AudiverisSheetAnalyzer;
-import com.modulo7.musicstatmodels.representation.Song;
-import junit.framework.Assert;
 import org.junit.Test;
 
 /**

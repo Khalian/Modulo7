@@ -1,6 +1,6 @@
 package com.modulo7.common.interfaces;
 
-import com.modulo7.musicstatmodels.representation.Song;
+import com.modulo7.musicstatmodels.representation.polyphonic.Song;
 
 /**
  * Created by asanyal on 9/4/15.

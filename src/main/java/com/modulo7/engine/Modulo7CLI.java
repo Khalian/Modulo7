@@ -1,10 +1,7 @@
 package com.modulo7.engine;
 
 import com.echonest.api.v4.EchoNestException;
-import com.modulo7.common.exceptions.Modulo7IndexingDirError;
-import com.modulo7.common.exceptions.Modulo7InvalidArgsException;
-import com.modulo7.common.exceptions.Modulo7InvalidMusicXMLFile;
-import com.modulo7.common.exceptions.Modulo7NoSuchFileException;
+import com.modulo7.common.exceptions.*;
 import org.apache.commons.cli.*;
 
 import javax.sound.midi.InvalidMidiDataException;
@@ -20,7 +17,6 @@ import javax.sound.midi.InvalidMidiDataException;
  * index_dest_dir - The indexed directory, where the indexed metadata can be serialized to disk
  * in_memory - A boolean flag which states whether data is purely in memory or should be serialized to disk
  * complete_metadata - In the event metadata is not present in music sources, whether modulo7 should guess it?
- *
  */
 public class Modulo7CLI {
 
@@ -49,13 +45,36 @@ public class Modulo7CLI {
      * @throws Modulo7IndexingDirError
      */
     public static void main(String args[]) throws ParseException, Modulo7InvalidArgsException, InvalidMidiDataException,
-            Modulo7InvalidMusicXMLFile, EchoNestException, Modulo7NoSuchFileException, Modulo7IndexingDirError {
+            Modulo7InvalidMusicXMLFile, EchoNestException, Modulo7NoSuchFileException, Modulo7IndexingDirError, Modulo7InvalidFIleOperationExeption {
 
         CommandLine commandLine = Modulo7CLI.getServerCommand(args);
         Modulo7Indexer indexer = new Modulo7Indexer(commandLine.getOptionValue(MUSIC_SOURCES_DIR), commandLine.getOptionValue(INDEX_DIR));
         indexer.indexData();
 
-        System.out.println("Welcome to Modulo7 interactive prompt for analysis");
+        System.out.println("Welcome to Modulo7 interactive prompt for analysis of the vector space models");
+        
+        interactiveCLI();
+    }
+
+    /**
+     * Driver method for the interactive CLI measures
+     */
+    private static void interactiveCLI() {
+        System.out.println("Input choice:");
+        viewChoices();
+    }
+
+    /**
+     * View the choices that are available to modulo7 users for consumption
+     */
+    private static void viewChoices() {
+        System.out.println("1. Return set of songs for a given artist");
+        System.out.println("2. Return set of songs for a given key signature");
+        System.out.println("3. Return set of songs for a given time signature");
+        System.out.println("4. Return set of songs for a given artist");
+        System.out.println("5. List out the lyrics of a song given the song name");
+        System.out.println("6. Input a custom modulo7 SQL query");
+        System.out.println("7. Exit from Modulo7");
     }
 
     /**

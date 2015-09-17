@@ -1,6 +1,6 @@
 package com.modulo7.musicstatmodels.inference;
 
-import com.modulo7.musicstatmodels.representation.Song;
+import com.modulo7.musicstatmodels.representation.polyphonic.Song;
 
 /**
  * Created by asanyal on 7/28/2015.

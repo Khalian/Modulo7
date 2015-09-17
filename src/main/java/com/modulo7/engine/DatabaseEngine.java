@@ -4,6 +4,7 @@ import com.echonest.api.v4.EchoNestException;
 import com.modulo7.acoustics.EchoNestBasicMP3Analyzer;
 import com.modulo7.acoustics.MidiToSongConverter;
 import com.modulo7.common.exceptions.Modulo7DataBaseNotSerializedException;
+import com.modulo7.common.exceptions.Modulo7InvalidFIleOperationExeption;
 import com.modulo7.common.exceptions.Modulo7InvalidMusicXMLFile;
 import com.modulo7.common.exceptions.Modulo7NoSuchFileException;
 import com.modulo7.common.interfaces.AbstractAnalyzer;
@@ -11,12 +12,14 @@ import com.modulo7.common.utils.AvroUtils;
 import com.modulo7.common.utils.Modulo7Utils;
 import com.modulo7.crawler.utils.MusicSources;
 import com.modulo7.image.AudiverisSheetAnalyzer;
-import com.modulo7.musicstatmodels.representation.Song;
+import com.modulo7.musicstatmodels.representation.polyphonic.Song;
+import com.modulo7.nlp.Lyrics;
 import com.modulo7.othersources.BasicMusicXMLParser;
 import org.apache.commons.io.FilenameUtils;
 
 import javax.sound.midi.InvalidMidiDataException;
 import java.io.File;
+import java.io.IOException;
 import java.util.*;
 
 /**
@@ -32,14 +35,20 @@ public class DatabaseEngine {
     // Destination Directory in which the serialization results are finally stored
     private String destinationDirectory;
 
-    // The song set along with a hashmap between location and songs and
+    // A hash map between location and songs in Modulo7 format and
     private Map<String, Song> songLocationMap = new HashMap<>();
+
+    // A hash map between indepedent lyrics object in Modulo7 format
+    private Map<String, Lyrics> independentLyricsMap = new HashMap<>();
 
     // A map containing song location to the deserialized location
     private Map<String, String> serializedSongLocationSet = new HashMap<>();
 
-    // The inverse of the previous set
+    // The inverse of the song to location map
     private Map<Song, String> inverseSongLocationMap = new HashMap<>();
+
+    // The inverse of the lyrics object to location map
+    private Map<Lyrics, String> inverseIndependentLyricsMap = new HashMap<>();
 
     // All set of all the song locations acquired by this database engine during init
     private Set<String> songLocations = new HashSet<>();
@@ -80,7 +89,7 @@ public class DatabaseEngine {
      * The map for songs, in can later be used to serialize if required
      */
     public synchronized void buildInMemoryDataBaseFromScratch() throws InvalidMidiDataException,
-            EchoNestException, Modulo7NoSuchFileException, Modulo7InvalidMusicXMLFile {
+            EchoNestException, Modulo7NoSuchFileException, Modulo7InvalidMusicXMLFile, Modulo7InvalidFIleOperationExeption {
         for (final String songLocation : songLocations) {
             if (songLocation.endsWith("midi") || songLocation.endsWith("mid")) {
                 AbstractAnalyzer analyzer = new MidiToSongConverter(songLocation);
@@ -98,6 +107,10 @@ public class DatabaseEngine {
                 AbstractAnalyzer analyzer = new AudiverisSheetAnalyzer(songLocation);
                 final Song song = analyzer.getSongRepresentation();
                 songLocationMap.put(songLocation, song);
+            } else if (songLocation.endsWith("m7lyrics")) {
+                // TODO : Fix these elements
+                Lyrics lyrics = new Lyrics("Artist", "Album", new File(songLocation));
+                independentLyricsMap.put(songLocation, lyrics);
             }
         }
 
@@ -168,7 +181,7 @@ public class DatabaseEngine {
      * Serialize the contents and dump database to a serialized location
      */
     public synchronized void serializeDataSetAndMoveToDisk() throws Modulo7NoSuchFileException, InvalidMidiDataException,
-            Modulo7InvalidMusicXMLFile, EchoNestException {
+            Modulo7InvalidMusicXMLFile, EchoNestException, Modulo7InvalidFIleOperationExeption {
 
         if (!isDataBaseConstructedInMemory) {
             buildInMemoryDataBaseFromScratch();

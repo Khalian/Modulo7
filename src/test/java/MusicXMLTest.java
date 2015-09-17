@@ -6,7 +6,15 @@
 
 import com.modulo7.common.exceptions.*;
 import com.modulo7.crawler.utils.MusicSources;
-import com.modulo7.musicstatmodels.representation.*;
+import com.modulo7.musicstatmodels.representation.buildingblocks.ChordQuality;
+import com.modulo7.musicstatmodels.representation.buildingblocks.Note;
+import com.modulo7.musicstatmodels.representation.metadata.KeySignature;
+import com.modulo7.musicstatmodels.representation.metadata.ScaleType;
+import com.modulo7.musicstatmodels.representation.metadata.SongMetadata;
+import com.modulo7.musicstatmodels.representation.metadata.TimeSignature;
+import com.modulo7.musicstatmodels.representation.monophonic.Voice;
+import com.modulo7.musicstatmodels.representation.monophonic.VoiceInstant;
+import com.modulo7.musicstatmodels.representation.polyphonic.Song;
 import com.modulo7.nlp.Lyrics;
 import com.modulo7.othersources.BasicMusicXMLParser;
 import junit.framework.Assert;

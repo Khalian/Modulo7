@@ -2,7 +2,7 @@ package com.modulo7.musicstatmodels.vectorspacemodels.vectorspacerepresentations
 
 import com.modulo7.common.exceptions.Modulo7WrongNoteType;
 import com.modulo7.common.interfaces.AbstractVoiceVector;
-import com.modulo7.musicstatmodels.representation.Voice;
+import com.modulo7.musicstatmodels.representation.monophonic.Voice;
 import com.modulo7.musicstatmodels.vectorspacemodels.datastructures.VoicePitchList;
 import org.apache.log4j.Logger;
 

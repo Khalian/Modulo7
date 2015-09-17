@@ -1,5 +1,6 @@
 package com.modulo7.nlp;
 
+import com.modulo7.common.exceptions.Modulo7InvalidFIleOperationExeption;
 import com.modulo7.common.utils.Modulo7Globals;
 
 import java.io.*;
@@ -71,25 +72,29 @@ public class Lyrics {
      * @param albumName
      * @param fileLyrics
      */
-    public Lyrics(final String artist, final String albumName, final File fileLyrics) throws IOException {
+    public Lyrics(final String artist, final String albumName, final File fileLyrics) throws Modulo7InvalidFIleOperationExeption {
 
-        FileInputStream fstream = new FileInputStream(fileLyrics);
-        BufferedReader br = new BufferedReader(new InputStreamReader(fstream));
+        try {
+            FileInputStream fstream = new FileInputStream(fileLyrics);
+            BufferedReader br = new BufferedReader(new InputStreamReader(fstream));
 
-        String lyricsInSingleLine = "";
-        String lyricsLine;
+            String lyricsInSingleLine = "";
+            String lyricsLine;
 
-        //Read File Line By Line
-        while ((lyricsLine = br.readLine()) != null)   {
-            lyricsInSingleLine += lyricsLine + PHRASETERM;
+            //Read File Line By Line and parse the lyrics
+            while ((lyricsLine = br.readLine()) != null) {
+                lyricsInSingleLine += lyricsLine + PHRASETERM;
+            }
+
+            //Close the input stream
+            br.close();
+
+            this.artist = artist;
+            this.albumName = albumName;
+            this.lyricsOfSong = lyricsInSingleLine;
+        } catch (IOException ie) {
+            throw new Modulo7InvalidFIleOperationExeption(ie.getMessage());
         }
-
-        //Close the input stream
-        br.close();
-
-        this.artist = artist;
-        this.albumName = albumName;
-        this.lyricsOfSong = lyricsInSingleLine;
     }
 
     /**

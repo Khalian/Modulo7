@@ -2,7 +2,7 @@ package com.modulo7.musicstatmodels.vectorspacemodels.vectorspacerepresentations
 
 import com.modulo7.common.interfaces.AbstractContour;
 import com.modulo7.common.interfaces.AbstractSongVector;
-import com.modulo7.musicstatmodels.representation.Song;
+import com.modulo7.musicstatmodels.representation.polyphonic.Song;
 
 import java.util.List;
 

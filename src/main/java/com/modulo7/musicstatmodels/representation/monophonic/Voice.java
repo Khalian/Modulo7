@@ -1,7 +1,8 @@
-package com.modulo7.musicstatmodels.representation;
+package com.modulo7.musicstatmodels.representation.monophonic;
 
 import com.modulo7.common.exceptions.Modulo7WrongNoteType;
 import com.modulo7.common.utils.Modulo7Globals;
+import com.modulo7.musicstatmodels.representation.buildingblocks.Note;
 
 import java.util.ArrayList;
 import java.util.List;

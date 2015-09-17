@@ -1,4 +1,4 @@
-package com.modulo7.musicstatmodels.representation;
+package com.modulo7.musicstatmodels.representation.buildingblocks;
 
 import com.modulo7.common.exceptions.Modulo7BadIntervalException;
 import com.modulo7.common.utils.FrequencyNoteMap;

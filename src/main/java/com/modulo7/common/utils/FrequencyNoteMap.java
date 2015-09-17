@@ -1,8 +1,8 @@
 package com.modulo7.common.utils;
 
 import com.modulo7.common.exceptions.Modulo7BadAccidentalException;
-import com.modulo7.musicstatmodels.representation.Accidental;
-import com.modulo7.musicstatmodels.representation.Note;
+import com.modulo7.musicstatmodels.representation.buildingblocks.Accidental;
+import com.modulo7.musicstatmodels.representation.buildingblocks.Note;
 
 import java.util.*;
 

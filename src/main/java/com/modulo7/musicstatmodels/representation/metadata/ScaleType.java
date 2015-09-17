@@ -1,4 +1,4 @@
-package com.modulo7.musicstatmodels.representation;
+package com.modulo7.musicstatmodels.representation.metadata;
 
 /**
  * Created by asanyal on 6/29/2015.

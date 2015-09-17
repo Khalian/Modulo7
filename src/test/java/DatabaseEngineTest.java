@@ -2,9 +2,9 @@ import com.echonest.api.v4.EchoNestException;
 import com.modulo7.common.exceptions.*;
 import com.modulo7.engine.DatabaseEngine;
 import com.modulo7.engine.Modulo7Indexer;
-import com.modulo7.musicstatmodels.representation.KeySignature;
-import com.modulo7.musicstatmodels.representation.ScaleType;
-import com.modulo7.musicstatmodels.representation.Song;
+import com.modulo7.musicstatmodels.representation.metadata.KeySignature;
+import com.modulo7.musicstatmodels.representation.metadata.ScaleType;
+import com.modulo7.musicstatmodels.representation.polyphonic.Song;
 import junit.framework.Assert;
 import org.apache.commons.io.FileUtils;
 import org.junit.Test;
@@ -30,7 +30,7 @@ public class DatabaseEngineTest {
      */
     @Test
     public void dataBaseSantiyTest() throws InvalidMidiDataException, Modulo7InvalidMusicXMLFile, EchoNestException, Modulo7NoSuchFileException,
-            Modulo7DataBaseNotSerializedException, IOException {
+            Modulo7DataBaseNotSerializedException, IOException, Modulo7InvalidFIleOperationExeption {
         File file = new File("./src/test/testdataSerialization/");
         file.mkdir();
         DatabaseEngine engine = new DatabaseEngine("./src/test/testdata", "./src/test/testdataSerialization/");
@@ -54,7 +54,7 @@ public class DatabaseEngineTest {
      */
     @Test
     public void m7IndexerSanityTest() throws InvalidMidiDataException, Modulo7InvalidMusicXMLFile, EchoNestException,
-            Modulo7NoSuchFileException, Modulo7BadKeyException, Modulo7IndexingDirError, IOException {
+            Modulo7NoSuchFileException, Modulo7BadKeyException, Modulo7IndexingDirError, IOException, Modulo7InvalidFIleOperationExeption {
         File file = new File("./src/test/testdataSerialization/");
         file.mkdir();
         Modulo7Indexer indexer = new Modulo7Indexer("./src/test/testdata", "./src/test/testdataSerialization/");

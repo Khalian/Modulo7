@@ -1,6 +1,6 @@
 package com.modulo7.musicstatmodels.criteria;
 
-import com.modulo7.musicstatmodels.representation.Song;
+import com.modulo7.musicstatmodels.representation.polyphonic.Song;
 
 /**
  * Created by asanyal on 8/29/15.
@@ -8,7 +8,7 @@ import com.modulo7.musicstatmodels.representation.Song;
  * Criteria's are predicates about a particular music theoretic assertion
  * that a song satisfies or not
  */
-public abstract class AbstractCriteria {
+public interface AbstractCriteria {
 
     /**
      * Returns whether the song satisfies a particular criteria or not
@@ -16,5 +16,5 @@ public abstract class AbstractCriteria {
      * @param song
      * @return
      */
-    protected abstract boolean getCriteriaEvaluation(final Song song);
+    public boolean getCriteriaEvaluation(final Song song);
 }

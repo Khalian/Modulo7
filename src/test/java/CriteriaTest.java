@@ -1,0 +1,48 @@
+import com.modulo7.common.exceptions.Modulo7InvalidLineInstantSizeException;
+import com.modulo7.crawler.utils.MusicSources;
+import com.modulo7.musicstatmodels.criteria.AbstractCriteria;
+import com.modulo7.musicstatmodels.criteria.PolyphonyCriteria;
+import com.modulo7.musicstatmodels.representation.buildingblocks.Note;
+import com.modulo7.musicstatmodels.representation.monophonic.Voice;
+import com.modulo7.musicstatmodels.representation.monophonic.VoiceInstant;
+import com.modulo7.musicstatmodels.representation.polyphonic.Song;
+import org.junit.Assert;
+import org.junit.Test;
+
+import java.util.HashSet;
+
+/**
+ * Created by asanyal on 9/16/15
+ *
+ * This test
+ */
+public class CriteriaTest {
+
+    /**
+     * Check if a song is polyphonic and or homophonic
+     * @throws Modulo7InvalidLineInstantSizeException
+     */
+    @Test
+    public void polyphonyCriteriaTest() throws Modulo7InvalidLineInstantSizeException {
+        AbstractCriteria criteria = new PolyphonyCriteria();
+
+        Voice voice = new Voice();
+        voice.addVoiceInstant(new VoiceInstant(Note.A0));
+
+        Song song = new Song(voice, MusicSources.UNKNOWN);
+
+        Assert.assertTrue(criteria.getCriteriaEvaluation(song));
+
+        Voice voice1 = new Voice();
+        voice1.addVoiceInstant(new VoiceInstant(Note.A1));
+
+        HashSet<Voice> newSongSet = new HashSet<>();
+        newSongSet.add(voice);
+        newSongSet.add(voice1);
+
+        Song newSong = new Song(newSongSet, MusicSources.UNKNOWN);
+
+        Assert.assertFalse(criteria.getCriteriaEvaluation(newSong));
+
+    }
+}

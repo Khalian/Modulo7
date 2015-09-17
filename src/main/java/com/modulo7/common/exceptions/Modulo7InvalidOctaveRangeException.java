@@ -1,7 +1,5 @@
 package com.modulo7.common.exceptions;
 
-import com.modulo7.common.exceptions.Modulo7BaseException;
-
 /**
  * Created by asanyal on 7/14/2015.
  *

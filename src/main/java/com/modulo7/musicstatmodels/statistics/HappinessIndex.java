@@ -3,7 +3,7 @@ package com.modulo7.musicstatmodels.statistics;
 import com.modulo7.common.interfaces.AbstractSongVector;
 import com.modulo7.common.interfaces.AbstractStatistic;
 import com.modulo7.musicstatmodels.musictheorymodels.IntervalEnum;
-import com.modulo7.musicstatmodels.representation.Song;
+import com.modulo7.musicstatmodels.representation.polyphonic.Song;
 import com.modulo7.musicstatmodels.vectorspacemodels.datastructures.TonalHistogramData;
 import com.modulo7.musicstatmodels.vectorspacemodels.vectorspacerepresentations.songvectors.TonalHistogram;
 

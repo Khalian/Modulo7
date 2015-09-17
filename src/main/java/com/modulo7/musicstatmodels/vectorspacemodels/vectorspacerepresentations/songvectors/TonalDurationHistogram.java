@@ -5,9 +5,9 @@ import com.modulo7.common.exceptions.Modulo7WrongNoteType;
 import com.modulo7.common.interfaces.AbstractSongVector;
 import com.modulo7.musicstatmodels.musictheorymodels.Interval;
 import com.modulo7.musicstatmodels.musictheorymodels.IntervalEnum;
-import com.modulo7.musicstatmodels.representation.Song;
-import com.modulo7.musicstatmodels.representation.Voice;
-import com.modulo7.musicstatmodels.representation.VoiceInstant;
+import com.modulo7.musicstatmodels.representation.polyphonic.Song;
+import com.modulo7.musicstatmodels.representation.monophonic.Voice;
+import com.modulo7.musicstatmodels.representation.monophonic.VoiceInstant;
 import com.modulo7.musicstatmodels.vectorspacemodels.datastructures.TonalDurationHistogramData;
 
 import java.util.List;

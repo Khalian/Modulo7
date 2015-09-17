@@ -1,8 +1,8 @@
 package com.modulo7.musicstatmodels.vectorspacemodels.datastructures;
 
 import com.modulo7.common.exceptions.Modulo7WrongNoteType;
-import com.modulo7.musicstatmodels.representation.Voice;
-import com.modulo7.musicstatmodels.representation.VoiceInstant;
+import com.modulo7.musicstatmodels.representation.monophonic.Voice;
+import com.modulo7.musicstatmodels.representation.monophonic.VoiceInstant;
 
 import java.util.ArrayList;
 import java.util.List;

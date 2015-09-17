@@ -4,7 +4,7 @@ import com.modulo7.common.exceptions.Modulo7VectorSizeMismatchException;
 import com.modulo7.common.interfaces.AbstractSimilarity;
 import com.modulo7.common.utils.Modulo7Globals;
 import com.modulo7.common.utils.Modulo7Utils;
-import com.modulo7.musicstatmodels.representation.Song;
+import com.modulo7.musicstatmodels.representation.polyphonic.Song;
 import com.modulo7.musicstatmodels.vectorspacemodels.datastructures.TonalHistogramData;
 import com.modulo7.common.interfaces.AbstractSongVector;
 import com.modulo7.musicstatmodels.vectorspacemodels.vectorspacerepresentations.songvectors.TonalHistogram;

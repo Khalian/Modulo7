@@ -1,9 +1,13 @@
-package com.modulo7.musicstatmodels.representation;
+package com.modulo7.musicstatmodels.representation.monophonic;
 
 import com.modulo7.common.exceptions.Modulo7BadIntervalException;
 import com.modulo7.common.exceptions.Modulo7InvalidLineInstantSizeException;
 import com.modulo7.common.exceptions.Modulo7WrongNoteType;
 import com.modulo7.common.utils.Modulo7Globals;
+import com.modulo7.musicstatmodels.representation.buildingblocks.ChordQuality;
+import com.modulo7.musicstatmodels.representation.buildingblocks.Note;
+import com.modulo7.musicstatmodels.representation.buildingblocks.NoteDuration;
+import com.modulo7.musicstatmodels.representation.buildingblocks.NoteType;
 
 import java.util.HashSet;
 

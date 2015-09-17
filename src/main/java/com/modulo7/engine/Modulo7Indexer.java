@@ -2,16 +2,16 @@ package com.modulo7.engine;
 
 import com.echonest.api.v4.EchoNestException;
 import com.modulo7.common.exceptions.Modulo7IndexingDirError;
+import com.modulo7.common.exceptions.Modulo7InvalidFIleOperationExeption;
 import com.modulo7.common.exceptions.Modulo7InvalidMusicXMLFile;
 import com.modulo7.common.exceptions.Modulo7NoSuchFileException;
-import com.modulo7.musicstatmodels.representation.KeySignature;
-import com.modulo7.musicstatmodels.representation.Song;
-import com.modulo7.musicstatmodels.representation.TimeSignature;
+import com.modulo7.musicstatmodels.representation.metadata.KeySignature;
+import com.modulo7.musicstatmodels.representation.polyphonic.Song;
+import com.modulo7.musicstatmodels.representation.metadata.TimeSignature;
 import com.modulo7.nlp.Lyrics;
 import com.modulo7.nlp.LyricsIndexer;
 
 import javax.sound.midi.InvalidMidiDataException;
-import java.io.IOException;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
@@ -54,7 +54,7 @@ public class Modulo7Indexer {
      * @throws Modulo7IndexingDirError
      */
     public Modulo7Indexer(final String srcDir, final String dstDir) throws InvalidMidiDataException, Modulo7InvalidMusicXMLFile,
-            EchoNestException, Modulo7NoSuchFileException, Modulo7IndexingDirError {
+            EchoNestException, Modulo7NoSuchFileException, Modulo7IndexingDirError, Modulo7InvalidFIleOperationExeption {
         engine = new DatabaseEngine(srcDir, dstDir);
         engine.buildInMemoryDataBaseFromScratch();
         lyricsIndexer = new LyricsIndexer();
@@ -72,7 +72,7 @@ public class Modulo7Indexer {
      * @throws Modulo7NoSuchFileException
      */
     public Modulo7Indexer(final String srcDir, final String dstDir, final boolean persistOnDisk) throws InvalidMidiDataException,
-            Modulo7InvalidMusicXMLFile, EchoNestException, Modulo7NoSuchFileException {
+            Modulo7InvalidMusicXMLFile, EchoNestException, Modulo7NoSuchFileException, Modulo7InvalidFIleOperationExeption {
         engine = new DatabaseEngine(srcDir, dstDir);
         engine.buildInMemoryDataBaseFromScratch();
         lyricsIndexer = new LyricsIndexer();
@@ -84,6 +84,7 @@ public class Modulo7Indexer {
 
     /**
      * Method to initiate indexing of data and help build the indexed data structures
+     * These indexes can later be used to query
      *
      * @throws Modulo7IndexingDirError
      */
@@ -91,6 +92,7 @@ public class Modulo7Indexer {
         indexKeySignatures();
         indexTimeSignatures();
         indexLyrics();
+        indexArtists();
     }
 
 
@@ -201,11 +203,20 @@ public class Modulo7Indexer {
     }
 
     /**
-     * Gets the key signature set of songs given a key signature element
+     * Gets the set of songs given a key signature element
      * @param signature
      * @return
      */
     public Set<Song> getKeySignatureIndexedSet(final KeySignature signature) {
         return keySignatureIndex.get(signature);
+    }
+
+    /**
+     * Gets the set of songs given an artist
+     * @param artist
+     * @return
+     */
+    public Set<Song> getArtistIndexedSet(final String artist) {
+        return artistIndex.get(artist);
     }
 }

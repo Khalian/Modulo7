@@ -117,7 +117,7 @@ jar {
     manifest {
         attributes 'Implementation-Title': 'Modulo7',
                    'Implementation-Version': 1.0,
-                    'Main-Class': 'Modulo7CLI   '
+                    'Main-Class': 'com.modulo7.engine.Modulo7CLI'
     }
 
     // remove the security files (from mail.jar / activation.jar) so that the jar will be executable.
@@ -197,6 +197,16 @@ dependencies {
 generateGrammarSource {
     maxHeapSize = "128m"
     arguments += ["-visitor", "-long-messages"]
+    outputs.upToDateWhen { false }
+
+    doLast {
+        copy {
+            from 'build/generated-src/antlr/main/'
+            include '*.java*'
+            into 'src/main/java/com/modulo7/modulo7SQL'
+        }
+        project.delete fileTree('build/generated-src/antlr/main').include('*.*')
+    }
 }
 
 uploadArchives {

@@ -5,10 +5,11 @@ import com.modulo7.common.interfaces.AbstractAnalyzer;
 import com.modulo7.common.utils.JarRunner;
 import com.modulo7.common.utils.Modulo7Utils;
 import com.modulo7.crawler.utils.MusicSources;
-import com.modulo7.musicstatmodels.representation.Song;
+import com.modulo7.musicstatmodels.representation.polyphonic.Song;
 import com.modulo7.othersources.BasicMusicXMLParser;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.FilenameUtils;
+import org.apache.log4j.Logger;
 
 import java.io.File;
 import java.io.IOException;
@@ -35,6 +36,9 @@ public class AudiverisSheetAnalyzer implements AbstractAnalyzer {
     // Loaded audiveris jar
     private static JarRunner jr;
 
+    // Logger class for audeveris sheet music analyzer
+    private static final Logger logger = Logger.getLogger(AudiverisSheetAnalyzer.class);
+
     /**
      * Sheet file location
      * @param sheetFileLocation
@@ -52,7 +56,7 @@ public class AudiverisSheetAnalyzer implements AbstractAnalyzer {
         try {
             jr = new JarRunner(new File(audiverisJarLocation));
         } catch (ClassNotFoundException | IOException | NoSuchMethodException e) {
-            e.printStackTrace();
+            logger.error(e.getStackTrace());
         }
     }
 
@@ -64,12 +68,12 @@ public class AudiverisSheetAnalyzer implements AbstractAnalyzer {
             return musicXXMLAnalyzer.getSongRepresentation();
 
         } catch (IOException | InvocationTargetException | IllegalAccessException | Modulo7InvalidMusicXMLFile e) {
-            e.printStackTrace();
+            logger.error(e.getStackTrace());
         } finally {
              FileUtils.deleteQuietly(new File(intermediateMusicXMLLocation));
         }
 
-        // Wont reach here but for the sake of completeness
+        // Wont reach here but for the sake of completeness for compilation
         return null;
     }
 }

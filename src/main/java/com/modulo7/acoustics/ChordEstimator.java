@@ -3,8 +3,8 @@ package com.modulo7.acoustics;
 import com.modulo7.common.utils.FrequencyNoteMap;
 import com.modulo7.common.exceptions.Modulo7BadChordException;
 import com.modulo7.musicstatmodels.musictheorymodels.IntervalEnum;
-import com.modulo7.musicstatmodels.representation.ChordQuality;
-import com.modulo7.musicstatmodels.representation.Note;
+import com.modulo7.musicstatmodels.representation.buildingblocks.ChordQuality;
+import com.modulo7.musicstatmodels.representation.buildingblocks.Note;
 
 import java.util.HashSet;
 
