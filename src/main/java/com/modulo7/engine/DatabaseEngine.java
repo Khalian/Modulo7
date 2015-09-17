@@ -16,6 +16,7 @@ import com.modulo7.musicstatmodels.representation.polyphonic.Song;
 import com.modulo7.nlp.Lyrics;
 import com.modulo7.othersources.BasicMusicXMLParser;
 import org.apache.commons.io.FilenameUtils;
+import org.apache.commons.lang3.SerializationUtils;
 
 import javax.sound.midi.InvalidMidiDataException;
 import java.io.File;
@@ -304,5 +305,21 @@ public class DatabaseEngine {
      */
     public Song getSongGivenLocationInMemoryVersion(final String location) {
         return songLocationMap.get(location);
+    }
+
+    /**
+     * Getter for the number of songs parsed
+     * @return
+     */
+    public int getNumSongsParsed() {
+        return songLocationMap.size();
+    }
+
+    /**
+     *
+     * @return
+     */
+    public Map<String, Song> getSongLocationMap() {
+        return songLocationMap;
     }
 }

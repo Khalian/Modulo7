@@ -1,7 +1,13 @@
 package com.modulo7.musicstatmodels.representation.metadata;
 
+import com.modulo7.common.exceptions.Modulo7BadIntervalException;
 import com.modulo7.common.exceptions.Modulo7BadKeyException;
+import com.modulo7.common.exceptions.Modulo7BadNoteException;
+import com.modulo7.common.utils.FrequencyNoteMap;
 import com.modulo7.common.utils.Modulo7Globals;
+import com.modulo7.musicstatmodels.musictheorymodels.Interval;
+import com.modulo7.musicstatmodels.musictheorymodels.IntervalEnum;
+import com.modulo7.musicstatmodels.representation.buildingblocks.Note;
 
 import java.util.Arrays;
 import java.util.HashSet;
@@ -25,6 +31,9 @@ public class KeySignature {
     // Available keys in western music theory
     private static final Set westernKeys =
             new HashSet<>(Arrays.asList(Modulo7Globals.NOTE_NAMES));
+
+    // Frequency note map distance
+    private static final FrequencyNoteMap noteMap = FrequencyNoteMap.getInstance();
 
     @Override
     public boolean equals(Object o) {
@@ -79,5 +88,24 @@ public class KeySignature {
      */
     public String getKey() {
         return key;
+    }
+
+    /**
+     * Get the intervalic distant thiskey and thatkey
+     * @param thisKey
+     * @param thatKey
+     * @return
+     * @throws Modulo7BadNoteException
+     * @throws Modulo7BadIntervalException
+     */
+    public static IntervalEnum getIntervalicDistance(final KeySignature thisKey, final KeySignature thatKey)
+            throws Modulo7BadNoteException, Modulo7BadIntervalException {
+        final String thisKeyValue = thisKey.getKey();
+        final String thatKeyValue = thatKey.getKey();
+
+        final Note thisNote = Note.getNoteValue(thatKeyValue, 4);
+        final Note thatNote = Note.getNoteValue(thatKeyValue, 4);
+
+        return Interval.getInterval(thatNote, thatNote).getIntervalEnum();
     }
 }

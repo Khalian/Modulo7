@@ -1,8 +1,13 @@
+import com.modulo7.common.exceptions.Modulo7BadKeyException;
 import com.modulo7.common.exceptions.Modulo7InvalidLineInstantSizeException;
 import com.modulo7.crawler.utils.MusicSources;
 import com.modulo7.musicstatmodels.criteria.AbstractCriteria;
+import com.modulo7.musicstatmodels.criteria.KeySignatureEqualityCriteria;
 import com.modulo7.musicstatmodels.criteria.PolyphonyCriteria;
 import com.modulo7.musicstatmodels.representation.buildingblocks.Note;
+import com.modulo7.musicstatmodels.representation.metadata.KeySignature;
+import com.modulo7.musicstatmodels.representation.metadata.ScaleType;
+import com.modulo7.musicstatmodels.representation.metadata.SongMetadata;
 import com.modulo7.musicstatmodels.representation.monophonic.Voice;
 import com.modulo7.musicstatmodels.representation.monophonic.VoiceInstant;
 import com.modulo7.musicstatmodels.representation.polyphonic.Song;
@@ -43,6 +48,25 @@ public class CriteriaTest {
         Song newSong = new Song(newSongSet, MusicSources.UNKNOWN);
 
         Assert.assertFalse(criteria.getCriteriaEvaluation(newSong));
+    }
 
+    /**
+     *
+     * @throws Modulo7BadKeyException
+     * @throws Modulo7InvalidLineInstantSizeException
+     */
+    public void keySignatureCriteriaTest() throws Modulo7BadKeyException, Modulo7InvalidLineInstantSizeException {
+        AbstractCriteria criteria = new KeySignatureEqualityCriteria(new KeySignature("C", ScaleType.MAJOR));
+
+        Voice voice = new Voice();
+        voice.addVoiceInstant(new VoiceInstant(Note.A0));
+
+        Song song = new Song(voice, new SongMetadata(new KeySignature("C", ScaleType.MAJOR), null), MusicSources.UNKNOWN);
+
+        Assert.assertTrue(criteria.getCriteriaEvaluation(song));
+
+        Song anotherSong = new Song(voice, new SongMetadata(new KeySignature("B", ScaleType.MINOR), null), MusicSources.UNKNOWN);
+
+        Assert.assertFalse(criteria.getCriteriaEvaluation(anotherSong));
     }
 }

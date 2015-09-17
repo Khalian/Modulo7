@@ -40,6 +40,9 @@ public class Modulo7Indexer {
     // Lyrics indexer for all the sub components
     private LyricsIndexer lyricsIndexer;
 
+    // Is there verbose output while indexing
+    private boolean verboseIndexing = false;
+
     /**
      * Default constructor for modulo7 indexer
      *
@@ -61,18 +64,22 @@ public class Modulo7Indexer {
     }
 
     /**
-     * Constructor which takes argument whether to persist models on to disk
+     * Constructor which takes argument whether to persist models on to disk and whetheer
+     * verbose output is needed when indexing
      *
      * @param srcDir
      * @param dstDir
      * @param persistOnDisk
+     * @param verboseIndexing
+     *
      * @throws InvalidMidiDataException
      * @throws Modulo7InvalidMusicXMLFile
      * @throws EchoNestException
      * @throws Modulo7NoSuchFileException
      */
-    public Modulo7Indexer(final String srcDir, final String dstDir, final boolean persistOnDisk) throws InvalidMidiDataException,
-            Modulo7InvalidMusicXMLFile, EchoNestException, Modulo7NoSuchFileException, Modulo7InvalidFIleOperationExeption {
+    public Modulo7Indexer(final String srcDir, final String dstDir, final boolean persistOnDisk, final boolean verboseIndexing)
+            throws InvalidMidiDataException, Modulo7InvalidMusicXMLFile, EchoNestException, Modulo7NoSuchFileException,
+            Modulo7InvalidFIleOperationExeption {
         engine = new DatabaseEngine(srcDir, dstDir);
         engine.buildInMemoryDataBaseFromScratch();
         lyricsIndexer = new LyricsIndexer();
@@ -80,6 +87,8 @@ public class Modulo7Indexer {
         if (persistOnDisk) {
             engine.serializeDataSetAndMoveToDisk();
         }
+
+        this.verboseIndexing = verboseIndexing;
     }
 
     /**
@@ -218,5 +227,13 @@ public class Modulo7Indexer {
      */
     public Set<Song> getArtistIndexedSet(final String artist) {
         return artistIndex.get(artist);
+    }
+
+    /**
+     * A simple getter for the number of songs parsed
+     * @return
+     */
+    public int getNumSongsIndexed() {
+        return engine.getNumSongsParsed();
     }
 }

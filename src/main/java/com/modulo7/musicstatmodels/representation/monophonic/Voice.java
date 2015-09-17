@@ -2,7 +2,9 @@ package com.modulo7.musicstatmodels.representation.monophonic;
 
 import com.modulo7.common.exceptions.Modulo7WrongNoteType;
 import com.modulo7.common.utils.Modulo7Globals;
+import com.modulo7.musicstatmodels.representation.buildingblocks.ChordQuality;
 import com.modulo7.musicstatmodels.representation.buildingblocks.Note;
+import org.apache.log4j.Logger;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -32,6 +34,9 @@ public class Voice {
 
     // Member indicating how long the entire voice was played
     private double totalVoiceDuration = (double) Modulo7Globals.UNKNOWN;
+
+    // Logger instance for voice
+    private static final Logger logger = Logger.getLogger(Voice.class);
 
     /**
      * Basic constructor for line by accepting a set of line
@@ -81,8 +86,13 @@ public class Voice {
                     final String noteValue = note.getNoteValue();
                     noteString += noteValue + " ";
                 } catch (Modulo7WrongNoteType e) {
-                    e.printStackTrace();
+                    logger.error(e.getMessage());
                 }
+            } else {
+                final Note chordRootNote = ChordQuality.getRootNoteFromChord(instant.getAllNotesofInstant());
+                final String chordRootNoteStringRep = chordRootNote.getNoteValue();
+                final String chordType = instant.getChordQuality().getStringRepresentation();
+                noteString += chordRootNoteStringRep + chordType;
             }
         }
 

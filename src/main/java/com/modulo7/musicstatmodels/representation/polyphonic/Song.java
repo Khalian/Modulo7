@@ -6,6 +6,7 @@ import com.modulo7.musicstatmodels.representation.metadata.SongMetadata;
 import com.modulo7.musicstatmodels.representation.monophonic.Voice;
 import com.modulo7.nlp.Lyrics;
 
+import java.io.Serializable;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -18,7 +19,7 @@ import java.util.Set;
  * A song is basically an interplay of multiple lines being played together
  * As such it encapsulates a set of modulo7 lines and metadata like artistname,
  */
-public class Song {
+public class Song implements Serializable {
 
     // A description of the length of the song in question
     private HashSet<Voice> voicesOfSong = new HashSet<>();

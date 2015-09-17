@@ -26,6 +26,9 @@ public class Modulo7Globals {
     // Audiveris jar location
     public static final String AUDIVERIS_JAR_LOCATION = Modulo7Utils.stringAssign(System.getenv("AUDIVERIS_JAR_LOCATION"));
 
+    // The number of processors available to Modulo7, this allows Modulo7 to build a simple threading model
+    public static final int NUM_OF_CORES = Runtime.getRuntime().availableProcessors();
+
     /**
      * Static block declaring all the gloabals
      */
