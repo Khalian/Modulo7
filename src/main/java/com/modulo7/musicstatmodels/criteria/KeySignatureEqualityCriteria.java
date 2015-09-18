@@ -1,5 +1,6 @@
 package com.modulo7.musicstatmodels.criteria;
 
+import com.modulo7.common.interfaces.AbstractCriteria;
 import com.modulo7.musicstatmodels.representation.metadata.KeySignature;
 import com.modulo7.musicstatmodels.representation.polyphonic.Song;
 

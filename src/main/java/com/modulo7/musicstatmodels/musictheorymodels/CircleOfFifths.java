@@ -16,8 +16,6 @@ import java.util.Iterator;
  *
  * The circle of fifths is a handy reference for key signatures and denote the number of flats
  * or sharps that are present in various keys
- *
- * TODO: Finish this implementation
  */
 public class CircleOfFifths {
 

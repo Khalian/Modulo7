@@ -15,12 +15,12 @@ import java.util.Set;
  * procedures for re - representing a voice so that contour gradients can be created for
  * new vector space models
  */
-public class SteinbeckContour implements AbstractContour {
+public class SteinbeckContour implements AbstractContour<Voice> {
 
     @Override
     public Voice getContourRepresentaionOfVoice(final Voice voice) {
 
-        AbstractContour naturalContour = new NaturalContour();
+        AbstractContour<Voice> naturalContour = new NaturalContour();
         Voice extemumNotes = naturalContour.getContourRepresentaionOfVoice(voice);
 
         Set<VoiceInstant> changingNoteIndices = new HashSet<>();

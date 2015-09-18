@@ -395,5 +395,4 @@ public enum Note {
 
         return positionOne < positionTwo;
     }
-
 }

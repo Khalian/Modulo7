@@ -310,7 +310,10 @@ public class VoiceInstant {
         return duration;
     }
 
-
+    /**
+     * Getter for note type
+     * @return
+     */
     public NoteType getNoteType() {
         return noteType;
     }
@@ -398,6 +401,14 @@ public class VoiceInstant {
             final Note rootNote = ChordQuality.getRootNoteFromChord(this.setOfNotes);
             return rootNote.getNoteValue() + chordQuality.getStringRepresentation();
         }
+    }
+
+    /**
+     * Change the notes in the note seet
+     * @param newNoteSet
+     */
+    public void reassignNotes(final HashSet<Note> newNoteSet) {
+        setOfNotes = newNoteSet;
     }
 
     /**

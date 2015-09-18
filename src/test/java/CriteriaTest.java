@@ -1,7 +1,7 @@
 import com.modulo7.common.exceptions.Modulo7BadKeyException;
 import com.modulo7.common.exceptions.Modulo7InvalidLineInstantSizeException;
 import com.modulo7.crawler.utils.MusicSources;
-import com.modulo7.musicstatmodels.criteria.AbstractCriteria;
+import com.modulo7.common.interfaces.AbstractCriteria;
 import com.modulo7.musicstatmodels.criteria.KeySignatureEqualityCriteria;
 import com.modulo7.musicstatmodels.criteria.PolyphonyCriteria;
 import com.modulo7.musicstatmodels.representation.buildingblocks.Note;

@@ -4,6 +4,7 @@ import com.echonest.api.v4.Term;
 import com.modulo7.common.exceptions.Modulo7MalformedM7SQLQuery;
 import org.antlr.v4.runtime.ANTLRInputStream;
 import org.antlr.v4.runtime.CommonTokenStream;
+import org.antlr.v4.runtime.tree.ParseTreeListener;
 import org.antlr.v4.runtime.tree.TerminalNode;
 
 /**
@@ -26,8 +27,12 @@ public class Modulo7UserInputQueryParser {
         CommonTokenStream tokens = new CommonTokenStream(lexer);
         modulo7SQLParser parser = new modulo7SQLParser(tokens);
 
+        ParseTreeListener listener = new modulo7SQLBaseListener();
+
         modulo7SQLParser.Select_clauseContext context = parser.select_clause();
         TerminalNode selectElem = context.SELECT();
+
+        context.enterRule(listener);
 
         if (selectElem == null) {
             throw new Modulo7MalformedM7SQLQuery("Must contain a select statement at the start of the query");

@@ -1,6 +1,8 @@
 package com.modulo7.common.utils;
 
 import com.modulo7.common.exceptions.Modulo7BadAccidentalException;
+import com.modulo7.musicstatmodels.musictheorymodels.Interval;
+import com.modulo7.musicstatmodels.musictheorymodels.IntervalType;
 import com.modulo7.musicstatmodels.representation.buildingblocks.Accidental;
 import com.modulo7.musicstatmodels.representation.buildingblocks.Note;
 
@@ -322,14 +324,31 @@ public class FrequencyNoteMap {
         return basicPositionNoteMap.get(position).getNoteValue();
     }
 
+    /**
+     * Given an interval get the new note from the current note
+     * @param baseNote
+     * @param interval
+     * @return
+     */
+    public Note getNoteGivenBaseAndInterval(final Note baseNote, final Interval interval) {
+        final int currPosition = getPositionGivenNote(baseNote);
+        final int newPosition;
 
+        if (interval.getType().equals(IntervalType.ASCENDING)) {
+            newPosition = currPosition + interval.getIntervalEnum().getIntervalQuantity();
+        } else {
+            newPosition = currPosition - interval.getIntervalEnum().getIntervalQuantity();
+        }
+
+        return getNoteGivenPosition(newPosition);
+    }
 
     /**
      * Acquires the position of the note given the note
      * @param note
      * @return
      */
-    public int getPositionGivenNote(Note note) {
+    public int getPositionGivenNote(final Note note) {
         return notePositionMap.get(note);
     }
 

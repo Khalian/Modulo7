@@ -1,6 +1,6 @@
 package com.modulo7.engine;
 
-import com.modulo7.common.interfaces.AbstractSimilarity;
+import com.modulo7.common.interfaces.AbstractSongSimilarity;
 import com.modulo7.musicstatmodels.representation.polyphonic.Song;
 
 import java.util.*;
@@ -17,13 +17,13 @@ import java.util.*;
  */
 public class RankEngineOnSimilarity {
 
-    AbstractSimilarity abstractSimilarity;
+    AbstractSongSimilarity abstractSimilarity;
 
     /**
      * Define a similarity engine by first inputting a similarity metric
      * @param similarity
      */
-    public RankEngineOnSimilarity(final AbstractSimilarity similarity) {
+    public RankEngineOnSimilarity(final AbstractSongSimilarity similarity) {
         this.abstractSimilarity = similarity;
     }
 

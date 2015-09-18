@@ -9,7 +9,7 @@ import com.modulo7.musicstatmodels.representation.monophonic.Voice;
  *
  * In order words certain operations are performed on the voice to reduce the number
  */
-public interface AbstractContour {
+public interface AbstractContour<T> {
 
-    public Voice getContourRepresentaionOfVoice(final Voice voice);
+    public T getContourRepresentaionOfVoice(final Voice voice);
 }

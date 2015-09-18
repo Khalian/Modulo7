@@ -1,4 +1,4 @@
-package com.modulo7.musicstatmodels.similarity;
+package com.modulo7.musicstatmodels.similarity.songsimilarity;
 
 /**
  * Created by asanyal on 7/25/2015.
@@ -7,6 +7,6 @@ package com.modulo7.musicstatmodels.similarity;
  * two lines in a song
  */
 public enum SimilarityTypes {
-    LINE_SIMILARITY,
+    VOICE_SIMILARITY,
     SONG_SIMILARITY,            // also called as line interplay similarity
 }

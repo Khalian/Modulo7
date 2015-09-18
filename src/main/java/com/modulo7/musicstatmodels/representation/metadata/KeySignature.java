@@ -98,14 +98,14 @@ public class KeySignature {
      * @throws Modulo7BadNoteException
      * @throws Modulo7BadIntervalException
      */
-    public static IntervalEnum getIntervalicDistance(final KeySignature thisKey, final KeySignature thatKey)
+    public static Interval getIntervalicDistance(final KeySignature thisKey, final KeySignature thatKey)
             throws Modulo7BadNoteException, Modulo7BadIntervalException {
         final String thisKeyValue = thisKey.getKey();
         final String thatKeyValue = thatKey.getKey();
 
-        final Note thisNote = Note.getNoteValue(thatKeyValue, 4);
+        final Note thisNote = Note.getNoteValue(thisKeyValue, 4);
         final Note thatNote = Note.getNoteValue(thatKeyValue, 4);
 
-        return Interval.getInterval(thatNote, thatNote).getIntervalEnum();
+        return Interval.getInterval(thisNote, thatNote);
     }
 }

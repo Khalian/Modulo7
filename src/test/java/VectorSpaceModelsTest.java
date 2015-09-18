@@ -8,6 +8,7 @@ import com.modulo7.musicstatmodels.representation.buildingblocks.Note;
 import com.modulo7.musicstatmodels.representation.polyphonic.Song;
 import com.modulo7.musicstatmodels.representation.monophonic.Voice;
 import com.modulo7.musicstatmodels.representation.monophonic.VoiceInstant;
+import com.modulo7.musicstatmodels.vectorspacemodels.contour.GrossContour;
 import com.modulo7.musicstatmodels.vectorspacemodels.contour.SteinbeckContour;
 import com.modulo7.musicstatmodels.vectorspacemodels.datastructures.TonalDurationHistogramData;
 import com.modulo7.musicstatmodels.vectorspacemodels.datastructures.TonalHistogramData;
@@ -41,7 +42,7 @@ public class VectorSpaceModelsTest {
         testVoice.addVoiceInstant(new VoiceInstant(Note.CSHARP0));
         testVoice.addVoiceInstant(new VoiceInstant(Note.D0));
 
-        AbstractContour contour = new SteinbeckContour();
+        AbstractContour<Voice> contour = new SteinbeckContour();
         Voice newContourizedVoice = contour.getContourRepresentaionOfVoice(testVoice);
 
         Assert.assertEquals(newContourizedVoice.getNumVoiceInstantsOfVoice(), 0);
@@ -62,7 +63,7 @@ public class VectorSpaceModelsTest {
         testVoice.addVoiceInstant(new VoiceInstant(Note.CSHARP1));
         testVoice.addVoiceInstant(new VoiceInstant(Note.D1));
 
-        AbstractContour contour = new SteinbeckContour();
+        AbstractContour<Voice> contour = new SteinbeckContour();
         Voice newContourizedVoice = contour.getContourRepresentaionOfVoice(testVoice);
 
         Assert.assertEquals(newContourizedVoice.getNumVoiceInstantsOfVoice(), 2);
@@ -172,5 +173,26 @@ public class VectorSpaceModelsTest {
 
         // The minor seconds have a total tonal histogram duration of 6.0 in the above test creation
         Assert.assertEquals(histogram.getInternalRepresentation().getData(IntervalEnum.MINOR_SECOND), 6.0);
+    }
+
+    /**
+     * Sanity test case for gross contour
+     * @throws Modulo7InvalidLineInstantSizeException
+     */
+    @Test
+    public void grossContourSanityTest() throws Modulo7InvalidLineInstantSizeException {
+        Voice testVoice1 = new Voice();
+
+        testVoice1.addVoiceInstant(new VoiceInstant(Note.ASHARP1, 1.0));
+        testVoice1.addVoiceInstant(new VoiceInstant(Note.B1, 1.0));
+        testVoice1.addVoiceInstant(new VoiceInstant(Note.C0, 1.0));
+        testVoice1.addVoiceInstant(new VoiceInstant(Note.CSHARP1, 1.0));
+        testVoice1.addVoiceInstant(new VoiceInstant(Note.D1, 1.0));
+
+        AbstractContour<String> contour = new GrossContour();
+
+        String contourRep = contour.getContourRepresentaionOfVoice(testVoice1);
+
+        Assert.assertEquals(contourRep, "U D U U");
     }
 }
