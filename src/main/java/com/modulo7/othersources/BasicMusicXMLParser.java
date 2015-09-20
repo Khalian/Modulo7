@@ -13,10 +13,7 @@ import com.modulo7.musicstatmodels.musictheorymodels.CircleOfFifths;
 import com.modulo7.musicstatmodels.representation.buildingblocks.Accidental;
 import com.modulo7.musicstatmodels.representation.buildingblocks.Note;
 import com.modulo7.musicstatmodels.representation.buildingblocks.NoteDuration;
-import com.modulo7.musicstatmodels.representation.metadata.KeySignature;
-import com.modulo7.musicstatmodels.representation.metadata.ScaleType;
-import com.modulo7.musicstatmodels.representation.metadata.SongMetadata;
-import com.modulo7.musicstatmodels.representation.metadata.TimeSignature;
+import com.modulo7.musicstatmodels.representation.metadata.*;
 import com.modulo7.musicstatmodels.representation.monophonic.Voice;
 import com.modulo7.musicstatmodels.representation.monophonic.VoiceInstant;
 import com.modulo7.musicstatmodels.representation.polyphonic.Song;
@@ -74,9 +71,11 @@ public class BasicMusicXMLParser implements AbstractAnalyzer {
     // Lyrics portion of music xml, if its present
     private Lyrics lyrics = new Lyrics();
 
+    // A clef element
+    private Clef clef;
+
     /**
      * Basic constructor takes as input the filename and applies
-     *
      *
      * @param  filename
      * @throws IOException
@@ -268,6 +267,34 @@ public class BasicMusicXMLParser implements AbstractAnalyzer {
                 timeSignature = new TimeSignature(beat, beatType);
         }
     }
+
+    /*
+    private void acquireClef() {
+        for (Element thisClef : this.doc.getElementsByTag("clef")) {
+
+            String sign = null;
+            Integer line = null;
+
+            for (Element thisSign : thisClef.getElementsByTag("sign")) {
+                sign = thisSign.text();
+                break;
+            }
+
+            for (Element thisLine : thisClef.getElementsByTag("line")) {
+                line = Integer.parseInt(thisLine.text());
+                break;
+            }
+
+            if (sign != null && line != null) {
+                if (sign.equals("G") && line == 2) {
+                    clef = Clef.Treble;
+                } else if (sign.equals("F") && line == 4) {
+                    clef = Clef.Bass;
+                }
+            }
+        }
+    }
+    */
 
     /**
      * Acquires the key signature from the music xml file

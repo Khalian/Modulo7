@@ -14,7 +14,7 @@ import java.io.*;
  * depending on the parsing from sources (if normal text files are provided for indexing
  * then lyrics are standalone objects
  */
-public class Lyrics {
+public class Lyrics implements Serializable {
 
     // Name of the song
     private String songName = Modulo7Globals.UNKNOWNSTRING;
@@ -105,20 +105,12 @@ public class Lyrics {
         return artist;
     }
 
-    public void setArtist(String artist) {
-        this.artist = artist;
-    }
-
     /**
      * Basic getter for album
      * @return
      */
     public String getAlbumName() {
         return albumName;
-    }
-
-    public void setAlbumName(String albumName) {
-        this.albumName = albumName;
     }
 
     /**

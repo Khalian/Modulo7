@@ -85,6 +85,51 @@ public class DatabaseEngine {
     }
 
     /**
+     * A method to incrementatally add elements
+     *
+     * @param songLocation
+     * @throws EchoNestException
+     * @throws Modulo7NoSuchFileException
+     * @throws InvalidMidiDataException
+     * @throws Modulo7InvalidMusicXMLFile
+     * @throws Modulo7InvalidFIleOperationExeption
+     *
+     * @return whether to incrementally add to database or not
+     *
+     */
+    public synchronized boolean incrementalAddToDatabase(final String songLocation) throws EchoNestException, Modulo7NoSuchFileException,
+            InvalidMidiDataException, Modulo7InvalidMusicXMLFile, Modulo7InvalidFIleOperationExeption {
+
+        if (songLocationMap.containsKey(songLocation)) {
+            return false;
+        }
+
+        if (songLocation.endsWith("midi") || songLocation.endsWith("mid")) {
+            AbstractAnalyzer analyzer = new MidiToSongConverter(songLocation);
+            final Song song = analyzer.getSongRepresentation();
+            songLocationMap.put(songLocation, song);
+        } else if (songLocation.endsWith("mp3")) {
+            AbstractAnalyzer analyzer = new EchoNestBasicMP3Analyzer(songLocation);
+            final Song song = analyzer.getSongRepresentation();
+            songLocationMap.put(songLocation, song);
+        } else if (songLocation.endsWith("xml")) {
+            AbstractAnalyzer analyzer = new BasicMusicXMLParser(songLocation);
+            final Song song = analyzer.getSongRepresentation();
+            songLocationMap.put(songLocation, song);
+        } else if (songLocation.endsWith("png") || songLocation.endsWith("jpg")) {
+            AbstractAnalyzer analyzer = new AudiverisSheetAnalyzer(songLocation);
+            final Song song = analyzer.getSongRepresentation();
+            songLocationMap.put(songLocation, song);
+        } else if (songLocation.endsWith("m7lyrics")) {
+            // TODO : Fix these elements
+            Lyrics lyrics = new Lyrics("Artist", "Album", new File(songLocation));
+            independentLyricsMap.put(songLocation, lyrics);
+        }
+
+        return true;
+    }
+
+    /**
      * Method which builds in memory database from scratch and populates
      *
      * The map for songs, in can later be used to serialize if required

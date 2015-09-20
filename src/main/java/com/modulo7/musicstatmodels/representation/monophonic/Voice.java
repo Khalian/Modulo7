@@ -6,6 +6,7 @@ import com.modulo7.musicstatmodels.representation.buildingblocks.ChordQuality;
 import com.modulo7.musicstatmodels.representation.buildingblocks.Note;
 import org.apache.log4j.Logger;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -22,7 +23,7 @@ import java.util.List;
  * A song is an interplay of distinct voices. Rules can be specific to a voice
  * or can be at a song level (also called voice interplay rules)
  */
-public class Voice {
+public class Voice implements Serializable {
 
     // A voice sequence is the sequence of line instance
     // That are being played

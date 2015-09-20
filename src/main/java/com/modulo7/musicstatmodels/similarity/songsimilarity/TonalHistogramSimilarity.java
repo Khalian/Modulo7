@@ -8,6 +8,7 @@ import com.modulo7.musicstatmodels.representation.polyphonic.Song;
 import com.modulo7.musicstatmodels.vectorspacemodels.datastructures.TonalHistogramData;
 import com.modulo7.common.interfaces.AbstractSongVector;
 import com.modulo7.musicstatmodels.vectorspacemodels.vectorspacerepresentations.songvectors.TonalHistogram;
+import org.apache.log4j.Logger;
 
 /**
  * Created by asanyal on 8/30/15.
@@ -17,6 +18,9 @@ import com.modulo7.musicstatmodels.vectorspacemodels.vectorspacerepresentations.
  * or any other such measure can also be used
  */
 public class TonalHistogramSimilarity implements AbstractSongSimilarity {
+
+    // Logger for tonal histogram similarity
+    private static final Logger logger = Logger.getLogger(TonalHistogramSimilarity.class);
 
     @Override
     public double getSimilarity(final Song first, final Song second) {
@@ -31,7 +35,7 @@ public class TonalHistogramSimilarity implements AbstractSongSimilarity {
         try {
             return Modulo7Utils.cosineSimilarity(internalVectorOne.getArrayRepresentation(), internalVectorTwo.getArrayRepresentation());
         } catch (Modulo7VectorSizeMismatchException e) {
-            e.printStackTrace();
+            logger.error(e.getMessage());
         }
 
         // If things fail return an unknown value, unlikely it will reach this code path

@@ -9,6 +9,7 @@ import com.modulo7.musicstatmodels.representation.buildingblocks.Note;
 import com.modulo7.musicstatmodels.representation.buildingblocks.NoteDuration;
 import com.modulo7.musicstatmodels.representation.buildingblocks.NoteType;
 
+import java.io.Serializable;
 import java.util.HashSet;
 
 /**
@@ -26,7 +27,7 @@ import java.util.HashSet;
  *
  * TODO : Rests in western music
  */
-public class VoiceInstant {
+public class VoiceInstant implements Serializable {
 
     // Whether the note is a part of a chord or a melody
     private NoteType noteType = NoteType.UNKNOWN;

@@ -5,6 +5,9 @@ import com.modulo7.common.exceptions.Modulo7IndexingDirError;
 import com.modulo7.common.exceptions.Modulo7InvalidFIleOperationExeption;
 import com.modulo7.common.exceptions.Modulo7InvalidMusicXMLFile;
 import com.modulo7.common.exceptions.Modulo7NoSuchFileException;
+import com.modulo7.common.interfaces.AbstractCriteria;
+import com.modulo7.common.utils.Modulo7Utils;
+import com.modulo7.musicstatmodels.criteria.PolyphonyCriteria;
 import com.modulo7.musicstatmodels.representation.metadata.KeySignature;
 import com.modulo7.musicstatmodels.representation.polyphonic.Song;
 import com.modulo7.musicstatmodels.representation.metadata.TimeSignature;
@@ -36,6 +39,12 @@ public class Modulo7Indexer {
 
     // Songs indexed on artists playing
     private Map<String, Set<Song>> artistIndex = new HashMap<>();
+
+    // Songs indexed on the fact that they are homophonic
+    private Map<String, Song> mophonicIndex = new HashMap<>();
+
+    // Songs indexed on the fact that they are polyphonic
+    private Map<String, Song> polyphonicIndex = new HashMap<>();
 
     // Lyrics indexer for all the sub components
     private LyricsIndexer lyricsIndexer;
@@ -102,8 +111,39 @@ public class Modulo7Indexer {
         indexTimeSignatures();
         indexLyrics();
         indexArtists();
+        indexPolyphony();
     }
 
+    /**
+     * Method to add additional songs to a given index
+     * @param newDir
+     */
+    public void addAdditionalSongsToIndex(final String newDir) {
+        final Set<String> newFilesToIndex = Modulo7Utils.listAllFiles(newDir);
+
+        for (final String newFile : newFilesToIndex) {
+            incrementalIndexArtists(newFile);
+        }
+    }
+
+    /**
+     * Method to index songs as monophonic and polyphonic
+     */
+    private synchronized void indexPolyphony() {
+
+        final AbstractCriteria polyphonyCriteria = new PolyphonyCriteria();
+
+        for (final String songLocation : engine.getSongLocationSet()) {
+            final Song song = engine.getSongGivenLocationInMemoryVersion(songLocation);
+
+            // If the song is polyphonic
+            if (polyphonyCriteria.getCriteriaEvaluation(song)) {
+                polyphonicIndex.put(songLocation, song);
+            } else {
+                mophonicIndex.put(songLocation, song);
+            }
+        }
+    }
 
     /**
      * Helper method to index lyrics on apache lucene
@@ -125,7 +165,7 @@ public class Modulo7Indexer {
     /**
      * Helper method that indexes all the songs based on their key signature
      */
-    private void indexKeySignatures() {
+    private synchronized void indexKeySignatures() {
         final Set<String> songLocations = engine.getSongLocationSet();
 
         for (final String songLocation : songLocations) {
@@ -138,7 +178,7 @@ public class Modulo7Indexer {
     /**
      * Helper method that indexes based on artist
      */
-    private void indexArtists() {
+    private synchronized void indexArtists() {
         final Set<String> songLocations = engine.getSongLocationSet();
 
         for (final String songLocation : songLocations) {
@@ -151,7 +191,7 @@ public class Modulo7Indexer {
     /**
      * Helper method to index all the time signatures
      */
-    private void indexTimeSignatures() {
+    private synchronized void indexTimeSignatures() {
         final Set<String> songLocations = engine.getSongLocationSet();
 
         for (final String songLocation : songLocations) {
@@ -175,7 +215,6 @@ public class Modulo7Indexer {
         songSet.add(song);
         keySignatureIndex.put(keySignature, songSet);
     }
-
 
     /**
      * Helper method that adds song to key signature
@@ -235,5 +274,86 @@ public class Modulo7Indexer {
      */
     public int getNumSongsIndexed() {
         return engine.getNumSongsParsed();
+    }
+
+    /**
+     * Method to incrementally add songs to an index
+     *
+     * @param location
+     * @throws InvalidMidiDataException
+     * @throws Modulo7InvalidMusicXMLFile
+     * @throws EchoNestException
+     * @throws Modulo7InvalidFIleOperationExeption
+     * @throws Modulo7NoSuchFileException
+     * @throws com.modulo7.common.exceptions.Modulo7IndexingDirError
+     */
+    public void incrementalIndexASong(final String location) throws InvalidMidiDataException, Modulo7InvalidMusicXMLFile,
+            EchoNestException, Modulo7InvalidFIleOperationExeption, Modulo7NoSuchFileException, Modulo7IndexingDirError {
+        boolean toIndex = engine.incrementalAddToDatabase(location);
+
+        if (toIndex) {
+            incrementalIndexKeySignatures(location);
+            incrementalIndexTimeSignatures(location);
+            incrementalIndexLyrics(location);
+            incrementalIndexArtists(location);
+            incrementatalIndexPolyphony(location);
+        }
+    }
+
+    /**
+     * Incremental version of the polyphony index
+     * @param location
+     */
+    private synchronized void incrementatalIndexPolyphony(final String location) {
+
+        final AbstractCriteria polyphonyCriteria = new PolyphonyCriteria();
+        final Song song = engine.getSongGivenLocationInMemoryVersion(location);
+
+        // If the song is polyphonic
+        if (polyphonyCriteria.getCriteriaEvaluation(song)) {
+            polyphonicIndex.put(location, song);
+        } else {
+            mophonicIndex.put(location, song);
+        }
+    }
+
+    /**
+     * Incremental version of the artist indexer
+     * @param location
+     */
+    private synchronized void incrementalIndexArtists(final String location) {
+        final Song song = engine.getSongGivenLocationInMemoryVersion(location);
+        final TimeSignature signature = song.getMetadata().getTimeSignature();
+        addSongToTimeSignatureIndex(signature, song);
+    }
+
+    /**
+     * Incremental version of the lyrics indexer
+     * @param location
+     * @throws Modulo7IndexingDirError
+     */
+    private synchronized void incrementalIndexLyrics(final String location) throws Modulo7IndexingDirError {
+        final Song song = engine.getSongGivenLocationInMemoryVersion(location);
+        lyricsIndexer.indexLyrics(song.getLyrics());
+    }
+
+    /**
+     * Incremental version of time signature indexing
+     * @param location
+     */
+    private synchronized void incrementalIndexTimeSignatures(final String location) {
+        final Song song = engine.getSongGivenLocationInMemoryVersion(location);
+        final TimeSignature signature = song.getMetadata().getTimeSignature();
+        addSongToTimeSignatureIndex(signature, song);
+    }
+
+    /**
+     * Incremental version of the key signature indexing
+     * @param location
+     */
+    private synchronized void incrementalIndexKeySignatures(final String location) {
+        final Song song = engine.getSongGivenLocationInMemoryVersion(location);
+        final KeySignature signature = song.getMetadata().getKeySignature();
+        addSongToKeySignatureIndex(signature, song);
     }
 }

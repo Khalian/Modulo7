@@ -9,6 +9,7 @@ import com.modulo7.musicstatmodels.musictheorymodels.Interval;
 import com.modulo7.musicstatmodels.musictheorymodels.IntervalEnum;
 import com.modulo7.musicstatmodels.representation.buildingblocks.Note;
 
+import java.io.Serializable;
 import java.util.Arrays;
 import java.util.HashSet;
 import java.util.Set;
@@ -20,7 +21,7 @@ import java.util.Set;
  *
  * The key signature of the song recoginizes
  */
-public class KeySignature {
+public class KeySignature implements Serializable {
 
     // The key of the key signature
     private String key = Modulo7Globals.UNKNOWNSTRING;

@@ -5,6 +5,8 @@ import com.modulo7.common.utils.Modulo7Globals;
 import com.modulo7.musicstatmodels.musictheorymodels.KKTonalityProfiles;
 import com.modulo7.musicstatmodels.vectorspacemodels.vectorspacerepresentations.songvectors.TonalDurationHistogram;
 
+import java.io.Serializable;
+
 /**
  * Created by asanyal on 7/28/2015.
  *
@@ -18,7 +20,7 @@ import com.modulo7.musicstatmodels.vectorspacemodels.vectorspacerepresentations.
  * Key Signature
  * Tempo of a song (or Beats per minute on the song)
  */
-public class SongMetadata {
+public class SongMetadata implements Serializable {
 
     // Name of the artist who wrote this song
     private String artistName = Modulo7Globals.UNKNOWNSTRING;
@@ -127,6 +129,14 @@ public class SongMetadata {
     private void inferKeySignature() throws Modulo7BadKeyException {
         TonalDurationHistogram histogram = new TonalDurationHistogram();
         keySignature = KKTonalityProfiles.estimateBestKeySignature(histogram);
+    }
+
+    /**
+     * Setter for key signature
+     * @param keySignature
+     */
+    public void setKeySignature(final KeySignature keySignature) {
+        this.keySignature = keySignature;
     }
 
     /**

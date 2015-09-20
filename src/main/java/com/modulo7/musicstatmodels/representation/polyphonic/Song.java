@@ -2,6 +2,7 @@ package com.modulo7.musicstatmodels.representation.polyphonic;
 
 import com.modulo7.common.utils.Modulo7Globals;
 import com.modulo7.crawler.utils.MusicSources;
+import com.modulo7.musicstatmodels.representation.metadata.KeySignature;
 import com.modulo7.musicstatmodels.representation.metadata.SongMetadata;
 import com.modulo7.musicstatmodels.representation.monophonic.Voice;
 import com.modulo7.nlp.Lyrics;

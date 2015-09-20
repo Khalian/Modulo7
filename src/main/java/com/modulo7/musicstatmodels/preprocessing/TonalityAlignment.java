@@ -24,18 +24,22 @@ public class TonalityAlignment {
     private static FrequencyNoteMap noteMap = FrequencyNoteMap.getInstance();
 
     /**
-     * Method which aligns songs to a particular key signature
+     * Method which aligns songs to a particular key signature so every note is shifted
+     * by a set interval
+     *
      * @param song
      * @param desiredKeySignature
      * @throws Modulo7BadIntervalException
      * @throws Modulo7BadNoteException
      */
-    public static void alignSong(final Song song, KeySignature desiredKeySignature) throws Modulo7BadIntervalException,
+    public static Song alignSong(final Song song, KeySignature desiredKeySignature) throws Modulo7BadIntervalException,
             Modulo7BadNoteException {
         final KeySignature currentKeySignature = song.getMetadata().getKeySignature();
         final Interval interval = KeySignature.getIntervalicDistance(currentKeySignature, desiredKeySignature);
 
         Song newSong = SerializationUtils.clone(song);
+
+        newSong.getMetadata().setKeySignature(desiredKeySignature);
 
         for (final Voice voice : newSong.getVoices()) {
             for (final VoiceInstant instant : voice.getVoiceSequence()) {
@@ -49,5 +53,7 @@ public class TonalityAlignment {
                 instant.reassignNotes(newNoteSet);
             }
         }
+
+        return newSong;
     }
 }
