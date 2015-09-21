@@ -1,5 +1,8 @@
+package nlptests;
+
 import com.modulo7.common.exceptions.Modulo7IndexingDirError;
-import com.modulo7.common.exceptions.Modulo7InvalidFIleOperationExeption;
+import com.modulo7.common.exceptions.Modulo7InvalidFileOperationExeption;
+import com.modulo7.common.exceptions.Modulo7ParseException;
 import com.modulo7.nlp.Lyrics;
 import com.modulo7.nlp.LyricsIndexer;
 import com.modulo7.nlp.LyricsQueryParser;
@@ -23,14 +26,20 @@ public class LyricsIndexerTest {
 
     /**
      * A sanity test with indexing exactly one object and returning it based on a score
-     * @throws Modulo7InvalidFIleOperationExeption
+     *
+     * @throws com.modulo7.common.exceptions.Modulo7InvalidFileOperationExeption
      * @throws ParseException
      * @throws Modulo7IndexingDirError
      * @throws IOException
+     * @throws Modulo7ParseException
      */
     @Test
-    public void lyricsIndexerSanityTest() throws ParseException, Modulo7IndexingDirError, Modulo7InvalidFIleOperationExeption, IOException {
+    public void lyricsIndexerSanityTest() throws ParseException, Modulo7IndexingDirError, Modulo7InvalidFileOperationExeption,
+            IOException, Modulo7ParseException {
+
         LyricsIndexer indexer = new LyricsIndexer();
+
+        FileUtils.deleteDirectory(new File(indexer.getIndexDirLocation()));
 
         Lyrics lyrics = new Lyrics("Barbie girl", "aqua", new File("./src/test/testdata/lyrics/barbie_girl"));
 
@@ -49,10 +58,11 @@ public class LyricsIndexerTest {
      *
      * @throws IOException
      * @throws Modulo7IndexingDirError
-     * @throws Modulo7InvalidFIleOperationExeption
+     * @throws Modulo7InvalidFileOperationExeption
+     * @throws Modulo7ParseException
      */
     @Test
-    public void lyricsIndexerTest() throws IOException, Modulo7IndexingDirError, Modulo7InvalidFIleOperationExeption {
+    public void lyricsIndexerTest() throws IOException, Modulo7IndexingDirError, Modulo7InvalidFileOperationExeption, Modulo7ParseException {
         LyricsIndexer indexer = new LyricsIndexer();
 
         Lyrics lyrics = new Lyrics("Barbie girl", "aqua", new File("./src/test/testdata/lyrics/barbie_girl"));

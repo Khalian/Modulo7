@@ -71,9 +71,11 @@ public class Modulo7CLI {
      * @throws EchoNestException
      * @throws Modulo7NoSuchFileException
      * @throws Modulo7IndexingDirError
+     * @throws Modulo7ParseException
      */
     public static void main(String args[]) throws ParseException, Modulo7InvalidArgsException, InvalidMidiDataException,
-            Modulo7InvalidMusicXMLFile, EchoNestException, Modulo7NoSuchFileException, Modulo7IndexingDirError, Modulo7InvalidFIleOperationExeption {
+            Modulo7InvalidMusicXMLFile, EchoNestException, Modulo7NoSuchFileException, Modulo7IndexingDirError,
+            Modulo7InvalidFileOperationExeption, Modulo7ParseException {
 
         CommandLine commandLine = Modulo7CLI.getServerCommand(args);
         indexer = new Modulo7Indexer(commandLine.getOptionValue(MUSIC_SOURCES_DIR), commandLine.getOptionValue(INDEX_DIR));
@@ -171,6 +173,7 @@ public class Modulo7CLI {
      * Helper method for displaying help
      */
     private static void help() {
+        System.out.println("Welcome to Modulo7 help");
         System.out.println("Potential Arguments to Modulo7 prompt are:");
         System.out.println(MUSIC_SOURCES_DIR + CLI_SPACING +  MUSIC_SOURCE_DIR_DESC);
         System.out.println(INDEX_DIR + CLI_SPACING +INDEX_DIR_DESC);

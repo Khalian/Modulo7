@@ -1,3 +1,5 @@
+package musicstatmodelstests;
+
 import com.modulo7.common.exceptions.Modulo7InvalidLineInstantSizeException;
 import com.modulo7.common.interfaces.AbstractContour;
 import com.modulo7.common.interfaces.AbstractSongVector;
@@ -16,7 +18,7 @@ import com.modulo7.musicstatmodels.vectorspacemodels.vectorspacerepresentations.
 import com.modulo7.musicstatmodels.vectorspacemodels.vectorspacerepresentations.songvectors.TonalHistogram;
 import com.modulo7.musicstatmodels.vectorspacemodels.vectorspacerepresentations.voicevectors.VoiceIntervalPitchVector;
 import com.modulo7.musicstatmodels.vectorspacemodels.vectorspacerepresentations.voicevectors.VoiceRawPitchVector;
-import junit.framework.Assert;
+import org.junit.Assert;
 import org.junit.Test;
 
 import java.util.HashSet;
@@ -166,13 +168,13 @@ public class VectorSpaceModelsTest {
         histogram.computeVectorRepresentation(song);
 
         TonalDurationHistogramData data = histogram.getInternalRepresentation();
-        Assert.assertEquals(data.getCumulativeDuration(), 8.0);
+        Assert.assertEquals(data.getCumulativeDuration(), 8.0, 0.0);
 
         // Max of both is voice lenths = max (4, 4)
-        Assert.assertEquals(song.getTotalSongDuration(), 4.0);
+        Assert.assertEquals(song.getTotalSongDuration(), 4.0, 0.0);
 
         // The minor seconds have a total tonal histogram duration of 6.0 in the above test creation
-        Assert.assertEquals(histogram.getInternalRepresentation().getData(IntervalEnum.MINOR_SECOND), 6.0);
+        Assert.assertEquals(histogram.getInternalRepresentation().getData(IntervalEnum.MINOR_SECOND), 6.0, 0.0);
     }
 
     /**

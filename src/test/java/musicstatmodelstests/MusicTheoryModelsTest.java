@@ -1,9 +1,12 @@
+package musicstatmodelstests;
+
 import com.modulo7.common.exceptions.Modulo7BadIntervalException;
 import com.modulo7.musicstatmodels.musictheorymodels.Interval;
 import com.modulo7.musicstatmodels.musictheorymodels.IntervalEnum;
+import com.modulo7.musicstatmodels.musictheorymodels.KKTonalityProfiles;
 import com.modulo7.musicstatmodels.representation.buildingblocks.ChordQuality;
 import com.modulo7.musicstatmodels.representation.buildingblocks.Note;
-import junit.framework.Assert;
+import org.junit.Assert;
 import org.junit.Test;
 
 import java.util.HashSet;
@@ -58,5 +61,16 @@ public class MusicTheoryModelsTest {
 
         Assert.assertNotSame(ChordQuality.MINOR, ChordQuality.estimateChordType(badNotes));
         Assert.assertNotSame(ChordQuality.MAJOR, ChordQuality.estimateChordType(badNotes));
+    }
+
+    /**
+     * Test cases for the KK Tonality profiles models
+     */
+    @Test
+    public void kkTonalityProfilesTest() {
+        Double[] array = {2.88, 6.35, 2.23, 3.48, 2.33, 4.38, 4.09, 2.52, 5.19, 2.39, 3.66, 2.29};
+
+        Assert.assertArrayEquals(KKTonalityProfiles.MAJOR_CHORD_PROFILES.get("C#").
+                toArray(new Double[KKTonalityProfiles.MAJOR_CHORD_PROFILES.get("C#").size()]), array);
     }
 }

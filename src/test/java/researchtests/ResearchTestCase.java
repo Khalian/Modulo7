@@ -1,3 +1,5 @@
+package researchtests;
+
 import com.modulo7.common.interfaces.AbstractAnalyzer;
 import com.modulo7.common.utils.Modulo7Utils;
 import com.modulo7.musicstatmodels.representation.polyphonic.Song;

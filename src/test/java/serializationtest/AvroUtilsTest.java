@@ -1,5 +1,8 @@
+package serializationtest;
+
 import com.echonest.api.v4.EchoNestException;
-import com.modulo7.common.exceptions.Modulo7InvalidFIleOperationExeption;
+import com.modulo7.common.exceptions.Modulo7InvalidFileOperationExeption;
+import com.modulo7.common.exceptions.Modulo7ParseException;
 import com.modulo7.common.interfaces.AbstractAnalyzer;
 import com.modulo7.acoustics.EchoNestBasicMP3Analyzer;
 import com.modulo7.acoustics.MidiToSongConverter;
@@ -14,7 +17,6 @@ import org.junit.Test;
 
 import javax.sound.midi.InvalidMidiDataException;
 import java.io.File;
-import java.io.IOException;
 
 /**
  * Created by asanyal on 8/31/15.
@@ -98,11 +100,13 @@ public class AvroUtilsTest {
 
     /**
      * A test case in an independent lyrics object can be serialized and deserialized correctly
-     * @throws Modulo7InvalidFIleOperationExeption
+     *
+     * @throws com.modulo7.common.exceptions.Modulo7InvalidFileOperationExeption
      * @throws Modulo7NoSuchFileException
+     * @throws com.modulo7.common.exceptions.Modulo7ParseException
      */
     @Test
-    public void testLyricsSerialization() throws Modulo7NoSuchFileException, Modulo7InvalidFIleOperationExeption {
+    public void testLyricsSerialization() throws Modulo7NoSuchFileException, Modulo7InvalidFileOperationExeption, Modulo7ParseException {
 
          Lyrics lyrics = new Lyrics("Barbie girl", "aqua", new File("./src/test/testdata/lyrics/barbie_girl"));
          AvroUtils.serialize("./src/test/tempLyrics.m7Lyrics", lyrics);

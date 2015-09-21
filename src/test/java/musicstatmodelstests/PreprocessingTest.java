@@ -1,3 +1,5 @@
+package musicstatmodelstests;
+
 import com.modulo7.common.exceptions.*;
 import com.modulo7.crawler.utils.MusicSources;
 import com.modulo7.musicstatmodels.preprocessing.TonalityAlignment;
@@ -8,7 +10,7 @@ import com.modulo7.musicstatmodels.representation.metadata.SongMetadata;
 import com.modulo7.musicstatmodels.representation.monophonic.Voice;
 import com.modulo7.musicstatmodels.representation.monophonic.VoiceInstant;
 import com.modulo7.musicstatmodels.representation.polyphonic.Song;
-import junit.framework.Assert;
+import org.junit.Assert;
 import org.junit.Test;
 
 /**
@@ -55,7 +57,5 @@ public class PreprocessingTest {
                 Assert.assertEquals(note, Note.A0);
             }
         }
-
-
     }
 }

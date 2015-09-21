@@ -1,10 +1,7 @@
 package com.modulo7.engine;
 
 import com.echonest.api.v4.EchoNestException;
-import com.modulo7.common.exceptions.Modulo7IndexingDirError;
-import com.modulo7.common.exceptions.Modulo7InvalidFIleOperationExeption;
-import com.modulo7.common.exceptions.Modulo7InvalidMusicXMLFile;
-import com.modulo7.common.exceptions.Modulo7NoSuchFileException;
+import com.modulo7.common.exceptions.*;
 import com.modulo7.common.interfaces.AbstractCriteria;
 import com.modulo7.common.utils.Modulo7Utils;
 import com.modulo7.musicstatmodels.criteria.PolyphonyCriteria;
@@ -64,9 +61,10 @@ public class Modulo7Indexer {
      * @throws EchoNestException
      * @throws Modulo7NoSuchFileException
      * @throws Modulo7IndexingDirError
+     * @throws Modulo7ParseException
      */
     public Modulo7Indexer(final String srcDir, final String dstDir) throws InvalidMidiDataException, Modulo7InvalidMusicXMLFile,
-            EchoNestException, Modulo7NoSuchFileException, Modulo7IndexingDirError, Modulo7InvalidFIleOperationExeption {
+            EchoNestException, Modulo7NoSuchFileException, Modulo7IndexingDirError, Modulo7InvalidFileOperationExeption, Modulo7ParseException {
         engine = new DatabaseEngine(srcDir, dstDir);
         engine.buildInMemoryDataBaseFromScratch();
         lyricsIndexer = new LyricsIndexer();
@@ -85,10 +83,11 @@ public class Modulo7Indexer {
      * @throws Modulo7InvalidMusicXMLFile
      * @throws EchoNestException
      * @throws Modulo7NoSuchFileException
+     * @throws Modulo7ParseException
      */
     public Modulo7Indexer(final String srcDir, final String dstDir, final boolean persistOnDisk, final boolean verboseIndexing)
             throws InvalidMidiDataException, Modulo7InvalidMusicXMLFile, EchoNestException, Modulo7NoSuchFileException,
-            Modulo7InvalidFIleOperationExeption {
+            Modulo7InvalidFileOperationExeption, Modulo7ParseException {
         engine = new DatabaseEngine(srcDir, dstDir);
         engine.buildInMemoryDataBaseFromScratch();
         lyricsIndexer = new LyricsIndexer();
@@ -283,12 +282,13 @@ public class Modulo7Indexer {
      * @throws InvalidMidiDataException
      * @throws Modulo7InvalidMusicXMLFile
      * @throws EchoNestException
-     * @throws Modulo7InvalidFIleOperationExeption
+     * @throws com.modulo7.common.exceptions.Modulo7InvalidFileOperationExeption
      * @throws Modulo7NoSuchFileException
-     * @throws com.modulo7.common.exceptions.Modulo7IndexingDirError
+     * @throws Modulo7IndexingDirError
+     * @throws Modulo7ParseException
      */
     public void incrementalIndexASong(final String location) throws InvalidMidiDataException, Modulo7InvalidMusicXMLFile,
-            EchoNestException, Modulo7InvalidFIleOperationExeption, Modulo7NoSuchFileException, Modulo7IndexingDirError {
+            EchoNestException, Modulo7InvalidFileOperationExeption, Modulo7NoSuchFileException, Modulo7IndexingDirError, Modulo7ParseException {
         boolean toIndex = engine.incrementalAddToDatabase(location);
 
         if (toIndex) {

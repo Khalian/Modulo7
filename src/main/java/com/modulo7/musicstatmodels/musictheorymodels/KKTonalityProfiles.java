@@ -24,9 +24,6 @@ import java.util.*;
  */
 public class KKTonalityProfiles {
 
-    // A frequency note map representation for production of chord profiles
-    private static final FrequencyNoteMap noteMap = FrequencyNoteMap.getInstance();
-
     // C major chord profile
     private static final Double[] CMAJOR_CHORD_PROFILE_INTERNALARRAYREP =
             {6.35, 2.23, 3.48, 2.33, 4.38, 4.09, 2.52, 5.19, 2.39, 3.66, 2.29, 2.88};

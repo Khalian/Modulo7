@@ -1,3 +1,5 @@
+package nlptests;
+
 import com.modulo7.nlp.NLPUtils;
 import junit.framework.Assert;
 import org.junit.Test;

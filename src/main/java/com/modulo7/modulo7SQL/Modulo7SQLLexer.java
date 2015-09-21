@@ -1,4 +1,4 @@
-// Generated from /home/asanyal/git_projects/Modulo7/src/main/antlr/modulo7SQL.g4 by ANTLR 4.5.1
+// Generated from /home/asanyal/git_projects/Modulo7/src/main/antlr/Modulo7SQL.g4 by ANTLR 4.5.1
 
     package  com.modulo7.modulo7SQL;
 
@@ -12,7 +12,7 @@ import org.antlr.v4.runtime.dfa.DFA;
 import org.antlr.v4.runtime.misc.*;
 
 @SuppressWarnings({"all", "warnings", "unchecked", "unused", "cast"})
-public class modulo7SQLLexer extends Lexer {
+public class Modulo7SQLLexer extends Lexer {
 	static { RuntimeMetaData.checkVersion("4.5.1", RuntimeMetaData.VERSION); }
 
 	protected static final DFA[] _decisionToDFA;
@@ -67,13 +67,13 @@ public class modulo7SQLLexer extends Lexer {
 	}
 
 
-	public modulo7SQLLexer(CharStream input) {
+	public Modulo7SQLLexer(CharStream input) {
 		super(input);
 		_interp = new LexerATNSimulator(this,_ATN,_decisionToDFA,_sharedContextCache);
 	}
 
 	@Override
-	public String getGrammarFileName() { return "modulo7SQL.g4"; }
+	public String getGrammarFileName() { return "Modulo7SQL.g4"; }
 
 	@Override
 	public String[] getRuleNames() { return ruleNames; }

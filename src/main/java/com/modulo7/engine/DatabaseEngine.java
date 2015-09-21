@@ -3,10 +3,7 @@ package com.modulo7.engine;
 import com.echonest.api.v4.EchoNestException;
 import com.modulo7.acoustics.EchoNestBasicMP3Analyzer;
 import com.modulo7.acoustics.MidiToSongConverter;
-import com.modulo7.common.exceptions.Modulo7DataBaseNotSerializedException;
-import com.modulo7.common.exceptions.Modulo7InvalidFIleOperationExeption;
-import com.modulo7.common.exceptions.Modulo7InvalidMusicXMLFile;
-import com.modulo7.common.exceptions.Modulo7NoSuchFileException;
+import com.modulo7.common.exceptions.*;
 import com.modulo7.common.interfaces.AbstractAnalyzer;
 import com.modulo7.common.utils.AvroUtils;
 import com.modulo7.common.utils.Modulo7Utils;
@@ -16,11 +13,9 @@ import com.modulo7.musicstatmodels.representation.polyphonic.Song;
 import com.modulo7.nlp.Lyrics;
 import com.modulo7.othersources.BasicMusicXMLParser;
 import org.apache.commons.io.FilenameUtils;
-import org.apache.commons.lang3.SerializationUtils;
 
 import javax.sound.midi.InvalidMidiDataException;
 import java.io.File;
-import java.io.IOException;
 import java.util.*;
 
 /**
@@ -35,6 +30,11 @@ public class DatabaseEngine {
 
     // Destination Directory in which the serialization results are finally stored
     private String destinationDirectory;
+
+    private static final String DEFAULT_ENGINE_NAME = "MODULO7_DEFAULT_DATABASE";
+
+    // The name of the database that this engine operates on
+    private String databaseName;
 
     // A hash map between location and songs in Modulo7 format and
     private Map<String, Song> songLocationMap = new HashMap<>();
@@ -64,13 +64,38 @@ public class DatabaseEngine {
      * Basic database engine constructor, this constructors accepts a source directory
      * which is a root directory from all the required files  are fetched. Once its fetched
      *
-     *
      * @param sourceDirectory
      * @param destinationDirectory
      */
     public DatabaseEngine(final String sourceDirectory, final String destinationDirectory) {
         this.destinationDirectory = destinationDirectory;
         this.sourceDirectory = sourceDirectory;
+        this.databaseName = DEFAULT_ENGINE_NAME;
+
+        Modulo7Utils.removeDuplicateFilesFromDirectory(sourceDirectory);
+
+        // Recursively descend and list all the files that
+        Set<String> allSongLocations = Modulo7Utils.listAllFiles(sourceDirectory);
+
+        for (final String location : allSongLocations) {
+            if (MusicSources.checkIfSupportedExtension(location)) {
+                songLocations.add(location);
+            }
+        }
+    }
+
+    /**
+     * Basic database engine constructor, this constructors accepts a source directory
+     * which is a root directory from all the required files  are fetched. Once its fetched
+     *
+     * @param databaseName
+     * @param sourceDirectory
+     * @param destinationDirectory
+     */
+    public DatabaseEngine(final String databaseName, final String sourceDirectory, final String destinationDirectory) {
+        this.destinationDirectory = destinationDirectory;
+        this.sourceDirectory = sourceDirectory;
+        this.databaseName = databaseName;
 
         Modulo7Utils.removeDuplicateFilesFromDirectory(sourceDirectory);
 
@@ -92,13 +117,14 @@ public class DatabaseEngine {
      * @throws Modulo7NoSuchFileException
      * @throws InvalidMidiDataException
      * @throws Modulo7InvalidMusicXMLFile
-     * @throws Modulo7InvalidFIleOperationExeption
+     * @throws Modulo7InvalidFileOperationExeption
+     * @throws Modulo7ParseException
      *
      * @return whether to incrementally add to database or not
      *
      */
     public synchronized boolean incrementalAddToDatabase(final String songLocation) throws EchoNestException, Modulo7NoSuchFileException,
-            InvalidMidiDataException, Modulo7InvalidMusicXMLFile, Modulo7InvalidFIleOperationExeption {
+            InvalidMidiDataException, Modulo7InvalidMusicXMLFile, Modulo7InvalidFileOperationExeption, Modulo7ParseException {
 
         if (songLocationMap.containsKey(songLocation)) {
             return false;
@@ -130,12 +156,20 @@ public class DatabaseEngine {
     }
 
     /**
-     * Method which builds in memory database from scratch and populates
+     * A method to build and in memory database from scratch
      *
-     * The map for songs, in can later be used to serialize if required
+     * Consumer can serialize the information later on
+     *
+     * @throws InvalidMidiDataException
+     * @throws EchoNestException
+     * @throws Modulo7NoSuchFileException
+     * @throws Modulo7InvalidMusicXMLFile
+     * @throws Modulo7InvalidFileOperationExeption
+     * @throws Modulo7ParseException
      */
     public synchronized void buildInMemoryDataBaseFromScratch() throws InvalidMidiDataException,
-            EchoNestException, Modulo7NoSuchFileException, Modulo7InvalidMusicXMLFile, Modulo7InvalidFIleOperationExeption {
+            EchoNestException, Modulo7NoSuchFileException, Modulo7InvalidMusicXMLFile, Modulo7InvalidFileOperationExeption,
+            Modulo7ParseException {
         for (final String songLocation : songLocations) {
             if (songLocation.endsWith("midi") || songLocation.endsWith("mid")) {
                 AbstractAnalyzer analyzer = new MidiToSongConverter(songLocation);
@@ -224,10 +258,17 @@ public class DatabaseEngine {
     }
 
     /**
-     * Serialize the contents and dump database to a serialized location
+     * Serialize and put database in a given location
+     *
+     * @throws Modulo7NoSuchFileException
+     * @throws InvalidMidiDataException
+     * @throws Modulo7InvalidMusicXMLFile
+     * @throws EchoNestException
+     * @throws Modulo7InvalidFileOperationExeption
+     * @throws Modulo7ParseException
      */
     public synchronized void serializeDataSetAndMoveToDisk() throws Modulo7NoSuchFileException, InvalidMidiDataException,
-            Modulo7InvalidMusicXMLFile, EchoNestException, Modulo7InvalidFIleOperationExeption {
+            Modulo7InvalidMusicXMLFile, EchoNestException, Modulo7InvalidFileOperationExeption, Modulo7ParseException {
 
         if (!isDataBaseConstructedInMemory) {
             buildInMemoryDataBaseFromScratch();
@@ -361,10 +402,18 @@ public class DatabaseEngine {
     }
 
     /**
-     *
+     * Getter for the entire song location map
      * @return
      */
     public Map<String, Song> getSongLocationMap() {
         return songLocationMap;
+    }
+
+    /**
+     * Get the database name
+     * @return
+     */
+    public String getDatabaseName() {
+        return databaseName;
     }
 }

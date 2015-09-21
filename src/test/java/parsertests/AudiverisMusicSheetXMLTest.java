@@ -1,3 +1,5 @@
+package parsertests;
+
 import com.modulo7.common.interfaces.AbstractAnalyzer;
 import com.modulo7.image.AudiverisSheetAnalyzer;
 import org.junit.Test;

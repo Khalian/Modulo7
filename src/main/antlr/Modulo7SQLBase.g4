@@ -1,4 +1,4 @@
-lexer grammar modulo7SQLBase;
+lexer grammar Modulo7SQLBase;
 
 @header {
     package  com.modulo7.modulo7SQL;
@@ -24,7 +24,6 @@ TRUE: 'true';
 FALSE: 'false';
 DIVIDE	: 'div' | '/' ;
 MOD: 'mod' | '%' ;
-BETWEEN: 'between';
 REGEXP: 'regexp';
 PLUS	: '+' ;
 MINUS	: '-' ;
@@ -52,24 +51,24 @@ SEMI: ';';
 COMMA: ',';
 DOT: '.';
 COLLATE: 'collate';
-INNER: 'inner';
-OUTER: 'outer';
-CROSS: 'cross';
 USING: 'using';
 INDEX: 'index';
 KEY: 'key';
 ORDER: 'order';
 GROUP: 'group';
-BY: 'by';
-FOR: 'for';
-USE: 'use';
-IGNORE: 'ignore';
-PARTITION: 'partition';
-OJ: 'oj';
-ON: 'on';
+BETWEEN: 'between';
+
+
+POLYPHONIC: 'polyphonic';
+
+HAPPINESSINDEX : 'happinessindex';
+SADNESSINDEX : 'sadnessindex';
+POWERINDEX : 'powerindex';
 
 ID: ('a'..'z' | 'A' .. 'Z' | '_')+ ;
 INT: '0'..'9'+ ;
+DOUBLE  : '0'..'9'+'.''0'..'9'+ ;
+DATABASENAME: ('a'..'z' | 'A' .. 'Z' | '_')+ ;
 
 NEWLINE: '\r' ? '\n' -> skip;
 WS: (' ' | '\t' | '\n' | '\r')+ -> skip;

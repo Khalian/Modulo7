@@ -1,3 +1,5 @@
+package enginetests;
+
 import com.echonest.api.v4.EchoNestException;
 import com.modulo7.common.exceptions.*;
 import com.modulo7.engine.DatabaseEngine;
@@ -21,16 +23,22 @@ import java.util.Set;
  */
 public class DatabaseEngineTest {
 
+
     /**
      * Sanity test case for database engine init
+     *
      * @throws InvalidMidiDataException
      * @throws Modulo7InvalidMusicXMLFile
      * @throws EchoNestException
      * @throws Modulo7NoSuchFileException
+     * @throws Modulo7DataBaseNotSerializedException
+     * @throws IOException
+     * @throws Modulo7InvalidFileOperationExeption
+     * @throws Modulo7ParseException
      */
     @Test
     public void dataBaseSantiyTest() throws InvalidMidiDataException, Modulo7InvalidMusicXMLFile, EchoNestException, Modulo7NoSuchFileException,
-            Modulo7DataBaseNotSerializedException, IOException, Modulo7InvalidFIleOperationExeption {
+            Modulo7DataBaseNotSerializedException, IOException, Modulo7InvalidFileOperationExeption, Modulo7ParseException {
         File file = new File("./src/test/testdataSerialization/");
         file.mkdir();
         DatabaseEngine engine = new DatabaseEngine("./src/test/testdata", "./src/test/testdataSerialization/");
@@ -51,10 +59,12 @@ public class DatabaseEngineTest {
      * @throws Modulo7BadKeyException
      * @throws Modulo7IndexingDirError
      * @throws IOException
+     * @throws Modulo7InvalidFileOperationExeption
+     * @throws Modulo7ParseException
      */
     @Test
     public void m7IndexerSanityTest() throws InvalidMidiDataException, Modulo7InvalidMusicXMLFile, EchoNestException,
-            Modulo7NoSuchFileException, Modulo7BadKeyException, Modulo7IndexingDirError, IOException, Modulo7InvalidFIleOperationExeption {
+            Modulo7NoSuchFileException, Modulo7BadKeyException, Modulo7IndexingDirError, IOException, Modulo7InvalidFileOperationExeption, Modulo7ParseException {
         File file = new File("./src/test/testdataSerialization/");
         file.mkdir();
         Modulo7Indexer indexer = new Modulo7Indexer("./src/test/testdata", "./src/test/testdataSerialization/");

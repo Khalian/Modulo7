@@ -43,7 +43,7 @@ public class LyricsQueryParser {
      * @throws ParseException
      */
     public TopDocs performLyricsSearch(final String queryString, final int numTopDocs) throws IOException, ParseException {
-        Query query = parser.parse(queryString);
+        Query query = parser.parse(NLPUtils.stemmer(queryString));
         return searcher.search(query, numTopDocs);
     }
 

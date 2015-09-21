@@ -1,3 +1,5 @@
+package musicstatmodelstests;
+
 import com.modulo7.common.exceptions.Modulo7BadIntervalException;
 import com.modulo7.common.exceptions.Modulo7InvalidLineInstantSizeException;
 import com.modulo7.common.interfaces.AbstractVoiceSimilarity;

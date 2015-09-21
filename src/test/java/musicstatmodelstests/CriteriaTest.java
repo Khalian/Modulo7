@@ -1,3 +1,5 @@
+package musicstatmodelstests;
+
 import com.modulo7.common.exceptions.Modulo7BadKeyException;
 import com.modulo7.common.exceptions.Modulo7InvalidLineInstantSizeException;
 import com.modulo7.crawler.utils.MusicSources;

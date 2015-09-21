@@ -4,7 +4,10 @@ import com.modulo7.musicstatmodels.representation.buildingblocks.Note;
 import com.modulo7.musicstatmodels.representation.buildingblocks.NoteDuration;
 
 /**
- * A helper class for crunching in basic XML
+ * A helper class for crunching chords in music xml in basic XML
+ *
+ * This class contains a note as it appears in music xml note tag and
+ * a boolean which states whether note tag is also tagged with chord tag
  */
 public class NoteAndIsChordDual {
 

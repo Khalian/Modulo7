@@ -1,4 +1,4 @@
-/**
+package parsertests; /**
  * Created by asanyal on 8/9/15.
  *
  * Test cases for music xml related operations and the parser in general
@@ -17,7 +17,7 @@ import com.modulo7.musicstatmodels.representation.monophonic.VoiceInstant;
 import com.modulo7.musicstatmodels.representation.polyphonic.Song;
 import com.modulo7.nlp.Lyrics;
 import com.modulo7.othersources.BasicMusicXMLParser;
-import junit.framework.Assert;
+import org.junit.Assert;
 import org.junit.Test;
 
 import java.io.IOException;
