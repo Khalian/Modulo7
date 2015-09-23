@@ -23,14 +23,14 @@ public class PreprocessingTest {
     /**
      * Test case for tonality alignment on a uniform voice
      * 
-     * @throws Modulo7InvalidLineInstantSizeException
+     * @throws com.modulo7.common.exceptions.Modulo7InvalidVoiceInstantSizeException
      * @throws Modulo7BadKeyException
      * @throws Modulo7BadIntervalException
      * @throws Modulo7BadNoteException
      * @throws Modulo7WrongNoteType
      */
     @Test
-    public void tonalityAlignmentSanityTest() throws Modulo7InvalidLineInstantSizeException, Modulo7BadKeyException,
+    public void tonalityAlignmentSanityTest() throws Modulo7InvalidVoiceInstantSizeException, Modulo7BadKeyException,
             Modulo7BadIntervalException, Modulo7BadNoteException, Modulo7WrongNoteType {
 
         final Voice voice = new Voice();

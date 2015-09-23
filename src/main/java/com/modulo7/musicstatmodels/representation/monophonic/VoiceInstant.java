@@ -1,7 +1,7 @@
 package com.modulo7.musicstatmodels.representation.monophonic;
 
 import com.modulo7.common.exceptions.Modulo7BadIntervalException;
-import com.modulo7.common.exceptions.Modulo7InvalidLineInstantSizeException;
+import com.modulo7.common.exceptions.Modulo7InvalidVoiceInstantSizeException;
 import com.modulo7.common.exceptions.Modulo7WrongNoteType;
 import com.modulo7.common.utils.Modulo7Globals;
 import com.modulo7.musicstatmodels.representation.buildingblocks.ChordQuality;
@@ -65,10 +65,10 @@ public class VoiceInstant implements Serializable {
      * @param duration
      */
     public VoiceInstant(final HashSet<Note> noteSet, final double duration, final double attack)
-            throws Modulo7InvalidLineInstantSizeException, Modulo7BadIntervalException {
+            throws Modulo7InvalidVoiceInstantSizeException, Modulo7BadIntervalException {
 
         if (noteSet.size() == 0) {
-            throw new Modulo7InvalidLineInstantSizeException("Voice Instant Cannot be of size" + noteSet.size());
+            throw new Modulo7InvalidVoiceInstantSizeException("Voice Instant Cannot be of size" + noteSet.size());
         }
 
         setOfNotes = noteSet;
@@ -93,7 +93,7 @@ public class VoiceInstant implements Serializable {
      * @param duration
      */
     public VoiceInstant(final Note note, final double duration, final double attack)
-            throws Modulo7InvalidLineInstantSizeException {
+            throws Modulo7InvalidVoiceInstantSizeException {
 
         checkIfValidNote(note);
 
@@ -121,10 +121,10 @@ public class VoiceInstant implements Serializable {
      * @param duration
      */
     public VoiceInstant(final HashSet<Note> noteSet, final double duration)
-            throws Modulo7InvalidLineInstantSizeException, Modulo7BadIntervalException {
+            throws Modulo7InvalidVoiceInstantSizeException, Modulo7BadIntervalException {
 
         if (noteSet.size() == 0) {
-            throw new Modulo7InvalidLineInstantSizeException("Voice Instant Cannot be of size" + noteSet.size());
+            throw new Modulo7InvalidVoiceInstantSizeException("Voice Instant Cannot be of size" + noteSet.size());
         }
 
         checkIfAllValidNotes(noteSet);
@@ -152,10 +152,10 @@ public class VoiceInstant implements Serializable {
      * @param chordQuality
      */
     public VoiceInstant(final HashSet<Note> noteSet, final double duration, final ChordQuality chordQuality)
-            throws Modulo7InvalidLineInstantSizeException, Modulo7BadIntervalException {
+            throws Modulo7InvalidVoiceInstantSizeException, Modulo7BadIntervalException {
 
         if (noteSet.size() == 0) {
-            throw new Modulo7InvalidLineInstantSizeException("Voice Instant Cannot be of size" + noteSet.size());
+            throw new Modulo7InvalidVoiceInstantSizeException("Voice Instant Cannot be of size" + noteSet.size());
         }
 
         checkIfAllValidNotes(noteSet);
@@ -183,10 +183,10 @@ public class VoiceInstant implements Serializable {
      * @param duration
      */
     public VoiceInstant(final HashSet<Note> noteSet, final NoteDuration theoreticalDuration, final double duration)
-            throws Modulo7InvalidLineInstantSizeException, Modulo7BadIntervalException {
+            throws Modulo7InvalidVoiceInstantSizeException, Modulo7BadIntervalException {
 
         if (noteSet.size() == 0) {
-            throw new Modulo7InvalidLineInstantSizeException("Voice Instant Cannot be of size" + noteSet.size());
+            throw new Modulo7InvalidVoiceInstantSizeException("Voice Instant Cannot be of size" + noteSet.size());
         }
 
         checkIfAllValidNotes(noteSet);
@@ -214,7 +214,7 @@ public class VoiceInstant implements Serializable {
      * @param duration
      */
     public VoiceInstant(final Note note, final double duration)
-            throws Modulo7InvalidLineInstantSizeException {
+            throws Modulo7InvalidVoiceInstantSizeException {
 
         checkIfValidNote(note);
 
@@ -236,7 +236,7 @@ public class VoiceInstant implements Serializable {
      * @param duration
      */
     public VoiceInstant(final Note note, final NoteDuration theoreticalDuration, final double duration)
-            throws Modulo7InvalidLineInstantSizeException {
+            throws Modulo7InvalidVoiceInstantSizeException {
 
         checkIfValidNote(note);
 
@@ -254,10 +254,10 @@ public class VoiceInstant implements Serializable {
      *
      * @param noteSet
      */
-    public VoiceInstant(final HashSet<Note> noteSet) throws Modulo7InvalidLineInstantSizeException, Modulo7BadIntervalException {
+    public VoiceInstant(final HashSet<Note> noteSet) throws Modulo7InvalidVoiceInstantSizeException, Modulo7BadIntervalException {
 
         if (noteSet.size() == 0) {
-            throw new Modulo7InvalidLineInstantSizeException("Voice Instant Cannot be of size" + noteSet.size());
+            throw new Modulo7InvalidVoiceInstantSizeException("Voice Instant Cannot be of size" + noteSet.size());
         }
 
         checkIfAllValidNotes(noteSet);
@@ -280,7 +280,7 @@ public class VoiceInstant implements Serializable {
      *
      * @param note
      */
-    public VoiceInstant(final Note note) throws Modulo7InvalidLineInstantSizeException {
+    public VoiceInstant(final Note note) throws Modulo7InvalidVoiceInstantSizeException {
 
         checkIfValidNote(note);
 

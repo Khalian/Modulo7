@@ -1,7 +1,7 @@
 package musicstatmodelstests;
 
 import com.modulo7.common.exceptions.Modulo7BadIntervalException;
-import com.modulo7.common.exceptions.Modulo7InvalidLineInstantSizeException;
+import com.modulo7.common.exceptions.Modulo7InvalidVoiceInstantSizeException;
 import com.modulo7.common.interfaces.AbstractVoiceSimilarity;
 import com.modulo7.musicstatmodels.representation.buildingblocks.Note;
 import com.modulo7.musicstatmodels.representation.monophonic.Voice;
@@ -18,7 +18,7 @@ import org.junit.Test;
 public class SimilarityTests {
 
     @Test
-    public void leveinsteinSanityTest() throws Modulo7InvalidLineInstantSizeException, Modulo7BadIntervalException {
+    public void leveinsteinSanityTest() throws Modulo7InvalidVoiceInstantSizeException, Modulo7BadIntervalException {
 
         AbstractVoiceSimilarity similarity = new RawMelodicEditDistanceSimilarity();
 

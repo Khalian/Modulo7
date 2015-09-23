@@ -1,7 +1,7 @@
 package musicstatmodelstests;
 
 import com.modulo7.common.exceptions.Modulo7BadKeyException;
-import com.modulo7.common.exceptions.Modulo7InvalidLineInstantSizeException;
+import com.modulo7.common.exceptions.Modulo7InvalidVoiceInstantSizeException;
 import com.modulo7.crawler.utils.MusicSources;
 import com.modulo7.common.interfaces.AbstractCriteria;
 import com.modulo7.musicstatmodels.criteria.KeySignatureEqualityCriteria;
@@ -27,10 +27,10 @@ public class CriteriaTest {
 
     /**
      * Check if a song is polyphonic and or homophonic
-     * @throws Modulo7InvalidLineInstantSizeException
+     * @throws com.modulo7.common.exceptions.Modulo7InvalidVoiceInstantSizeException
      */
     @Test
-    public void polyphonyCriteriaTest() throws Modulo7InvalidLineInstantSizeException {
+    public void polyphonyCriteriaTest() throws Modulo7InvalidVoiceInstantSizeException {
         AbstractCriteria criteria = new PolyphonyCriteria();
 
         Voice voice = new Voice();
@@ -55,9 +55,9 @@ public class CriteriaTest {
     /**
      *
      * @throws Modulo7BadKeyException
-     * @throws Modulo7InvalidLineInstantSizeException
+     * @throws com.modulo7.common.exceptions.Modulo7InvalidVoiceInstantSizeException
      */
-    public void keySignatureCriteriaTest() throws Modulo7BadKeyException, Modulo7InvalidLineInstantSizeException {
+    public void keySignatureCriteriaTest() throws Modulo7BadKeyException, Modulo7InvalidVoiceInstantSizeException {
         AbstractCriteria criteria = new KeySignatureEqualityCriteria(new KeySignature("C", ScaleType.MAJOR));
 
         Voice voice = new Voice();

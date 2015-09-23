@@ -359,6 +359,22 @@ public class DatabaseEngine {
     }
 
     /**
+     * Gets the location from where the song has been parsed
+     * @param song
+     * @return
+     * @throws Modulo7DataBaseNotSerializedException
+     */
+    public String getLocationGivenSong(final Song song) throws Modulo7DataBaseNotSerializedException {
+        // This operation does not make sense if the database is not constructed in the first place
+        if (!isDataBaseConstructedInMemory) {
+            throw new Modulo7DataBaseNotSerializedException("Engine database has not been serialized, " +
+                    "please run serializeDataSetAndMoveToDisk method first");
+        } else {
+            return inverseSongLocationMap.get(song);
+        }
+    }
+
+    /**
      * Gets the source directory in which input sources are stored
      * @return
      */
@@ -405,7 +421,7 @@ public class DatabaseEngine {
      * Getter for the entire song location map
      * @return
      */
-    public Map<String, Song> getSongLocationMap() {
+    protected Map<String, Song> getSongLocationMap() {
         return songLocationMap;
     }
 
@@ -413,7 +429,15 @@ public class DatabaseEngine {
      * Get the database name
      * @return
      */
-    public String getDatabaseName() {
+    protected String getDatabaseName() {
         return databaseName;
+    }
+
+    /**
+     * Gets all the songs
+     * @return
+     */
+    protected Set<Song> getAllSongs() {
+        return inverseSongLocationMap.keySet();
     }
 }

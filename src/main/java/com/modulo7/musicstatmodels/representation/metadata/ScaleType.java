@@ -18,4 +18,21 @@ public enum ScaleType {
     ScaleType(final String scale) {
         this.scale = scale.toUpperCase();
     }
+
+    /**
+     * Gets the scale type given a string representation
+     * @param inputStr
+     * @return
+     */
+    public static ScaleType getScaleTypeFromString(final String inputStr) {
+        String actualStr = inputStr.toUpperCase();
+
+        if (actualStr.equals("MAJOR") || actualStr.equals("MAJ")) {
+            return MAJOR;
+        } else if (actualStr.equals("MINOR") || actualStr.equals("MIN")) {
+            return MINOR;
+        } else {
+            return UNKNOWN;
+        }
+    }
 }

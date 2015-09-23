@@ -38,4 +38,20 @@ public class Modulo7QueryComponents {
 
         assert (exprList.size() - 1 == exprOprList.size());
     }
+
+    public Set<String> getInputs() {
+        return inputs;
+    }
+
+    public List<String> getExprList() {
+        return exprList;
+    }
+
+    public List<String> getExprOprList() {
+        return exprOprList;
+    }
+
+    public String getDbName() {
+        return dbName;
+    }
 }

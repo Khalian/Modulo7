@@ -1,8 +1,9 @@
 package musicstatmodelstests;
 
-import com.modulo7.common.exceptions.Modulo7InvalidLineInstantSizeException;
+import com.modulo7.common.exceptions.Modulo7InvalidVoiceInstantSizeException;
 import com.modulo7.common.interfaces.AbstractContour;
 import com.modulo7.common.interfaces.AbstractSongVector;
+import com.modulo7.common.interfaces.AbstractVoiceSimilarity;
 import com.modulo7.common.interfaces.AbstractVoiceVector;
 import com.modulo7.crawler.utils.MusicSources;
 import com.modulo7.musicstatmodels.musictheorymodels.IntervalEnum;
@@ -10,6 +11,7 @@ import com.modulo7.musicstatmodels.representation.buildingblocks.Note;
 import com.modulo7.musicstatmodels.representation.polyphonic.Song;
 import com.modulo7.musicstatmodels.representation.monophonic.Voice;
 import com.modulo7.musicstatmodels.representation.monophonic.VoiceInstant;
+import com.modulo7.musicstatmodels.similarity.voicesimilarity.VoiceTonalHistogramSimilarity;
 import com.modulo7.musicstatmodels.vectorspacemodels.contour.GrossContour;
 import com.modulo7.musicstatmodels.vectorspacemodels.contour.SteinbeckContour;
 import com.modulo7.musicstatmodels.vectorspacemodels.datastructures.TonalDurationHistogramData;
@@ -36,7 +38,7 @@ public class VectorSpaceModelsTest {
      * In this particular melody, there are no contour
      */
     @Test
-    public void steinBeckContourSanityTest() throws Modulo7InvalidLineInstantSizeException {
+    public void steinBeckContourSanityTest() throws Modulo7InvalidVoiceInstantSizeException {
         Voice testVoice = new Voice();
         testVoice.addVoiceInstant(new VoiceInstant(Note.ASHARP0));
         testVoice.addVoiceInstant(new VoiceInstant(Note.B0));
@@ -54,10 +56,10 @@ public class VectorSpaceModelsTest {
      * A test in which there is a valid contour element present and that element is removed
      * There are two contour extremum notes in this melody
      *
-     * @throws Modulo7InvalidLineInstantSizeException
+     * @throws com.modulo7.common.exceptions.Modulo7InvalidVoiceInstantSizeException
      */
     @Test
-    public void contourizedVoiceTest() throws Modulo7InvalidLineInstantSizeException{
+    public void contourizedVoiceTest() throws Modulo7InvalidVoiceInstantSizeException {
         Voice testVoice = new Voice();
         testVoice.addVoiceInstant(new VoiceInstant(Note.ASHARP1));
         testVoice.addVoiceInstant(new VoiceInstant(Note.B1));
@@ -74,10 +76,10 @@ public class VectorSpaceModelsTest {
     /**
      * Sanity test cases for voice pitch vectors
      *
-     * @throws Modulo7InvalidLineInstantSizeException
+     * @throws com.modulo7.common.exceptions.Modulo7InvalidVoiceInstantSizeException
      */
     @Test
-    public void voiceVectorPitchSanityTest() throws Modulo7InvalidLineInstantSizeException {
+    public void voiceVectorPitchSanityTest() throws Modulo7InvalidVoiceInstantSizeException {
         Voice testVoice = new Voice();
         testVoice.addVoiceInstant(new VoiceInstant(Note.ASHARP1));
         testVoice.addVoiceInstant(new VoiceInstant(Note.B1));
@@ -98,10 +100,10 @@ public class VectorSpaceModelsTest {
 
     /**
      * Sanity test cases for song vectors
-     * @throws Modulo7InvalidLineInstantSizeException
+     * @throws com.modulo7.common.exceptions.Modulo7InvalidVoiceInstantSizeException
      */
     @Test
-    public void songVectorSanityTest() throws Modulo7InvalidLineInstantSizeException {
+    public void songVectorSanityTest() throws Modulo7InvalidVoiceInstantSizeException {
         Voice testVoice1 = new Voice();
 
         testVoice1.addVoiceInstant(new VoiceInstant(Note.ASHARP1));
@@ -141,7 +143,7 @@ public class VectorSpaceModelsTest {
      * and sanity tests whether the cumulative durations are properly accounted for
      */
     @Test
-    public void tonalDurationHistogramDataSanityTest() throws Modulo7InvalidLineInstantSizeException {
+    public void tonalDurationHistogramDataSanityTest() throws Modulo7InvalidVoiceInstantSizeException {
         Voice testVoice1 = new Voice();
 
         testVoice1.addVoiceInstant(new VoiceInstant(Note.ASHARP1, 1.0));
@@ -179,10 +181,10 @@ public class VectorSpaceModelsTest {
 
     /**
      * Sanity test case for gross contour
-     * @throws Modulo7InvalidLineInstantSizeException
+     * @throws com.modulo7.common.exceptions.Modulo7InvalidVoiceInstantSizeException
      */
     @Test
-    public void grossContourSanityTest() throws Modulo7InvalidLineInstantSizeException {
+    public void grossContourSanityTest() throws Modulo7InvalidVoiceInstantSizeException {
         Voice testVoice1 = new Voice();
 
         testVoice1.addVoiceInstant(new VoiceInstant(Note.ASHARP1, 1.0));
@@ -196,5 +198,34 @@ public class VectorSpaceModelsTest {
         String contourRep = contour.getContourRepresentaionOfVoice(testVoice1);
 
         Assert.assertEquals(contourRep, "U D U U");
+    }
+
+    /**
+     * Sanity test for voice tonal histogram similarity
+     * @throws Modulo7InvalidVoiceInstantSizeException
+     */
+    @Test
+    public void voiceTonalSanitylHistogramSimilarity() throws Modulo7InvalidVoiceInstantSizeException {
+        Voice testVoice1 = new Voice();
+
+        testVoice1.addVoiceInstant(new VoiceInstant(Note.ASHARP1, 1.0));
+        testVoice1.addVoiceInstant(new VoiceInstant(Note.B1, 1.0));
+        testVoice1.addVoiceInstant(new VoiceInstant(Note.C1, 1.0));
+        testVoice1.addVoiceInstant(new VoiceInstant(Note.CSHARP1, 1.0));
+        testVoice1.addVoiceInstant(new VoiceInstant(Note.D1, 1.0));
+
+        // Similarity based on voices having the same tonal histogram
+        AbstractVoiceSimilarity similarity = new VoiceTonalHistogramSimilarity();
+
+        Voice testVoice2 = new Voice();
+
+        testVoice2.addVoiceInstant(new VoiceInstant(Note.B1, 1.0));
+        testVoice2.addVoiceInstant(new VoiceInstant(Note.C1, 1.0));
+        testVoice2.addVoiceInstant(new VoiceInstant(Note.CSHARP1, 1.0));
+        testVoice2.addVoiceInstant(new VoiceInstant(Note.D1, 1.0));
+        testVoice2.addVoiceInstant(new VoiceInstant(Note.DSHARP1, 1.0));
+
+        // Check if they both have the exact same histogram
+        Assert.assertEquals(similarity.getSimilarity(testVoice1, testVoice2), 1.0, 0.0);
     }
 }

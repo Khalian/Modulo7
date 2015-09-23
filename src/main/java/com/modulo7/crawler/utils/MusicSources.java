@@ -34,12 +34,15 @@ public enum MusicSources {
     // Unknown Source
     UNKNOWN("Unknown");
 
+    // String representation of source
+    private String source;
+
     /**
      * Basic constructor for music sources
-     * @param png
+     * @param source
      */
-    MusicSources(final String png) {
-
+    MusicSources(final String source) {
+        this.source = source;
     }
 
     // Supported file extenstions for the modulo7 platform
@@ -53,5 +56,13 @@ public enum MusicSources {
     public static boolean checkIfSupportedExtension(final String fileName) {
         final String fileExtension = FilenameUtils.getExtension(fileName);
         return SUPPORTED_FILE_EXTENSIONS.contains(fileExtension.toLowerCase());
+    }
+
+    /**
+     * Gets the string representation of the music source
+     * @return
+     */
+    public String getStringRepresentation() {
+        return source;
     }
 }

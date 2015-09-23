@@ -356,4 +356,61 @@ public class Modulo7Indexer {
         final KeySignature signature = song.getMetadata().getKeySignature();
         addSongToKeySignatureIndex(signature, song);
     }
+
+    /**
+     * Gets the database name of the internal database
+     * @return
+     */
+    protected String getInternalDBName() {
+        return engine.getDatabaseName();
+    }
+
+    /**
+     * Gets handles all the songs from the internal database
+     * @return
+     */
+    protected Set<Song> getAllSongs() {
+        return engine.getAllSongs();
+    }
+
+    /**
+     * Given the song name, returns the song object
+     * @param songName
+     * @return
+     */
+    protected Song getSongObjectGivenSongName(final String songName) {
+        final Set<Song> allSongs = getAllSongs();
+
+        for (Song song : allSongs) {
+            if (songName.equals(song.getMetadata().getTitleOfTrack())) {
+                return song;
+            }
+        }
+
+        // If there are no songs whatsover with the given song name return null
+        return null;
+    }
+
+    /**
+     * Once a query obtains a set of relevant song objects, the next order
+     * of business would be get the set of
+     *
+     * @param relevantSongs
+     * @throws Modulo7DataBaseNotSerializedException
+     *
+     * @return
+     */
+    public Set<String> getLocationsGivenRelevantSongs(final Set<Song> relevantSongs) throws Modulo7DataBaseNotSerializedException {
+
+        Set<String> allRelevantLocations = new HashSet<>();
+
+        // Relevant songs is null when you dont have any elements returned as relevant
+        if (relevantSongs != null) {
+            for (final Song song : relevantSongs) {
+                allRelevantLocations.add(engine.getLocationGivenSong(song));
+            }
+        }
+
+        return allRelevantLocations;
+    }
 }
