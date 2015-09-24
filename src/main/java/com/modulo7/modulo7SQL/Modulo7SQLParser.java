@@ -21,13 +21,13 @@ public class Modulo7SQLParser extends Parser {
 	public static final int
 		SELECT=1, MIDI=2, SHEET=3, MP3=4, MUSICXML=5, FROM=6, WHERE=7, AND=8, 
 		OR=9, IS=10, NULL=11, LIKE=12, IN=13, EXISTS=14, ALL=15, ANY=16, TRUE=17, 
-		FALSE=18, DIVIDE=19, MOD=20, REGEXP=21, PLUS=22, MINUS=23, NEGATION=24, 
-		VERTBAR=25, BITAND=26, POWER_OP=27, BINARY=28, ESCAPE=29, ASTERISK=30, 
-		RPAREN=31, LPAREN=32, RBRACK=33, LBRACK=34, COLON=35, ALL_FIELDS=36, EQ=37, 
-		LTH=38, GTH=39, NOT_EQ=40, NOT=41, LET=42, GET=43, SEMI=44, COMMA=45, 
-		DOT=46, COLLATE=47, USING=48, INDEX=49, KEY=50, ORDER=51, GROUP=52, BETWEEN=53, 
-		POLYPHONIC=54, HAPPINESSINDEX=55, SADNESSINDEX=56, POWERINDEX=57, ID=58, 
-		INT=59, DOUBLE=60, DATABASENAME=61, NEWLINE=62, WS=63, USER_VAR=64;
+		FALSE=18, DIVIDE=19, MOD=20, PLUS=21, MINUS=22, NEGATION=23, VERTBAR=24, 
+		BITAND=25, POWER_OP=26, BINARY=27, ESCAPE=28, ASTERISK=29, RPAREN=30, 
+		LPAREN=31, RBRACK=32, LBRACK=33, COLON=34, ALL_FIELDS=35, EQ=36, LTH=37, 
+		GTH=38, NOT_EQ=39, NOT=40, LET=41, GET=42, SEMI=43, COMMA=44, DOT=45, 
+		COLLATE=46, USING=47, INDEX=48, BETWEEN=49, POLYPHONIC=50, HAPPINESSINDEX=51, 
+		SADNESSINDEX=52, POWERINDEX=53, MAXMELODICREPREATINGFACTOR=54, ID=55, 
+		INT=56, DOUBLE=57, DATABASENAME=58, NEWLINE=59, WS=60, USER_VAR=61;
 	public static final int
 		RULE_select_clause = 0, RULE_from_clause = 1, RULE_table_name = 2, RULE_input_name = 3, 
 		RULE_column_name_alias = 4, RULE_index_name = 5, RULE_input_list_clause = 6, 
@@ -35,35 +35,33 @@ public class Modulo7SQLParser extends Parser {
 		RULE_right_element = 11, RULE_left_element = 12, RULE_target_element = 13, 
 		RULE_relational_op = 14, RULE_expr_op = 15, RULE_between_op = 16, RULE_is_or_is_not = 17, 
 		RULE_either_true_or_false = 18, RULE_simple_expression = 19, RULE_criteria = 20, 
-		RULE_statistic = 21, RULE_subquery_alias = 22, RULE_subquery = 23;
+		RULE_statistic = 21;
 	public static final String[] ruleNames = {
 		"select_clause", "from_clause", "table_name", "input_name", "column_name_alias", 
 		"index_name", "input_list_clause", "select_key", "where_clause", "expression", 
 		"element", "right_element", "left_element", "target_element", "relational_op", 
 		"expr_op", "between_op", "is_or_is_not", "either_true_or_false", "simple_expression", 
-		"criteria", "statistic", "subquery_alias", "subquery"
+		"criteria", "statistic"
 	};
 
 	private static final String[] _LITERAL_NAMES = {
 		null, "'select'", "'midi'", "'sheet'", "'mp3'", "'musicxml'", "'from'", 
 		"'where'", null, null, "'is'", "'null'", "'like'", "'in'", "'exists'", 
-		"'all'", "'any'", "'true'", "'false'", null, null, "'regexp'", "'+'", 
-		"'-'", "'~'", "'|'", "'&'", "'^'", "'binary'", "'escape'", "'*'", "')'", 
-		"'('", "']'", "'['", "':'", "'.*'", "'='", "'<'", "'>'", "'!='", "'not'", 
-		"'<='", "'>='", "';'", "','", "'.'", "'collate'", "'using'", "'index'", 
-		"'key'", "'order'", "'group'", "'between'", "'polyphonic'", "'happinessindex'", 
-		"'sadnessindex'", "'powerindex'"
+		"'all'", "'any'", "'true'", "'false'", null, null, "'+'", "'-'", "'~'", 
+		"'|'", "'&'", "'^'", "'binary'", "'escape'", "'*'", "')'", "'('", "']'", 
+		"'['", "':'", "'.*'", "'='", "'<'", "'>'", "'!='", "'not'", "'<='", "'>='", 
+		"';'", "','", "'.'", "'collate'", "'using'", "'index'", "'between'", "'polyphonic'", 
+		"'happinessindex'", "'sadnessindex'", "'powerindex'", "'maxmelodicrepeatingfactor'"
 	};
 	private static final String[] _SYMBOLIC_NAMES = {
 		null, "SELECT", "MIDI", "SHEET", "MP3", "MUSICXML", "FROM", "WHERE", "AND", 
 		"OR", "IS", "NULL", "LIKE", "IN", "EXISTS", "ALL", "ANY", "TRUE", "FALSE", 
-		"DIVIDE", "MOD", "REGEXP", "PLUS", "MINUS", "NEGATION", "VERTBAR", "BITAND", 
-		"POWER_OP", "BINARY", "ESCAPE", "ASTERISK", "RPAREN", "LPAREN", "RBRACK", 
-		"LBRACK", "COLON", "ALL_FIELDS", "EQ", "LTH", "GTH", "NOT_EQ", "NOT", 
-		"LET", "GET", "SEMI", "COMMA", "DOT", "COLLATE", "USING", "INDEX", "KEY", 
-		"ORDER", "GROUP", "BETWEEN", "POLYPHONIC", "HAPPINESSINDEX", "SADNESSINDEX", 
-		"POWERINDEX", "ID", "INT", "DOUBLE", "DATABASENAME", "NEWLINE", "WS", 
-		"USER_VAR"
+		"DIVIDE", "MOD", "PLUS", "MINUS", "NEGATION", "VERTBAR", "BITAND", "POWER_OP", 
+		"BINARY", "ESCAPE", "ASTERISK", "RPAREN", "LPAREN", "RBRACK", "LBRACK", 
+		"COLON", "ALL_FIELDS", "EQ", "LTH", "GTH", "NOT_EQ", "NOT", "LET", "GET", 
+		"SEMI", "COMMA", "DOT", "COLLATE", "USING", "INDEX", "BETWEEN", "POLYPHONIC", 
+		"HAPPINESSINDEX", "SADNESSINDEX", "POWERINDEX", "MAXMELODICREPREATINGFACTOR", 
+		"ID", "INT", "DOUBLE", "DATABASENAME", "NEWLINE", "WS", "USER_VAR"
 	};
 	public static final Vocabulary VOCABULARY = new VocabularyImpl(_LITERAL_NAMES, _SYMBOLIC_NAMES);
 
@@ -154,29 +152,29 @@ public class Modulo7SQLParser extends Parser {
 		try {
 			enterOuterAlt(_localctx, 1);
 			{
-			setState(48);
+			setState(44);
 			select_key();
-			setState(49);
+			setState(45);
 			input_list_clause();
-			setState(51);
+			setState(47);
 			_la = _input.LA(1);
 			if (_la==FROM) {
 				{
-				setState(50);
+				setState(46);
 				from_clause();
 				}
 			}
 
-			setState(54);
+			setState(50);
 			_la = _input.LA(1);
 			if (_la==WHERE) {
 				{
-				setState(53);
+				setState(49);
 				where_clause();
 				}
 			}
 
-			setState(56);
+			setState(52);
 			match(SEMI);
 			}
 		}
@@ -221,9 +219,9 @@ public class Modulo7SQLParser extends Parser {
 		try {
 			enterOuterAlt(_localctx, 1);
 			{
-			setState(58);
+			setState(54);
 			match(FROM);
-			setState(59);
+			setState(55);
 			table_name();
 			}
 		}
@@ -265,7 +263,7 @@ public class Modulo7SQLParser extends Parser {
 		try {
 			enterOuterAlt(_localctx, 1);
 			{
-			setState(61);
+			setState(57);
 			match(ID);
 			}
 		}
@@ -311,7 +309,7 @@ public class Modulo7SQLParser extends Parser {
 		try {
 			enterOuterAlt(_localctx, 1);
 			{
-			setState(63);
+			setState(59);
 			_la = _input.LA(1);
 			if ( !((((_la) & ~0x3f) == 0 && ((1L << _la) & ((1L << MIDI) | (1L << SHEET) | (1L << MP3) | (1L << MUSICXML))) != 0)) ) {
 			_errHandler.recoverInline(this);
@@ -358,7 +356,7 @@ public class Modulo7SQLParser extends Parser {
 		try {
 			enterOuterAlt(_localctx, 1);
 			{
-			setState(65);
+			setState(61);
 			match(ID);
 			}
 		}
@@ -400,7 +398,7 @@ public class Modulo7SQLParser extends Parser {
 		try {
 			enterOuterAlt(_localctx, 1);
 			{
-			setState(67);
+			setState(63);
 			match(ID);
 			}
 		}
@@ -452,21 +450,21 @@ public class Modulo7SQLParser extends Parser {
 		try {
 			enterOuterAlt(_localctx, 1);
 			{
-			setState(69);
+			setState(65);
 			input_name();
-			setState(74);
+			setState(70);
 			_errHandler.sync(this);
 			_la = _input.LA(1);
 			while (_la==COMMA) {
 				{
 				{
-				setState(70);
+				setState(66);
 				match(COMMA);
-				setState(71);
+				setState(67);
 				input_name();
 				}
 				}
-				setState(76);
+				setState(72);
 				_errHandler.sync(this);
 				_la = _input.LA(1);
 			}
@@ -510,7 +508,7 @@ public class Modulo7SQLParser extends Parser {
 		try {
 			enterOuterAlt(_localctx, 1);
 			{
-			setState(77);
+			setState(73);
 			match(SELECT);
 			}
 		}
@@ -555,9 +553,9 @@ public class Modulo7SQLParser extends Parser {
 		try {
 			enterOuterAlt(_localctx, 1);
 			{
-			setState(79);
+			setState(75);
 			match(WHERE);
-			setState(80);
+			setState(76);
 			expression();
 			}
 		}
@@ -611,21 +609,21 @@ public class Modulo7SQLParser extends Parser {
 		try {
 			enterOuterAlt(_localctx, 1);
 			{
-			setState(82);
+			setState(78);
 			simple_expression();
-			setState(88);
+			setState(84);
 			_errHandler.sync(this);
 			_la = _input.LA(1);
 			while ((((_la) & ~0x3f) == 0 && ((1L << _la) & ((1L << AND) | (1L << OR) | (1L << NOT))) != 0)) {
 				{
 				{
-				setState(83);
+				setState(79);
 				expr_op();
-				setState(84);
+				setState(80);
 				simple_expression();
 				}
 				}
-				setState(90);
+				setState(86);
 				_errHandler.sync(this);
 				_la = _input.LA(1);
 			}
@@ -671,7 +669,7 @@ public class Modulo7SQLParser extends Parser {
 		try {
 			enterOuterAlt(_localctx, 1);
 			{
-			setState(91);
+			setState(87);
 			_la = _input.LA(1);
 			if ( !(_la==INT || _la==DOUBLE) ) {
 			_errHandler.recoverInline(this);
@@ -720,7 +718,7 @@ public class Modulo7SQLParser extends Parser {
 		try {
 			enterOuterAlt(_localctx, 1);
 			{
-			setState(93);
+			setState(89);
 			element();
 			}
 		}
@@ -764,7 +762,7 @@ public class Modulo7SQLParser extends Parser {
 		try {
 			enterOuterAlt(_localctx, 1);
 			{
-			setState(95);
+			setState(91);
 			element();
 			}
 		}
@@ -808,7 +806,7 @@ public class Modulo7SQLParser extends Parser {
 		try {
 			enterOuterAlt(_localctx, 1);
 			{
-			setState(97);
+			setState(93);
 			element();
 			}
 		}
@@ -828,8 +826,6 @@ public class Modulo7SQLParser extends Parser {
 		public TerminalNode LTH() { return getToken(Modulo7SQLParser.LTH, 0); }
 		public TerminalNode GTH() { return getToken(Modulo7SQLParser.GTH, 0); }
 		public TerminalNode NOT_EQ() { return getToken(Modulo7SQLParser.NOT_EQ, 0); }
-		public TerminalNode LET() { return getToken(Modulo7SQLParser.LET, 0); }
-		public TerminalNode GET() { return getToken(Modulo7SQLParser.GET, 0); }
 		public Relational_opContext(ParserRuleContext parent, int invokingState) {
 			super(parent, invokingState);
 		}
@@ -856,9 +852,9 @@ public class Modulo7SQLParser extends Parser {
 		try {
 			enterOuterAlt(_localctx, 1);
 			{
-			setState(99);
+			setState(95);
 			_la = _input.LA(1);
-			if ( !((((_la) & ~0x3f) == 0 && ((1L << _la) & ((1L << EQ) | (1L << LTH) | (1L << GTH) | (1L << NOT_EQ) | (1L << LET) | (1L << GET))) != 0)) ) {
+			if ( !((((_la) & ~0x3f) == 0 && ((1L << _la) & ((1L << EQ) | (1L << LTH) | (1L << GTH) | (1L << NOT_EQ))) != 0)) ) {
 			_errHandler.recoverInline(this);
 			} else {
 				consume();
@@ -906,7 +902,7 @@ public class Modulo7SQLParser extends Parser {
 		try {
 			enterOuterAlt(_localctx, 1);
 			{
-			setState(101);
+			setState(97);
 			_la = _input.LA(1);
 			if ( !((((_la) & ~0x3f) == 0 && ((1L << _la) & ((1L << AND) | (1L << OR) | (1L << NOT))) != 0)) ) {
 			_errHandler.recoverInline(this);
@@ -953,7 +949,7 @@ public class Modulo7SQLParser extends Parser {
 		try {
 			enterOuterAlt(_localctx, 1);
 			{
-			setState(103);
+			setState(99);
 			match(BETWEEN);
 			}
 		}
@@ -994,21 +990,21 @@ public class Modulo7SQLParser extends Parser {
 		Is_or_is_notContext _localctx = new Is_or_is_notContext(_ctx, getState());
 		enterRule(_localctx, 34, RULE_is_or_is_not);
 		try {
-			setState(108);
+			setState(104);
 			switch ( getInterpreter().adaptivePredict(_input,4,_ctx) ) {
 			case 1:
 				enterOuterAlt(_localctx, 1);
 				{
-				setState(105);
+				setState(101);
 				match(IS);
 				}
 				break;
 			case 2:
 				enterOuterAlt(_localctx, 2);
 				{
-				setState(106);
+				setState(102);
 				match(IS);
-				setState(107);
+				setState(103);
 				match(NOT);
 				}
 				break;
@@ -1054,7 +1050,7 @@ public class Modulo7SQLParser extends Parser {
 		try {
 			enterOuterAlt(_localctx, 1);
 			{
-			setState(110);
+			setState(106);
 			_la = _input.LA(1);
 			if ( !(_la==TRUE || _la==FALSE) ) {
 			_errHandler.recoverInline(this);
@@ -1126,42 +1122,42 @@ public class Modulo7SQLParser extends Parser {
 		Simple_expressionContext _localctx = new Simple_expressionContext(_ctx, getState());
 		enterRule(_localctx, 38, RULE_simple_expression);
 		try {
-			setState(126);
+			setState(122);
 			switch ( getInterpreter().adaptivePredict(_input,5,_ctx) ) {
 			case 1:
 				enterOuterAlt(_localctx, 1);
 				{
-				setState(112);
+				setState(108);
 				criteria();
-				setState(113);
+				setState(109);
 				is_or_is_not();
-				setState(114);
+				setState(110);
 				either_true_or_false();
 				}
 				break;
 			case 2:
 				enterOuterAlt(_localctx, 2);
 				{
-				setState(116);
+				setState(112);
 				statistic();
-				setState(117);
+				setState(113);
 				relational_op();
-				setState(118);
+				setState(114);
 				element();
 				}
 				break;
 			case 3:
 				enterOuterAlt(_localctx, 3);
 				{
-				setState(120);
+				setState(116);
 				statistic();
-				setState(121);
+				setState(117);
 				between_op();
-				setState(122);
+				setState(118);
 				left_element();
-				setState(123);
+				setState(119);
 				match(AND);
-				setState(124);
+				setState(120);
 				right_element();
 				}
 				break;
@@ -1205,7 +1201,7 @@ public class Modulo7SQLParser extends Parser {
 		try {
 			enterOuterAlt(_localctx, 1);
 			{
-			setState(128);
+			setState(124);
 			match(POLYPHONIC);
 			}
 		}
@@ -1224,6 +1220,7 @@ public class Modulo7SQLParser extends Parser {
 		public TerminalNode HAPPINESSINDEX() { return getToken(Modulo7SQLParser.HAPPINESSINDEX, 0); }
 		public TerminalNode SADNESSINDEX() { return getToken(Modulo7SQLParser.SADNESSINDEX, 0); }
 		public TerminalNode POWERINDEX() { return getToken(Modulo7SQLParser.POWERINDEX, 0); }
+		public TerminalNode MAXMELODICREPREATINGFACTOR() { return getToken(Modulo7SQLParser.MAXMELODICREPREATINGFACTOR, 0); }
 		public StatisticContext(ParserRuleContext parent, int invokingState) {
 			super(parent, invokingState);
 		}
@@ -1250,9 +1247,9 @@ public class Modulo7SQLParser extends Parser {
 		try {
 			enterOuterAlt(_localctx, 1);
 			{
-			setState(130);
+			setState(126);
 			_la = _input.LA(1);
-			if ( !((((_la) & ~0x3f) == 0 && ((1L << _la) & ((1L << HAPPINESSINDEX) | (1L << SADNESSINDEX) | (1L << POWERINDEX))) != 0)) ) {
+			if ( !((((_la) & ~0x3f) == 0 && ((1L << _la) & ((1L << HAPPINESSINDEX) | (1L << SADNESSINDEX) | (1L << POWERINDEX) | (1L << MAXMELODICREPREATINGFACTOR))) != 0)) ) {
 			_errHandler.recoverInline(this);
 			} else {
 				consume();
@@ -1270,132 +1267,37 @@ public class Modulo7SQLParser extends Parser {
 		return _localctx;
 	}
 
-	public static class Subquery_aliasContext extends ParserRuleContext {
-		public TerminalNode ID() { return getToken(Modulo7SQLParser.ID, 0); }
-		public Subquery_aliasContext(ParserRuleContext parent, int invokingState) {
-			super(parent, invokingState);
-		}
-		@Override public int getRuleIndex() { return RULE_subquery_alias; }
-		@Override
-		public void enterRule(ParseTreeListener listener) {
-			if ( listener instanceof Modulo7SQLListener ) ((Modulo7SQLListener)listener).enterSubquery_alias(this);
-		}
-		@Override
-		public void exitRule(ParseTreeListener listener) {
-			if ( listener instanceof Modulo7SQLListener ) ((Modulo7SQLListener)listener).exitSubquery_alias(this);
-		}
-		@Override
-		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
-			if ( visitor instanceof Modulo7SQLVisitor ) return ((Modulo7SQLVisitor<? extends T>)visitor).visitSubquery_alias(this);
-			else return visitor.visitChildren(this);
-		}
-	}
-
-	public final Subquery_aliasContext subquery_alias() throws RecognitionException {
-		Subquery_aliasContext _localctx = new Subquery_aliasContext(_ctx, getState());
-		enterRule(_localctx, 44, RULE_subquery_alias);
-		try {
-			enterOuterAlt(_localctx, 1);
-			{
-			setState(132);
-			match(ID);
-			}
-		}
-		catch (RecognitionException re) {
-			_localctx.exception = re;
-			_errHandler.reportError(this, re);
-			_errHandler.recover(this, re);
-		}
-		finally {
-			exitRule();
-		}
-		return _localctx;
-	}
-
-	public static class SubqueryContext extends ParserRuleContext {
-		public TerminalNode LPAREN() { return getToken(Modulo7SQLParser.LPAREN, 0); }
-		public Select_clauseContext select_clause() {
-			return getRuleContext(Select_clauseContext.class,0);
-		}
-		public TerminalNode RPAREN() { return getToken(Modulo7SQLParser.RPAREN, 0); }
-		public SubqueryContext(ParserRuleContext parent, int invokingState) {
-			super(parent, invokingState);
-		}
-		@Override public int getRuleIndex() { return RULE_subquery; }
-		@Override
-		public void enterRule(ParseTreeListener listener) {
-			if ( listener instanceof Modulo7SQLListener ) ((Modulo7SQLListener)listener).enterSubquery(this);
-		}
-		@Override
-		public void exitRule(ParseTreeListener listener) {
-			if ( listener instanceof Modulo7SQLListener ) ((Modulo7SQLListener)listener).exitSubquery(this);
-		}
-		@Override
-		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
-			if ( visitor instanceof Modulo7SQLVisitor ) return ((Modulo7SQLVisitor<? extends T>)visitor).visitSubquery(this);
-			else return visitor.visitChildren(this);
-		}
-	}
-
-	public final SubqueryContext subquery() throws RecognitionException {
-		SubqueryContext _localctx = new SubqueryContext(_ctx, getState());
-		enterRule(_localctx, 46, RULE_subquery);
-		try {
-			enterOuterAlt(_localctx, 1);
-			{
-			setState(134);
-			match(LPAREN);
-			setState(135);
-			select_clause();
-			setState(136);
-			match(RPAREN);
-			}
-		}
-		catch (RecognitionException re) {
-			_localctx.exception = re;
-			_errHandler.reportError(this, re);
-			_errHandler.recover(this, re);
-		}
-		finally {
-			exitRule();
-		}
-		return _localctx;
-	}
-
 	public static final String _serializedATN =
-		"\3\u0430\ud6d1\u8206\uad2d\u4417\uaef1\u8d80\uaadd\3B\u008d\4\2\t\2\4"+
+		"\3\u0430\ud6d1\u8206\uad2d\u4417\uaef1\u8d80\uaadd\3?\u0083\4\2\t\2\4"+
 		"\3\t\3\4\4\t\4\4\5\t\5\4\6\t\6\4\7\t\7\4\b\t\b\4\t\t\t\4\n\t\n\4\13\t"+
 		"\13\4\f\t\f\4\r\t\r\4\16\t\16\4\17\t\17\4\20\t\20\4\21\t\21\4\22\t\22"+
-		"\4\23\t\23\4\24\t\24\4\25\t\25\4\26\t\26\4\27\t\27\4\30\t\30\4\31\t\31"+
-		"\3\2\3\2\3\2\5\2\66\n\2\3\2\5\29\n\2\3\2\3\2\3\3\3\3\3\3\3\4\3\4\3\5\3"+
-		"\5\3\6\3\6\3\7\3\7\3\b\3\b\3\b\7\bK\n\b\f\b\16\bN\13\b\3\t\3\t\3\n\3\n"+
-		"\3\n\3\13\3\13\3\13\3\13\7\13Y\n\13\f\13\16\13\\\13\13\3\f\3\f\3\r\3\r"+
-		"\3\16\3\16\3\17\3\17\3\20\3\20\3\21\3\21\3\22\3\22\3\23\3\23\3\23\5\23"+
-		"o\n\23\3\24\3\24\3\25\3\25\3\25\3\25\3\25\3\25\3\25\3\25\3\25\3\25\3\25"+
-		"\3\25\3\25\3\25\5\25\u0081\n\25\3\26\3\26\3\27\3\27\3\30\3\30\3\31\3\31"+
-		"\3\31\3\31\3\31\2\2\32\2\4\6\b\n\f\16\20\22\24\26\30\32\34\36 \"$&(*,"+
-		".\60\2\b\3\2\4\7\3\2=>\4\2\'*,-\4\2\n\13++\3\2\23\24\3\29;{\2\62\3\2\2"+
-		"\2\4<\3\2\2\2\6?\3\2\2\2\bA\3\2\2\2\nC\3\2\2\2\fE\3\2\2\2\16G\3\2\2\2"+
-		"\20O\3\2\2\2\22Q\3\2\2\2\24T\3\2\2\2\26]\3\2\2\2\30_\3\2\2\2\32a\3\2\2"+
-		"\2\34c\3\2\2\2\36e\3\2\2\2 g\3\2\2\2\"i\3\2\2\2$n\3\2\2\2&p\3\2\2\2(\u0080"+
-		"\3\2\2\2*\u0082\3\2\2\2,\u0084\3\2\2\2.\u0086\3\2\2\2\60\u0088\3\2\2\2"+
-		"\62\63\5\20\t\2\63\65\5\16\b\2\64\66\5\4\3\2\65\64\3\2\2\2\65\66\3\2\2"+
-		"\2\668\3\2\2\2\679\5\22\n\28\67\3\2\2\289\3\2\2\29:\3\2\2\2:;\7.\2\2;"+
-		"\3\3\2\2\2<=\7\b\2\2=>\5\6\4\2>\5\3\2\2\2?@\7<\2\2@\7\3\2\2\2AB\t\2\2"+
-		"\2B\t\3\2\2\2CD\7<\2\2D\13\3\2\2\2EF\7<\2\2F\r\3\2\2\2GL\5\b\5\2HI\7/"+
-		"\2\2IK\5\b\5\2JH\3\2\2\2KN\3\2\2\2LJ\3\2\2\2LM\3\2\2\2M\17\3\2\2\2NL\3"+
-		"\2\2\2OP\7\3\2\2P\21\3\2\2\2QR\7\t\2\2RS\5\24\13\2S\23\3\2\2\2TZ\5(\25"+
-		"\2UV\5 \21\2VW\5(\25\2WY\3\2\2\2XU\3\2\2\2Y\\\3\2\2\2ZX\3\2\2\2Z[\3\2"+
-		"\2\2[\25\3\2\2\2\\Z\3\2\2\2]^\t\3\2\2^\27\3\2\2\2_`\5\26\f\2`\31\3\2\2"+
-		"\2ab\5\26\f\2b\33\3\2\2\2cd\5\26\f\2d\35\3\2\2\2ef\t\4\2\2f\37\3\2\2\2"+
-		"gh\t\5\2\2h!\3\2\2\2ij\7\67\2\2j#\3\2\2\2ko\7\f\2\2lm\7\f\2\2mo\7+\2\2"+
-		"nk\3\2\2\2nl\3\2\2\2o%\3\2\2\2pq\t\6\2\2q\'\3\2\2\2rs\5*\26\2st\5$\23"+
-		"\2tu\5&\24\2u\u0081\3\2\2\2vw\5,\27\2wx\5\36\20\2xy\5\26\f\2y\u0081\3"+
-		"\2\2\2z{\5,\27\2{|\5\"\22\2|}\5\32\16\2}~\7\n\2\2~\177\5\30\r\2\177\u0081"+
-		"\3\2\2\2\u0080r\3\2\2\2\u0080v\3\2\2\2\u0080z\3\2\2\2\u0081)\3\2\2\2\u0082"+
-		"\u0083\78\2\2\u0083+\3\2\2\2\u0084\u0085\t\7\2\2\u0085-\3\2\2\2\u0086"+
-		"\u0087\7<\2\2\u0087/\3\2\2\2\u0088\u0089\7\"\2\2\u0089\u008a\5\2\2\2\u008a"+
-		"\u008b\7!\2\2\u008b\61\3\2\2\2\b\658LZn\u0080";
+		"\4\23\t\23\4\24\t\24\4\25\t\25\4\26\t\26\4\27\t\27\3\2\3\2\3\2\5\2\62"+
+		"\n\2\3\2\5\2\65\n\2\3\2\3\2\3\3\3\3\3\3\3\4\3\4\3\5\3\5\3\6\3\6\3\7\3"+
+		"\7\3\b\3\b\3\b\7\bG\n\b\f\b\16\bJ\13\b\3\t\3\t\3\n\3\n\3\n\3\13\3\13\3"+
+		"\13\3\13\7\13U\n\13\f\13\16\13X\13\13\3\f\3\f\3\r\3\r\3\16\3\16\3\17\3"+
+		"\17\3\20\3\20\3\21\3\21\3\22\3\22\3\23\3\23\3\23\5\23k\n\23\3\24\3\24"+
+		"\3\25\3\25\3\25\3\25\3\25\3\25\3\25\3\25\3\25\3\25\3\25\3\25\3\25\3\25"+
+		"\5\25}\n\25\3\26\3\26\3\27\3\27\3\27\2\2\30\2\4\6\b\n\f\16\20\22\24\26"+
+		"\30\32\34\36 \"$&(*,\2\b\3\2\4\7\3\2:;\3\2&)\4\2\n\13**\3\2\23\24\3\2"+
+		"\658s\2.\3\2\2\2\48\3\2\2\2\6;\3\2\2\2\b=\3\2\2\2\n?\3\2\2\2\fA\3\2\2"+
+		"\2\16C\3\2\2\2\20K\3\2\2\2\22M\3\2\2\2\24P\3\2\2\2\26Y\3\2\2\2\30[\3\2"+
+		"\2\2\32]\3\2\2\2\34_\3\2\2\2\36a\3\2\2\2 c\3\2\2\2\"e\3\2\2\2$j\3\2\2"+
+		"\2&l\3\2\2\2(|\3\2\2\2*~\3\2\2\2,\u0080\3\2\2\2./\5\20\t\2/\61\5\16\b"+
+		"\2\60\62\5\4\3\2\61\60\3\2\2\2\61\62\3\2\2\2\62\64\3\2\2\2\63\65\5\22"+
+		"\n\2\64\63\3\2\2\2\64\65\3\2\2\2\65\66\3\2\2\2\66\67\7-\2\2\67\3\3\2\2"+
+		"\289\7\b\2\29:\5\6\4\2:\5\3\2\2\2;<\79\2\2<\7\3\2\2\2=>\t\2\2\2>\t\3\2"+
+		"\2\2?@\79\2\2@\13\3\2\2\2AB\79\2\2B\r\3\2\2\2CH\5\b\5\2DE\7.\2\2EG\5\b"+
+		"\5\2FD\3\2\2\2GJ\3\2\2\2HF\3\2\2\2HI\3\2\2\2I\17\3\2\2\2JH\3\2\2\2KL\7"+
+		"\3\2\2L\21\3\2\2\2MN\7\t\2\2NO\5\24\13\2O\23\3\2\2\2PV\5(\25\2QR\5 \21"+
+		"\2RS\5(\25\2SU\3\2\2\2TQ\3\2\2\2UX\3\2\2\2VT\3\2\2\2VW\3\2\2\2W\25\3\2"+
+		"\2\2XV\3\2\2\2YZ\t\3\2\2Z\27\3\2\2\2[\\\5\26\f\2\\\31\3\2\2\2]^\5\26\f"+
+		"\2^\33\3\2\2\2_`\5\26\f\2`\35\3\2\2\2ab\t\4\2\2b\37\3\2\2\2cd\t\5\2\2"+
+		"d!\3\2\2\2ef\7\63\2\2f#\3\2\2\2gk\7\f\2\2hi\7\f\2\2ik\7*\2\2jg\3\2\2\2"+
+		"jh\3\2\2\2k%\3\2\2\2lm\t\6\2\2m\'\3\2\2\2no\5*\26\2op\5$\23\2pq\5&\24"+
+		"\2q}\3\2\2\2rs\5,\27\2st\5\36\20\2tu\5\26\f\2u}\3\2\2\2vw\5,\27\2wx\5"+
+		"\"\22\2xy\5\32\16\2yz\7\n\2\2z{\5\30\r\2{}\3\2\2\2|n\3\2\2\2|r\3\2\2\2"+
+		"|v\3\2\2\2})\3\2\2\2~\177\7\64\2\2\177+\3\2\2\2\u0080\u0081\t\7\2\2\u0081"+
+		"-\3\2\2\2\b\61\64HVj|";
 	public static final ATN _ATN =
 		new ATNDeserializer().deserialize(_serializedATN.toCharArray());
 	static {

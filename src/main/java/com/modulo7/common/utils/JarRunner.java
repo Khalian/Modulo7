@@ -14,11 +14,21 @@ import java.util.regex.Pattern;
 
 /**
  * Helper method to load jar and run it
+ *
+ * This is used to run the audiveris jav
  */
 public class JarRunner {
 
+    // The method which acts as the entry point into the jar
     private final Method entryPoint;
 
+    /**
+     * Constructor for the jar runner class
+     * @param jarFile
+     * @throws ClassNotFoundException
+     * @throws IOException
+     * @throws NoSuchMethodException
+     */
     public JarRunner(File jarFile) throws
             ClassNotFoundException,
             IOException,
@@ -32,6 +42,7 @@ public class JarRunner {
         entryPoint = clazz.getMethod("main", String[].class);
     }
 
+    // Entry point to a jar class run
     public void run(String[] argsToMain) throws
             IllegalAccessException,
             IllegalArgumentException,
@@ -39,6 +50,12 @@ public class JarRunner {
         entryPoint.invoke(null, (Object) argsToMain);
     }
 
+    /**
+     * Method to consume a classpath resource as a string
+     * @param url
+     * @return
+     * @throws IOException
+     */
     private static String resourceToString(URL url) throws IOException {
         InputStream contentStream = url.openStream();
         try {
@@ -58,6 +75,11 @@ public class JarRunner {
         }
     }
 
+    /**
+     * Method to search for a class with the main method defined
+     * @param manifest
+     * @return
+     */
     private static String findMainClassName(String manifest) {
         Matcher m = MAIN_CLASS_PATTERN.matcher(manifest);
         if (m.find()) {
@@ -66,6 +88,9 @@ public class JarRunner {
         return null;
     }
 
+    /**
+     * A regurlar expression defined for the main class
+     */
     private static final Pattern MAIN_CLASS_PATTERN =
             Pattern.compile("Main-Class: (.+)");
 }

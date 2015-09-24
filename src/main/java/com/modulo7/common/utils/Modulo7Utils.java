@@ -19,10 +19,6 @@ import java.util.Set;
  *
  * Various Utilities for Modulo7
  *
- * Utility functions include :
- *
- * 1. removeDuplicateLinesFromFile : Useful for trimming artists crawled etc
- * 2. removeDuplicateFiles : Removing duplicate files from a root directory
  */
 public class Modulo7Utils {
 

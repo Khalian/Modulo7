@@ -277,30 +277,6 @@ public class Modulo7SQLBaseListener implements Modulo7SQLListener {
 	 * <p>The default implementation does nothing.</p>
 	 */
 	@Override public void exitStatistic(Modulo7SQLParser.StatisticContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
-	@Override public void enterSubquery_alias(Modulo7SQLParser.Subquery_aliasContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
-	@Override public void exitSubquery_alias(Modulo7SQLParser.Subquery_aliasContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
-	@Override public void enterSubquery(Modulo7SQLParser.SubqueryContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
-	@Override public void exitSubquery(Modulo7SQLParser.SubqueryContext ctx) { }
 
 	/**
 	 * {@inheritDoc}

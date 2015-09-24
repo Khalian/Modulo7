@@ -24,7 +24,6 @@ TRUE: 'true';
 FALSE: 'false';
 DIVIDE	: 'div' | '/' ;
 MOD: 'mod' | '%' ;
-REGEXP: 'regexp';
 PLUS	: '+' ;
 MINUS	: '-' ;
 NEGATION: '~' ;
@@ -53,9 +52,6 @@ DOT: '.';
 COLLATE: 'collate';
 USING: 'using';
 INDEX: 'index';
-KEY: 'key';
-ORDER: 'order';
-GROUP: 'group';
 BETWEEN: 'between';
 
 
@@ -64,6 +60,7 @@ POLYPHONIC: 'polyphonic';
 HAPPINESSINDEX : 'happinessindex';
 SADNESSINDEX : 'sadnessindex';
 POWERINDEX : 'powerindex';
+MAXMELODICREPREATINGFACTOR: 'maxmelodicrepeatingfactor';
 
 ID: ('a'..'z' | 'A' .. 'Z' | '_')+ ;
 INT: '0'..'9'+ ;

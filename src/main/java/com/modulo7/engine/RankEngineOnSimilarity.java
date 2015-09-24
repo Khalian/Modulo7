@@ -17,7 +17,7 @@ import java.util.*;
  */
 public class RankEngineOnSimilarity {
 
-    AbstractSongSimilarity abstractSimilarity;
+    private AbstractSongSimilarity abstractSimilarity;
 
     /**
      * Define a similarity engine by first inputting a similarity metric
@@ -81,7 +81,7 @@ public class RankEngineOnSimilarity {
 
         int count = 0;
 
-        for (Double key : similarityScoreVals) {
+        for (final Double key : similarityScoreVals) {
 
             if (count < n)
                 rankOrder.add(similarityScore.get(key));

@@ -3,6 +3,7 @@ package musicstatmodelstests;
 import com.modulo7.common.exceptions.*;
 import com.modulo7.crawler.utils.MusicSources;
 import com.modulo7.musicstatmodels.preprocessing.TonalityAlignment;
+import com.modulo7.musicstatmodels.preprocessing.VoiceToMelodyConversion;
 import com.modulo7.musicstatmodels.representation.buildingblocks.Note;
 import com.modulo7.musicstatmodels.representation.metadata.KeySignature;
 import com.modulo7.musicstatmodels.representation.metadata.ScaleType;
@@ -12,6 +13,8 @@ import com.modulo7.musicstatmodels.representation.monophonic.VoiceInstant;
 import com.modulo7.musicstatmodels.representation.polyphonic.Song;
 import org.junit.Assert;
 import org.junit.Test;
+
+import java.util.HashSet;
 
 /**
  * Created by asanyal on 9/18/15.
@@ -57,5 +60,38 @@ public class PreprocessingTest {
                 Assert.assertEquals(note, Note.A0);
             }
         }
+    }
+
+    /**
+     * Sanity test for preprocessing for voice to melody conversion
+     *
+     * @throws Modulo7InvalidVoiceInstantSizeException
+     * @throws Modulo7BadIntervalException
+     */
+    @Test
+    public void voiceToMelodyConversionSanityTest() throws Modulo7InvalidVoiceInstantSizeException, Modulo7BadIntervalException {
+
+        final Voice voice = new Voice();
+
+        voice.addVoiceInstant(new VoiceInstant(Note.A0));
+        voice.addVoiceInstant(new VoiceInstant(Note.ASHARP0));
+        voice.addVoiceInstant(new VoiceInstant(Note.B0));
+        voice.addVoiceInstant(new VoiceInstant(Note.C0));
+
+        HashSet<Note> chord = new HashSet<>();
+        chord.add(Note.C0);
+        chord.add(Note.E0);
+        chord.add(Note.G0);
+
+        voice.addVoiceInstant(new VoiceInstant(chord));
+
+        voice.addVoiceInstant(new VoiceInstant(Note.A1));
+
+        // First check if the doc representation is correct
+        Assert.assertEquals(voice.getDocumentRepresentation(), "A A# B C Cmaj A");
+
+        Voice melodicVersion = VoiceToMelodyConversion.melodyConversion(voice);
+
+        Assert.assertEquals("A A# B C C A", melodicVersion.getDocumentRepresentation());
     }
 }

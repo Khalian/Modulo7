@@ -229,24 +229,4 @@ public interface Modulo7SQLListener extends ParseTreeListener {
 	 * @param ctx the parse tree
 	 */
 	void exitStatistic(Modulo7SQLParser.StatisticContext ctx);
-	/**
-	 * Enter a parse tree produced by {@link Modulo7SQLParser#subquery_alias}.
-	 * @param ctx the parse tree
-	 */
-	void enterSubquery_alias(Modulo7SQLParser.Subquery_aliasContext ctx);
-	/**
-	 * Exit a parse tree produced by {@link Modulo7SQLParser#subquery_alias}.
-	 * @param ctx the parse tree
-	 */
-	void exitSubquery_alias(Modulo7SQLParser.Subquery_aliasContext ctx);
-	/**
-	 * Enter a parse tree produced by {@link Modulo7SQLParser#subquery}.
-	 * @param ctx the parse tree
-	 */
-	void enterSubquery(Modulo7SQLParser.SubqueryContext ctx);
-	/**
-	 * Exit a parse tree produced by {@link Modulo7SQLParser#subquery}.
-	 * @param ctx the parse tree
-	 */
-	void exitSubquery(Modulo7SQLParser.SubqueryContext ctx);
 }

@@ -93,7 +93,7 @@ public class Voice implements Serializable {
                 final Note chordRootNote = ChordQuality.getRootNoteFromChord(instant.getAllNotesofInstant());
                 final String chordRootNoteStringRep = chordRootNote.getNoteValue();
                 final String chordType = instant.getChordQuality().getStringRepresentation();
-                noteString += chordRootNoteStringRep + chordType;
+                noteString += chordRootNoteStringRep + chordType + " ";
             }
         }
 

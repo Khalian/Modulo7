@@ -144,16 +144,4 @@ public interface Modulo7SQLVisitor<T> extends ParseTreeVisitor<T> {
 	 * @return the visitor result
 	 */
 	T visitStatistic(Modulo7SQLParser.StatisticContext ctx);
-	/**
-	 * Visit a parse tree produced by {@link Modulo7SQLParser#subquery_alias}.
-	 * @param ctx the parse tree
-	 * @return the visitor result
-	 */
-	T visitSubquery_alias(Modulo7SQLParser.Subquery_aliasContext ctx);
-	/**
-	 * Visit a parse tree produced by {@link Modulo7SQLParser#subquery}.
-	 * @param ctx the parse tree
-	 * @return the visitor result
-	 */
-	T visitSubquery(Modulo7SQLParser.SubqueryContext ctx);
 }

@@ -79,7 +79,7 @@ target_element:
 	;
 
 relational_op:
-		EQ | LTH | GTH | NOT_EQ | LET | GET  ;
+		EQ | LTH | GTH | NOT_EQ ;
 
 expr_op:
 		AND | OR | NOT ;
@@ -109,13 +109,6 @@ criteria:
 statistic:
     HAPPINESSINDEX |
     SADNESSINDEX |
-    POWERINDEX
-;
-
-subquery_alias:
-    ID
-    ;
-
-subquery:
-	LPAREN select_clause RPAREN
+    POWERINDEX |
+    MAXMELODICREPREATINGFACTOR
 ;

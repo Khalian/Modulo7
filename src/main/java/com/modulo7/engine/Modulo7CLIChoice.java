@@ -25,10 +25,6 @@ public enum Modulo7CLIChoice {
         this.choice = choice;
     }
 
-    Modulo7CLIChoice() {
-
-    }
-
     /**
      * Parse an integer choice and then returns the enum variant, easier for readability
      * @param choiceNum
@@ -37,7 +33,6 @@ public enum Modulo7CLIChoice {
     public static Modulo7CLIChoice parseChoice(final int choiceNum) {
         switch (choiceNum) {
             case 1 : return RET_SONGS_FOR_GIVEN_ARTIST;
-
             case 2: return RANK_ON_SIMILARITY_ORDER;
             case 3: return RET_SONGS_FOR_GIVEN_KEY_SIGNATURE;
             case 4: return RET_SONGS_FOR_GIVEN_TIME_SIGNATURE;

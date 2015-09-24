@@ -26,7 +26,7 @@ import java.util.Set;
 public class Modulo7Indexer {
 
     // Database engine
-    private DatabaseEngine engine;
+    protected DatabaseEngine engine;
 
     // Songs indexed on key signature
     private Map<KeySignature, Set<Song>> keySignatureIndex = new HashMap<>();
@@ -88,7 +88,7 @@ public class Modulo7Indexer {
     public Modulo7Indexer(final String srcDir, final String dstDir, final boolean persistOnDisk, final boolean verboseIndexing)
             throws InvalidMidiDataException, Modulo7InvalidMusicXMLFile, EchoNestException, Modulo7NoSuchFileException,
             Modulo7InvalidFileOperationExeption, Modulo7ParseException {
-        engine = new DatabaseEngine(srcDir, dstDir);
+        engine = new DatabaseEngine(srcDir, dstDir, verboseIndexing);
         engine.buildInMemoryDataBaseFromScratch();
         lyricsIndexer = new LyricsIndexer();
 
@@ -412,5 +412,17 @@ public class Modulo7Indexer {
         }
 
         return allRelevantLocations;
+    }
+
+    /**
+     * Gets a song given location
+     *
+     * @param candidateSongLocation
+     * @return
+     * @throws Modulo7DataBaseNotSerializedException
+     */
+    public Song getSongObjectGivenLocation(final String candidateSongLocation)
+            throws Modulo7DataBaseNotSerializedException {
+        return engine.getSongGivenLocation(candidateSongLocation);
     }
 }

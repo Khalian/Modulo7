@@ -36,6 +36,9 @@ public class DatabaseEngine {
     // The name of the database that this engine operates on
     private String databaseName;
 
+    // Whether there is verbose output during processing by the database
+    private boolean verboseOutput = false;
+
     // A hash map between location and songs in Modulo7 format and
     private Map<String, Song> songLocationMap = new HashMap<>();
 
@@ -110,6 +113,31 @@ public class DatabaseEngine {
     }
 
     /**
+     * Constructor defined with verbose output as well as source and destination
+     * directories
+     *
+     * @param srcDir
+     * @param dstDir
+     * @param verboseOutput
+     */
+    public DatabaseEngine(String srcDir, String dstDir, boolean verboseOutput) {
+        this.destinationDirectory = srcDir;
+        this.sourceDirectory = dstDir;
+        this.verboseOutput = verboseOutput;
+
+        Modulo7Utils.removeDuplicateFilesFromDirectory(sourceDirectory);
+
+        // Recursively descend and list all the files that
+        Set<String> allSongLocations = Modulo7Utils.listAllFiles(sourceDirectory);
+
+        for (final String location : allSongLocations) {
+            if (MusicSources.checkIfSupportedExtension(location)) {
+                songLocations.add(location);
+            }
+        }
+    }
+
+    /**
      * A method to incrementatally add elements
      *
      * @param songLocation
@@ -147,9 +175,10 @@ public class DatabaseEngine {
             final Song song = analyzer.getSongRepresentation();
             songLocationMap.put(songLocation, song);
         } else if (songLocation.endsWith("m7lyrics")) {
-            // TODO : Fix these elements
+            // TODO : Fix these elements for artist and album
             Lyrics lyrics = new Lyrics("Artist", "Album", new File(songLocation));
             independentLyricsMap.put(songLocation, lyrics);
+            inverseIndependentLyricsMap.put(lyrics, songLocation);
         }
 
         return true;
@@ -174,28 +203,25 @@ public class DatabaseEngine {
             if (songLocation.endsWith("midi") || songLocation.endsWith("mid")) {
                 AbstractAnalyzer analyzer = new MidiToSongConverter(songLocation);
                 final Song song = analyzer.getSongRepresentation();
-                songLocationMap.put(songLocation, song);
+                addToSongLocationMap(songLocation, song);
             } else if (songLocation.endsWith("mp3")) {
                 AbstractAnalyzer analyzer = new EchoNestBasicMP3Analyzer(songLocation);
                 final Song song = analyzer.getSongRepresentation();
-                songLocationMap.put(songLocation, song);
+                addToSongLocationMap(songLocation, song);
             } else if (songLocation.endsWith("xml")) {
                 AbstractAnalyzer analyzer = new BasicMusicXMLParser(songLocation);
                 final Song song = analyzer.getSongRepresentation();
-                songLocationMap.put(songLocation, song);
+                addToSongLocationMap(songLocation, song);
             } else if (songLocation.endsWith("png") || songLocation.endsWith("jpg")) {
                 AbstractAnalyzer analyzer = new AudiverisSheetAnalyzer(songLocation);
                 final Song song = analyzer.getSongRepresentation();
-                songLocationMap.put(songLocation, song);
+                addToSongLocationMap(songLocation, song);
             } else if (songLocation.endsWith("m7lyrics")) {
                 // TODO : Fix these elements
                 Lyrics lyrics = new Lyrics("Artist", "Album", new File(songLocation));
                 independentLyricsMap.put(songLocation, lyrics);
+                inverseIndependentLyricsMap.put(lyrics, songLocation);
             }
-        }
-
-        for (Map.Entry<String, Song> entry : songLocationMap.entrySet()) {
-            inverseSongLocationMap.put(entry.getValue(), entry.getKey());
         }
 
         isDataBaseConstructedInMemory = true;
@@ -214,8 +240,7 @@ public class DatabaseEngine {
             if (songLocation.endsWith("midi") || songLocation.endsWith("mid")) {
                 AbstractAnalyzer analyzer = new MidiToSongConverter(songLocation);
                 final Song song = analyzer.getSongRepresentation();
-                inverseSongLocationMap.put(song, songLocation);
-                songLocationMap.put(songLocation, song);
+                addToSongLocationMap(songLocation, song);
 
                 final String finalSerializedLocation = destinationDirectory + File.separator + FilenameUtils.getBaseName(songLocation) + ".m7";
                 AvroUtils.serialize(finalSerializedLocation, song);
@@ -224,8 +249,7 @@ public class DatabaseEngine {
             } else if (songLocation.endsWith("mp3")) {
                 AbstractAnalyzer analyzer = new EchoNestBasicMP3Analyzer(songLocation);
                 final Song song = analyzer.getSongRepresentation();
-                inverseSongLocationMap.put(song, songLocation);
-                songLocationMap.put(songLocation, song);
+                addToSongLocationMap(songLocation, song);
 
                 final String finalSerializedLocation = destinationDirectory + File.separator + FilenameUtils.getBaseName(songLocation) + ".m7";
                 AvroUtils.serialize(finalSerializedLocation, song);
@@ -234,8 +258,7 @@ public class DatabaseEngine {
             } else if (songLocation.endsWith("xml")) {
                 AbstractAnalyzer analyzer = new BasicMusicXMLParser(songLocation);
                 final Song song = analyzer.getSongRepresentation();
-                inverseSongLocationMap.put(song, songLocation);
-                songLocationMap.put(songLocation, song);
+                addToSongLocationMap(songLocation, song);
 
                 final String finalSerializedLocation = destinationDirectory + File.separator + FilenameUtils.getBaseName(songLocation) + ".m7";
                 AvroUtils.serialize(finalSerializedLocation, song);
@@ -244,8 +267,7 @@ public class DatabaseEngine {
             } else if (songLocation.endsWith("png") || songLocation.endsWith("jpg")) {
                 AbstractAnalyzer analyzer = new AudiverisSheetAnalyzer(songLocation);
                 final Song song = analyzer.getSongRepresentation();
-                inverseSongLocationMap.put(song, songLocation);
-                songLocationMap.put(songLocation, song);
+                addToSongLocationMap(songLocation, song);
 
                 final String finalSerializedLocation = destinationDirectory + File.separator + FilenameUtils.getBaseName(songLocation) + ".m7";
                 AvroUtils.serialize(finalSerializedLocation, song);
@@ -313,8 +335,7 @@ public class DatabaseEngine {
             final String diskFileLocation = entry.getValue();
             final Song song = AvroUtils.deserialize(diskFileLocation);
 
-            songLocationMap.put(actualLocation, song);
-            inverseSongLocationMap.put(song, actualLocation);
+            addToSongLocationMap(actualLocation, song);
 
             // Delete the serialized file if no longer required on disk
             if (!keepDiskCopy) {
@@ -329,6 +350,21 @@ public class DatabaseEngine {
             serializedSongLocationSet = new HashMap<>();
             isDataBasePresentOnDisk = false;
         }
+    }
+
+    /**
+     * Method to add song object to location map and inverse location map
+     * @param actualLocationOnDisk
+     * @param songObject
+     */
+    private synchronized void addToSongLocationMap(final String actualLocationOnDisk, final Song songObject) {
+
+        if (verboseOutput) {
+            System.out.println("Indexed file " + actualLocationOnDisk);
+        }
+
+        songLocationMap.put(actualLocationOnDisk, songObject);
+        inverseSongLocationMap.put(songObject, actualLocationOnDisk);
     }
 
     /**

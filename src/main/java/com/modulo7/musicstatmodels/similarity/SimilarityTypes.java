@@ -1,4 +1,4 @@
-package com.modulo7.musicstatmodels.similarity.songsimilarity;
+package com.modulo7.musicstatmodels.similarity;
 
 /**
  * Created by asanyal on 7/25/2015.
