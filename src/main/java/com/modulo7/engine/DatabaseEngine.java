@@ -70,7 +70,7 @@ public class DatabaseEngine {
      * @param sourceDirectory
      * @param destinationDirectory
      */
-    public DatabaseEngine(final String sourceDirectory, final String destinationDirectory) {
+    public DatabaseEngine(final String sourceDirectory, final String destinationDirectory) throws Modulo7InvalidArgsException {
         this.destinationDirectory = destinationDirectory;
         this.sourceDirectory = sourceDirectory;
         this.databaseName = DEFAULT_ENGINE_NAME;
@@ -95,7 +95,7 @@ public class DatabaseEngine {
      * @param sourceDirectory
      * @param destinationDirectory
      */
-    public DatabaseEngine(final String databaseName, final String sourceDirectory, final String destinationDirectory) {
+    public DatabaseEngine(final String databaseName, final String sourceDirectory, final String destinationDirectory) throws Modulo7InvalidArgsException {
         this.destinationDirectory = destinationDirectory;
         this.sourceDirectory = sourceDirectory;
         this.databaseName = databaseName;
@@ -120,9 +120,9 @@ public class DatabaseEngine {
      * @param dstDir
      * @param verboseOutput
      */
-    public DatabaseEngine(String srcDir, String dstDir, boolean verboseOutput) {
-        this.destinationDirectory = srcDir;
-        this.sourceDirectory = dstDir;
+    public DatabaseEngine(String srcDir, String dstDir, boolean verboseOutput) throws Modulo7InvalidArgsException {
+        this.destinationDirectory = dstDir;
+        this.sourceDirectory = srcDir;
         this.verboseOutput = verboseOutput;
 
         Modulo7Utils.removeDuplicateFilesFromDirectory(sourceDirectory);

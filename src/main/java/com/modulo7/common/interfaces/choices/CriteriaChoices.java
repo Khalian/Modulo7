@@ -13,7 +13,8 @@ public enum  CriteriaChoices {
     POLYPHONIC_CRITERIA("polyphonic");
 
     private static final Set<String> CRITERIA_CHOICES = new HashSet<String>() {{
-        add("keysignatureequalto"); add("polyphonic");
+        add("keysignatureequalto");
+        add("polyphonic");
     }};
 
     public static final String REGEXP_REP;
@@ -33,7 +34,5 @@ public enum  CriteriaChoices {
 
 
     CriteriaChoices(String polyphonic) {
-
     }
-
 }

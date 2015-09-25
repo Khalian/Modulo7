@@ -1,5 +1,6 @@
 package com.modulo7.common.utils;
 
+import com.modulo7.common.exceptions.Modulo7InvalidArgsException;
 import com.modulo7.common.exceptions.Modulo7VectorSizeMismatchException;
 import com.modulo7.musicstatmodels.representation.monophonic.Voice;
 import com.modulo7.musicstatmodels.representation.monophonic.VoiceInstant;
@@ -42,7 +43,7 @@ public class Modulo7Utils {
                 removedDuplicateLines.add(line);
         }
 
-        file.delete();
+       file.delete();
 
         File newFile = new File(fileName);
 
@@ -62,7 +63,7 @@ public class Modulo7Utils {
      *
      * @param directoryName
      */
-    public static void removeDuplicateFilesFromDirectory(final String directoryName) {
+    public static void removeDuplicateFilesFromDirectory(final String directoryName) throws Modulo7InvalidArgsException {
 
         final File dirFileHandle = new File(directoryName);
 
@@ -72,6 +73,10 @@ public class Modulo7Utils {
 
         // A handle to keep a track of distinct files
         final Set<String> distinctFiles = new HashSet<>();
+
+        if (dirFileHandle == files) {
+            throw new Modulo7InvalidArgsException("No such source file by the name:" + directoryName);
+        }
 
         for (File file : files) {
 

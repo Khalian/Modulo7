@@ -8,6 +8,7 @@ import com.modulo7.common.exceptions.Modulo7NoSuchSimilarityMeasureException;
 import com.modulo7.musicstatmodels.representation.metadata.KeySignature;
 import com.modulo7.musicstatmodels.representation.metadata.ScaleType;
 import com.modulo7.musicstatmodels.representation.polyphonic.Song;
+import com.modulo7.nlp.Lyrics;
 import org.apache.commons.cli.*;
 import org.apache.log4j.Logger;
 
@@ -43,7 +44,7 @@ public class Modulo7CLI {
     private static final String INDEX_DIR = "index_dest_dir";
 
     // Is the data base in memory
-    private static final String IS_DATABASE_IN_MEMORY = "in_memory";
+    private static final String PERSIST_ON_DISK = "in_memory";
 
     // Is metadata to be filled up by Modulo7, in order to compensate for missing information
     private static final String IS_METADATA_FIX_NEEDED = "complete_metadata";
@@ -58,7 +59,7 @@ public class Modulo7CLI {
     private static final String INDEX_DIR_DESC = "The location in which indexed files are stored";
 
     // A description of the is database in memory option
-    private static final String IS_DATABASE_IN_MEMORY_DESC = "Whether Modulo7 should keep the indexed data in memory " +
+    private static final String PERSIST_ON_DISK_DESC = "Whether Modulo7 should keep the indexed data in memory " +
             "or serialize it to disk/db";
 
     // A description of is a metadata fix needed option
@@ -105,9 +106,12 @@ public class Modulo7CLI {
         CommandLine commandLine = Modulo7CLI.getServerCommand(args);
         System.out.println("Indexing the given data");
 
-        indexer = new Modulo7Indexer(commandLine.getOptionValue(MUSIC_SOURCES_DIR), commandLine.getOptionValue(INDEX_DIR),
-                Boolean.parseBoolean(commandLine.getOptionValue(IS_DATABASE_IN_MEMORY)),
-                Boolean.parseBoolean(commandLine.getOptionValue(VERBOSE_OUTPUT)));
+        final String srcDir = commandLine.getOptionValue(MUSIC_SOURCES_DIR);
+        final String indexDir = commandLine.getOptionValue(INDEX_DIR);
+        final boolean persistOnDisk = commandLine.hasOption(PERSIST_ON_DISK);
+        final boolean verboseOutput = commandLine.hasOption(VERBOSE_OUTPUT);
+
+        indexer = new Modulo7Indexer(srcDir, indexDir, persistOnDisk, verboseOutput);
 
         indexer.indexData();
         System.out.println("Welcome to Modulo7 interactive prompt for analysis of the vector space models");
@@ -141,6 +145,8 @@ public class Modulo7CLI {
     private static void viewChoices() throws Modulo7BadKeyException, Modulo7QueryProcessingException,
             Modulo7MalformedM7SQLQuery, Modulo7DataBaseNotSerializedException, Modulo7NoSuchSimilarityMeasureException {
 
+        Scanner in = new Scanner(System.in);
+
         while (true) {
             System.out.println(RET_SONGS_FOR_GIVEN_ARTIST.choice + ". Return set of songs for a given artist");
             System.out.println(RANK_ON_SIMILARITY_ORDER.choice + ". Return a ranked list of songs on a similarity measure");
@@ -153,12 +159,10 @@ public class Modulo7CLI {
 
             // Input a choice at this point
             System.out.print("Please Input choice:");
-            Scanner in = new Scanner(System.in);
 
             Integer testNum = in.nextInt();
 
-            exectuteChoice(Modulo7CLIChoice.parseChoice(testNum));
-            in.close();
+            exectuteChoice(Modulo7CLIChoice.parseChoice(testNum), in);
         }
     }
 
@@ -173,25 +177,27 @@ public class Modulo7CLI {
      * @throws Modulo7DataBaseNotSerializedException
      * @throws Modulo7NoSuchSimilarityMeasureException
      */
-    private static void exectuteChoice(final Modulo7CLIChoice testNum) throws Modulo7BadKeyException,
-            Modulo7MalformedM7SQLQuery, Modulo7QueryProcessingException, Modulo7DataBaseNotSerializedException,
-            Modulo7NoSuchSimilarityMeasureException {
+    private static void exectuteChoice(final Modulo7CLIChoice testNum, final Scanner in) throws Modulo7BadKeyException,
+            Modulo7MalformedM7SQLQuery, Modulo7QueryProcessingException, Modulo7DataBaseNotSerializedException, Modulo7NoSuchSimilarityMeasureException {
         switch (testNum) {
             case INPUT_CUSTOM_QUERY:
                 System.out.println("Consumer is going into custom query mode, now changing to Modulo7 SQL parser mode");
                 System.out.println("Enter input query");
-                Scanner customIn = new Scanner(System.in);
-                final String queryStr = customIn.nextLine();
-                Modulo7QueryProcessingEngine processingEngine = new Modulo7QueryProcessingEngine(queryStr, indexer);
-                Set<Song> relevantSongs = processingEngine.processQuery();
-                printAllRelevantSongLocations(relevantSongs);
+                final String queryStr = in.next();
+                Modulo7QueryProcessingEngine processingEngine;
+                try {
+                    processingEngine = new Modulo7QueryProcessingEngine(queryStr, indexer);
+                    Set<Song> relevantSongs = processingEngine.processQuery();
+                    printAllRelevantSongLocations(relevantSongs);
+                } catch (Modulo7MalformedM7SQLQuery e) {
+                    SongSimilarityChoices.listAllSimilarityMeasures();
+                }
                 break;
 
             // Rank on a similarity order
             case RANK_ON_SIMILARITY_ORDER:
                 System.out.println("Enter a similarity measure:");
-                Scanner simIn = new Scanner(System.in);
-                final String similarityMeasure = simIn.nextLine();
+                final String similarityMeasure = in.next();
 
                 Class choiceClass = SongSimilarityChoices.SONG_SIMILARITY_TO_CLASS_MAP.get(similarityMeasure);
 
@@ -202,16 +208,19 @@ public class Modulo7CLI {
                         AbstractSongSimilarity similarity = (AbstractSongSimilarity) choiceClass.newInstance();
                         RankEngineOnSimilarity engineOnSimilarity = new RankEngineOnSimilarity(similarity);
                         System.out.println("Enter the location of a song to rank the rest of the database against");
-                        final String candidateSongLocation = simIn.nextLine();
+                        final String candidateSongLocation = in.next();
                         indexer.addAdditionalSongsToIndex(candidateSongLocation);
                         final List<String> rankedOrder =
                                 engineOnSimilarity.relevantRankOrdering(indexer.engine, indexer.getSongObjectGivenLocation(candidateSongLocation));
 
                         System.out.println("The ranked order of the songs are");
 
+                        int rank = 1;
+
                         // Print out the element in ranked order
                         for (final String elem : rankedOrder) {
-                            System.out.println(elem);
+                            System.out.println(rank + ":" + elem);
+                            rank++;
                         }
 
                     } catch (InstantiationException | IllegalAccessException e) {
@@ -225,39 +234,44 @@ public class Modulo7CLI {
             // Case for returning all songs for a given key signature
             case RET_SONGS_FOR_GIVEN_KEY_SIGNATURE:
                 System.out.print("Please enter the key:");
-                Scanner inKey = new Scanner(System.in);
-                final String key = inKey.nextLine();
+                final String key = in.next();
                 System.out.print("Please enter the Scale:");
-                final String inScale = inKey.nextLine();
+                final String inScale = in.next();
                 ScaleType scaleType = ScaleType.getScaleTypeFromString(inScale);
                 KeySignature desiredKeySignature = new KeySignature(key, scaleType);
                 Set<Song> relevantSongObjects = indexer.getKeySignatureIndexedSet(desiredKeySignature);
                 printAllRelevantSongLocations(relevantSongObjects);
-                inKey.close();
                 break;
 
+            // Returns a list of songs for a given artist
             case RET_SONGS_FOR_GIVEN_ARTIST:
                 System.out.print("Enter the name of the artist:");
-                Scanner inArtist = new Scanner(System.in);
-                String artist = inArtist.nextLine();
+                String artist = in.next();
                 Set<Song> relevantArtistSongs = indexer.getArtistIndexedSet(artist);
                 printAllRelevantSongLocations(relevantArtistSongs);
-                inArtist.close();
                 break;
 
+            // Returns the lyrics object for a given song
             case RET_LYRICS_GIVEN_SONG: System.out.print("Enter song name for which lyrics need to be acquired: ");
-                Scanner in = new Scanner(System.in);
-                String songName = in.nextLine();
+                String songName = in.next();
                 final Song song = indexer.getSongObjectGivenSongName(songName);
-                System.out.println(song.getLyrics().getLyricsOfSong());
-                in.close();
+
+                if (song != null) {
+
+                    Lyrics lyrics = song.getLyrics();
+                    if (lyrics != null) {
+                        System.out.println(song.getLyrics().getLyricsOfSong());
+                    }
+                } else {
+                    System.out.println("No such song");
+                }
                 break;
 
             case LIST_NUM_SONGS_INDEXED :
                      System.out.println("There are " + indexer.getNumSongsIndexed() + "song sources indexed by Modulo7");
                      break;
 
-            case EXIT : System.out.println("Exitting Modulo7");
+            case EXIT : System.out.println("Exitting from Modulo7");
                      System.exit(0);
                      break;
 
@@ -290,11 +304,11 @@ public class Modulo7CLI {
                     MUSIC_SOURCE_DIR_DESC);
             m7Options.addOption(INDEX_DIR, false,
                     INDEX_DIR_DESC);
-            m7Options.addOption(IS_DATABASE_IN_MEMORY, true,
-                    IS_DATABASE_IN_MEMORY_DESC);
-            m7Options.addOption(IS_METADATA_FIX_NEEDED, true,
+            m7Options.addOption(PERSIST_ON_DISK, true,
+                    PERSIST_ON_DISK_DESC);
+            m7Options.addOption(IS_METADATA_FIX_NEEDED, false,
                     IS_METADATA_FIX_NEEDED_DESC);
-            m7Options.addOption(VERBOSE_OUTPUT, true,
+            m7Options.addOption(VERBOSE_OUTPUT, false,
                     VERBOSE_OUTPUT_DESC);
 
             CommandLineParser parser = new DefaultParser();
@@ -318,7 +332,7 @@ public class Modulo7CLI {
         System.out.println("Potential Arguments to Modulo7 prompt are:");
         System.out.println(MUSIC_SOURCES_DIR + CLI_SPACING +  MUSIC_SOURCE_DIR_DESC);
         System.out.println(INDEX_DIR + CLI_SPACING +INDEX_DIR_DESC);
-        System.out.println(IS_DATABASE_IN_MEMORY + CLI_SPACING +IS_DATABASE_IN_MEMORY_DESC);
+        System.out.println(PERSIST_ON_DISK + CLI_SPACING + PERSIST_ON_DISK_DESC);
         System.out.println(IS_METADATA_FIX_NEEDED + CLI_SPACING + IS_METADATA_FIX_NEEDED_DESC);
         System.out.println(VERBOSE_OUTPUT + CLI_SPACING + VERBOSE_OUTPUT_DESC);
         System.out.println("");

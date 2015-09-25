@@ -170,4 +170,20 @@ public class Voice implements Serializable {
     public VoiceInstant getVoiceInstantAtPostion(final int pos) {
         return voiceSequence.get(pos);
     }
+
+    /**
+     * Gettter for the voice tag object
+     * @return
+     */
+    public VoiceTag getVoiceTag() {
+        return voiceTag;
+    }
+
+    /**
+     * Setter for the voice tag
+     * @param voiceTag
+     */
+    public void setVoiceTag(VoiceTag voiceTag) {
+        this.voiceTag = voiceTag;
+    }
 }

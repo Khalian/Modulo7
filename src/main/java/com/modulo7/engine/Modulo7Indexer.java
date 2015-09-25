@@ -64,7 +64,8 @@ public class Modulo7Indexer {
      * @throws Modulo7ParseException
      */
     public Modulo7Indexer(final String srcDir, final String dstDir) throws InvalidMidiDataException, Modulo7InvalidMusicXMLFile,
-            EchoNestException, Modulo7NoSuchFileException, Modulo7IndexingDirError, Modulo7InvalidFileOperationExeption, Modulo7ParseException {
+            EchoNestException, Modulo7NoSuchFileException, Modulo7IndexingDirError, Modulo7InvalidFileOperationExeption,
+            Modulo7ParseException, Modulo7InvalidArgsException {
         engine = new DatabaseEngine(srcDir, dstDir);
         engine.buildInMemoryDataBaseFromScratch();
         lyricsIndexer = new LyricsIndexer();
@@ -87,7 +88,7 @@ public class Modulo7Indexer {
      */
     public Modulo7Indexer(final String srcDir, final String dstDir, final boolean persistOnDisk, final boolean verboseIndexing)
             throws InvalidMidiDataException, Modulo7InvalidMusicXMLFile, EchoNestException, Modulo7NoSuchFileException,
-            Modulo7InvalidFileOperationExeption, Modulo7ParseException {
+            Modulo7InvalidFileOperationExeption, Modulo7ParseException, Modulo7InvalidArgsException {
         engine = new DatabaseEngine(srcDir, dstDir, verboseIndexing);
         engine.buildInMemoryDataBaseFromScratch();
         lyricsIndexer = new LyricsIndexer();

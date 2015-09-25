@@ -21,6 +21,8 @@ import java.util.Arrays;
  * Thanks !!
  *
  * NOTE : This statistic implicitly applied a generic voice to melody preprocessing technique
+ *
+ * TODO: Fix it so that sharps dont cause problems
  */
 public class MaxMelodicRepeatingFactor implements AbstractStatistic<Double> {
 

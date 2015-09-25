@@ -22,6 +22,12 @@ public class TonalHistogramSimilarity implements AbstractSongSimilarity {
     // Logger for tonal histogram similarity
     private static final Logger logger = Logger.getLogger(TonalHistogramSimilarity.class);
 
+    /**
+     * Gets similarity based on tonal histograms
+     * @param first
+     * @param second
+     * @return
+     */
     @Override
     public double getSimilarity(final Song first, final Song second) {
         AbstractSongVector<TonalHistogramData> tonalHistogram = new TonalHistogram();
