@@ -8,8 +8,7 @@ import com.modulo7.musicstatmodels.representation.monophonic.Voice;
  *
  * A generic similarity measure on comparing
  */
-public class MaxUnequalMelodicLengthSimilarityMeasure<T extends AbstractVoiceSimilarity>
-        implements AbstractVoiceSimilarity {
+public class MaxUnequalMelodicLengSimilarityMeasure<T extends AbstractVoiceSimilarity> implements AbstractVoiceSimilarity {
 
     // An internal voice similarity measure
     private T internalVoiceSimilarityMeasure;
@@ -19,7 +18,7 @@ public class MaxUnequalMelodicLengthSimilarityMeasure<T extends AbstractVoiceSim
      *
      * @param internalVoiceSimilarityMeasure
      */
-    public MaxUnequalMelodicLengthSimilarityMeasure(T internalVoiceSimilarityMeasure) {
+    public MaxUnequalMelodicLengSimilarityMeasure(T internalVoiceSimilarityMeasure) {
         this.internalVoiceSimilarityMeasure = internalVoiceSimilarityMeasure;
     }
 
@@ -54,7 +53,7 @@ public class MaxUnequalMelodicLengthSimilarityMeasure<T extends AbstractVoiceSim
     }
 
     /**
-     * Method to return a sub voice (a generalization of the submelody concept in SIMILIE)
+     * Method to return a sub voice (a generalization of the sub melody concept in SIMILIE)
      *
      * @param originalVoice
      * @param firstVoiceInstant

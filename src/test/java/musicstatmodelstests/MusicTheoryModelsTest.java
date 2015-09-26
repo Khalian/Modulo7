@@ -33,7 +33,8 @@ public class MusicTheoryModelsTest {
     }
 
     /**
-     * Unit test cases to test for chord auality identification
+     * Unit test cases for chord quality Identification
+     * @throws Modulo7BadIntervalException
      */
     @Test
     public void testChordQualityID() throws Modulo7BadIntervalException {

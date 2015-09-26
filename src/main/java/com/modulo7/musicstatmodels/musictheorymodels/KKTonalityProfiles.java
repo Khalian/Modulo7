@@ -5,6 +5,7 @@ import com.modulo7.common.utils.FrequencyNoteMap;
 import com.modulo7.common.utils.Modulo7Globals;
 import com.modulo7.musicstatmodels.representation.metadata.KeySignature;
 import com.modulo7.musicstatmodels.representation.metadata.ScaleType;
+import com.modulo7.musicstatmodels.representation.polyphonic.Song;
 import com.modulo7.musicstatmodels.vectorspacemodels.vectorspacerepresentations.songvectors.TonalDurationHistogram;
 import org.apache.commons.lang3.ArrayUtils;
 import org.apache.commons.math3.stat.correlation.PearsonsCorrelation;
@@ -131,13 +132,16 @@ public class KKTonalityProfiles {
      *
      * @param thisOne
      * @param thatOne
-     * @param tonalDurations
+     * @param song
      * @return true if thisOne is a better profile than that one
      */
-    public static boolean estimateBetterProfile(final KeySignature thisOne, final KeySignature thatOne,
-           final TonalDurationHistogram tonalDurations) {
+    public static boolean estimateBetterKeySignature(final KeySignature thisOne, final KeySignature thatOne,
+           final Song song) {
 
-        final List<Double> tonalDurationsList = tonalDurations.getInternalRepresentation().getArrayRepresentation();
+        TonalDurationHistogram durationHistogram = new TonalDurationHistogram();
+        durationHistogram.computeVectorRepresentation(song);
+
+        final List<Double> tonalDurationsList = durationHistogram.getInternalRepresentation().getArrayRepresentation();
         Double[] tonalDurationsHistogramArray = tonalDurationsList.toArray(new Double[tonalDurationsList.size()]);
         double[] tonalDurationsArray = ArrayUtils.toPrimitive(tonalDurationsHistogramArray);
         assert (tonalDurationsArray.length == 12);

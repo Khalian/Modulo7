@@ -18,7 +18,7 @@ public class GenericMaximalVoiceSimilarity<T extends AbstractVoiceSimilarity> im
 
     /**
      * Basic constructor for generic maximal similarity
-     * @param similarityMeasure
+     * @param similarityMeasure (The internal similarity measure used inside generic maximal voice similarity)
      */
     public GenericMaximalVoiceSimilarity(final T similarityMeasure) {
         internalVoiceSimilarity = similarityMeasure;

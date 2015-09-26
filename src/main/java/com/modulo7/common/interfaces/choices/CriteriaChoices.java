@@ -8,7 +8,7 @@ import java.util.Set;
  *
  * A listing of all the criteria implemented in modulo7
  */
-public enum  CriteriaChoices {
+public enum CriteriaChoices {
     KEY_SIGNATURE_EQUALITY_CRITERIA("keysignatureequalto"),
     POLYPHONIC_CRITERIA("polyphonic");
 

@@ -29,6 +29,11 @@ public class MaxMelodicRepeatingFactor implements AbstractStatistic<Double> {
     // Logger for max melodic repeating factor
     final Logger logger = Logger.getLogger(MaxMelodicRepeatingFactor.class);
 
+    /**
+     * This particular statistic gives the max repeating factor for a melody
+     * @param song
+     * @return
+     */
     @Override
     public Double getStatistic(final Song song) {
         double longestFactor = -Double.MAX_VALUE;

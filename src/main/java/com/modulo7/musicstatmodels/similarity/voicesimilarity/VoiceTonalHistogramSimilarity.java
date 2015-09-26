@@ -14,6 +14,12 @@ import com.modulo7.musicstatmodels.similarity.songsimilarity.TonalHistogramSimil
  */
 public class VoiceTonalHistogramSimilarity implements AbstractVoiceSimilarity {
 
+    /**
+     * Gets the tonal histogram similarity between two voices
+     * @param first
+     * @param second
+     * @return
+     */
     @Override
     public double getSimilarity(final Voice first, final Voice second) {
 

@@ -26,8 +26,8 @@ public class GrossCountourSimilarity implements AbstractVoiceSimilarity {
         final String secondContourRep = contour.getContourRepresentaionOfVoice(second);
 
         LevensteinDistance distance = new LevensteinDistance();
-        double distanceVal = distance.getDistance(firstContourRep, secondContourRep);
 
-        return 1 - (distanceVal / Math.max(firstContourRep.length(), secondContourRep.length()));
+        // Leveinstein distance is a misnomer, its actually a similarity measure
+        return distance.getDistance(firstContourRep, secondContourRep);
     }
 }

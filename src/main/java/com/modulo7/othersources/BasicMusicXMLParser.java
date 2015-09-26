@@ -10,6 +10,7 @@ import com.modulo7.common.utils.FrequencyNoteMap;
 import com.modulo7.common.utils.Modulo7Utils;
 import com.modulo7.crawler.utils.MusicSources;
 import com.modulo7.musicstatmodels.musictheorymodels.CircleOfFifths;
+import com.modulo7.musicstatmodels.musictheorymodels.KKTonalityProfiles;
 import com.modulo7.musicstatmodels.representation.buildingblocks.Accidental;
 import com.modulo7.musicstatmodels.representation.buildingblocks.Note;
 import com.modulo7.musicstatmodels.representation.buildingblocks.NoteDuration;
@@ -17,6 +18,7 @@ import com.modulo7.musicstatmodels.representation.metadata.*;
 import com.modulo7.musicstatmodels.representation.monophonic.Voice;
 import com.modulo7.musicstatmodels.representation.monophonic.VoiceInstant;
 import com.modulo7.musicstatmodels.representation.polyphonic.Song;
+import com.modulo7.musicstatmodels.vectorspacemodels.vectorspacerepresentations.songvectors.TonalDurationHistogram;
 import com.modulo7.nlp.Lyrics;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.log4j.Logger;
@@ -172,12 +174,15 @@ public class BasicMusicXMLParser implements AbstractAnalyzer {
             e.printStackTrace();
         }
 
+        // acquires the notes
+        getNotes();
+
         // Acquires the beats information
         acquireTimeSignature();
 
-        // acquires the notes
-        getNotes();
-        
+        // Acquires the clef information
+        acquireClef();
+
         // Crunch notestreams into chords
         crunchChords();
 
@@ -268,7 +273,9 @@ public class BasicMusicXMLParser implements AbstractAnalyzer {
         }
     }
 
-    /*
+    /**
+     * Acquires a clef element in a song
+     */
     private void acquireClef() {
         for (Element thisClef : this.doc.getElementsByTag("clef")) {
 
@@ -294,7 +301,6 @@ public class BasicMusicXMLParser implements AbstractAnalyzer {
             }
         }
     }
-    */
 
     /**
      * Acquires the key signature from the music xml file
@@ -343,13 +349,29 @@ public class BasicMusicXMLParser implements AbstractAnalyzer {
      * @return
      * @throws Modulo7InvalidCircleOfFifthsDistance
      */
-    private String getKey(final ScaleType typeOfScale) throws Modulo7InvalidCircleOfFifthsDistance {
+    private String getKey(final ScaleType typeOfScale) throws Modulo7InvalidCircleOfFifthsDistance, Modulo7BadKeyException {
 
         // Acquire the key information from the music xml file
         for (Element thisKey : this.doc.getElementsByTag("fifths")) {
             final int fifthsAwayFromMode = Integer.parseInt(thisKey.text());
             logger.debug("Fifth : " + fifthsAwayFromMode);
-            return CircleOfFifths.getKeyGivenFifthDistance(typeOfScale, fifthsAwayFromMode);
+
+            if (typeOfScale != null) {
+                return CircleOfFifths.getKeyGivenFifthDistance(typeOfScale, fifthsAwayFromMode);
+            } else {
+                // This happens when the mode information is not present but the fifths information is present
+                String candidateMajor = CircleOfFifths.getKeyGivenFifthDistance(ScaleType.MAJOR, fifthsAwayFromMode);
+                KeySignature candidateMajorKeySig = new KeySignature(candidateMajor, ScaleType.MAJOR);
+
+                String candidateMinor = CircleOfFifths.getKeyGivenFifthDistance(ScaleType.MINOR, fifthsAwayFromMode);
+                KeySignature candidateMinorKeySig = new KeySignature(candidateMinor, ScaleType.MINOR);
+
+                HashSet<Voice> setOfVoices = new HashSet<>(voiceIndextoVoiceMap.values());
+
+                Song song = new Song(setOfVoices, MusicSources.UNKNOWN);
+
+                KKTonalityProfiles.estimateBetterKeySignature(candidateMajorKeySig, candidateMinorKeySig, song);
+            }
         }
 
         // Return a null if no key is found
@@ -501,6 +523,14 @@ public class BasicMusicXMLParser implements AbstractAnalyzer {
      */
     public int getDivision(final int divisionIndex) {
         return divisions.get(divisionIndex);
+    }
+
+    /**
+     * Getter for the clef information
+     * @return
+     */
+    public Clef getClef() {
+        return clef;
     }
 }
 

@@ -12,14 +12,15 @@ import com.modulo7.musicstatmodels.representation.monophonic.VoiceInstant;
  * it does not take into account the magnnitude of the motion
  *
  * Gross contour similarity can be used to understand similar and parallel motion
- * as well antiparallel motion but can distinguish between similar and parallel
+ * as well anti parallel motion but can distinguish between similar and parallel
+ * motion in melodies
  */
 public class GrossContour implements AbstractContour<String> {
 
     @Override
     public String getContourRepresentaionOfVoice(final Voice voice) {
 
-        String countourRep = "";
+        StringBuilder countourRep = new StringBuilder();
 
         int voiceInstantIndex = 0;
         final int maxVoiceInstantIndex = voice.getNumVoiceInstantsOfVoice();
@@ -34,11 +35,11 @@ public class GrossContour implements AbstractContour<String> {
                     final boolean isAbove = VoiceInstant.isHigherPitch(nPlusOne, voiceInstant);
 
                     if (isBelow) {
-                        countourRep += "D ";
+                        countourRep.append("D ");
                     } else if (isAbove) {
-                        countourRep += "U ";
+                        countourRep.append("U ");
                     } else {
-                        countourRep += "S ";
+                        countourRep.append("S ");
                     }
                 } catch (Modulo7WrongNoteType e) {
                     e.printStackTrace();
@@ -47,7 +48,6 @@ public class GrossContour implements AbstractContour<String> {
             voiceInstantIndex++;
         }
 
-        return  countourRep.trim();
-
+        return countourRep.toString().trim();
     }
 }
