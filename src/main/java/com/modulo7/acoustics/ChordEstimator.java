@@ -15,7 +15,8 @@ import java.util.HashSet;
  * Once we have chromagram from echo nest we can use this template based
  * chord estimation algorithm to estimate chords including tough ones like
  *
- * Ideas taken from but reimplemented : https://github.com/adamstark/Chord-Detector-and-Chromagram
+ * Ideas taken from but reimplemented :
+ * https://github.com/adamstark/Chord-Detector-and-Chromagram
  */
 public class ChordEstimator {
 
@@ -34,9 +35,6 @@ public class ChordEstimator {
      * This methodoloty is useful for
      */
     private IntervalEnum intervals;
-
-    // Bias parameter
-    private double bias = 1.06;
 
     // A copy of the chromagram vector
     private double[] chromagram;
@@ -230,6 +228,7 @@ public class ChordEstimator {
         }
 
         // major chords
+        double bias = 1.06;
         for (j = 0; j < 12; j++) {
             chord[j] = calculateChordScore(chromagram, chordProfiles[j], bias, 3);
         }

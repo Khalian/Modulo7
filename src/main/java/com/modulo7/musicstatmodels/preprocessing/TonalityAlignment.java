@@ -12,6 +12,8 @@ import com.modulo7.musicstatmodels.representation.polyphonic.Song;
 import org.apache.commons.lang3.SerializationUtils;
 
 import java.util.HashSet;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 /**
  * Created by asanyal on 9/17/15.
@@ -43,14 +45,9 @@ public class TonalityAlignment {
 
         for (final Voice voice : newSong.getVoices()) {
             for (final VoiceInstant instant : voice.getVoiceSequence()) {
-
-                HashSet<Note> newNoteSet = new HashSet<>();
-
-                for (final Note note : instant.getAllNotesofInstant()) {
-                    newNoteSet.add(noteMap.getNoteGivenBaseAndInterval(note, interval));
-                }
-
-                instant.reassignNotes(newNoteSet);
+                Set<Note> newNoteSet =
+                        instant.getAllNotesofInstant().parallelStream().map(note -> noteMap.getNoteGivenBaseAndInterval(note, interval)).collect(Collectors.toSet());
+                instant.reassignNotes(new HashSet<>(newNoteSet));
             }
         }
 

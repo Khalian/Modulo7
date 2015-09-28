@@ -83,22 +83,23 @@ public class Lyrics implements Serializable {
             FileInputStream fstream = new FileInputStream(fileLyrics);
             BufferedReader br = new BufferedReader(new InputStreamReader(fstream));
 
-            String lyricsInSingleLine = "";
+            StringBuilder lyricsInSingleLine = new StringBuilder();
             String lyricsLine;
 
             //Read File Line By Line and parse the lyrics
             while ((lyricsLine = br.readLine()) != null) {
-                lyricsInSingleLine += lyricsLine + PHRASETERM;
+                //lyricsInSingleLine += lyricsLine + PHRASETERM;
+                lyricsInSingleLine.append(lyricsLine);
+                lyricsInSingleLine.append(PHRASETERM);
             }
 
-            //Close the input stream
             br.close();
 
             this.artist = artist;
             this.albumName = albumName;
 
             // Introducing basic stemming into lyrics object, removing redundant words
-            this.lyricsOfSong = NLPUtils.stemmer(lyricsInSingleLine);
+            this.lyricsOfSong = NLPUtils.stemmer(lyricsInSingleLine.toString());
         } catch (IOException ie) {
             throw new Modulo7InvalidFileOperationExeption(ie.getMessage());
         } catch (ParseException e) {

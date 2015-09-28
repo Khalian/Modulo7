@@ -8,20 +8,26 @@ import java.util.Set;
  *
  * Different types of statistics defined
  */
-public enum StatisticChoices {
+public enum StatisticChoice {
 
     HAPPINESSINDEX("happinessIndex"),
     SADNESSINDEX("sadnessIndex"),
     POWERINDEX("powerIndex"),
     MAXMELODICREPEATINGFACTOR("maxMelodicRepeatingFactor");
 
-    private static final Set<String> STATISTIC_CHOICES = new HashSet<String>() {{
-        add("happinessIndex"); add("sadnessIndex"); add("ppwerIndex"); add("maxMelodicRepeatingFactor");
-    }};
+    // A list of all the statistic choices as defined
+    private static final Set<String> STATISTIC_CHOICES = new HashSet<>();
 
     public static final String REGEXP_REP;
 
     static {
+
+        StatisticChoice[] allChoices = StatisticChoice.class.getEnumConstants();
+
+        for (StatisticChoice choice : allChoices) {
+            STATISTIC_CHOICES.add(choice.getChoice());
+        }
+
         StringBuilder builder = new StringBuilder();
         builder.append("(");
         for (final String choice : STATISTIC_CHOICES) {
@@ -34,8 +40,13 @@ public enum StatisticChoices {
         REGEXP_REP = builder.toString();
     }
 
+    private String choice;
 
-    StatisticChoices(String happinessIndex) {
+    StatisticChoice(final String choice) {
+        this.choice = choice;
+    }
 
+    public String getChoice() {
+        return choice;
     }
 }

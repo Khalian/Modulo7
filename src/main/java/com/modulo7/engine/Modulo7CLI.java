@@ -238,16 +238,16 @@ public class Modulo7CLI {
                 System.out.print("Please enter the Scale:");
                 final String inScale = in.next();
                 ScaleType scaleType = ScaleType.getScaleTypeFromString(inScale);
-                KeySignature desiredKeySignature = new KeySignature(key, scaleType);
-                Set<Song> relevantSongObjects = indexer.getKeySignatureIndexedSet(desiredKeySignature);
+                final KeySignature desiredKeySignature = new KeySignature(key, scaleType);
+                final Set<Song> relevantSongObjects = indexer.getKeySignatureIndexedSet(desiredKeySignature);
                 printAllRelevantSongLocations(relevantSongObjects);
                 break;
 
             // Returns a list of songs for a given artist
             case RET_SONGS_FOR_GIVEN_ARTIST:
                 System.out.print("Enter the name of the artist:");
-                String artist = in.next();
-                Set<Song> relevantArtistSongs = indexer.getArtistIndexedSet(artist);
+                final String artist = in.next();
+                final Set<Song> relevantArtistSongs = indexer.getArtistIndexedSet(artist);
                 printAllRelevantSongLocations(relevantArtistSongs);
                 break;
 
@@ -344,11 +344,10 @@ public class Modulo7CLI {
      * @param allRelevantSongs
      * @throws Modulo7DataBaseNotSerializedException
      */
-    private static void printAllRelevantSongLocations(final Set<Song> allRelevantSongs) throws Modulo7DataBaseNotSerializedException {
+    private static void printAllRelevantSongLocations(final Set<Song> allRelevantSongs)
+            throws Modulo7DataBaseNotSerializedException {
         Set<String> locations = indexer.getLocationsGivenRelevantSongs(allRelevantSongs);
         System.out.println("The locations of relevant songs are :");
-        for (final String location : locations) {
-            System.out.println(location);
-        }
+        locations.forEach(System.out::println);
     }
 }

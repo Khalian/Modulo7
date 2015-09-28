@@ -10,6 +10,7 @@ import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 /**
  * Created by asanyal on 8/5/2015.
@@ -69,9 +70,7 @@ public class Modulo7UserInputQueryParser {
 
                 List<Modulo7SQLParser.Expr_opContext> exprContexts = expressionContext.expr_op();
 
-                for (Modulo7SQLParser.Expr_opContext exprContext : exprContexts) {
-                    exprOpsInSequence.add(exprContext.getText());
-                }
+                exprOpsInSequence.addAll(exprContexts.stream().map(Modulo7SQLParser.Expr_opContext::getText).collect(Collectors.toList()));
 
                 List<Modulo7SQLParser.Simple_expressionContext> simpleContextList = expressionContext.simple_expression();
 

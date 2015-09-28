@@ -8,18 +8,23 @@ import java.util.Set;
  *
  * A listing of all the criteria implemented in modulo7
  */
-public enum CriteriaChoices {
+public enum CriteriaChoice {
     KEY_SIGNATURE_EQUALITY_CRITERIA("keysignatureequalto"),
     POLYPHONIC_CRITERIA("polyphonic");
 
-    private static final Set<String> CRITERIA_CHOICES = new HashSet<String>() {{
-        add("keysignatureequalto");
-        add("polyphonic");
-    }};
+    // A set of all criteria choices
+    private static final Set<String> CRITERIA_CHOICES = new HashSet<>();
 
     public static final String REGEXP_REP;
 
     static {
+
+        CriteriaChoice[] choices = CriteriaChoice.class.getEnumConstants();
+
+        for (CriteriaChoice choice : choices) {
+            CRITERIA_CHOICES.add(choice.getCriteriaChoice());
+        }
+
         StringBuilder builder = new StringBuilder();
         builder.append("(");
         for (final String choice : CRITERIA_CHOICES) {
@@ -32,7 +37,14 @@ public enum CriteriaChoices {
         REGEXP_REP = builder.toString();
     }
 
+    private String criteriaChoice;
 
-    CriteriaChoices(String polyphonic) {
+    CriteriaChoice(final String criteriaChoice) {
+
+        this.criteriaChoice = criteriaChoice;
+    }
+
+    public String getCriteriaChoice() {
+        return criteriaChoice;
     }
 }

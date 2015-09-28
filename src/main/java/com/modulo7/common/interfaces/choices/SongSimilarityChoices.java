@@ -20,10 +20,8 @@ public enum SongSimilarityChoices {
 
     public static final String REGEXP_REP;
 
-    private static final Set<String> SONG_SIMILARITY_CHOICES = new HashSet<String>() {{
-        add("maxmelodiceditdistance");
-        add("tonalhistogramsimilarity");
-    }};
+    // A list of all the song similarity choices
+    private static final Set<String> SONG_SIMILARITY_CHOICES = new HashSet<>();
 
     // Song similarity to class , useful for dynamically calling classes during similarity metric analysis
     public static final Map<String, Class> SONG_SIMILARITY_TO_CLASS_MAP = new HashMap<String, Class>() {{
@@ -31,7 +29,16 @@ public enum SongSimilarityChoices {
         put("tonalhistogramsimilarity", TonalHistogramSimilarity.class);
     }};
 
+    /**
+     * Build up the global data structures
+     */
     static {
+        SongSimilarityChoices[] choices = SongSimilarityChoices.class.getEnumConstants();
+
+        for (SongSimilarityChoices choice : choices) {
+            SONG_SIMILARITY_CHOICES.add(choice.getChoice());
+        }
+
         StringBuilder builder = new StringBuilder();
         builder.append("(");
         for (final String choice : SONG_SIMILARITY_CHOICES) {
@@ -44,7 +51,10 @@ public enum SongSimilarityChoices {
         REGEXP_REP = builder.toString();
     }
 
-    SongSimilarityChoices(String generic_maximal_voice_similarity) {
+    private String choice;
+
+    SongSimilarityChoices(final String choice) {
+        this.choice = choice;
     }
 
     /**
@@ -55,5 +65,9 @@ public enum SongSimilarityChoices {
         for (final String simChoice : SONG_SIMILARITY_CHOICES) {
             System.out.println(simChoice);
         }
+    }
+
+    public String getChoice() {
+        return choice;
     }
 }

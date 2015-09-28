@@ -14,6 +14,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 /**
  * Created by asanyal on 7/20/2015.
@@ -78,7 +79,7 @@ public class Modulo7Utils {
             throw new Modulo7InvalidArgsException("No such source file by the name:" + directoryName);
         }
 
-        for (File file : files) {
+        for (final File file : files) {
 
             String fileName = file.getName();
 
@@ -101,13 +102,7 @@ public class Modulo7Utils {
         final List<File> files =
                 (List<File>) FileUtils.listFiles(dirFileHandle, TrueFileFilter.INSTANCE, TrueFileFilter.INSTANCE);
 
-        Set<String> newReturnSet = new HashSet<>();
-
-        for (File file : files) {
-            newReturnSet.add(file.getAbsolutePath());
-        }
-
-        return newReturnSet;
+        return files.stream().map(File::getAbsolutePath).collect(Collectors.toSet());
     }
 
     /**

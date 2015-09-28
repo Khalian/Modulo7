@@ -77,7 +77,7 @@ public class Voice implements Serializable {
      */
     public String getDocumentRepresentation() {
 
-        String noteString = "";
+        StringBuilder noteString = new StringBuilder();
 
         for (VoiceInstant instant : voiceSequence) {
 
@@ -85,7 +85,8 @@ public class Voice implements Serializable {
                 try {
                     final Note note = instant.getNote();
                     final String noteValue = note.getNoteValue();
-                    noteString += noteValue + " ";
+                    noteString.append(noteValue);
+                    noteString.append(" ");
                 } catch (Modulo7WrongNoteType e) {
                     logger.error(e.getMessage());
                 }
@@ -93,11 +94,13 @@ public class Voice implements Serializable {
                 final Note chordRootNote = ChordQuality.getRootNoteFromChord(instant.getAllNotesofInstant());
                 final String chordRootNoteStringRep = chordRootNote.getNoteValue();
                 final String chordType = instant.getChordQuality().getStringRepresentation();
-                noteString += chordRootNoteStringRep + chordType + " ";
+                noteString.append(chordRootNoteStringRep);
+                noteString.append(chordType);
+                noteString.append(" ");
             }
         }
 
-        return noteString.trim();
+        return noteString.toString().trim();
     }
 
     /**

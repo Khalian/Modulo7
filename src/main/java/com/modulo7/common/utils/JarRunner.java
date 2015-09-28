@@ -62,7 +62,7 @@ public class JarRunner {
             BufferedReader r = new BufferedReader(
                     new InputStreamReader(contentStream));
             StringBuilder sb = new StringBuilder();
-            String line = null;
+            String line;
             do {
                 line = r.readLine();
                 if (line != null) {
