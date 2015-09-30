@@ -20,14 +20,13 @@ public class Modulo7SQLParser extends Parser {
 		new PredictionContextCache();
 	public static final int
 		SELECT=1, MIDI=2, SHEET=3, MP3=4, MUSICXML=5, FROM=6, WHERE=7, AND=8, 
-		OR=9, IS=10, NULL=11, LIKE=12, IN=13, EXISTS=14, ALL=15, ANY=16, TRUE=17, 
-		FALSE=18, DIVIDE=19, MOD=20, PLUS=21, MINUS=22, NEGATION=23, VERTBAR=24, 
-		BITAND=25, POWER_OP=26, BINARY=27, ESCAPE=28, ASTERISK=29, RPAREN=30, 
-		LPAREN=31, RBRACK=32, LBRACK=33, COLON=34, ALL_FIELDS=35, EQ=36, LTH=37, 
-		GTH=38, NOT_EQ=39, NOT=40, LET=41, GET=42, SEMI=43, COMMA=44, DOT=45, 
-		COLLATE=46, USING=47, INDEX=48, BETWEEN=49, POLYPHONIC=50, HAPPINESSINDEX=51, 
-		SADNESSINDEX=52, POWERINDEX=53, MAXMELODICREPREATINGFACTOR=54, ID=55, 
-		INT=56, DOUBLE=57, DATABASENAME=58, NEWLINE=59, WS=60, USER_VAR=61;
+		OR=9, IS=10, NULL=11, IN=12, TRUE=13, FALSE=14, DIVIDE=15, MOD=16, PLUS=17, 
+		MINUS=18, NEGATION=19, VERTBAR=20, BITAND=21, POWER_OP=22, BINARY=23, 
+		ESCAPE=24, ASTERISK=25, RPAREN=26, LPAREN=27, RBRACK=28, LBRACK=29, COLON=30, 
+		ALL_FIELDS=31, EQ=32, LTH=33, GTH=34, NOT_EQ=35, NOT=36, LET=37, GET=38, 
+		SEMI=39, COMMA=40, DOT=41, COLLATE=42, USING=43, INDEX=44, BETWEEN=45, 
+		POLYPHONIC=46, HAPPINESSINDEX=47, SADNESSINDEX=48, POWERINDEX=49, MAXMELODICREPREATINGFACTOR=50, 
+		ID=51, INT=52, DOUBLE=53, DATABASENAME=54, NEWLINE=55, WS=56, USER_VAR=57;
 	public static final int
 		RULE_select_clause = 0, RULE_from_clause = 1, RULE_table_name = 2, RULE_input_name = 3, 
 		RULE_column_name_alias = 4, RULE_index_name = 5, RULE_input_list_clause = 6, 
@@ -46,22 +45,22 @@ public class Modulo7SQLParser extends Parser {
 
 	private static final String[] _LITERAL_NAMES = {
 		null, "'select'", "'midi'", "'sheet'", "'mp3'", "'musicxml'", "'from'", 
-		"'where'", null, null, "'is'", "'null'", "'like'", "'in'", "'exists'", 
-		"'all'", "'any'", "'true'", "'false'", null, null, "'+'", "'-'", "'~'", 
-		"'|'", "'&'", "'^'", "'binary'", "'escape'", "'*'", "')'", "'('", "']'", 
-		"'['", "':'", "'.*'", "'='", "'<'", "'>'", "'!='", "'not'", "'<='", "'>='", 
-		"';'", "','", "'.'", "'collate'", "'using'", "'index'", "'between'", "'polyphonic'", 
-		"'happinessindex'", "'sadnessindex'", "'powerindex'", "'maxmelodicrepeatingfactor'"
+		"'where'", null, null, "'is'", "'null'", "'in'", "'true'", "'false'", 
+		null, null, "'+'", "'-'", "'~'", "'|'", "'&'", "'^'", "'binary'", "'escape'", 
+		"'*'", "')'", "'('", "']'", "'['", "':'", "'.*'", "'='", "'<'", "'>'", 
+		"'!='", "'not'", "'<='", "'>='", "';'", "','", "'.'", "'collate'", "'using'", 
+		"'index'", "'between'", "'polyphonic'", "'happinessindex'", "'sadnessindex'", 
+		"'powerindex'", "'maxmelodicrepeatingfactor'"
 	};
 	private static final String[] _SYMBOLIC_NAMES = {
 		null, "SELECT", "MIDI", "SHEET", "MP3", "MUSICXML", "FROM", "WHERE", "AND", 
-		"OR", "IS", "NULL", "LIKE", "IN", "EXISTS", "ALL", "ANY", "TRUE", "FALSE", 
-		"DIVIDE", "MOD", "PLUS", "MINUS", "NEGATION", "VERTBAR", "BITAND", "POWER_OP", 
-		"BINARY", "ESCAPE", "ASTERISK", "RPAREN", "LPAREN", "RBRACK", "LBRACK", 
-		"COLON", "ALL_FIELDS", "EQ", "LTH", "GTH", "NOT_EQ", "NOT", "LET", "GET", 
-		"SEMI", "COMMA", "DOT", "COLLATE", "USING", "INDEX", "BETWEEN", "POLYPHONIC", 
-		"HAPPINESSINDEX", "SADNESSINDEX", "POWERINDEX", "MAXMELODICREPREATINGFACTOR", 
-		"ID", "INT", "DOUBLE", "DATABASENAME", "NEWLINE", "WS", "USER_VAR"
+		"OR", "IS", "NULL", "IN", "TRUE", "FALSE", "DIVIDE", "MOD", "PLUS", "MINUS", 
+		"NEGATION", "VERTBAR", "BITAND", "POWER_OP", "BINARY", "ESCAPE", "ASTERISK", 
+		"RPAREN", "LPAREN", "RBRACK", "LBRACK", "COLON", "ALL_FIELDS", "EQ", "LTH", 
+		"GTH", "NOT_EQ", "NOT", "LET", "GET", "SEMI", "COMMA", "DOT", "COLLATE", 
+		"USING", "INDEX", "BETWEEN", "POLYPHONIC", "HAPPINESSINDEX", "SADNESSINDEX", 
+		"POWERINDEX", "MAXMELODICREPREATINGFACTOR", "ID", "INT", "DOUBLE", "DATABASENAME", 
+		"NEWLINE", "WS", "USER_VAR"
 	};
 	public static final Vocabulary VOCABULARY = new VocabularyImpl(_LITERAL_NAMES, _SYMBOLIC_NAMES);
 
@@ -1268,7 +1267,7 @@ public class Modulo7SQLParser extends Parser {
 	}
 
 	public static final String _serializedATN =
-		"\3\u0430\ud6d1\u8206\uad2d\u4417\uaef1\u8d80\uaadd\3?\u0083\4\2\t\2\4"+
+		"\3\u0430\ud6d1\u8206\uad2d\u4417\uaef1\u8d80\uaadd\3;\u0083\4\2\t\2\4"+
 		"\3\t\3\4\4\t\4\4\5\t\5\4\6\t\6\4\7\t\7\4\b\t\b\4\t\t\t\4\n\t\n\4\13\t"+
 		"\13\4\f\t\f\4\r\t\r\4\16\t\16\4\17\t\17\4\20\t\20\4\21\t\21\4\22\t\22"+
 		"\4\23\t\23\4\24\t\24\4\25\t\25\4\26\t\26\4\27\t\27\3\2\3\2\3\2\5\2\62"+
@@ -1278,26 +1277,26 @@ public class Modulo7SQLParser extends Parser {
 		"\17\3\20\3\20\3\21\3\21\3\22\3\22\3\23\3\23\3\23\5\23k\n\23\3\24\3\24"+
 		"\3\25\3\25\3\25\3\25\3\25\3\25\3\25\3\25\3\25\3\25\3\25\3\25\3\25\3\25"+
 		"\5\25}\n\25\3\26\3\26\3\27\3\27\3\27\2\2\30\2\4\6\b\n\f\16\20\22\24\26"+
-		"\30\32\34\36 \"$&(*,\2\b\3\2\4\7\3\2:;\3\2&)\4\2\n\13**\3\2\23\24\3\2"+
-		"\658s\2.\3\2\2\2\48\3\2\2\2\6;\3\2\2\2\b=\3\2\2\2\n?\3\2\2\2\fA\3\2\2"+
-		"\2\16C\3\2\2\2\20K\3\2\2\2\22M\3\2\2\2\24P\3\2\2\2\26Y\3\2\2\2\30[\3\2"+
-		"\2\2\32]\3\2\2\2\34_\3\2\2\2\36a\3\2\2\2 c\3\2\2\2\"e\3\2\2\2$j\3\2\2"+
-		"\2&l\3\2\2\2(|\3\2\2\2*~\3\2\2\2,\u0080\3\2\2\2./\5\20\t\2/\61\5\16\b"+
-		"\2\60\62\5\4\3\2\61\60\3\2\2\2\61\62\3\2\2\2\62\64\3\2\2\2\63\65\5\22"+
-		"\n\2\64\63\3\2\2\2\64\65\3\2\2\2\65\66\3\2\2\2\66\67\7-\2\2\67\3\3\2\2"+
-		"\289\7\b\2\29:\5\6\4\2:\5\3\2\2\2;<\79\2\2<\7\3\2\2\2=>\t\2\2\2>\t\3\2"+
-		"\2\2?@\79\2\2@\13\3\2\2\2AB\79\2\2B\r\3\2\2\2CH\5\b\5\2DE\7.\2\2EG\5\b"+
-		"\5\2FD\3\2\2\2GJ\3\2\2\2HF\3\2\2\2HI\3\2\2\2I\17\3\2\2\2JH\3\2\2\2KL\7"+
-		"\3\2\2L\21\3\2\2\2MN\7\t\2\2NO\5\24\13\2O\23\3\2\2\2PV\5(\25\2QR\5 \21"+
-		"\2RS\5(\25\2SU\3\2\2\2TQ\3\2\2\2UX\3\2\2\2VT\3\2\2\2VW\3\2\2\2W\25\3\2"+
-		"\2\2XV\3\2\2\2YZ\t\3\2\2Z\27\3\2\2\2[\\\5\26\f\2\\\31\3\2\2\2]^\5\26\f"+
-		"\2^\33\3\2\2\2_`\5\26\f\2`\35\3\2\2\2ab\t\4\2\2b\37\3\2\2\2cd\t\5\2\2"+
-		"d!\3\2\2\2ef\7\63\2\2f#\3\2\2\2gk\7\f\2\2hi\7\f\2\2ik\7*\2\2jg\3\2\2\2"+
-		"jh\3\2\2\2k%\3\2\2\2lm\t\6\2\2m\'\3\2\2\2no\5*\26\2op\5$\23\2pq\5&\24"+
-		"\2q}\3\2\2\2rs\5,\27\2st\5\36\20\2tu\5\26\f\2u}\3\2\2\2vw\5,\27\2wx\5"+
-		"\"\22\2xy\5\32\16\2yz\7\n\2\2z{\5\30\r\2{}\3\2\2\2|n\3\2\2\2|r\3\2\2\2"+
-		"|v\3\2\2\2})\3\2\2\2~\177\7\64\2\2\177+\3\2\2\2\u0080\u0081\t\7\2\2\u0081"+
-		"-\3\2\2\2\b\61\64HVj|";
+		"\30\32\34\36 \"$&(*,\2\b\3\2\4\7\3\2\66\67\3\2\"%\4\2\n\13&&\3\2\17\20"+
+		"\3\2\61\64s\2.\3\2\2\2\48\3\2\2\2\6;\3\2\2\2\b=\3\2\2\2\n?\3\2\2\2\fA"+
+		"\3\2\2\2\16C\3\2\2\2\20K\3\2\2\2\22M\3\2\2\2\24P\3\2\2\2\26Y\3\2\2\2\30"+
+		"[\3\2\2\2\32]\3\2\2\2\34_\3\2\2\2\36a\3\2\2\2 c\3\2\2\2\"e\3\2\2\2$j\3"+
+		"\2\2\2&l\3\2\2\2(|\3\2\2\2*~\3\2\2\2,\u0080\3\2\2\2./\5\20\t\2/\61\5\16"+
+		"\b\2\60\62\5\4\3\2\61\60\3\2\2\2\61\62\3\2\2\2\62\64\3\2\2\2\63\65\5\22"+
+		"\n\2\64\63\3\2\2\2\64\65\3\2\2\2\65\66\3\2\2\2\66\67\7)\2\2\67\3\3\2\2"+
+		"\289\7\b\2\29:\5\6\4\2:\5\3\2\2\2;<\7\65\2\2<\7\3\2\2\2=>\t\2\2\2>\t\3"+
+		"\2\2\2?@\7\65\2\2@\13\3\2\2\2AB\7\65\2\2B\r\3\2\2\2CH\5\b\5\2DE\7*\2\2"+
+		"EG\5\b\5\2FD\3\2\2\2GJ\3\2\2\2HF\3\2\2\2HI\3\2\2\2I\17\3\2\2\2JH\3\2\2"+
+		"\2KL\7\3\2\2L\21\3\2\2\2MN\7\t\2\2NO\5\24\13\2O\23\3\2\2\2PV\5(\25\2Q"+
+		"R\5 \21\2RS\5(\25\2SU\3\2\2\2TQ\3\2\2\2UX\3\2\2\2VT\3\2\2\2VW\3\2\2\2"+
+		"W\25\3\2\2\2XV\3\2\2\2YZ\t\3\2\2Z\27\3\2\2\2[\\\5\26\f\2\\\31\3\2\2\2"+
+		"]^\5\26\f\2^\33\3\2\2\2_`\5\26\f\2`\35\3\2\2\2ab\t\4\2\2b\37\3\2\2\2c"+
+		"d\t\5\2\2d!\3\2\2\2ef\7/\2\2f#\3\2\2\2gk\7\f\2\2hi\7\f\2\2ik\7&\2\2jg"+
+		"\3\2\2\2jh\3\2\2\2k%\3\2\2\2lm\t\6\2\2m\'\3\2\2\2no\5*\26\2op\5$\23\2"+
+		"pq\5&\24\2q}\3\2\2\2rs\5,\27\2st\5\36\20\2tu\5\26\f\2u}\3\2\2\2vw\5,\27"+
+		"\2wx\5\"\22\2xy\5\32\16\2yz\7\n\2\2z{\5\30\r\2{}\3\2\2\2|n\3\2\2\2|r\3"+
+		"\2\2\2|v\3\2\2\2})\3\2\2\2~\177\7\60\2\2\177+\3\2\2\2\u0080\u0081\t\7"+
+		"\2\2\u0081-\3\2\2\2\b\61\64HVj|";
 	public static final ATN _ATN =
 		new ATNDeserializer().deserialize(_serializedATN.toCharArray());
 	static {

@@ -8,7 +8,7 @@ import com.modulo7.musicstatmodels.representation.polyphonic.Song;
  * Base class to acquire a particular statistic on a song
  *
  */
-public interface AbstractStatistic<T> {
+public interface AbstractStatistic<T extends Double> {
 
     public T getStatistic(final Song song);
 }

@@ -1,6 +1,15 @@
 package com.modulo7.common.interfaces.choices;
 
+import com.modulo7.musicstatmodels.similarity.songsimilarity.MaxMelodicEditDistanceSimilarity;
+import com.modulo7.musicstatmodels.similarity.songsimilarity.TonalHistogramSimilarity;
+import com.modulo7.musicstatmodels.statistics.HappinessIndex;
+import com.modulo7.musicstatmodels.statistics.MaxMelodicRepeatingFactor;
+import com.modulo7.musicstatmodels.statistics.PowerIndex;
+import com.modulo7.musicstatmodels.statistics.SadnessIndex;
+
+import java.util.HashMap;
 import java.util.HashSet;
+import java.util.Map;
 import java.util.Set;
 
 /**
@@ -40,6 +49,14 @@ public enum StatisticChoice {
         REGEXP_REP = builder.toString();
     }
 
+    // Statistic to class , useful for dynamically calling classes during similarity metric analysis
+    private static final Map<String, Class> STATISTIC_TO_CLASS_MAP = new HashMap<String, Class>() {{
+        put("happinessIndex", HappinessIndex.class);
+        put("sadnessIndex", SadnessIndex.class);
+        put("powerIndex", PowerIndex.class);
+        put("maxMelodicRepeatingFactor", MaxMelodicRepeatingFactor.class);
+    }};
+
     private String choice;
 
     StatisticChoice(final String choice) {
@@ -48,5 +65,15 @@ public enum StatisticChoice {
 
     public String getChoice() {
         return choice;
+    }
+
+    /**
+     * Returns a statistic type class given the string rep
+     *
+     * @param statistic
+     * @return
+     */
+    public static Class getStatisticMapGivenChoiceString(final String statistic) {
+        return STATISTIC_TO_CLASS_MAP.get(statistic);
     }
 }

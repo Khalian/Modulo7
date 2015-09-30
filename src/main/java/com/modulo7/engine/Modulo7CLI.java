@@ -80,28 +80,22 @@ public class Modulo7CLI {
 
 
     /**
-     * Entry point to teh Modulo7 CLI engine
+     * Entry point to the Modulo7 CLI engine
      *
      * @param args
      * @throws ParseException
      * @throws Modulo7InvalidArgsException
-     * @throws InvalidMidiDataException
-     * @throws Modulo7InvalidMusicXMLFile
-     * @throws EchoNestException
-     * @throws Modulo7NoSuchFileException
-     * @throws Modulo7IndexingDirError
      * @throws Modulo7InvalidFileOperationExeption
+     * @throws EchoNestException
+     * @throws Modulo7InvalidMusicXMLFile
      * @throws Modulo7ParseException
-     * @throws Modulo7BadKeyException
-     * @throws Modulo7QueryProcessingException
-     * @throws Modulo7MalformedM7SQLQuery
-     * @throws Modulo7DataBaseNotSerializedException
-     * @throws Modulo7NoSuchSimilarityMeasureException
+     * @throws Modulo7NoSuchFileException
+     * @throws InvalidMidiDataException
+     * @throws Modulo7IndexingDirError
      */
-    public static void main(String args[]) throws ParseException, Modulo7InvalidArgsException, InvalidMidiDataException,
-            Modulo7InvalidMusicXMLFile, EchoNestException, Modulo7NoSuchFileException, Modulo7IndexingDirError,
-            Modulo7InvalidFileOperationExeption, Modulo7ParseException, Modulo7BadKeyException, Modulo7QueryProcessingException,
-            Modulo7MalformedM7SQLQuery, Modulo7DataBaseNotSerializedException, Modulo7NoSuchSimilarityMeasureException {
+    public static void main(String args[]) throws ParseException, Modulo7InvalidArgsException,
+            Modulo7InvalidFileOperationExeption, EchoNestException, Modulo7InvalidMusicXMLFile,
+            Modulo7ParseException, Modulo7NoSuchFileException, InvalidMidiDataException, Modulo7IndexingDirError {
 
         CommandLine commandLine = Modulo7CLI.getServerCommand(args);
         System.out.println("Indexing the given data");
@@ -120,54 +114,50 @@ public class Modulo7CLI {
 
     /**
      * Driver method for the interactive CLI
-     *
-     * @throws Modulo7BadKeyException
-     * @throws Modulo7QueryProcessingException
-     * @throws Modulo7MalformedM7SQLQuery
-     * @throws Modulo7DataBaseNotSerializedException
-     * @throws Modulo7NoSuchSimilarityMeasureException
      */
-    private static void interactiveCLI() throws Modulo7BadKeyException, Modulo7QueryProcessingException,
-            Modulo7MalformedM7SQLQuery, Modulo7DataBaseNotSerializedException, Modulo7NoSuchSimilarityMeasureException {
-        System.out.println("Input choice:");
+    private static void interactiveCLI() {
         viewChoices();
     }
 
     /**
      * View the choices that are available to modulo7 users
-     *
-     * @throws Modulo7BadKeyException
-     * @throws Modulo7QueryProcessingException
-     * @throws Modulo7MalformedM7SQLQuery
-     * @throws Modulo7DataBaseNotSerializedException
-     * @throws Modulo7NoSuchSimilarityMeasureException
      */
-    private static void viewChoices() throws Modulo7BadKeyException, Modulo7QueryProcessingException,
-            Modulo7MalformedM7SQLQuery, Modulo7DataBaseNotSerializedException, Modulo7NoSuchSimilarityMeasureException {
+    private static void viewChoices() {
 
         Scanner in = new Scanner(System.in);
 
         while (true) {
-            System.out.println(RET_SONGS_FOR_GIVEN_ARTIST.choice + ". Return set of songs for a given artist");
-            System.out.println(RANK_ON_SIMILARITY_ORDER.choice + ". Return a ranked list of songs on a similarity measure");
-            System.out.println(RET_SONGS_FOR_GIVEN_KEY_SIGNATURE.choice + ". Return set of songs for a given key signature");
-            System.out.println(RET_SONGS_FOR_GIVEN_TIME_SIGNATURE.choice + ". Return set of songs for a given time signature");
-            System.out.println(RET_LYRICS_GIVEN_SONG.choice + ". List out the lyrics of a song given the song name");
-            System.out.println(LIST_NUM_SONGS_INDEXED.choice + ". List the number of songs indexed");
-            System.out.println(INPUT_CUSTOM_QUERY.choice + ". Input a custom modulo7 SQL query");
-            System.out.println(EXIT.choice + ". Exit from Modulo7");
+            try {
+                System.out.println("");
+                System.out.println("Welcome to the Modulo7 interactive window");
+                System.out.println("Please input choice");
+                System.out.println("");
+                System.out.println(RET_SONGS_FOR_GIVEN_ARTIST.choice + ". Return set of songs for a given artist");
+                System.out.println(RANK_ON_SIMILARITY_ORDER.choice + ". Return a ranked list of songs on a similarity measure");
+                System.out.println(RET_SONGS_FOR_GIVEN_KEY_SIGNATURE.choice + ". Return set of songs for a given key signature");
+                System.out.println(RET_SONGS_FOR_GIVEN_TIME_SIGNATURE.choice + ". Return set of songs for a given time signature");
+                System.out.println(RET_LYRICS_GIVEN_SONG.choice + ". List out the lyrics of a song given the song name");
+                System.out.println(LIST_NUM_SONGS_INDEXED.choice + ". List the number of songs indexed");
+                System.out.println(INPUT_CUSTOM_QUERY.choice + ". Input a custom modulo7 SQL query");
+                System.out.println(SERIALIZE_DATABASE.choice + ". Serialize database into disk at a given location");
+                System.out.println(EXIT.choice + ". Exit from Modulo7");
+                System.out.println("");
 
-            // Input a choice at this point
-            System.out.print("Please Input choice:");
-
-            Integer testNum = in.nextInt();
-
-            exectuteChoice(Modulo7CLIChoice.parseChoice(testNum), in);
+                // Input a choice at this point
+                System.out.print("Please Input choice:");
+                Integer testNum = in.nextInt();
+                exectuteChoice(Modulo7CLIChoice.parseChoice(testNum), in);
+            } catch (Modulo7BaseException e) {
+                System.out.println(e.getMessage());
+                if (e instanceof Modulo7NoSuchSimilarityMeasureException) {
+                    SongSimilarityChoices.listAllSimilarityMeasures();
+                }
+            }
         }
     }
 
     /**
-     * Method which exectutes a given choice in Modulo7, entry point to all the other subcomponents
+     * Method which exectutes a given choice in Modulo7, entry point to all the other sub components
      * of Modulo7
      *
      * @param testNum
@@ -181,16 +171,17 @@ public class Modulo7CLI {
             Modulo7MalformedM7SQLQuery, Modulo7QueryProcessingException, Modulo7DataBaseNotSerializedException, Modulo7NoSuchSimilarityMeasureException {
         switch (testNum) {
             case INPUT_CUSTOM_QUERY:
-                System.out.println("Consumer is going into custom query mode, now changing to Modulo7 SQL parser mode");
-                System.out.println("Enter input query");
+                System.out.println("Consumer is going into custom query mode, now changing to Modulo7 SQL parser mode \n");
+                System.out.print("Enter input query : ");
                 final String queryStr = in.next();
+                System.out.println("");
                 Modulo7QueryProcessingEngine processingEngine;
                 try {
                     processingEngine = new Modulo7QueryProcessingEngine(queryStr, indexer);
                     Set<Song> relevantSongs = processingEngine.processQuery();
                     printAllRelevantSongLocations(relevantSongs);
                 } catch (Modulo7MalformedM7SQLQuery e) {
-                    SongSimilarityChoices.listAllSimilarityMeasures();
+                    logger.error(e.getMessage());
                 }
                 break;
 
@@ -199,13 +190,13 @@ public class Modulo7CLI {
                 System.out.println("Enter a similarity measure:");
                 final String similarityMeasure = in.next();
 
-                Class choiceClass = SongSimilarityChoices.SONG_SIMILARITY_TO_CLASS_MAP.get(similarityMeasure);
+                Class similarityChoice = SongSimilarityChoices.getSongSimilarityGivenChoice(similarityMeasure);
 
-                if (choiceClass == null) {
-                    throw new Modulo7NoSuchSimilarityMeasureException("No such similarity measure" + similarityMeasure);
+                if (similarityChoice == null) {
+                    throw new Modulo7NoSuchSimilarityMeasureException("No such similarity measure " + similarityMeasure);
                 } else {
                     try {
-                        AbstractSongSimilarity similarity = (AbstractSongSimilarity) choiceClass.newInstance();
+                        AbstractSongSimilarity similarity = (AbstractSongSimilarity) similarityChoice.newInstance();
                         RankEngineOnSimilarity engineOnSimilarity = new RankEngineOnSimilarity(similarity);
                         System.out.println("Enter the location of a song to rank the rest of the database against");
                         final String candidateSongLocation = in.next();
@@ -235,7 +226,7 @@ public class Modulo7CLI {
             case RET_SONGS_FOR_GIVEN_KEY_SIGNATURE:
                 System.out.print("Please enter the key:");
                 final String key = in.next();
-                System.out.print("Please enter the Scale:");
+                System.out.print("\nPlease enter the Scale:");
                 final String inScale = in.next();
                 ScaleType scaleType = ScaleType.getScaleTypeFromString(inScale);
                 final KeySignature desiredKeySignature = new KeySignature(key, scaleType);
@@ -263,26 +254,29 @@ public class Modulo7CLI {
                         System.out.println(song.getLyrics().getLyricsOfSong());
                     }
                 } else {
-                    System.out.println("No such song");
+                    System.out.println("\n No such song");
                 }
                 break;
 
             case LIST_NUM_SONGS_INDEXED :
-                     System.out.println("There are " + indexer.getNumSongsIndexed() + "song sources indexed by Modulo7");
+                     System.out.println("\nThere are " + indexer.getNumSongsIndexed() + " song sources indexed by Modulo7");
                      break;
 
-            case EXIT : System.out.println("Exitting from Modulo7");
+            case SERIALIZE_DATABASE:
+                     System.out.println("\n");
+                     break;
+
+            case EXIT : System.out.println("\nExitting from Modulo7");
                      System.exit(0);
                      break;
 
-            default: System.out.println("Does not match any of the choices, exitting"); System.exit(0);
+            default: System.out.println("\nDoes not match any of the choices, exitting"); System.exit(0);
         }
     }
 
     /**
      * Helper method to parse command line options via apache CLI for the server side CLI
-     * @param args
-     * @return
+     * @param args - Arguments passed on the command line
      * @throws Modulo7InvalidArgsException
      * @throws ParseException
      */
@@ -341,13 +335,17 @@ public class Modulo7CLI {
     /**
      * Prints all the relevant song locations given the relevant songs objects
      *
-     * @param allRelevantSongs
+     * @param allRelevantSongs - a set of all the relevant songs
      * @throws Modulo7DataBaseNotSerializedException
      */
     private static void printAllRelevantSongLocations(final Set<Song> allRelevantSongs)
             throws Modulo7DataBaseNotSerializedException {
-        Set<String> locations = indexer.getLocationsGivenRelevantSongs(allRelevantSongs);
-        System.out.println("The locations of relevant songs are :");
-        locations.forEach(System.out::println);
+        final Set<String> locations = indexer.getLocationsGivenRelevantSongs(allRelevantSongs);
+        if (locations.size() == 0) {
+            System.out.println("No songs are relevant to your query\n");
+        } else {
+            System.out.println("The locations of relevant songs are :");
+            locations.forEach(System.out::println);
+        }
     }
 }

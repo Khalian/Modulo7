@@ -221,6 +221,10 @@ public class DatabaseEngine {
                 Lyrics lyrics = new Lyrics("Artist", "Album", new File(songLocation));
                 independentLyricsMap.put(songLocation, lyrics);
                 inverseIndependentLyricsMap.put(lyrics, songLocation);
+            } else if (songLocation.endsWith("m7")) {
+                // Build an inmemory datbase from an already serialized one
+                final Song song = AvroUtils.deserialize(songLocation);
+                addToSongLocationMap(songLocation, song);
             }
         }
 

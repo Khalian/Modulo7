@@ -70,7 +70,7 @@ public class Modulo7UserInputQueryParser {
 
                 List<Modulo7SQLParser.Expr_opContext> exprContexts = expressionContext.expr_op();
 
-                exprOpsInSequence.addAll(exprContexts.stream().map(Modulo7SQLParser.Expr_opContext::getText).collect(Collectors.toList()));
+                exprOpsInSequence.addAll(exprContexts.parallelStream().map(Modulo7SQLParser.Expr_opContext::getText).collect(Collectors.toList()));
 
                 List<Modulo7SQLParser.Simple_expressionContext> simpleContextList = expressionContext.simple_expression();
 
@@ -78,14 +78,15 @@ public class Modulo7UserInputQueryParser {
 
                     for (Modulo7SQLParser.Simple_expressionContext simpleContext : simpleContextList) {
 
-                        String stringRep = "";
+                        StringBuilder stringRep = new StringBuilder();
 
                         if (simpleContext.children != null) {
                             for (ParseTree tree : simpleContext.children) {
-                                stringRep += tree.getText() + " ";
+                                stringRep.append(tree.getText());
+                                stringRep.append(" ");
                             }
 
-                            expressionsInSequence.add(stringRep);
+                            expressionsInSequence.add(stringRep.toString());
                         }
                     }
                 }

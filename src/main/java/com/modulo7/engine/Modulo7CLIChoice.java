@@ -16,7 +16,8 @@ public enum Modulo7CLIChoice {
     RET_LYRICS_GIVEN_SONG(5),
     LIST_NUM_SONGS_INDEXED(6),
     INPUT_CUSTOM_QUERY(7),
-    EXIT(8),
+    SERIALIZE_DATABASE(8),
+    EXIT(9),
     INVALID_CHOICE(-1);
 
     int choice;

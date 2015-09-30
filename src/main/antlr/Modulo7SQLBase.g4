@@ -15,11 +15,7 @@ AND: 'and' | '&&';
 OR: 'or' | '||';
 IS: 'is';
 NULL: 'null';
-LIKE: 'like';
 IN: 'in';
-EXISTS: 'exists';
-ALL: 'all';
-ANY: 'any';
 TRUE: 'true';
 FALSE: 'false';
 DIVIDE	: 'div' | '/' ;
@@ -53,7 +49,6 @@ COLLATE: 'collate';
 USING: 'using';
 INDEX: 'index';
 BETWEEN: 'between';
-
 
 POLYPHONIC: 'polyphonic';
 

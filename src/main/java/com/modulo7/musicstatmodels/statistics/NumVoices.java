@@ -8,9 +8,9 @@ import com.modulo7.musicstatmodels.representation.polyphonic.Song;
  *
  * Simple criteria which returns the number of voices in the song
  */
-public class NumVoices implements AbstractStatistic<Integer> {
+public class NumVoices implements AbstractStatistic<Double> {
     @Override
-    public Integer getStatistic(final Song song) {
-        return song.getNumVoices();
+    public Double getStatistic(final Song song) {
+        return (double) song.getNumVoices();
     }
 }
