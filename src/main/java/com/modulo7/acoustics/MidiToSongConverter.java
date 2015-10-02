@@ -4,8 +4,7 @@ package com.modulo7.acoustics;
  * Created by asanyal on 6/28/2015.
  *
  * This class is responsible to converting a midi file into a modulo7
- * representation
- *
+ * representation, its lacking a chord ID system for midi
  */
 
 import com.modulo7.common.exceptions.*;
@@ -14,6 +13,7 @@ import com.modulo7.common.utils.Modulo7Globals;
 import com.modulo7.common.utils.Modulo7Utils;
 import com.modulo7.crawler.utils.MusicSources;
 import com.modulo7.musicstatmodels.musictheorymodels.CircleOfFifths;
+import com.modulo7.musicstatmodels.musictheorymodels.KKTonalityProfiles;
 import com.modulo7.musicstatmodels.representation.buildingblocks.Note;
 import com.modulo7.musicstatmodels.representation.metadata.KeySignature;
 import com.modulo7.musicstatmodels.representation.metadata.ScaleType;
@@ -22,6 +22,8 @@ import com.modulo7.musicstatmodels.representation.metadata.TimeSignature;
 import com.modulo7.musicstatmodels.representation.monophonic.Voice;
 import com.modulo7.musicstatmodels.representation.monophonic.VoiceInstant;
 import com.modulo7.musicstatmodels.representation.polyphonic.Song;
+import com.modulo7.musicstatmodels.vectorspacemodels.vectorspacerepresentations.songvectors.PitchDurationHistogram;
+import com.modulo7.musicstatmodels.vectorspacemodels.vectorspacerepresentations.songvectors.TonalDurationHistogram;
 import com.modulo7.nlp.Lyrics;
 import org.apache.log4j.Logger;
 
@@ -56,9 +58,6 @@ public class MidiToSongConverter implements AbstractAnalyzer {
     // Apache log4j logger representation
     private static final Logger logger = Logger.getLogger(MidiToSongConverter.class);
 
-    // The midi sequence of the Midi Song Coverter for a particular midi file
-    private Sequence midiSequence;
-
     // The scale element for this midi recording
     private KeySignature keySignature = null;
 
@@ -90,6 +89,8 @@ public class MidiToSongConverter implements AbstractAnalyzer {
     public MidiToSongConverter(final String midiFileLocation) throws InvalidMidiDataException, Modulo7NoSuchFileException {
         // Gets the sequence of events from a midi file, we can then acquire the various parameters from the midi
         // sequences to construct voice instants
+        Sequence midiSequence;
+
         try {
             midiSequence = MidiSystem.getSequence(new File(midiFileLocation));
         } catch (IOException e) {
@@ -214,7 +215,19 @@ public class MidiToSongConverter implements AbstractAnalyzer {
         if (timeSignature != null && keySignature != null) {
             return new Song(nonEmptyVoiceSet, new SongMetadata(keySignature, timeSignature), MusicSources.MIDI);
         } else {
-            return new Song(nonEmptyVoiceSet, MusicSources.MIDI);
+            final Song song = new Song(nonEmptyVoiceSet, MusicSources.MIDI);
+
+            try {
+                final KeySignature keySignature;
+                PitchDurationHistogram histogram = new PitchDurationHistogram();
+                histogram.computeVectorRepresentation(song);
+                keySignature = KKTonalityProfiles.estimateBestKeySignature(histogram);
+                song.addSongMetadata(keySignature);
+            } catch (Modulo7BadKeyException e) {
+                logger.error(e.getMessage());
+            }
+
+            return song;
         }
     }
 

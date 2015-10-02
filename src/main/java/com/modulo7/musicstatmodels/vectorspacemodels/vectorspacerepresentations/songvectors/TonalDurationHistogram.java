@@ -9,6 +9,7 @@ import com.modulo7.musicstatmodels.representation.polyphonic.Song;
 import com.modulo7.musicstatmodels.representation.monophonic.Voice;
 import com.modulo7.musicstatmodels.representation.monophonic.VoiceInstant;
 import com.modulo7.musicstatmodels.vectorspacemodels.datastructures.TonalDurationHistogramData;
+import org.apache.log4j.Logger;
 
 import java.util.List;
 
@@ -22,6 +23,9 @@ public class TonalDurationHistogram implements AbstractSongVector<TonalDurationH
 
     // Internal intervalDurationHistogram representation
     private TonalDurationHistogramData intervalDurationHistogram;
+
+    // Logger for tonal duration histogram
+    private static final Logger logger = Logger.getLogger(TonalDurationHistogram.class);
 
     /**
      * Default constructor for tonal histogram and the only one present
@@ -47,7 +51,7 @@ public class TonalDurationHistogram implements AbstractSongVector<TonalDurationH
                     IntervalEnum intervalEnum = Interval.getInterval(instant, nextInstant).getIntervalEnum();
                     addIntervalDurationToHistogram(intervalEnum, instant.getDuration());
                 } catch (Modulo7WrongNoteType | Modulo7BadIntervalException e) {
-                    e.printStackTrace();
+                    logger.error(e.getMessage());
                 }
             }
         }

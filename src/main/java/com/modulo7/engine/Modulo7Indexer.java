@@ -16,6 +16,8 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
 /**
  * Created by asanyal on 9/10/15.
@@ -90,6 +92,36 @@ public class Modulo7Indexer {
             throws InvalidMidiDataException, Modulo7InvalidMusicXMLFile, EchoNestException, Modulo7NoSuchFileException,
             Modulo7InvalidFileOperationExeption, Modulo7ParseException, Modulo7InvalidArgsException {
         engine = new DatabaseEngine(srcDir, dstDir, verboseIndexing);
+        engine.buildInMemoryDataBaseFromScratch();
+        lyricsIndexer = new LyricsIndexer();
+
+        if (persistOnDisk) {
+            engine.serializeDataSetAndMoveToDisk();
+        }
+
+        this.verboseIndexing = verboseIndexing;
+    }
+
+    /**
+     * Constructor similar to the above, but accepts the number of threads in the thread pool
+     *
+     * @param srcDir
+     * @param dstDir
+     * @param persistOnDisk
+     * @param verboseIndexing
+     * @param numThreads
+     * @throws InvalidMidiDataException
+     * @throws Modulo7InvalidMusicXMLFile
+     * @throws EchoNestException
+     * @throws Modulo7NoSuchFileException
+     * @throws Modulo7InvalidFileOperationExeption
+     * @throws Modulo7ParseException
+     * @throws Modulo7InvalidArgsException
+     */
+    public Modulo7Indexer(final String srcDir, final String dstDir, final boolean persistOnDisk, final boolean verboseIndexing, final int numThreads)
+            throws InvalidMidiDataException, Modulo7InvalidMusicXMLFile, EchoNestException, Modulo7NoSuchFileException,
+            Modulo7InvalidFileOperationExeption, Modulo7ParseException, Modulo7InvalidArgsException {
+        engine = new DatabaseEngine(srcDir, dstDir, verboseIndexing, numThreads);
         engine.buildInMemoryDataBaseFromScratch();
         lyricsIndexer = new LyricsIndexer();
 

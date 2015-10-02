@@ -6,6 +6,7 @@ import com.modulo7.common.utils.Modulo7Globals;
 import com.modulo7.musicstatmodels.representation.metadata.KeySignature;
 import com.modulo7.musicstatmodels.representation.metadata.ScaleType;
 import com.modulo7.musicstatmodels.representation.polyphonic.Song;
+import com.modulo7.musicstatmodels.vectorspacemodels.vectorspacerepresentations.songvectors.PitchDurationHistogram;
 import com.modulo7.musicstatmodels.vectorspacemodels.vectorspacerepresentations.songvectors.TonalDurationHistogram;
 import org.apache.commons.lang3.ArrayUtils;
 import org.apache.commons.math3.stat.correlation.PearsonsCorrelation;
@@ -15,7 +16,7 @@ import java.util.*;
 /**
  * Created by asanyal on 9/1/15.
  *
- * The KK profile is metadata on which tonaility estimation (also called key
+ * The KK profile is metadata on which tonality estimation (also called key
  * estimation is performed)
  *
  * Effectively a weighted interval density is compared with these profiles and the maximum
@@ -68,15 +69,14 @@ public class KKTonalityProfiles {
      * Best profile match for tonal duration histogram to all the key profiles
      * precomputed using the KK probe tone method
      *
-     * @param tonalDurations
+     * @param durations
      * @return
      */
-    public static KeySignature estimateBestKeySignature(final TonalDurationHistogram tonalDurations) throws Modulo7BadKeyException {
+    public static KeySignature estimateBestKeySignature(final PitchDurationHistogram durations) throws Modulo7BadKeyException {
 
-        final List<Double> tonalDurationsList = tonalDurations.getInternalRepresentation().getArrayRepresentation();
-        Double[] tonalDurationsHistogramArray = tonalDurationsList.toArray(new Double[tonalDurationsList.size()]);
+        final List<Double> pithDurationsList = durations.getInternalRepresentation().getArrayRepresentation();
+        Double[] tonalDurationsHistogramArray = pithDurationsList.toArray(new Double[pithDurationsList.size()]);
         double[] tonalDurationsArray = ArrayUtils.toPrimitive(tonalDurationsHistogramArray);
-        assert (tonalDurationsArray.length == 12);
 
         double bestCorrelation = -Double.MAX_VALUE;
         String bestKey = "C";

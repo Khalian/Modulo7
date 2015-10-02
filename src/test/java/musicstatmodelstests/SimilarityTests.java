@@ -68,4 +68,9 @@ public class SimilarityTests {
 
         Assert.assertEquals(contourSim.getSimilarity(newVoice, newVoice2), 1.0, 0.0);
     }
+
+    @Test
+    public void grossSongContourSimilaritySanityTest() {
+
+    }
 }

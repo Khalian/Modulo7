@@ -5,7 +5,7 @@ import com.modulo7.common.interfaces.AbstractAnalyzer;
 import com.modulo7.acoustics.MidiToSongConverter;
 import com.modulo7.crawler.utils.MusicSources;
 import com.modulo7.musicstatmodels.representation.polyphonic.Song;
-import junit.framework.Assert;
+import org.junit.Assert;
 import org.junit.Test;
 
 import javax.sound.midi.InvalidMidiDataException;

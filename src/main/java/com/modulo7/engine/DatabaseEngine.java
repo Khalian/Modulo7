@@ -17,13 +17,20 @@ import org.apache.commons.io.FilenameUtils;
 import javax.sound.midi.InvalidMidiDataException;
 import java.io.File;
 import java.util.*;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.concurrent.RunnableFuture;
+import java.util.stream.Collectors;
 
 /**
  * Created by asanyal on 8/31/15.
  *
- * Builds a complete Modulo7 Serialized database
+ * Builds a complete Modulo7 Serialized database from the various source files that modulo7
+ * supports and optionally serialize it to disk
+ *
+ * TODO : Build a multithreaded version that performs better, in process
  */
-public class DatabaseEngine {
+public class DatabaseEngine implements Runnable {
 
     // Source Directory or base location from all types of files are loaded by the parsers
     private String sourceDirectory;
@@ -63,6 +70,9 @@ public class DatabaseEngine {
     // A boolean flag which indicates if the data base has been serialized on disk or not
     private boolean isDataBasePresentOnDisk = false;
 
+    // A thread pool artifact that is created at run time
+    private ExecutorService databaseThreadPool;
+
     /**
      * Basic database engine constructor, this constructors accepts a source directory
      * which is a root directory from all the required files  are fetched. Once its fetched
@@ -80,11 +90,9 @@ public class DatabaseEngine {
         // Recursively descend and list all the files that
         Set<String> allSongLocations = Modulo7Utils.listAllFiles(sourceDirectory);
 
-        for (final String location : allSongLocations) {
-            if (MusicSources.checkIfSupportedExtension(location)) {
-                songLocations.add(location);
-            }
-        }
+        songLocations.addAll(allSongLocations.stream().filter(MusicSources::checkIfSupportedExtension).collect(Collectors.toList()));
+
+        databaseThreadPool = Executors.newFixedThreadPool(1);
     }
 
     /**
@@ -105,11 +113,9 @@ public class DatabaseEngine {
         // Recursively descend and list all the files that
         Set<String> allSongLocations = Modulo7Utils.listAllFiles(sourceDirectory);
 
-        for (final String location : allSongLocations) {
-            if (MusicSources.checkIfSupportedExtension(location)) {
-                songLocations.add(location);
-            }
-        }
+        songLocations.addAll(allSongLocations.stream().filter(MusicSources::checkIfSupportedExtension).collect(Collectors.toList()));
+
+        databaseThreadPool = Executors.newFixedThreadPool(1);
     }
 
     /**
@@ -120,7 +126,7 @@ public class DatabaseEngine {
      * @param dstDir
      * @param verboseOutput
      */
-    public DatabaseEngine(String srcDir, String dstDir, boolean verboseOutput) throws Modulo7InvalidArgsException {
+    public DatabaseEngine(final String srcDir, final String dstDir, final boolean verboseOutput) throws Modulo7InvalidArgsException {
         this.destinationDirectory = dstDir;
         this.sourceDirectory = srcDir;
         this.verboseOutput = verboseOutput;
@@ -130,11 +136,34 @@ public class DatabaseEngine {
         // Recursively descend and list all the files that
         Set<String> allSongLocations = Modulo7Utils.listAllFiles(sourceDirectory);
 
-        for (final String location : allSongLocations) {
-            if (MusicSources.checkIfSupportedExtension(location)) {
-                songLocations.add(location);
-            }
-        }
+        songLocations.addAll(allSongLocations.stream().filter(MusicSources::checkIfSupportedExtension).collect(Collectors.toList()));
+
+        databaseThreadPool = Executors.newFixedThreadPool(1);
+    }
+
+    /**
+     * Init with number of threads in the executor pool
+     *
+     * @param srcDir
+     * @param dstDir
+     * @param verboseOutput
+     * @param numThreads
+     * @throws Modulo7InvalidArgsException
+     */
+    public DatabaseEngine(final String srcDir, final String dstDir, final boolean verboseOutput, final int numThreads)
+            throws Modulo7InvalidArgsException {
+        this.destinationDirectory = dstDir;
+        this.sourceDirectory = srcDir;
+        this.verboseOutput = verboseOutput;
+
+        Modulo7Utils.removeDuplicateFilesFromDirectory(sourceDirectory);
+
+        // Recursively descend and list all the files that
+        Set<String> allSongLocations = Modulo7Utils.listAllFiles(sourceDirectory);
+
+        songLocations.addAll(allSongLocations.stream().filter(MusicSources::checkIfSupportedExtension).collect(Collectors.toList()));
+
+        databaseThreadPool = Executors.newFixedThreadPool(numThreads);
     }
 
     /**
@@ -158,28 +187,7 @@ public class DatabaseEngine {
             return false;
         }
 
-        if (songLocation.endsWith("midi") || songLocation.endsWith("mid")) {
-            AbstractAnalyzer analyzer = new MidiToSongConverter(songLocation);
-            final Song song = analyzer.getSongRepresentation();
-            songLocationMap.put(songLocation, song);
-        } else if (songLocation.endsWith("mp3")) {
-            AbstractAnalyzer analyzer = new EchoNestBasicMP3Analyzer(songLocation);
-            final Song song = analyzer.getSongRepresentation();
-            songLocationMap.put(songLocation, song);
-        } else if (songLocation.endsWith("xml")) {
-            AbstractAnalyzer analyzer = new BasicMusicXMLParser(songLocation);
-            final Song song = analyzer.getSongRepresentation();
-            songLocationMap.put(songLocation, song);
-        } else if (songLocation.endsWith("png") || songLocation.endsWith("jpg")) {
-            AbstractAnalyzer analyzer = new AudiverisSheetAnalyzer(songLocation);
-            final Song song = analyzer.getSongRepresentation();
-            songLocationMap.put(songLocation, song);
-        } else if (songLocation.endsWith("m7lyrics")) {
-            // TODO : Fix these elements for artist and album
-            Lyrics lyrics = new Lyrics("Artist", "Album", new File(songLocation));
-            independentLyricsMap.put(songLocation, lyrics);
-            inverseIndependentLyricsMap.put(lyrics, songLocation);
-        }
+        parseSource(songLocation);
 
         return true;
     }
@@ -200,87 +208,89 @@ public class DatabaseEngine {
             EchoNestException, Modulo7NoSuchFileException, Modulo7InvalidMusicXMLFile, Modulo7InvalidFileOperationExeption,
             Modulo7ParseException {
         for (final String songLocation : songLocations) {
-            if (songLocation.endsWith("midi") || songLocation.endsWith("mid")) {
-                AbstractAnalyzer analyzer = new MidiToSongConverter(songLocation);
-                final Song song = analyzer.getSongRepresentation();
-                addToSongLocationMap(songLocation, song);
-            } else if (songLocation.endsWith("mp3")) {
-                AbstractAnalyzer analyzer = new EchoNestBasicMP3Analyzer(songLocation);
-                final Song song = analyzer.getSongRepresentation();
-                addToSongLocationMap(songLocation, song);
-            } else if (songLocation.endsWith("xml")) {
-                AbstractAnalyzer analyzer = new BasicMusicXMLParser(songLocation);
-                final Song song = analyzer.getSongRepresentation();
-                addToSongLocationMap(songLocation, song);
-            } else if (songLocation.endsWith("png") || songLocation.endsWith("jpg")) {
-                AbstractAnalyzer analyzer = new AudiverisSheetAnalyzer(songLocation);
-                final Song song = analyzer.getSongRepresentation();
-                addToSongLocationMap(songLocation, song);
-            } else if (songLocation.endsWith("m7lyrics")) {
-                // TODO : Fix these elements
-                Lyrics lyrics = new Lyrics("Artist", "Album", new File(songLocation));
-                independentLyricsMap.put(songLocation, lyrics);
-                inverseIndependentLyricsMap.put(lyrics, songLocation);
-            } else if (songLocation.endsWith("m7")) {
-                // Build an inmemory datbase from an already serialized one
-                final Song song = AvroUtils.deserialize(songLocation);
-                addToSongLocationMap(songLocation, song);
-            }
+            parseSource(songLocation);
         }
 
         isDataBaseConstructedInMemory = true;
     }
 
     /**
-     * Method to incrementally build a dataset by creating both serialized version and in memory version for each song one by one
+     * Parse a given source
+     * @param songLocation
+     * @throws InvalidMidiDataException
+     * @throws Modulo7NoSuchFileException
+     * @throws EchoNestException
+     * @throws Modulo7InvalidMusicXMLFile
+     * @throws Modulo7ParseException
+     * @throws Modulo7InvalidFileOperationExeption
+     */
+    private Song parseSource(final String songLocation) throws InvalidMidiDataException, Modulo7NoSuchFileException,
+            EchoNestException, Modulo7InvalidMusicXMLFile, Modulo7ParseException, Modulo7InvalidFileOperationExeption {
+
+        Song song = null;
+
+        if (songLocation.endsWith("midi") || songLocation.endsWith("mid")) {
+            AbstractAnalyzer analyzer = new MidiToSongConverter(songLocation);
+            song = analyzer.getSongRepresentation();
+            addToSongLocationMap(songLocation, song);
+        } else if (songLocation.endsWith("mp3")) {
+            AbstractAnalyzer analyzer = new EchoNestBasicMP3Analyzer(songLocation);
+            song = analyzer.getSongRepresentation();
+            addToSongLocationMap(songLocation, song);
+        } else if (songLocation.endsWith("xml")) {
+            AbstractAnalyzer analyzer = new BasicMusicXMLParser(songLocation);
+            song = analyzer.getSongRepresentation();
+            addToSongLocationMap(songLocation, song);
+        } else if (songLocation.endsWith("png") || songLocation.endsWith("jpg")) {
+            AbstractAnalyzer analyzer = new AudiverisSheetAnalyzer(songLocation);
+            song = analyzer.getSongRepresentation();
+            addToSongLocationMap(songLocation, song);
+        } else if (songLocation.endsWith("m7lyrics")) {
+            // TODO : Fix these elements
+            Lyrics lyrics = new Lyrics("Artist", "Album", new File(songLocation));
+            independentLyricsMap.put(songLocation, lyrics);
+            inverseIndependentLyricsMap.put(lyrics, songLocation);
+        } else if (songLocation.endsWith("m7")) {
+            // Build an in memory datbase from an already serialized one, fastest way to deal with preconstructed database
+            song = AvroUtils.deserialize(songLocation);
+            addToSongLocationMap(songLocation, song);
+        }
+
+        return song;
+    }
+
+    /**
+     * Method to serialize and both get a song
+     *
      * @throws Modulo7InvalidMusicXMLFile
      * @throws Modulo7NoSuchFileException
      * @throws EchoNestException
      * @throws InvalidMidiDataException
+     * @throws Modulo7InvalidFileOperationExeption
+     * @throws Modulo7ParseException
      */
     public synchronized void dynamicBuildDataSet() throws Modulo7InvalidMusicXMLFile,
-            Modulo7NoSuchFileException, EchoNestException, InvalidMidiDataException {
+            Modulo7NoSuchFileException, EchoNestException, InvalidMidiDataException,
+            Modulo7InvalidFileOperationExeption, Modulo7ParseException {
         for (final String songLocation : songLocations) {
-            if (songLocation.endsWith("midi") || songLocation.endsWith("mid")) {
-                AbstractAnalyzer analyzer = new MidiToSongConverter(songLocation);
-                final Song song = analyzer.getSongRepresentation();
-                addToSongLocationMap(songLocation, song);
-
-                final String finalSerializedLocation = destinationDirectory + File.separator + FilenameUtils.getBaseName(songLocation) + ".m7";
-                AvroUtils.serialize(finalSerializedLocation, song);
-                serializedSongLocationSet.put(songLocation, finalSerializedLocation);
-
-            } else if (songLocation.endsWith("mp3")) {
-                AbstractAnalyzer analyzer = new EchoNestBasicMP3Analyzer(songLocation);
-                final Song song = analyzer.getSongRepresentation();
-                addToSongLocationMap(songLocation, song);
-
-                final String finalSerializedLocation = destinationDirectory + File.separator + FilenameUtils.getBaseName(songLocation) + ".m7";
-                AvroUtils.serialize(finalSerializedLocation, song);
-                serializedSongLocationSet.put(songLocation, finalSerializedLocation);
-
-            } else if (songLocation.endsWith("xml")) {
-                AbstractAnalyzer analyzer = new BasicMusicXMLParser(songLocation);
-                final Song song = analyzer.getSongRepresentation();
-                addToSongLocationMap(songLocation, song);
-
-                final String finalSerializedLocation = destinationDirectory + File.separator + FilenameUtils.getBaseName(songLocation) + ".m7";
-                AvroUtils.serialize(finalSerializedLocation, song);
-                serializedSongLocationSet.put(songLocation, finalSerializedLocation);
-
-            } else if (songLocation.endsWith("png") || songLocation.endsWith("jpg")) {
-                AbstractAnalyzer analyzer = new AudiverisSheetAnalyzer(songLocation);
-                final Song song = analyzer.getSongRepresentation();
-                addToSongLocationMap(songLocation, song);
-
-                final String finalSerializedLocation = destinationDirectory + File.separator + FilenameUtils.getBaseName(songLocation) + ".m7";
-                AvroUtils.serialize(finalSerializedLocation, song);
-                serializedSongLocationSet.put(songLocation, finalSerializedLocation);
-            }
+            final Song song = parseSource(songLocation);
+            serializeAndPutToDisk(songLocation, song);
         }
 
         isDataBasePresentOnDisk = true;
         isDataBaseConstructedInMemory = false;
+    }
+
+    /**
+     * Method to serialize a song object and put to appropriate location in disk
+     * @param songLocation
+     * @param song
+     * @throws Modulo7NoSuchFileException
+     */
+    private synchronized void serializeAndPutToDisk(final String songLocation, final Song song) throws Modulo7NoSuchFileException {
+        final String finalSerializedLocation = destinationDirectory + File.separator + FilenameUtils.getBaseName(songLocation) + ".m7";
+        AvroUtils.serialize(finalSerializedLocation, song);
+        serializedSongLocationSet.put(songLocation, finalSerializedLocation);
     }
 
     /**
@@ -479,5 +489,10 @@ public class DatabaseEngine {
      */
     protected Set<Song> getAllSongs() {
         return inverseSongLocationMap.keySet();
+    }
+
+    @Override
+    public void run() {
+        // TODO : Stub impl, need to implement
     }
 }

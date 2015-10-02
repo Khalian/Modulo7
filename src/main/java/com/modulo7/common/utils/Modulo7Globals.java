@@ -13,9 +13,13 @@ public class Modulo7Globals {
     // Acquiring the host type allows for different types of ops
     public static final String MODULO7_HOST_OS_TYPE;
 
-    // Notes in western music, both and sharps taken into account
+    // Notes in western music, both flats and sharps taken into account
     public static final String[] NOTE_NAMES = {"A", "A#", "B", "C", "C#", "D", "D#",
             "E", "F", "F#", "G", "G#", "Ab", "Bb", "Db", "Eb", "Gb"};
+
+    // Notes in western music, only sharps taken into account
+    public static final String[] NOTE_NAMES_ONLY_SHARPS = {"A", "A#", "B", "C", "C#", "D", "D#",
+            "E", "F", "F#", "G", "G#"};
 
     // A place holder for unknown quantities
     public static final int UNKNOWN = -1;
@@ -46,5 +50,19 @@ public class Modulo7Globals {
         } else {
             MODULO7_HOST_OS_TYPE = "UNSUPPORTED_OS";
         }
+    }
+
+    /**
+     * Gets the index of a note given the note value
+     * @param note
+     * @return
+     */
+    public static int getIndexOfNote(final String note) {
+        for (int i = 0; i < NOTE_NAMES_ONLY_SHARPS.length; i++) {
+            if (NOTE_NAMES_ONLY_SHARPS[i].equals(note))
+                return i;
+        }
+
+        return -1;
     }
 }

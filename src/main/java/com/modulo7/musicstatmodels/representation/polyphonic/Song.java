@@ -235,4 +235,12 @@ public class Song implements Serializable {
     public Lyrics getLyrics() {
         return lyrics;
     }
+
+    /**
+     * Once the key signature is ascertained, you can add it to the song
+     * @param keySignature
+     */
+    public void addSongMetadata(final KeySignature keySignature) {
+        metadata = new SongMetadata(keySignature);
+    }
 }

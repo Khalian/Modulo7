@@ -16,6 +16,8 @@ import javax.sound.midi.InvalidMidiDataException;
 import java.util.List;
 import java.util.Scanner;
 import java.util.Set;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
 import static com.modulo7.engine.Modulo7CLIChoice.*;
 import static com.modulo7.engine.Modulo7CLIChoice.LIST_NUM_SONGS_INDEXED;
@@ -32,6 +34,7 @@ import static com.modulo7.engine.Modulo7CLIChoice.LIST_NUM_SONGS_INDEXED;
  * in_memory - A boolean flag which states whether data is purely in memory or should be serialized to disk
  * complete_metadata - In the event metadata is not present in music sources, whether modulo7 should guess it?
  * verbose - Should the output be verbose, when indexing and computing
+ * num_threads - This argument would allow for an optional number of threads to spawn for java
  *
  * This class supports all that modulo7 has to offer including an example standard query set and a custom query engine
  */
@@ -62,6 +65,12 @@ public class Modulo7CLI {
     private static final String PERSIST_ON_DISK_DESC = "Whether Modulo7 should keep the indexed data in memory " +
             "or serialize it to disk/db";
 
+    // The number of threads to startup up the modulo7 database engine with
+    private static final String NUM_THREADS = "num_threads";
+
+    // Num threads desc
+    private static final String NUM_THREADS_DESC = "The number of threads to startup up the modulo7 database engine with";
+
     // A description of is a metadata fix needed option
     private static final String IS_METADATA_FIX_NEEDED_DESC = "Whether Modulo7 attempts to complete its metadata or leaves " +
             "it incomplete if unspecified in the music source files";
@@ -77,7 +86,6 @@ public class Modulo7CLI {
 
     // Logger element in Modulo7 CLI
     private static final Logger logger = Logger.getLogger(Modulo7CLI.class);
-
 
     /**
      * Entry point to the Modulo7 CLI engine
@@ -104,8 +112,15 @@ public class Modulo7CLI {
         final String indexDir = commandLine.getOptionValue(INDEX_DIR);
         final boolean persistOnDisk = commandLine.hasOption(PERSIST_ON_DISK);
         final boolean verboseOutput = commandLine.hasOption(VERBOSE_OUTPUT);
+        final boolean hasNumberThreads = commandLine.hasOption(NUM_THREADS);
 
-        indexer = new Modulo7Indexer(srcDir, indexDir, persistOnDisk, verboseOutput);
+        // Init the database with a set number of threads
+        if (hasNumberThreads) {
+            final int numThreads = Integer.parseInt(commandLine.getOptionValue(NUM_THREADS));
+            indexer = new Modulo7Indexer(srcDir, indexDir, persistOnDisk, verboseOutput, numThreads);
+        } else {
+            indexer = new Modulo7Indexer(srcDir, indexDir, persistOnDisk, verboseOutput);
+        }
 
         indexer.indexData();
         System.out.println("Welcome to Modulo7 interactive prompt for analysis of the vector space models");
@@ -173,7 +188,11 @@ public class Modulo7CLI {
             case INPUT_CUSTOM_QUERY:
                 System.out.println("Consumer is going into custom query mode, now changing to Modulo7 SQL parser mode \n");
                 System.out.print("Enter input query : ");
-                final String queryStr = in.next();
+                Scanner customIn = new Scanner(System.in);
+
+                customIn.useDelimiter("\n");
+
+                final String queryStr = customIn.next();
                 System.out.println("");
                 Modulo7QueryProcessingEngine processingEngine;
                 try {
@@ -291,7 +310,7 @@ public class Modulo7CLI {
 
         try {
             // create Options object
-            Options m7Options = new Options();
+            final Options m7Options = new Options();
 
             // options currently supported by the indexer sub system
             m7Options.addOption(MUSIC_SOURCES_DIR, true,
@@ -304,6 +323,8 @@ public class Modulo7CLI {
                     IS_METADATA_FIX_NEEDED_DESC);
             m7Options.addOption(VERBOSE_OUTPUT, false,
                     VERBOSE_OUTPUT_DESC);
+            m7Options.addOption(NUM_THREADS, false,
+                    NUM_THREADS_DESC);
 
             CommandLineParser parser = new DefaultParser();
 
@@ -329,6 +350,7 @@ public class Modulo7CLI {
         System.out.println(PERSIST_ON_DISK + CLI_SPACING + PERSIST_ON_DISK_DESC);
         System.out.println(IS_METADATA_FIX_NEEDED + CLI_SPACING + IS_METADATA_FIX_NEEDED_DESC);
         System.out.println(VERBOSE_OUTPUT + CLI_SPACING + VERBOSE_OUTPUT_DESC);
+        System.out.println(NUM_THREADS + CLI_SPACING + NUM_THREADS_DESC);
         System.out.println("");
     }
 

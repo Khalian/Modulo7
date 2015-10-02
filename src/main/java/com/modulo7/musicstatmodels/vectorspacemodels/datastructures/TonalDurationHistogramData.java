@@ -42,13 +42,14 @@ public class TonalDurationHistogramData {
      * @return
      */
     public List<Double> getArrayRepresentation() {
-        Double[] array = new Double[13];
+        Double[] array = new Double[12];
 
         for (Map.Entry<IntervalEnum, Double> histogramElem : intervalHistogram.entrySet()) {
             final Integer index = histogramElem.getKey().getIntervalQuantity();
             final Double value = histogramElem.getValue();
 
-            array[index] = value;
+            // Perfect unison and perfect octave are considered the same
+            array[index % 12] = value;
         }
 
         return Arrays.asList(array);
@@ -69,17 +70,6 @@ public class TonalDurationHistogramData {
         }
 
         return duration;
-    }
-
-
-    /**
-     * This method acquires duration for a particular interval
-     *
-     * @param intervalEnum
-     * @return
-     */
-    public double getCumulativeDurationForInterval(final IntervalEnum intervalEnum) {
-        return intervalHistogram.get(intervalEnum);
     }
 
     /**

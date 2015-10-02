@@ -18,7 +18,7 @@ import java.util.stream.Collectors;
  * A class for parsing queries provided to the query engine
  * of the
  */
-public class Modulo7UserInputQueryParser {
+public class Modulo7QueryParser {
 
     /**
      * Parses a query given to the query engine

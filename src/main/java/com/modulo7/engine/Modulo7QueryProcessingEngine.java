@@ -8,7 +8,7 @@ import com.modulo7.common.interfaces.choices.CriteriaChoice;
 import com.modulo7.common.interfaces.choices.SongSimilarityChoices;
 import com.modulo7.common.interfaces.choices.StatisticChoice;
 import com.modulo7.modulo7SQL.Modulo7QueryComponents;
-import com.modulo7.modulo7SQL.Modulo7UserInputQueryParser;
+import com.modulo7.modulo7SQL.Modulo7QueryParser;
 import com.modulo7.musicstatmodels.representation.polyphonic.Song;
 import org.apache.log4j.Logger;
 
@@ -56,7 +56,7 @@ public class Modulo7QueryProcessingEngine {
      */
     public Modulo7QueryProcessingEngine(final String query, final Modulo7Indexer indexer) throws Modulo7MalformedM7SQLQuery {
         this.query = query;
-        this.componentsOfQuery = Modulo7UserInputQueryParser.parseQuery(query);
+        this.componentsOfQuery = Modulo7QueryParser.parseQuery(query);
 
         if (componentsOfQuery == null) {
             throw new Modulo7MalformedM7SQLQuery("The query was bad");

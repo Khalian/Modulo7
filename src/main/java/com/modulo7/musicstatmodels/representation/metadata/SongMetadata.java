@@ -123,12 +123,11 @@ public class SongMetadata implements Serializable {
     }
 
     /**
-     * This method is called by song to infer key signature
-     * based on correlated template matching on the KK tonality profile
+     * Basic constructor with only the song key signature known
+     * @param keySignature
      */
-    private void inferKeySignature() throws Modulo7BadKeyException {
-        TonalDurationHistogram histogram = new TonalDurationHistogram();
-        keySignature = KKTonalityProfiles.estimateBestKeySignature(histogram);
+    public SongMetadata(final KeySignature keySignature) {
+        this.keySignature = keySignature;
     }
 
     /**
