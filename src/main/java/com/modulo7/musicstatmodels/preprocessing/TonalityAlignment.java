@@ -45,7 +45,7 @@ public class TonalityAlignment {
 
         for (final Voice voice : newSong.getVoices()) {
             for (final VoiceInstant instant : voice.getVoiceSequence()) {
-                Set<Note> newNoteSet =
+                final Set<Note> newNoteSet =
                         instant.getAllNotesofInstant().parallelStream().map(note -> noteMap.getNoteGivenBaseAndInterval(note, interval)).collect(Collectors.toSet());
                 instant.reassignNotes(new HashSet<>(newNoteSet));
             }

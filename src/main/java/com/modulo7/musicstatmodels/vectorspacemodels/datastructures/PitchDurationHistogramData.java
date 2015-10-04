@@ -1,7 +1,6 @@
 package com.modulo7.musicstatmodels.vectorspacemodels.datastructures;
 
 import com.modulo7.common.utils.Modulo7Globals;
-import com.modulo7.musicstatmodels.musictheorymodels.IntervalEnum;
 
 import java.util.*;
 

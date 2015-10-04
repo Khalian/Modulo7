@@ -19,18 +19,18 @@ import com.modulo7.musicstatmodels.representation.monophonic.VoiceInstant;
 public class Interval {
 
     // The interval entity
-    private IntervalEnum interval;
+    private IntervalQuantity interval;
 
     // The type of interval
     private IntervalType type;
 
     /**
      * Basic constructor
-     * @param intervalEnum
+     * @param intervalQuantity
      * @param type
      */
-    private Interval(final IntervalEnum intervalEnum, final IntervalType type) {
-        this.interval = intervalEnum;
+    private Interval(final IntervalQuantity intervalQuantity, final IntervalType type) {
+        this.interval = intervalQuantity;
         this.type = type;
     }
 
@@ -59,44 +59,71 @@ public class Interval {
             intervalType = IntervalType.DESCENDING;
         }
 
-        IntervalEnum intervalEnum = getInterval(Math.abs(secondPosition - firstPosition));
+        IntervalQuantity intervalQuantity = getIntervalQuantity(secondPosition - firstPosition);
 
-        return new Interval(intervalEnum, intervalType);
+        return new Interval(intervalQuantity, intervalType);
+    }
+
+
+    /**
+     * Returns an interval given the number of half steps (negative sign meaning descending)
+     * and positive sign meaning ascending
+     *
+     * @param numHalfStepsWithSign
+     * @return
+     * @throws Modulo7BadIntervalException
+     */
+    public static Interval getInterval(final int numHalfStepsWithSign) throws Modulo7BadIntervalException {
+        // Figure out what type of an interval it is
+        final IntervalType intervalType;
+
+        if (numHalfStepsWithSign > 0) {
+            intervalType = IntervalType.ASCENDING;
+        } else {
+            intervalType = IntervalType.DESCENDING;
+        }
+
+        IntervalQuantity intervalQuantity = getIntervalQuantity(numHalfStepsWithSign);
+
+        return new Interval(intervalQuantity, intervalType);
     }
 
     /**
      * Gets the interval given the number of half steps
      *
-     * @param numHalfSteps
+     * @param numHalfStepsWithSign
      * @return
      */
-    public static IntervalEnum getInterval(final int numHalfSteps) throws Modulo7BadIntervalException {
+    public static IntervalQuantity getIntervalQuantity(final int numHalfStepsWithSign) throws Modulo7BadIntervalException {
+
+        int numHalfSteps = Math.abs(numHalfStepsWithSign);
+
         if (numHalfSteps % 12 == 0 && numHalfSteps == 0) {
-            return IntervalEnum.PERFECT_UNISON;
+            return IntervalQuantity.PERFECT_UNISON;
         } else if (numHalfSteps % 12 == 1) {
-            return IntervalEnum.MINOR_SECOND;
+            return IntervalQuantity.MINOR_SECOND;
         } else if (numHalfSteps % 12 == 2) {
-            return IntervalEnum.MAJOR_SECOND;
+            return IntervalQuantity.MAJOR_SECOND;
         } else if (numHalfSteps % 12 == 3) {
-            return IntervalEnum.MINOR_THIRD;
+            return IntervalQuantity.MINOR_THIRD;
         } else if (numHalfSteps % 12 == 4) {
-            return IntervalEnum.MAJOR_THIRD;
+            return IntervalQuantity.MAJOR_THIRD;
         } else if (numHalfSteps % 12 == 5) {
-            return IntervalEnum.PERFECT_FOURTH;
+            return IntervalQuantity.PERFECT_FOURTH;
         } else if (numHalfSteps % 12 == 6) {
-            return IntervalEnum.AUGMENTED_FOURTH;
+            return IntervalQuantity.AUGMENTED_FOURTH;
         } else if (numHalfSteps % 12 == 7) {
-            return IntervalEnum.PERFECT_FIFTH;
+            return IntervalQuantity.PERFECT_FIFTH;
         } else if (numHalfSteps % 12 == 8) {
-            return IntervalEnum.MINOR_SIXTH;
+            return IntervalQuantity.MINOR_SIXTH;
         } else if (numHalfSteps % 12 == 9) {
-            return IntervalEnum.MAJOR_SIXTH;
+            return IntervalQuantity.MAJOR_SIXTH;
         } else if (numHalfSteps % 12 == 10) {
-            return IntervalEnum.MINOR_SEVENTH;
+            return IntervalQuantity.MINOR_SEVENTH;
         } else if (numHalfSteps % 12 == 11) {
-            return IntervalEnum.MAJOR_SEVENTH;
+            return IntervalQuantity.MAJOR_SEVENTH;
         } else if (numHalfSteps % 12 == 12) {
-            return IntervalEnum.PERFECT_OCTAVE;
+            return IntervalQuantity.PERFECT_OCTAVE;
         } else {
             throw new Modulo7BadIntervalException("No interval associated with half step distance " + numHalfSteps);
         }
@@ -106,8 +133,16 @@ public class Interval {
      * Basic getter for interval
      * @return
      */
-    public IntervalEnum getIntervalEnum() {
+    public IntervalQuantity getIntervalQuantity() {
         return interval;
+    }
+
+    /**
+     * Getter for interval type
+     * @return
+     */
+    public IntervalType getIntervalType() {
+        return type;
     }
 
     /**

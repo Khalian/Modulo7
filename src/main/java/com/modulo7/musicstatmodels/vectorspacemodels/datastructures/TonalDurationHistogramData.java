@@ -1,6 +1,6 @@
 package com.modulo7.musicstatmodels.vectorspacemodels.datastructures;
 
-import com.modulo7.musicstatmodels.musictheorymodels.IntervalEnum;
+import com.modulo7.musicstatmodels.musictheorymodels.IntervalQuantity;
 
 import java.util.Arrays;
 import java.util.HashMap;
@@ -16,25 +16,25 @@ import java.util.Map;
 public class TonalDurationHistogramData {
 
     // Internal intervalHistogram representation
-    private Map<IntervalEnum, Double> intervalHistogram = new HashMap<>();
+    private Map<IntervalQuantity, Double> intervalHistogram = new HashMap<>();
 
     /**
      * Tonal Histogram scratch representation
      */
     public TonalDurationHistogramData() {
-        intervalHistogram.put(IntervalEnum.PERFECT_UNISON, 0.0);
-        intervalHistogram.put(IntervalEnum.MINOR_SECOND, 0.0);
-        intervalHistogram.put(IntervalEnum.MAJOR_SECOND, 0.0);
-        intervalHistogram.put(IntervalEnum.MINOR_THIRD, 0.0);
-        intervalHistogram.put(IntervalEnum.MAJOR_THIRD, 0.0);
-        intervalHistogram.put(IntervalEnum.PERFECT_FOURTH, 0.0);
-        intervalHistogram.put(IntervalEnum.AUGMENTED_FOURTH, 0.0);
-        intervalHistogram.put(IntervalEnum.PERFECT_FIFTH, 0.0);
-        intervalHistogram.put(IntervalEnum.MINOR_SIXTH, 0.0);
-        intervalHistogram.put(IntervalEnum.MAJOR_SIXTH, 0.0);
-        intervalHistogram.put(IntervalEnum.MINOR_SEVENTH, 0.0);
-        intervalHistogram.put(IntervalEnum.MAJOR_SEVENTH, 0.0);
-        intervalHistogram.put(IntervalEnum.PERFECT_OCTAVE, 0.0);
+        intervalHistogram.put(IntervalQuantity.PERFECT_UNISON, 0.0);
+        intervalHistogram.put(IntervalQuantity.MINOR_SECOND, 0.0);
+        intervalHistogram.put(IntervalQuantity.MAJOR_SECOND, 0.0);
+        intervalHistogram.put(IntervalQuantity.MINOR_THIRD, 0.0);
+        intervalHistogram.put(IntervalQuantity.MAJOR_THIRD, 0.0);
+        intervalHistogram.put(IntervalQuantity.PERFECT_FOURTH, 0.0);
+        intervalHistogram.put(IntervalQuantity.AUGMENTED_FOURTH, 0.0);
+        intervalHistogram.put(IntervalQuantity.PERFECT_FIFTH, 0.0);
+        intervalHistogram.put(IntervalQuantity.MINOR_SIXTH, 0.0);
+        intervalHistogram.put(IntervalQuantity.MAJOR_SIXTH, 0.0);
+        intervalHistogram.put(IntervalQuantity.MINOR_SEVENTH, 0.0);
+        intervalHistogram.put(IntervalQuantity.MAJOR_SEVENTH, 0.0);
+        intervalHistogram.put(IntervalQuantity.PERFECT_OCTAVE, 0.0);
     }
 
     /**
@@ -44,8 +44,8 @@ public class TonalDurationHistogramData {
     public List<Double> getArrayRepresentation() {
         Double[] array = new Double[12];
 
-        for (Map.Entry<IntervalEnum, Double> histogramElem : intervalHistogram.entrySet()) {
-            final Integer index = histogramElem.getKey().getIntervalQuantity();
+        for (Map.Entry<IntervalQuantity, Double> histogramElem : intervalHistogram.entrySet()) {
+            final Integer index = histogramElem.getKey().getQuantity();
             final Double value = histogramElem.getValue();
 
             // Perfect unison and perfect octave are considered the same
@@ -65,7 +65,7 @@ public class TonalDurationHistogramData {
 
         double duration = 0.0;
 
-        for (Map.Entry<IntervalEnum, Double> entry : intervalHistogram.entrySet()) {
+        for (Map.Entry<IntervalQuantity, Double> entry : intervalHistogram.entrySet()) {
             duration += entry.getValue();
         }
 
@@ -85,7 +85,7 @@ public class TonalDurationHistogramData {
      * @param interval
      * @return
      */
-    public Double getData(final IntervalEnum interval) {
+    public Double getData(final IntervalQuantity interval) {
         return intervalHistogram.get(interval);
     }
 
@@ -94,7 +94,7 @@ public class TonalDurationHistogramData {
      * @param interval
      * @param value
      */
-    public void setData(final IntervalEnum interval, final double value) {
+    public void setData(final IntervalQuantity interval, final double value) {
         intervalHistogram.put(interval, value);
     }
 }

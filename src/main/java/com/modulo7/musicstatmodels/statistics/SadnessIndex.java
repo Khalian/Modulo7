@@ -2,7 +2,7 @@ package com.modulo7.musicstatmodels.statistics;
 
 import com.modulo7.common.interfaces.AbstractSongVector;
 import com.modulo7.common.interfaces.AbstractStatistic;
-import com.modulo7.musicstatmodels.musictheorymodels.IntervalEnum;
+import com.modulo7.musicstatmodels.musictheorymodels.IntervalQuantity;
 import com.modulo7.musicstatmodels.representation.polyphonic.Song;
 import com.modulo7.musicstatmodels.vectorspacemodels.datastructures.TonalHistogramData;
 import com.modulo7.musicstatmodels.vectorspacemodels.vectorspacerepresentations.songvectors.TonalHistogram;
@@ -38,10 +38,10 @@ public class SadnessIndex implements AbstractStatistic<Double> {
         int minorSum = 0;
 
         // Add perfect intervals to perfect sum
-        minorSum += histogramData.getCountForInterval(IntervalEnum.MINOR_SECOND);
-        minorSum += histogramData.getCountForInterval(IntervalEnum.MINOR_THIRD);
-        minorSum += histogramData.getCountForInterval(IntervalEnum.MINOR_SIXTH);
-        minorSum += histogramData.getCountForInterval(IntervalEnum.MINOR_SEVENTH);
+        minorSum += histogramData.getCountForInterval(IntervalQuantity.MINOR_SECOND);
+        minorSum += histogramData.getCountForInterval(IntervalQuantity.MINOR_THIRD);
+        minorSum += histogramData.getCountForInterval(IntervalQuantity.MINOR_SIXTH);
+        minorSum += histogramData.getCountForInterval(IntervalQuantity.MINOR_SEVENTH);
 
         return (double)(minorSum / totalSum);
     }

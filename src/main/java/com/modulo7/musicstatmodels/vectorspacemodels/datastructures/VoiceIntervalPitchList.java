@@ -3,7 +3,7 @@ package com.modulo7.musicstatmodels.vectorspacemodels.datastructures;
 import com.modulo7.common.exceptions.Modulo7BadIntervalException;
 import com.modulo7.common.exceptions.Modulo7WrongNoteType;
 import com.modulo7.musicstatmodels.musictheorymodels.Interval;
-import com.modulo7.musicstatmodels.musictheorymodels.IntervalEnum;
+import com.modulo7.musicstatmodels.musictheorymodels.IntervalQuantity;
 import com.modulo7.musicstatmodels.representation.monophonic.Voice;
 import com.modulo7.musicstatmodels.representation.monophonic.VoiceInstant;
 
@@ -18,7 +18,7 @@ import java.util.List;
 public class VoiceIntervalPitchList {
 
     // Pitches on the voices in sequence
-    private List<IntervalEnum> pitcheIntervalsInSequenceOfVoice = new ArrayList<>();
+    private List<IntervalQuantity> pitcheIntervalsInSequenceOfVoice = new ArrayList<>();
 
     /**
      * Computes the voice pitches in sequence
@@ -32,7 +32,7 @@ public class VoiceIntervalPitchList {
             final VoiceInstant currInstant = voice.getVoiceInstantAtPostion(i);
             final VoiceInstant nextInstant = voice.getVoiceInstantAtPostion(i + 1);
 
-            final IntervalEnum interval = Interval.getInterval(currInstant, nextInstant).getIntervalEnum();
+            final IntervalQuantity interval = Interval.getInterval(currInstant, nextInstant).getIntervalQuantity();
             pitcheIntervalsInSequenceOfVoice.add(interval);
         }
     }
@@ -41,7 +41,7 @@ public class VoiceIntervalPitchList {
      * Getter for pitches in sequence of voice
      * @return
      */
-    private List<IntervalEnum> getPitchIntervalsInSequenceOfVoice() {
+    private List<IntervalQuantity> getPitchIntervalsInSequenceOfVoice() {
         return pitcheIntervalsInSequenceOfVoice;
     }
 

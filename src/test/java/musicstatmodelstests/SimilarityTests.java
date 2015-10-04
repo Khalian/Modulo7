@@ -3,11 +3,12 @@ package musicstatmodelstests;
 import com.modulo7.common.exceptions.Modulo7BadIntervalException;
 import com.modulo7.common.exceptions.Modulo7InvalidVoiceInstantSizeException;
 import com.modulo7.common.interfaces.AbstractContour;
+import com.modulo7.common.interfaces.AbstractStringContour;
 import com.modulo7.common.interfaces.AbstractVoiceSimilarity;
 import com.modulo7.musicstatmodels.representation.buildingblocks.Note;
 import com.modulo7.musicstatmodels.representation.monophonic.Voice;
 import com.modulo7.musicstatmodels.representation.monophonic.VoiceInstant;
-import com.modulo7.musicstatmodels.similarity.voicesimilarity.GrossCountourSimilarity;
+import com.modulo7.musicstatmodels.similarity.voicesimilarity.GrossContourSimilarity;
 import com.modulo7.musicstatmodels.similarity.voicesimilarity.RawMelodicEditDistanceSimilarity;
 import com.modulo7.musicstatmodels.vectorspacemodels.contour.GrossContour;
 import org.junit.Assert;
@@ -57,14 +58,14 @@ public class SimilarityTests {
         newVoice2.addVoiceInstant(new VoiceInstant(Note.C0));
         newVoice2.addVoiceInstant(new VoiceInstant(Note.E0));
 
-        AbstractContour<String> grossContour = new GrossContour();
+        AbstractStringContour grossContour = new GrossContour();
         final String contour1 = grossContour.getContourRepresentaionOfVoice(newVoice);
         final String contour2 = grossContour.getContourRepresentaionOfVoice(newVoice2);
 
         // First check if both contours are same or not
         Assert.assertEquals(contour1, contour2);
 
-        AbstractVoiceSimilarity contourSim = new GrossCountourSimilarity();
+        AbstractVoiceSimilarity contourSim = new GrossContourSimilarity();
 
         Assert.assertEquals(contourSim.getSimilarity(newVoice, newVoice2), 1.0, 0.0);
     }

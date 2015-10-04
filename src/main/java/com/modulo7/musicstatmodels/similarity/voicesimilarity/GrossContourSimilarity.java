@@ -11,7 +11,7 @@ import org.apache.lucene.search.spell.LevensteinDistance;
  * A similarity measure based on the gross contour of melodies and their
  * edit distance
  */
-public class GrossCountourSimilarity implements AbstractVoiceSimilarity {
+public class GrossContourSimilarity implements AbstractVoiceSimilarity {
 
     /**
      * Returns similarity based on the gross contour representation of songs
@@ -27,7 +27,7 @@ public class GrossCountourSimilarity implements AbstractVoiceSimilarity {
 
         LevensteinDistance distance = new LevensteinDistance();
 
-        // Leveinstein distance is a misnomer, its actually a similarity measure
+        // Leveinstein distance is a misnomer in apache lucene, its actually a similarity measure
         return distance.getDistance(firstContourRep, secondContourRep);
     }
 }

@@ -2,7 +2,7 @@ package com.modulo7.musicstatmodels.statistics;
 
 import com.modulo7.common.interfaces.AbstractSongVector;
 import com.modulo7.common.interfaces.AbstractStatistic;
-import com.modulo7.musicstatmodels.musictheorymodels.IntervalEnum;
+import com.modulo7.musicstatmodels.musictheorymodels.IntervalQuantity;
 import com.modulo7.musicstatmodels.representation.polyphonic.Song;
 import com.modulo7.musicstatmodels.vectorspacemodels.datastructures.TonalHistogramData;
 import com.modulo7.musicstatmodels.vectorspacemodels.vectorspacerepresentations.songvectors.TonalHistogram;
@@ -47,10 +47,10 @@ public class PowerIndex implements AbstractStatistic<Double> {
         int perfectSum = 0;
 
         // Add perfect intervals to perfect sum
-        perfectSum += histogramData.getCountForInterval(IntervalEnum.PERFECT_UNISON);
-        perfectSum += histogramData.getCountForInterval(IntervalEnum.PERFECT_FIFTH);
-        perfectSum += histogramData.getCountForInterval(IntervalEnum.PERFECT_OCTAVE);
-        perfectSum += histogramData.getCountForInterval(IntervalEnum.PERFECT_FOURTH);
+        perfectSum += histogramData.getCountForInterval(IntervalQuantity.PERFECT_UNISON);
+        perfectSum += histogramData.getCountForInterval(IntervalQuantity.PERFECT_FIFTH);
+        perfectSum += histogramData.getCountForInterval(IntervalQuantity.PERFECT_OCTAVE);
+        perfectSum += histogramData.getCountForInterval(IntervalQuantity.PERFECT_FOURTH);
 
         return (double)(perfectSum / totalSum);
     }

@@ -4,10 +4,12 @@ import com.modulo7.common.exceptions.Modulo7BadIntervalException;
 import com.modulo7.common.exceptions.Modulo7InvalidVoiceInstantSizeException;
 import com.modulo7.common.exceptions.Modulo7WrongNoteType;
 import com.modulo7.common.utils.Modulo7Globals;
+import com.modulo7.musicstatmodels.musictheorymodels.Interval;
 import com.modulo7.musicstatmodels.representation.buildingblocks.ChordQuality;
 import com.modulo7.musicstatmodels.representation.buildingblocks.Note;
 import com.modulo7.musicstatmodels.representation.buildingblocks.NoteDuration;
 import com.modulo7.musicstatmodels.representation.buildingblocks.NoteType;
+import org.apache.commons.lang3.SerializationUtils;
 
 import java.io.Serializable;
 import java.util.HashSet;
@@ -362,10 +364,6 @@ public class VoiceInstant implements Serializable {
      */
     private void checkIfAllValidNotes(HashSet<Note> notes) {
        for (Note note : notes) {
-
-           if (note == null) {
-               System.out.println("Haha");
-           }
            assert (note != null);
        }
     }
@@ -414,6 +412,7 @@ public class VoiceInstant implements Serializable {
 
     /**
      * Similar to is higher pitch in note module, for chords considers the
+     * root note versus other melodic note
      *
      * @param thisInstant
      * @param thatInstant
@@ -442,7 +441,35 @@ public class VoiceInstant implements Serializable {
     }
 
     /**
-     * Similar to is lower pitch in note module, for chords considers the
+     * Gets a new Voice Instant from older instance based on intervalic distance
+     *
+     * @param thisInstant
+     * @param intervalInt
+     * @return
+     * @throws Modulo7WrongNoteType
+     * @throws Modulo7BadIntervalException
+     */
+    public static VoiceInstant getShiftedInstance(final VoiceInstant thisInstant, final int intervalInt) throws Modulo7WrongNoteType, Modulo7BadIntervalException {
+        VoiceInstant newInstant = SerializationUtils.clone(thisInstant);
+
+        HashSet<Note> allNotes = newInstant.getAllNotesofInstant();
+        HashSet<Note> shiftedNotes = new HashSet<>();
+
+        Interval shiftInterval = Interval.getInterval(intervalInt);
+
+        for (final Note note: allNotes) {
+            final Note newNote = Note.getShiftedNote(note, shiftInterval);
+            shiftedNotes.add(newNote);
+        }
+
+        newInstant.reassignNotes(shiftedNotes);
+
+        return newInstant;
+    }
+
+    /**
+     * Checks whether two voice instants have the same pith. For chords ,the root note of a chord
+     * is considered
      *
      * @param thisInstant
      * @param thatInstant
@@ -468,5 +495,34 @@ public class VoiceInstant implements Serializable {
         }
 
         return Note.isLowerPitch(thisNote, thatNote);
+    }
+
+    /**
+     * Similar to is equal in  pitch in note module, for chords considers the
+     *
+     * @param thisInstant
+     * @param thatInstant
+     * @return
+     * @throws Modulo7WrongNoteType
+     */
+    public static boolean isEqualPitch(final VoiceInstant thisInstant, final VoiceInstant thatInstant) throws Modulo7WrongNoteType {
+
+        final Note thisNote;
+
+        if (thisInstant.isChord()) {
+            thisNote = ChordQuality.getRootNoteFromChord(thisInstant.setOfNotes);
+        } else {
+            thisNote = thisInstant.getNote();
+        }
+
+        final Note thatNote;
+
+        if (thatInstant.isChord()) {
+            thatNote = ChordQuality.getRootNoteFromChord(thisInstant.setOfNotes);
+        } else {
+            thatNote = thatInstant.getNote();
+        }
+
+        return thisNote.getNoteValue().equals(thatNote.getNoteValue());
     }
 }

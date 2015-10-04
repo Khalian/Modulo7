@@ -6,9 +6,11 @@ import com.modulo7.musicstatmodels.representation.monophonic.Voice;
 /**
  * Created by asanyal on 9/24/15.
  *
- * A generic similarity measure on comparing
+ * A generic similarity measure on comparing similarity measures on unequal sized melodies / voices
+ *
+ * Used as a subroutine inside generic maximal voice similarity
  */
-public class MaxUnequalMelodicLengSimilarityMeasure<T extends AbstractVoiceSimilarity> implements AbstractVoiceSimilarity {
+public class MaxUnequalMelodicLenSimiMeasure<T extends AbstractVoiceSimilarity> implements AbstractVoiceSimilarity {
 
     // An internal voice similarity measure
     private T internalVoiceSimilarityMeasure;
@@ -16,9 +18,9 @@ public class MaxUnequalMelodicLengSimilarityMeasure<T extends AbstractVoiceSimil
     /**
      * Internal voice similarity is acquired in the constructor
      *
-     * @param internalVoiceSimilarityMeasure
+     * @param internalVoiceSimilarityMeasure ( the internal measure used for similarity computation)
      */
-    public MaxUnequalMelodicLengSimilarityMeasure(T internalVoiceSimilarityMeasure) {
+    public MaxUnequalMelodicLenSimiMeasure(T internalVoiceSimilarityMeasure) {
         this.internalVoiceSimilarityMeasure = internalVoiceSimilarityMeasure;
     }
 

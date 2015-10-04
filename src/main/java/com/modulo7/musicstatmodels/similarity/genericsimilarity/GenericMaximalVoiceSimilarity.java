@@ -9,7 +9,10 @@ import com.modulo7.musicstatmodels.representation.polyphonic.Song;
  * Created by asanyal on 9/18/15.
  *
  * Generic maximal voice similarity is based on similarity
- * between pairs of voices and then returning
+ * between pairs of voices and then returning the max similarity obtained
+ *
+ * It internally uses a maximal unequal melodic similarity measure.
+ * This is to ensure that voices of different length are measured appropriately
  */
 public class GenericMaximalVoiceSimilarity<T extends AbstractVoiceSimilarity> implements AbstractSongSimilarity {
 
@@ -28,9 +31,14 @@ public class GenericMaximalVoiceSimilarity<T extends AbstractVoiceSimilarity> im
     public double getSimilarity(final Song first, final  Song second) {
         double bestSim = -Double.MAX_VALUE;
 
+        // Its expected that both voices would be of different lengths, if thats the case
+        // automatically apply an unequal similarity measurement criteria
+        final MaxUnequalMelodicLenSimiMeasure<T> unequalSimilarity =
+                new MaxUnequalMelodicLenSimiMeasure<>(internalVoiceSimilarity);
+
         for (final Voice firstVoice : first.getVoices()) {
             for (final Voice secondVoice : second.getVoices()) {
-                final double currSim = internalVoiceSimilarity.getSimilarity(firstVoice, secondVoice);
+                final double currSim = unequalSimilarity.getSimilarity(firstVoice, secondVoice);
                 bestSim = Math.max(bestSim, currSim);
             }
         }

@@ -4,12 +4,11 @@ import com.modulo7.common.exceptions.Modulo7BadIntervalException;
 import com.modulo7.common.exceptions.Modulo7WrongNoteType;
 import com.modulo7.common.interfaces.AbstractContour;
 import com.modulo7.musicstatmodels.musictheorymodels.Interval;
-import com.modulo7.musicstatmodels.musictheorymodels.IntervalType;
 import com.modulo7.musicstatmodels.representation.monophonic.Voice;
 import com.modulo7.musicstatmodels.representation.monophonic.VoiceInstant;
+import org.apache.commons.lang3.SerializationUtils;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
 
 /**
  * Created by asanyal on 9/26/15.
@@ -17,6 +16,11 @@ import java.util.List;
  * Given a contour, returns the gradient with respect to consecutive notes in the contour representation
  * The gradient is a quantitative representation of the direction and magnitude of successive elements in
  * the contour
+ *
+ * Once the gradient is computed, all notes are shifted in between two extremum notes by the gradient amount
+ * by the equation
+ *
+ * p_(i + k) = p_i + m (t_{i+k} - t(i)) for natural contour, steinbeck contour and mullensefstein contour
  */
 public class ContourGradient<T extends AbstractContour> {
 
@@ -41,39 +45,38 @@ public class ContourGradient<T extends AbstractContour> {
      * @throws Modulo7BadIntervalException
      * @throws Modulo7WrongNoteType
      */
-    public List<Integer> getGradient(final Voice voice) throws Modulo7BadIntervalException, Modulo7WrongNoteType {
+    public Voice getGradient(final Voice voice) throws Modulo7BadIntervalException, Modulo7WrongNoteType {
 
         // Gradient vector for
-        final List<Integer> gradientVector = new ArrayList<>();
+        final LinkedHashMap<Integer, VoiceInstant> extemumNotes = internalContourRepresentation.getContourRepresentaionOfVoice(voice);
 
-        if (internalContourRepresentation instanceof GrossContour) {
-            final String contour = (String) internalContourRepresentation.getContourRepresentaionOfVoice(voice);
-            final String[] contourSplit = contour.split(" ");
-            for (int i = 0; i < contourSplit.length - 1; i++) {
-                if (contourSplit[i].equals("U") && contourSplit[i + 1].equals("D")) {
-                    gradientVector.add(-1);
-                } else if (contourSplit[i].equals("D") && contourSplit[i+1].equals("U")) {
-                    gradientVector.add(1);
-                } else {
-                    gradientVector.add(0);
-                }
-            }
-        } else {
-            final Voice newVoice = (Voice) internalContourRepresentation.getContourRepresentaionOfVoice(voice);
-            final List<VoiceInstant> instantList = newVoice.getVoiceSequence();
+        // This ensures a deep copy of the voice so that the original voice survives
+        Voice newVoice = SerializationUtils.clone(voice);
 
-            for (int i = 0; i < instantList.size() - 1; i++) {
-                final VoiceInstant instant = instantList.get(i);
-                final VoiceInstant nextInstant = instantList.get(i + 1);
+        final List<Integer> extremumNotesInOrder = new ArrayList<>(extemumNotes.keySet());
 
-                final Interval gradientInterval = Interval.getInterval(instant, nextInstant);
+        for (int i = 1; i < extremumNotesInOrder.size(); i++) {
+            int location1 = extremumNotesInOrder.get(i - 1);
+            int location2 = extremumNotesInOrder.get(i);
 
-                // Add the intervalic distance to the contour gradient representation dep
-                final int sign = (gradientInterval.getType().equals(IntervalType.ASCENDING)) ? 1 : -1;
-                gradientVector.add(gradientInterval.getIntervalEnum().getIntervalQuantity() * sign);
+            VoiceInstant v1 = extemumNotes.get(location1);
+            VoiceInstant v2 = extemumNotes.get(location2);
+
+            final int interval = Interval.getInterval(v2, v1).getIntervalQuantity().getQuantity();
+            final double durationDiff = v2.getDuration() - v1.getDuration();
+
+            final double gradient = interval / durationDiff;
+
+            // Alter the voice based on contour computation
+            for (int j = location1; j <= location2; j++) {
+                final VoiceInstant currInstant = voice.getVoiceInstantAtPostion(j);
+                final double currDifference = currInstant.getDuration() - v1.getDuration();
+                final int estimatedInterval = (int) (currDifference * gradient);
+                VoiceInstant shiftedInstance = VoiceInstant.getShiftedInstance(currInstant, estimatedInterval);
+                voice.reassignVoiceInstance(shiftedInstance, j);
             }
         }
 
-        return gradientVector;
+        return newVoice;
     }
 }

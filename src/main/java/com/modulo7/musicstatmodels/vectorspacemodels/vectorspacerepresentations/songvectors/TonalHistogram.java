@@ -4,7 +4,7 @@ import com.modulo7.common.exceptions.Modulo7BadIntervalException;
 import com.modulo7.common.exceptions.Modulo7WrongNoteType;
 import com.modulo7.common.interfaces.AbstractSongVector;
 import com.modulo7.musicstatmodels.musictheorymodels.Interval;
-import com.modulo7.musicstatmodels.musictheorymodels.IntervalEnum;
+import com.modulo7.musicstatmodels.musictheorymodels.IntervalQuantity;
 import com.modulo7.musicstatmodels.representation.polyphonic.Song;
 import com.modulo7.musicstatmodels.representation.monophonic.Voice;
 import com.modulo7.musicstatmodels.representation.monophonic.VoiceInstant;
@@ -45,8 +45,8 @@ public class TonalHistogram implements AbstractSongVector<TonalHistogramData> {
 
                 try {
                     // Compute intervals
-                    IntervalEnum intervalEnum = Interval.getInterval(instant, nextInstant).getIntervalEnum();
-                    addIntervalToHistogram(intervalEnum);
+                    IntervalQuantity intervalQuantity = Interval.getInterval(instant, nextInstant).getIntervalQuantity();
+                    addIntervalToHistogram(intervalQuantity);
                 } catch (Modulo7WrongNoteType | Modulo7BadIntervalException e) {
                     e.printStackTrace();
                 }
@@ -64,7 +64,7 @@ public class TonalHistogram implements AbstractSongVector<TonalHistogramData> {
      *
      * @param interval
      */
-    private synchronized void addIntervalToHistogram(final IntervalEnum interval) {
+    private synchronized void addIntervalToHistogram(final IntervalQuantity interval) {
         Integer count = intervalHistogram.getData(interval);
 
         if (count == null) {

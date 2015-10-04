@@ -6,6 +6,7 @@ package com.modulo7.musicstatmodels.representation.metadata;
  * Different types of scales that in existence in western music.
  *
  * Major Scale : Standard major scale, also called the happy sounding scale
+ * Minor Scale : Standard minor scale, also called the sad sounding scale
  */
 public enum ScaleType {
 
@@ -34,5 +35,13 @@ public enum ScaleType {
         } else {
             return UNKNOWN;
         }
+    }
+
+    /**
+     * Gets the string representation of the scale
+     * @return
+     */
+    public String getScale() {
+        return scale;
     }
 }

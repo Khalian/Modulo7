@@ -1,18 +1,16 @@
 package musicstatmodelstests;
 
 import com.modulo7.common.exceptions.Modulo7InvalidVoiceInstantSizeException;
-import com.modulo7.common.interfaces.AbstractContour;
-import com.modulo7.common.interfaces.AbstractSongVector;
-import com.modulo7.common.interfaces.AbstractVoiceSimilarity;
-import com.modulo7.common.interfaces.AbstractVoiceVector;
+import com.modulo7.common.interfaces.*;
 import com.modulo7.crawler.utils.MusicSources;
-import com.modulo7.musicstatmodels.musictheorymodels.IntervalEnum;
+import com.modulo7.musicstatmodels.musictheorymodels.IntervalQuantity;
 import com.modulo7.musicstatmodels.representation.buildingblocks.Note;
 import com.modulo7.musicstatmodels.representation.polyphonic.Song;
 import com.modulo7.musicstatmodels.representation.monophonic.Voice;
 import com.modulo7.musicstatmodels.representation.monophonic.VoiceInstant;
 import com.modulo7.musicstatmodels.similarity.voicesimilarity.VoiceTonalHistogramSimilarity;
 import com.modulo7.musicstatmodels.vectorspacemodels.contour.GrossContour;
+import com.modulo7.musicstatmodels.vectorspacemodels.contour.MullensiefenContour;
 import com.modulo7.musicstatmodels.vectorspacemodels.contour.SteinbeckContour;
 import com.modulo7.musicstatmodels.vectorspacemodels.datastructures.TonalDurationHistogramData;
 import com.modulo7.musicstatmodels.vectorspacemodels.datastructures.TonalHistogramData;
@@ -25,6 +23,7 @@ import org.junit.Test;
 
 import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
 
 /**
  * Created by asanyal on 9/4/15.
@@ -46,10 +45,10 @@ public class VectorSpaceModelsTest {
         testVoice.addVoiceInstant(new VoiceInstant(Note.CSHARP0));
         testVoice.addVoiceInstant(new VoiceInstant(Note.D0));
 
-        AbstractContour<Voice> contour = new SteinbeckContour();
-        Voice newContourizedVoice = contour.getContourRepresentaionOfVoice(testVoice);
+        AbstractContour contour = new SteinbeckContour();
+        Map<Integer, VoiceInstant> contourRep = contour.getContourRepresentaionOfVoice(testVoice);
 
-        Assert.assertEquals(newContourizedVoice.getNumVoiceInstantsOfVoice(), 0);
+        Assert.assertEquals(contourRep.size(), 0);
     }
 
     /**
@@ -59,7 +58,7 @@ public class VectorSpaceModelsTest {
      * @throws com.modulo7.common.exceptions.Modulo7InvalidVoiceInstantSizeException
      */
     @Test
-    public void contourizedVoiceTest() throws Modulo7InvalidVoiceInstantSizeException {
+    public void steinbeckContour() throws Modulo7InvalidVoiceInstantSizeException {
         Voice testVoice = new Voice();
         testVoice.addVoiceInstant(new VoiceInstant(Note.ASHARP1));
         testVoice.addVoiceInstant(new VoiceInstant(Note.B1));
@@ -67,10 +66,10 @@ public class VectorSpaceModelsTest {
         testVoice.addVoiceInstant(new VoiceInstant(Note.CSHARP1));
         testVoice.addVoiceInstant(new VoiceInstant(Note.D1));
 
-        AbstractContour<Voice> contour = new SteinbeckContour();
-        Voice newContourizedVoice = contour.getContourRepresentaionOfVoice(testVoice);
+        AbstractContour contour = new SteinbeckContour();
+        Map<Integer, VoiceInstant> contourRep = contour.getContourRepresentaionOfVoice(testVoice);
 
-        Assert.assertEquals(newContourizedVoice.getNumVoiceInstantsOfVoice(), 2);
+        Assert.assertEquals(contourRep.size(), 1);
     }
 
     /**
@@ -134,7 +133,7 @@ public class VectorSpaceModelsTest {
         Assert.assertEquals(data.getSize(), 13);
         List<Integer> intervalArrayRep = data.getArrayRepresentation();
         Assert.assertEquals(intervalArrayRep.size(), 13);
-        Assert.assertEquals(data.getCountForInterval(IntervalEnum.MINOR_SECOND), 6);
+        Assert.assertEquals(data.getCountForInterval(IntervalQuantity.MINOR_SECOND), 6);
         Assert.assertEquals(data.getHistogramTotalSum(), 8);    
     }
 
@@ -176,7 +175,7 @@ public class VectorSpaceModelsTest {
         Assert.assertEquals(song.getTotalSongDuration(), 4.0, 0.0);
 
         // The minor seconds have a total tonal histogram duration of 6.0 in the above test creation
-        Assert.assertEquals(histogram.getInternalRepresentation().getData(IntervalEnum.MINOR_SECOND), 6.0, 0.0);
+        Assert.assertEquals(histogram.getInternalRepresentation().getData(IntervalQuantity.MINOR_SECOND), 6.0, 0.0);
     }
 
     /**
@@ -193,7 +192,7 @@ public class VectorSpaceModelsTest {
         testVoice1.addVoiceInstant(new VoiceInstant(Note.CSHARP1, 1.0));
         testVoice1.addVoiceInstant(new VoiceInstant(Note.D1, 1.0));
 
-        AbstractContour<String> contour = new GrossContour();
+        AbstractStringContour contour = new GrossContour();
 
         String contourRep = contour.getContourRepresentaionOfVoice(testVoice1);
 
@@ -227,5 +226,23 @@ public class VectorSpaceModelsTest {
 
         // Check if they both have the exact same histogram
         Assert.assertEquals(similarity.getSimilarity(testVoice1, testVoice2), 1.0, 0.0);
+    }
+
+    /**
+     * Test case for mullensiefen contour
+     */
+    @Test
+    public void mullensiefenContourTest() throws Modulo7InvalidVoiceInstantSizeException {
+        Voice testVoice = new Voice();
+        testVoice.addVoiceInstant(new VoiceInstant(Note.ASHARP1));
+        testVoice.addVoiceInstant(new VoiceInstant(Note.B1));
+        testVoice.addVoiceInstant(new VoiceInstant(Note.C0));
+        testVoice.addVoiceInstant(new VoiceInstant(Note.B1));
+        testVoice.addVoiceInstant(new VoiceInstant(Note.D1));
+
+        AbstractContour contour = new MullensiefenContour();
+        Map<Integer, VoiceInstant> contourRep = contour.getContourRepresentaionOfVoice(testVoice);
+
+        Assert.assertEquals(contourRep.size(), 1);
     }
 }

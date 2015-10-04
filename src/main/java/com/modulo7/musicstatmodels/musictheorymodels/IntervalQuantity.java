@@ -3,7 +3,7 @@ package com.modulo7.musicstatmodels.musictheorymodels;
 /**
  * A declaration of all the intervals present in western music theory
  */
-public enum IntervalEnum {
+public enum IntervalQuantity {
 
     PERFECT_UNISON(0),
     MINOR_SECOND(1),
@@ -37,7 +37,7 @@ public enum IntervalEnum {
      * Basic constructor with only interval quantity
      * @param intervalQuantity
      */
-    IntervalEnum(final int intervalQuantity) {
+    IntervalQuantity(final int intervalQuantity) {
         this.intervalQuantity = intervalQuantity;
         inferIntervalQuality();
     }
@@ -72,7 +72,7 @@ public enum IntervalEnum {
      * Getter for interval quantity
      * @return
      */
-    public int getIntervalQuantity() {
+    public int getQuantity() {
         return intervalQuantity;
     }
 

@@ -24,6 +24,11 @@ public class VoiceTag implements Serializable {
 
     }
 
+    /**
+     * Standard voice tag constructor
+     * @param instrumentName
+     * @param clef
+     */
     public VoiceTag(final String instrumentName, final Clef clef) {
         this.instrumentName = instrumentName;
         this.clef = clef;

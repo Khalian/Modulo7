@@ -4,8 +4,10 @@ import com.modulo7.common.exceptions.Modulo7WrongNoteType;
 import com.modulo7.common.interfaces.AbstractContour;
 import com.modulo7.musicstatmodels.representation.monophonic.Voice;
 import com.modulo7.musicstatmodels.representation.monophonic.VoiceInstant;
+import org.apache.log4j.Logger;
 
 import java.util.HashSet;
+import java.util.LinkedHashMap;
 import java.util.Set;
 
 /**
@@ -15,26 +17,31 @@ import java.util.Set;
  * procedures for re - representing a voice so that contour gradients can be created for
  * new vector space models
  */
-public class SteinbeckContour implements AbstractContour<Voice> {
+public class SteinbeckContour implements AbstractContour {
+
+    // Logger for steinbeck contour
+    private Logger logger = Logger.getLogger(SteinbeckContour.class);
 
     @Override
-    public Voice getContourRepresentaionOfVoice(final Voice voice) {
+    public LinkedHashMap<Integer, VoiceInstant> getContourRepresentaionOfVoice(final Voice voice) {
 
-        AbstractContour<Voice> naturalContour = new NaturalContour();
-        Voice extemumNotes = naturalContour.getContourRepresentaionOfVoice(voice);
+        AbstractContour naturalContour = new NaturalContour();
 
-        Set<VoiceInstant> changingNoteIndices = new HashSet<>();
+        LinkedHashMap<Integer, VoiceInstant> naturalExtemumNotes = naturalContour.getContourRepresentaionOfVoice(voice);
+
+        final Set<Integer> changingNoteIndices = new HashSet<>();
 
         int voiceInstantIndex = 0;
-        final int maxVoiceInstantIndex = extemumNotes.getNumVoiceInstantsOfVoice();
 
-        for (final VoiceInstant voiceInstant : extemumNotes.getVoiceSequence()) {
+        final int numVoiceInstantsOfVoice = voice.getNumVoiceInstantsOfVoice();
 
-            if (voiceInstantIndex >= 2 && voiceInstantIndex < maxVoiceInstantIndex - 2) {
-                final VoiceInstant nMinusTwo = extemumNotes.getVoiceInstantAtPostion(voiceInstantIndex - 2);
-                final VoiceInstant nMinusOne = extemumNotes.getVoiceInstantAtPostion(voiceInstantIndex - 1);
-                final VoiceInstant nPlusOne = extemumNotes.getVoiceInstantAtPostion(voiceInstantIndex + 1);
-                final VoiceInstant nPlusTwo = extemumNotes.getVoiceInstantAtPostion(voiceInstantIndex + 2);
+        for (final VoiceInstant voiceInstant : voice.getVoiceSequence()) {
+
+            if (voiceInstantIndex >= 2 && voiceInstantIndex < numVoiceInstantsOfVoice - 2) {
+                final VoiceInstant nMinusTwo = voice.getVoiceInstantAtPostion(voiceInstantIndex - 2);
+                final VoiceInstant nMinusOne = voice.getVoiceInstantAtPostion(voiceInstantIndex - 1);
+                final VoiceInstant nPlusOne = voice.getVoiceInstantAtPostion(voiceInstantIndex + 1);
+                final VoiceInstant nPlusTwo = voice.getVoiceInstantAtPostion(voiceInstantIndex + 2);
 
                 try {
                     final boolean isAllBelow = VoiceInstant.isLowerPitch(voiceInstant, nMinusTwo) && VoiceInstant.isLowerPitch(voiceInstant, nMinusOne) &&
@@ -44,23 +51,17 @@ public class SteinbeckContour implements AbstractContour<Voice> {
                             VoiceInstant.isHigherPitch(voiceInstant, nPlusOne) && VoiceInstant.isHigherPitch(voiceInstant, nPlusTwo);
 
                     if (isAllAbove || isAllBelow) {
-                        changingNoteIndices.add(voiceInstant);
+                        changingNoteIndices.add(voiceInstantIndex);
                     }
                 } catch (Modulo7WrongNoteType e) {
-                    e.printStackTrace();
+                    logger.error(e.getMessage());
                 }
             }
             voiceInstantIndex++;
         }
 
-        Voice contourizedVoice = new Voice();
+        changingNoteIndices.forEach(naturalExtemumNotes::remove);
 
-        for (final VoiceInstant voiceInstant : extemumNotes.getVoiceSequence()) {
-            if (!changingNoteIndices.contains(voiceInstant)) {
-                contourizedVoice.addVoiceInstant(voiceInstant);
-            }
-        }
-
-        return contourizedVoice;
+        return naturalExtemumNotes;
     }
 }

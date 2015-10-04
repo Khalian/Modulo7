@@ -1,6 +1,6 @@
 package com.modulo7.musicstatmodels.vectorspacemodels.datastructures;
 
-import com.modulo7.musicstatmodels.musictheorymodels.IntervalEnum;
+import com.modulo7.musicstatmodels.musictheorymodels.IntervalQuantity;
 
 import java.util.*;
 
@@ -12,25 +12,25 @@ import java.util.*;
 public class TonalHistogramData {
 
     // Internal intervalHistogram representation
-    private Map<IntervalEnum, Integer> intervalHistogram = new HashMap<>();
+    private Map<IntervalQuantity, Integer> intervalHistogram = new HashMap<>();
 
     /**
      * Tonal Histogram scratch representation
      */
     public TonalHistogramData() {
-        intervalHistogram.put(IntervalEnum.PERFECT_UNISON, 0);
-        intervalHistogram.put(IntervalEnum.MINOR_SECOND, 0);
-        intervalHistogram.put(IntervalEnum.MAJOR_SECOND, 0);
-        intervalHistogram.put(IntervalEnum.MINOR_THIRD, 0);
-        intervalHistogram.put(IntervalEnum.MAJOR_THIRD, 0);
-        intervalHistogram.put(IntervalEnum.PERFECT_FOURTH, 0);
-        intervalHistogram.put(IntervalEnum.AUGMENTED_FOURTH, 0);
-        intervalHistogram.put(IntervalEnum.PERFECT_FIFTH, 0);
-        intervalHistogram.put(IntervalEnum.MINOR_SIXTH, 0);
-        intervalHistogram.put(IntervalEnum.MAJOR_SIXTH, 0);
-        intervalHistogram.put(IntervalEnum.MINOR_SEVENTH, 0);
-        intervalHistogram.put(IntervalEnum.MAJOR_SEVENTH, 0);
-        intervalHistogram.put(IntervalEnum.PERFECT_OCTAVE, 0);
+        intervalHistogram.put(IntervalQuantity.PERFECT_UNISON, 0);
+        intervalHistogram.put(IntervalQuantity.MINOR_SECOND, 0);
+        intervalHistogram.put(IntervalQuantity.MAJOR_SECOND, 0);
+        intervalHistogram.put(IntervalQuantity.MINOR_THIRD, 0);
+        intervalHistogram.put(IntervalQuantity.MAJOR_THIRD, 0);
+        intervalHistogram.put(IntervalQuantity.PERFECT_FOURTH, 0);
+        intervalHistogram.put(IntervalQuantity.AUGMENTED_FOURTH, 0);
+        intervalHistogram.put(IntervalQuantity.PERFECT_FIFTH, 0);
+        intervalHistogram.put(IntervalQuantity.MINOR_SIXTH, 0);
+        intervalHistogram.put(IntervalQuantity.MAJOR_SIXTH, 0);
+        intervalHistogram.put(IntervalQuantity.MINOR_SEVENTH, 0);
+        intervalHistogram.put(IntervalQuantity.MAJOR_SEVENTH, 0);
+        intervalHistogram.put(IntervalQuantity.PERFECT_OCTAVE, 0);
     }
 
 
@@ -41,8 +41,8 @@ public class TonalHistogramData {
     public List<Integer> getArrayRepresentation() {
         Integer[] array = new Integer[13];
 
-        for (Map.Entry<IntervalEnum, Integer> histogramElem : intervalHistogram.entrySet()) {
-            final Integer index = histogramElem.getKey().getIntervalQuantity();
+        for (Map.Entry<IntervalQuantity, Integer> histogramElem : intervalHistogram.entrySet()) {
+            final Integer index = histogramElem.getKey().getQuantity();
             final Integer value = histogramElem.getValue();
 
             array[index] = value;
@@ -69,11 +69,11 @@ public class TonalHistogramData {
     /**
      * This method acquires count for a particular interval
      *
-     * @param intervalEnum
+     * @param intervalQuantity
      * @return
      */
-    public int getCountForInterval(final IntervalEnum intervalEnum) {
-        return intervalHistogram.get(intervalEnum);
+    public int getCountForInterval(final IntervalQuantity intervalQuantity) {
+        return intervalHistogram.get(intervalQuantity);
     }
 
     /**
@@ -89,7 +89,7 @@ public class TonalHistogramData {
      * @param interval
      * @return
      */
-    public Integer getData(final IntervalEnum interval) {
+    public Integer getData(final IntervalQuantity interval) {
         return intervalHistogram.get(interval);
     }
 
@@ -98,7 +98,7 @@ public class TonalHistogramData {
      * @param interval
      * @param value
      */
-    public void setData(final IntervalEnum interval, final int value) {
+    public void setData(final IntervalQuantity interval, final int value) {
         intervalHistogram.put(interval, value);
     }
 }

@@ -4,9 +4,10 @@ import com.modulo7.common.exceptions.Modulo7WrongNoteType;
 import com.modulo7.common.interfaces.AbstractContour;
 import com.modulo7.musicstatmodels.representation.monophonic.Voice;
 import com.modulo7.musicstatmodels.representation.monophonic.VoiceInstant;
+import org.apache.log4j.Logger;
 
-import java.util.HashSet;
-import java.util.Set;
+import java.util.LinkedHashMap;
+import java.util.Map;
 
 /**
  * Created by asanyal on 9/8/15.
@@ -15,17 +16,21 @@ import java.util.Set;
  * consider three voice instants : n_i , n_{i-1} and n_{i+1}, natural contour elements
  * are those in which n_i is either higher or lower than both n_{i-1} and n_{i+1} simultaneously
  */
-public class NaturalContour implements AbstractContour<Voice> {
+public class NaturalContour implements AbstractContour {
+
+    // Logger for natural contour
+    private static final Logger logger = Logger.getLogger(NaturalContour.class);
 
     /**
      * Gets the voice representation of the natural contour only exressing the
      * contour extremum notes
+     *
      * @param voice
      * @return
      */
     @Override
-    public Voice getContourRepresentaionOfVoice(final Voice voice) {
-        Set<VoiceInstant> contourExtemum = new HashSet<>();
+    public LinkedHashMap<Integer, VoiceInstant> getContourRepresentaionOfVoice(final Voice voice) {
+        LinkedHashMap<Integer, VoiceInstant> contourExtemumNotes = new LinkedHashMap<>();
 
         int voiceInstantIndex = 0;
         final int maxVoiceInstantIndex = voice.getNumVoiceInstantsOfVoice();
@@ -44,23 +49,15 @@ public class NaturalContour implements AbstractContour<Voice> {
                             VoiceInstant.isHigherPitch(voiceInstant, nPlusOne);
 
                     if (isAllAbove || isAllBelow) {
-                        contourExtemum.add(voiceInstant);
+                        contourExtemumNotes.put(voiceInstantIndex, voiceInstant);
                     }
                 } catch (Modulo7WrongNoteType e) {
-                    e.printStackTrace();
+                    logger.error(e.getMessage());
                 }
             }
             voiceInstantIndex++;
         }
 
-        final Voice contourizedVoice = new Voice();
-
-        for (final VoiceInstant voiceInstant : voice.getVoiceSequence()) {
-            if (contourExtemum.contains(voiceInstant)) {
-                contourizedVoice.addVoiceInstant(voiceInstant);
-            }
-        }
-
-        return contourizedVoice;
+       return contourExtemumNotes;
     }
 }

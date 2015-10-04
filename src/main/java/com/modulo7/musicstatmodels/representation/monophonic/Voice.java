@@ -189,4 +189,13 @@ public class Voice implements Serializable {
     public void setVoiceTag(VoiceTag voiceTag) {
         this.voiceTag = voiceTag;
     }
+
+    /**
+     * Alter a voice instance at a given position
+     * @param shiftedInstance
+     * @param position
+     */
+    public void reassignVoiceInstance(final VoiceInstant shiftedInstance, final int position) {
+        voiceSequence.set(position, shiftedInstance);
+    }
 }

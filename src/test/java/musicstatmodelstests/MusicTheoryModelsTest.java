@@ -2,7 +2,7 @@ package musicstatmodelstests;
 
 import com.modulo7.common.exceptions.Modulo7BadIntervalException;
 import com.modulo7.musicstatmodels.musictheorymodels.Interval;
-import com.modulo7.musicstatmodels.musictheorymodels.IntervalEnum;
+import com.modulo7.musicstatmodels.musictheorymodels.IntervalQuantity;
 import com.modulo7.musicstatmodels.musictheorymodels.KKTonalityProfiles;
 import com.modulo7.musicstatmodels.representation.buildingblocks.ChordQuality;
 import com.modulo7.musicstatmodels.representation.buildingblocks.Note;
@@ -25,11 +25,11 @@ public class MusicTheoryModelsTest {
      */
     @Test
     public void testIntervals() throws Modulo7BadIntervalException {
-        Assert.assertEquals(Interval.getInterval(Note.A0, Note.B0).getIntervalEnum(), IntervalEnum.MAJOR_SECOND);
-        Assert.assertEquals(Interval.getInterval(Note.A1, Note.CSHARP1).getIntervalEnum(), IntervalEnum.MAJOR_THIRD);
-        Assert.assertEquals(Interval.getInterval(Note.A2, Note.DSHARP2).getIntervalEnum(), IntervalEnum.AUGMENTED_FOURTH);
-        Assert.assertEquals(Interval.getInterval(Note.B0, Note.B0).getIntervalEnum(), IntervalEnum.PERFECT_UNISON);
-        Assert.assertEquals(Interval.getInterval(Note.CSHARP4, Note.GSHARP4).getIntervalEnum(), IntervalEnum.PERFECT_FIFTH);
+        Assert.assertEquals(Interval.getInterval(Note.A0, Note.B0).getIntervalQuantity(), IntervalQuantity.MAJOR_SECOND);
+        Assert.assertEquals(Interval.getInterval(Note.A1, Note.CSHARP1).getIntervalQuantity(), IntervalQuantity.MAJOR_THIRD);
+        Assert.assertEquals(Interval.getInterval(Note.A2, Note.DSHARP2).getIntervalQuantity(), IntervalQuantity.AUGMENTED_FOURTH);
+        Assert.assertEquals(Interval.getInterval(Note.B0, Note.B0).getIntervalQuantity(), IntervalQuantity.PERFECT_UNISON);
+        Assert.assertEquals(Interval.getInterval(Note.CSHARP4, Note.GSHARP4).getIntervalQuantity(), IntervalQuantity.PERFECT_FIFTH);
     }
 
     /**

@@ -3,6 +3,9 @@ package com.modulo7.musicstatmodels.representation.buildingblocks;
 import com.modulo7.common.exceptions.Modulo7BadNoteException;
 import com.modulo7.common.exceptions.Modulo7InvalidOctaveRangeException;
 import com.modulo7.common.utils.FrequencyNoteMap;
+import com.modulo7.musicstatmodels.musictheorymodels.Interval;
+import com.modulo7.musicstatmodels.musictheorymodels.IntervalQuality;
+import com.modulo7.musicstatmodels.musictheorymodels.IntervalType;
 
 /**
  * Created by asanyal on 6/16/2015.
@@ -394,5 +397,19 @@ public enum Note {
         final int positionTwo = noteMap.getPositionGivenNote(thatNote);
 
         return positionOne < positionTwo;
+    }
+
+    /**
+     * Gets a shifted note from a root note given an interval
+     *
+     * @param note
+     * @param shiftInterval
+     * @return
+     */
+    public static Note getShiftedNote(final Note note, final Interval shiftInterval) {
+        final int positionOne = noteMap.getPositionGivenNote(note);
+        final int shiftPosition =  shiftInterval.getIntervalQuantity().getQuantity();
+        final int sign = shiftInterval.getIntervalType().equals(IntervalType.ASCENDING) ? 1 : -1;
+        return noteMap.getNoteGivenPosition(positionOne + sign * shiftPosition);
     }
 }

@@ -2,7 +2,7 @@ package com.modulo7.musicstatmodels.statistics;
 
 import com.modulo7.common.interfaces.AbstractSongVector;
 import com.modulo7.common.interfaces.AbstractStatistic;
-import com.modulo7.musicstatmodels.musictheorymodels.IntervalEnum;
+import com.modulo7.musicstatmodels.musictheorymodels.IntervalQuantity;
 import com.modulo7.musicstatmodels.representation.polyphonic.Song;
 import com.modulo7.musicstatmodels.vectorspacemodels.datastructures.TonalHistogramData;
 import com.modulo7.musicstatmodels.vectorspacemodels.vectorspacerepresentations.songvectors.TonalHistogram;
@@ -38,10 +38,10 @@ public class HappinessIndex implements AbstractStatistic<Double> {
         int majorSum = 0;
 
         // Add perfect intervals to perfect sum
-        majorSum += histogramData.getCountForInterval(IntervalEnum.MAJOR_SECOND);
-        majorSum += histogramData.getCountForInterval(IntervalEnum.MAJOR_THIRD);
-        majorSum += histogramData.getCountForInterval(IntervalEnum.MAJOR_SIXTH);
-        majorSum += histogramData.getCountForInterval(IntervalEnum.MAJOR_SEVENTH);
+        majorSum += histogramData.getCountForInterval(IntervalQuantity.MAJOR_SECOND);
+        majorSum += histogramData.getCountForInterval(IntervalQuantity.MAJOR_THIRD);
+        majorSum += histogramData.getCountForInterval(IntervalQuantity.MAJOR_SIXTH);
+        majorSum += histogramData.getCountForInterval(IntervalQuantity.MAJOR_SEVENTH);
 
         return (double)(majorSum / totalSum);
     }

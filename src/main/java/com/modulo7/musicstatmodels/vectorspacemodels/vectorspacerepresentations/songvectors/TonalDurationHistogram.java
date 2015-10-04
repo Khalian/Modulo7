@@ -4,7 +4,7 @@ import com.modulo7.common.exceptions.Modulo7BadIntervalException;
 import com.modulo7.common.exceptions.Modulo7WrongNoteType;
 import com.modulo7.common.interfaces.AbstractSongVector;
 import com.modulo7.musicstatmodels.musictheorymodels.Interval;
-import com.modulo7.musicstatmodels.musictheorymodels.IntervalEnum;
+import com.modulo7.musicstatmodels.musictheorymodels.IntervalQuantity;
 import com.modulo7.musicstatmodels.representation.polyphonic.Song;
 import com.modulo7.musicstatmodels.representation.monophonic.Voice;
 import com.modulo7.musicstatmodels.representation.monophonic.VoiceInstant;
@@ -48,8 +48,8 @@ public class TonalDurationHistogram implements AbstractSongVector<TonalDurationH
 
                 try {
                     // Compute intervals
-                    IntervalEnum intervalEnum = Interval.getInterval(instant, nextInstant).getIntervalEnum();
-                    addIntervalDurationToHistogram(intervalEnum, instant.getDuration());
+                    IntervalQuantity intervalQuantity = Interval.getInterval(instant, nextInstant).getIntervalQuantity();
+                    addIntervalDurationToHistogram(intervalQuantity, instant.getDuration());
                 } catch (Modulo7WrongNoteType | Modulo7BadIntervalException e) {
                     logger.error(e.getMessage());
                 }
@@ -68,7 +68,7 @@ public class TonalDurationHistogram implements AbstractSongVector<TonalDurationH
      * @param interval
      * @param duration
      */
-    private synchronized void addIntervalDurationToHistogram(final IntervalEnum interval, final double duration) {
+    private synchronized void addIntervalDurationToHistogram(final IntervalQuantity interval, final double duration) {
         Double currCumulativeDuration = intervalDurationHistogram.getData(interval);
         intervalDurationHistogram.setData(interval, currCumulativeDuration + duration);
     }

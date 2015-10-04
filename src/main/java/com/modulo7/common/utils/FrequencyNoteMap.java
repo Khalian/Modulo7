@@ -335,9 +335,9 @@ public class FrequencyNoteMap {
         final int newPosition;
 
         if (interval.getType().equals(IntervalType.ASCENDING)) {
-            newPosition = currPosition + interval.getIntervalEnum().getIntervalQuantity();
+            newPosition = currPosition + interval.getIntervalQuantity().getQuantity();
         } else {
-            newPosition = currPosition - interval.getIntervalEnum().getIntervalQuantity();
+            newPosition = currPosition - interval.getIntervalQuantity().getQuantity();
         }
 
         return getNoteGivenPosition(newPosition);

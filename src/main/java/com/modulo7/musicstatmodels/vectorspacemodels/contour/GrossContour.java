@@ -2,6 +2,7 @@ package com.modulo7.musicstatmodels.vectorspacemodels.contour;
 
 import com.modulo7.common.exceptions.Modulo7WrongNoteType;
 import com.modulo7.common.interfaces.AbstractContour;
+import com.modulo7.common.interfaces.AbstractStringContour;
 import com.modulo7.musicstatmodels.representation.monophonic.Voice;
 import com.modulo7.musicstatmodels.representation.monophonic.VoiceInstant;
 
@@ -15,7 +16,7 @@ import com.modulo7.musicstatmodels.representation.monophonic.VoiceInstant;
  * as well anti parallel motion but can distinguish between similar and parallel
  * motion in melodies
  */
-public class GrossContour implements AbstractContour<String> {
+public class GrossContour implements AbstractStringContour {
 
     @Override
     public String getContourRepresentaionOfVoice(final Voice voice) {

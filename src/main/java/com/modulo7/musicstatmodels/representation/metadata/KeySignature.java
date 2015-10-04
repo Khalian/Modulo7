@@ -3,10 +3,8 @@ package com.modulo7.musicstatmodels.representation.metadata;
 import com.modulo7.common.exceptions.Modulo7BadIntervalException;
 import com.modulo7.common.exceptions.Modulo7BadKeyException;
 import com.modulo7.common.exceptions.Modulo7BadNoteException;
-import com.modulo7.common.utils.FrequencyNoteMap;
 import com.modulo7.common.utils.Modulo7Globals;
 import com.modulo7.musicstatmodels.musictheorymodels.Interval;
-import com.modulo7.musicstatmodels.musictheorymodels.IntervalEnum;
 import com.modulo7.musicstatmodels.representation.buildingblocks.Note;
 
 import java.io.Serializable;
@@ -33,9 +31,6 @@ public class KeySignature implements Serializable {
     private static final Set westernKeys =
             new HashSet<>(Arrays.asList(Modulo7Globals.NOTE_NAMES));
 
-    // Frequency note map distance
-    private static final FrequencyNoteMap noteMap = FrequencyNoteMap.getInstance();
-
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -43,8 +38,7 @@ public class KeySignature implements Serializable {
 
         KeySignature signature = (KeySignature) o;
 
-        if (!key.equals(signature.key)) return false;
-        return scale == signature.scale;
+        return key.equals(signature.key) && scale == signature.scale;
 
     }
 
@@ -92,10 +86,11 @@ public class KeySignature implements Serializable {
     }
 
     /**
-     * Get the intervalic distant thiskey and thatkey
-     * @param thisKey
-     * @param thatKey
-     * @return
+     * Get the intervalic distant two keys
+     * @param thisKey (first key)he
+     * @param thatKey (second key)
+     * @return (the distance in intervals between the two key signatures)
+     *
      * @throws Modulo7BadNoteException
      * @throws Modulo7BadIntervalException
      */

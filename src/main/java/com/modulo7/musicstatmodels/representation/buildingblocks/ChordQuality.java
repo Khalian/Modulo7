@@ -3,7 +3,7 @@ package com.modulo7.musicstatmodels.representation.buildingblocks;
 import com.modulo7.common.exceptions.Modulo7BadIntervalException;
 import com.modulo7.common.utils.FrequencyNoteMap;
 import com.modulo7.musicstatmodels.musictheorymodels.Interval;
-import com.modulo7.musicstatmodels.musictheorymodels.IntervalEnum;
+import com.modulo7.musicstatmodels.musictheorymodels.IntervalQuantity;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -95,11 +95,11 @@ public enum ChordQuality {
             return false;
         } else {
 
-            List<IntervalEnum> intervalsList = ascertainIntervalSpacings(noteSet);
+            List<IntervalQuantity> intervalsList = ascertainIntervalSpacings(noteSet);
 
-            if (intervalsList.get(0).equals(IntervalEnum.PERFECT_UNISON)
-                    && intervalsList.get(1).equals(IntervalEnum.MAJOR_THIRD)
-                    && intervalsList.get(2).equals(IntervalEnum.PERFECT_FIFTH))
+            if (intervalsList.get(0).equals(IntervalQuantity.PERFECT_UNISON)
+                    && intervalsList.get(1).equals(IntervalQuantity.MAJOR_THIRD)
+                    && intervalsList.get(2).equals(IntervalQuantity.PERFECT_FIFTH))
                 return true;
         }
 
@@ -118,11 +118,11 @@ public enum ChordQuality {
             return false;
         } else {
 
-            List<IntervalEnum> intervalsList = ascertainIntervalSpacings(noteSet);
+            List<IntervalQuantity> intervalsList = ascertainIntervalSpacings(noteSet);
 
-            if (intervalsList.get(0).equals(IntervalEnum.PERFECT_UNISON)
-                    && intervalsList.get(1).equals(IntervalEnum.MINOR_THIRD)
-                    && intervalsList.get(2).equals(IntervalEnum.PERFECT_FIFTH))
+            if (intervalsList.get(0).equals(IntervalQuantity.PERFECT_UNISON)
+                    && intervalsList.get(1).equals(IntervalQuantity.MINOR_THIRD)
+                    && intervalsList.get(2).equals(IntervalQuantity.PERFECT_FIFTH))
                 return true;
         }
 
@@ -149,7 +149,7 @@ public enum ChordQuality {
      * @return
      * @throws Modulo7BadIntervalException
      */
-    private static List<IntervalEnum> ascertainIntervalSpacings(final Set<Note> noteSet) throws Modulo7BadIntervalException {
+    private static List<IntervalQuantity> ascertainIntervalSpacings(final Set<Note> noteSet) throws Modulo7BadIntervalException {
         // Position the array
         List<Integer> notePositionArray = new ArrayList<>();
 
@@ -167,10 +167,10 @@ public enum ChordQuality {
             notePositionArray.set(i, notePositionArray.get(i) - minPosition);
         }
 
-        List<IntervalEnum> intervalsList = new ArrayList<>();
+        List<IntervalQuantity> intervalsList = new ArrayList<>();
 
         for (final Integer noteInterval : notePositionArray) {
-            intervalsList.add(Interval.getInterval(noteInterval));
+            intervalsList.add(Interval.getIntervalQuantity(noteInterval));
         }
 
         return intervalsList;
