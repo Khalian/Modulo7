@@ -6,6 +6,8 @@ import com.modulo7.musicstatmodels.representation.metadata.KeySignature;
 import com.modulo7.musicstatmodels.representation.metadata.SongMetadata;
 import com.modulo7.musicstatmodels.representation.monophonic.Voice;
 import com.modulo7.nlp.Lyrics;
+import org.apache.avro.Schema;
+import org.apache.avro.reflect.ReflectData;
 
 import java.io.Serializable;
 import java.util.HashSet;
@@ -36,6 +38,9 @@ public class Song implements Serializable {
 
     // A basic lyrics object added to the song model    
     private Lyrics lyrics = new Lyrics();
+
+    // Acquire the reflective schema from Modulo7 class
+    private static final Schema songSchema = ReflectData.get().getSchema(Song.class);
 
     /**
      * Method to infer the song length as maximum of all the line duration
@@ -242,5 +247,17 @@ public class Song implements Serializable {
      */
     public void addSongMetadata(final KeySignature keySignature) {
         metadata = new SongMetadata(keySignature);
+    }
+
+    /**
+     * Reassigns the entire voice set of a song
+     * @param newVoiceSet
+     */
+    public void reassignVoiceSet(final HashSet<Voice> newVoiceSet) {
+        this.voicesOfSong = newVoiceSet;
+    }
+
+    public static Schema getSongSchema() {
+        return songSchema;
     }
 }

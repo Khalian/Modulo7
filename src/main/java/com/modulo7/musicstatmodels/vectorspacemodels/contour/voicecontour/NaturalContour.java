@@ -1,4 +1,4 @@
-package com.modulo7.musicstatmodels.vectorspacemodels.contour;
+package com.modulo7.musicstatmodels.vectorspacemodels.contour.voicecontour;
 
 import com.modulo7.common.exceptions.Modulo7WrongNoteType;
 import com.modulo7.common.interfaces.AbstractContour;
@@ -7,7 +7,6 @@ import com.modulo7.musicstatmodels.representation.monophonic.VoiceInstant;
 import org.apache.log4j.Logger;
 
 import java.util.LinkedHashMap;
-import java.util.Map;
 
 /**
  * Created by asanyal on 9/8/15.

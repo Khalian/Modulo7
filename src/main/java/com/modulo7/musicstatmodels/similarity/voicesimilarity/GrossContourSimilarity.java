@@ -2,7 +2,7 @@ package com.modulo7.musicstatmodels.similarity.voicesimilarity;
 
 import com.modulo7.common.interfaces.AbstractVoiceSimilarity;
 import com.modulo7.musicstatmodels.representation.monophonic.Voice;
-import com.modulo7.musicstatmodels.vectorspacemodels.contour.GrossContour;
+import com.modulo7.musicstatmodels.vectorspacemodels.contour.voicecontour.GrossContour;
 import org.apache.lucene.search.spell.LevensteinDistance;
 
 /**

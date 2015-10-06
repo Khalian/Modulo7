@@ -2,7 +2,6 @@ package musicstatmodelstests;
 
 import com.modulo7.common.exceptions.Modulo7BadIntervalException;
 import com.modulo7.common.exceptions.Modulo7InvalidVoiceInstantSizeException;
-import com.modulo7.common.interfaces.AbstractContour;
 import com.modulo7.common.interfaces.AbstractStringContour;
 import com.modulo7.common.interfaces.AbstractVoiceSimilarity;
 import com.modulo7.musicstatmodels.representation.buildingblocks.Note;
@@ -10,7 +9,7 @@ import com.modulo7.musicstatmodels.representation.monophonic.Voice;
 import com.modulo7.musicstatmodels.representation.monophonic.VoiceInstant;
 import com.modulo7.musicstatmodels.similarity.voicesimilarity.GrossContourSimilarity;
 import com.modulo7.musicstatmodels.similarity.voicesimilarity.RawMelodicEditDistanceSimilarity;
-import com.modulo7.musicstatmodels.vectorspacemodels.contour.GrossContour;
+import com.modulo7.musicstatmodels.vectorspacemodels.contour.voicecontour.GrossContour;
 import org.junit.Assert;
 import org.junit.Test;
 

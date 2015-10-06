@@ -1,4 +1,4 @@
-package com.modulo7.musicstatmodels.vectorspacemodels.contour;
+package com.modulo7.musicstatmodels.vectorspacemodels.contour.voicecontour;
 
 import com.modulo7.common.exceptions.Modulo7WrongNoteType;
 import com.modulo7.common.interfaces.AbstractContour;

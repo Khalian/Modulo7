@@ -30,6 +30,30 @@ public class Modulo7SQLBaseListener implements Modulo7SQLListener {
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
+	@Override public void enterPreprocess_clause(Modulo7SQLParser.Preprocess_clauseContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitPreprocess_clause(Modulo7SQLParser.Preprocess_clauseContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void enterPreprocess_criteria(Modulo7SQLParser.Preprocess_criteriaContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitPreprocess_criteria(Modulo7SQLParser.Preprocess_criteriaContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
 	@Override public void enterFrom_clause(Modulo7SQLParser.From_clauseContext ctx) { }
 	/**
 	 * {@inheritDoc}

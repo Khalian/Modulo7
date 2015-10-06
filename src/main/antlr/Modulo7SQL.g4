@@ -21,8 +21,19 @@ select_clause:
 		input_list_clause
 		(from_clause)?
 		(where_clause)?
+		(preprocess_clause)?
 		SEMI
 		;
+
+preprocess_clause:
+        AND PREPROCESS ON preprocess_criteria (COMMA preprocess_criteria)*
+    ;
+
+preprocess_criteria:
+        NATURALCONTOUR
+    |   STEINBECKCONTOUR
+    |   MULLENFESTEINCONTOUR
+    ;
 
 from_clause:
     FROM table_name

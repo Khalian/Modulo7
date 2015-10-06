@@ -50,7 +50,7 @@ public class ContourGradient<T extends AbstractContour> {
         // Gradient vector for
         final LinkedHashMap<Integer, VoiceInstant> extemumNotes = internalContourRepresentation.getContourRepresentaionOfVoice(voice);
 
-        // This ensures a deep copy of the voice so that the original voice survives
+        // This ensures a deep copy of the voice so that the original voi
         Voice newVoice = SerializationUtils.clone(voice);
 
         final List<Integer> extremumNotesInOrder = new ArrayList<>(extemumNotes.keySet());

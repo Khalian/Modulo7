@@ -33,6 +33,9 @@ import java.io.IOException;
  */
 public class AvroUtils {
 
+    // Acquire the reflective schema from Modulo7 class
+    private static final Schema schema = Song.getSongSchema();
+
     /**
      * Method to serialize a modulo7 object, the assumption is that each file
      * has exactly song object stored into it
@@ -41,9 +44,6 @@ public class AvroUtils {
      * @param song
      */
     public static void serialize(final String destinationFileName, final Song song) throws Modulo7NoSuchFileException {
-
-        // Acquire the reflective schema from Modulo7 class
-        final Schema schema= ReflectData.get().getSchema(Song.class);
 
         DatumWriter<Song> writer = new ReflectDatumWriter<>(Song.class);
         DataFileWriter<Song> fileWriter = new DataFileWriter<>(writer);

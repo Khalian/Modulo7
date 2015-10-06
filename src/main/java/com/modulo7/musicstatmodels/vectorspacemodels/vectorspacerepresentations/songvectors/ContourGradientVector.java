@@ -11,7 +11,7 @@ import java.util.List;
  *
  * Expression giving the gradient
  */
-public class ContourGradientVector implements AbstractSongVector<List<Double>> {
+public class ContourGradientVector implements AbstractSongVector {
 
     // A contour algorithm input to the gradient vector
     private AbstractContour contour;

@@ -128,7 +128,7 @@ public class MidiToSongConverter implements AbstractAnalyzer {
 
             trackNumber++;
 
-            logger.info("Track " + trackNumber + ": size = " + track.size());
+            logger.debug("Track " + trackNumber + ": size = " + track.size());
 
             // Incrementally add voice instants to a voice
             voiceToChannelMap.put(trackNumber, new Voice());
@@ -136,16 +136,15 @@ public class MidiToSongConverter implements AbstractAnalyzer {
             for (int i = 0; i < track.size(); i++) {
 
                 MidiEvent event = track.get(i);
-                logger.info("@" + event.getTick() + " ");
                 MidiMessage message = event.getMessage();
 
                 if (message instanceof ShortMessage) {
                     ShortMessage sm = (ShortMessage) message;
-                    logger.info("Channel: " + sm.getChannel() + " ");
+                    logger.debug("Channel: " + sm.getChannel() + " ");
 
                     if (sm.getCommand() == NOTE_ON) {
                         int key = sm.getData1();
-                        int octave = (key / 12)-1;
+                        int octave = (key / 12) - 1;
                         int note = key % 12;
                         String noteName = Modulo7Globals.NOTE_NAMES[note];
                         int velocity = sm.getData2();
@@ -164,8 +163,6 @@ public class MidiToSongConverter implements AbstractAnalyzer {
                         } catch (Modulo7InvalidVoiceInstantSizeException | Modulo7BadNoteException e) {
                             logger.error(e.getMessage());
                         }
-                    } else {
-                        // We ignore the command elements that are neither note on or off
                     }
                 }
                 // Parsing meta events
@@ -196,7 +193,7 @@ public class MidiToSongConverter implements AbstractAnalyzer {
                         }
                     }
                 } else {
-                   logger.info("Other message: " + message.getClass());
+                   logger.debug("Other message: " + message.getClass());
                 }
             }
         }

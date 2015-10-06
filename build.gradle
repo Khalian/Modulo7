@@ -186,6 +186,9 @@ dependencies {
     compile group: 'org.apache.lucene', name:'lucene-spellchecker', version:'3.3.0'
     compile group: 'org.apache.commons', name:'commons-math3',  version:'3.0'
     compile group: 'org.hdfgroup', name:'hdf-java', version:'2.6.1'
+    compile group: 'org.apache.hadoop', name:'hadoop-core', version:'1.2.1'
+    compile group: 'org.apache.avro', name:'avro-mapred', version:'1.7.7'
+
 
     // Test compile artifacts
     testCompile 'junit:junit:4.12'
