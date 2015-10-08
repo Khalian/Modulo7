@@ -286,6 +286,9 @@ public class MidiToSongConverter implements AbstractAnalyzer {
     /**
      * Look through the recording in order to find tempo change messages
      * Fill in secondsPerTick on these messages.
+     *
+     * The tempo map is needed for acquiring end times of notes, which gives
+     * the duration the notes are played
      */
     private void generateTempoMap()
     {

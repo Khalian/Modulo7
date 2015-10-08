@@ -38,7 +38,7 @@ public class CriteriaTest {
 
         Song song = new Song(voice, MusicSources.UNKNOWN);
 
-        Assert.assertTrue(criteria.getCriteriaEvaluation(song));
+        Assert.assertFalse(criteria.getCriteriaEvaluation(song));
 
         Voice voice1 = new Voice();
         voice1.addVoiceInstant(new VoiceInstant(Note.A1));
@@ -49,14 +49,16 @@ public class CriteriaTest {
 
         Song newSong = new Song(newSongSet, MusicSources.UNKNOWN);
 
-        Assert.assertFalse(criteria.getCriteriaEvaluation(newSong));
+        Assert.assertTrue(criteria.getCriteriaEvaluation(newSong));
     }
 
     /**
+     * Checks the key signature equality criteria
      *
      * @throws Modulo7BadKeyException
      * @throws com.modulo7.common.exceptions.Modulo7InvalidVoiceInstantSizeException
      */
+    @Test
     public void keySignatureCriteriaTest() throws Modulo7BadKeyException, Modulo7InvalidVoiceInstantSizeException {
         AbstractCriteria criteria = new KeySignatureEqualityCriteria(new KeySignature("C", ScaleType.MAJOR));
 

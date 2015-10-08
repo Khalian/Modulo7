@@ -5,7 +5,6 @@ import com.modulo7.common.exceptions.Modulo7QueryProcessingException;
 import com.modulo7.common.interfaces.AbstractCriteria;
 import com.modulo7.common.interfaces.AbstractStatistic;
 import com.modulo7.common.interfaces.choices.CriteriaChoice;
-import com.modulo7.common.interfaces.choices.SongSimilarityChoices;
 import com.modulo7.common.interfaces.choices.StatisticChoice;
 import com.modulo7.modulo7SQL.Modulo7QueryComponents;
 import com.modulo7.modulo7SQL.Modulo7QueryParser;
@@ -15,6 +14,7 @@ import org.apache.log4j.Logger;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
+import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
@@ -36,16 +36,13 @@ public class Modulo7QueryProcessingEngine {
     private Modulo7Indexer indexer;
 
     // Regular expression pattern for criterion
-    private static final Pattern CRITERIA_PATTERNS = Pattern.compile(CriteriaChoice.REGEXP_REP + " (is|isnot) " + "(true|false)");
+    public static final Pattern CRITERIA_PATTERNS = Pattern.compile(CriteriaChoice.REGEXP_REP);
 
     // Regular expression pattern for statistics
-    private static final Pattern STATISTIC_PATTERNS = Pattern.compile(StatisticChoice.REGEXP_REP + "(<|<=|>|>=)" + "[0-9]{1,13}(\\.[0-9]*)?");
-
-    // Regular expression pattern for similarity measures : TODO : Finish impl
-    private static final Pattern SIMILARITY_MEASURE_PATTERNS = Pattern.compile(SongSimilarityChoices.REGEXP_REP);
+    public static final Pattern STATISTIC_PATTERNS = Pattern.compile(StatisticChoice.REGEXP_REP);
 
     // Logger for the query processing engine
-    private static final Logger logger = Logger.getLogger(Modulo7QueryProcessingEngine.class);
+    public static final Logger logger = Logger.getLogger(Modulo7QueryProcessingEngine.class);
 
     /**
      * Basic construtor for modulo7 processor
@@ -76,6 +73,10 @@ public class Modulo7QueryProcessingEngine {
      */
     public Set<Song> processQuery() throws Modulo7QueryProcessingException {
 
+        if (componentsOfQuery == null) {
+            throw new Modulo7QueryProcessingException("Malformed query, try again");
+        }
+
         // First check if both databases have the same name, if not fail with an exception
         if (!indexer.getInternalDBName().toLowerCase().equals(componentsOfQuery.getDbName())) {
             throw new Modulo7QueryProcessingException("Input database " + componentsOfQuery.getDbName() +
@@ -104,7 +105,10 @@ public class Modulo7QueryProcessingEngine {
 
             final String expr = exprList.get(i);
 
-            if (expr.matches(STATISTIC_PATTERNS.pattern())) {
+            final Matcher criteriaMatcher = CRITERIA_PATTERNS.matcher(expr);
+            final Matcher statisticMatcher = STATISTIC_PATTERNS.matcher(expr);
+
+            if (statisticMatcher.find()) {
                 final String[] components = expr.split(" ");
                 final String statistic = components[0];
                 final String relationalOp = components[1];
@@ -123,7 +127,7 @@ public class Modulo7QueryProcessingEngine {
                     candidateSet = originalCandidateSet;
                 }
 
-            } else if (expr.matches(CRITERIA_PATTERNS.pattern())) {
+            } else if (criteriaMatcher.find()) {
                 String[] components = expr.split(" ");
                 final String criteria = components[0];
                 final String assertion = components[1];

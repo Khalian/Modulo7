@@ -34,7 +34,9 @@ public class Modulo7QueryComponents {
         this.inputs = inputs;
         this.exprList = exprList;
         this.exprOprList = exprOprList;
-        this.dbName = dbName;
+        if (dbName != null) {
+            this.dbName = "default_database";
+        }
 
         assert (exprList.size() - 1 == exprOprList.size());
     }

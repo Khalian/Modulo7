@@ -14,6 +14,6 @@ import com.modulo7.musicstatmodels.representation.polyphonic.Song;
 public class PolyphonyCriteria implements AbstractCriteria {
     @Override
     public boolean getCriteriaEvaluation(final Song song) {
-        return song.getNumVoices() == 1;
+        return song.getNumVoices() != 1;
     }
 }

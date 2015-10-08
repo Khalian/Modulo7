@@ -38,10 +38,10 @@ public class DatabaseEngine implements Runnable {
     // Destination Directory in which the serialization results are finally stored
     private String destinationDirectory;
 
-    private static final String DEFAULT_ENGINE_NAME = "MODULO7_DEFAULT_DATABASE";
+    private static final String DEFAULT_ENGINE_NAME = "default_database";
 
     // The name of the database that this engine operates on
-    private String databaseName;
+    private String databaseName = DEFAULT_ENGINE_NAME;
 
     // Whether there is verbose output during processing by the database
     private boolean verboseOutput = false;

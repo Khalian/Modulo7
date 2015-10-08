@@ -40,7 +40,8 @@ public enum Modulo7CLIChoice {
             case 5: return RET_LYRICS_GIVEN_SONG;
             case 6: return LIST_NUM_SONGS_INDEXED;
             case 7: return INPUT_CUSTOM_QUERY;
-            case 8: return EXIT;
+            case 8 : return SERIALIZE_DATABASE;
+            case 9: return EXIT;
             default: return INVALID_CHOICE;
         }
     }

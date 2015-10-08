@@ -42,7 +42,7 @@ public class ChordEstimator {
     // Scores for each chord profile computed for the given chromagram
     private double chord[] = new double[108];
 
-    // An array reprentation of the chord profiles computed by the algorithm
+    // An array representation of the chord profiles computed by the algorithm
     private static double[][] chordProfiles = new double[108][12];
 
     // Frequency note map instance
@@ -52,8 +52,6 @@ public class ChordEstimator {
     static {
         makeChordProfiles();
     }
-
-    private int chordIndex;
 
     /**
      * Basic constructor
@@ -273,7 +271,7 @@ public class ChordEstimator {
             chord[j] = calculateChordScore(chromagram, chordProfiles[j], bias, 4);
         }
 
-        chordIndex = minimumIndex(chord, 108);
+        int chordIndex = minimumIndex(chord, 108);
 
         // major
         if (chordIndex < 12) {
@@ -505,7 +503,7 @@ public class ChordEstimator {
     }
 
     /**
-     * Gets the chordquality associated with the chord
+     * Gets the chord quality associated with the chord
      * @return
      */
     public ChordQuality getQuality() {

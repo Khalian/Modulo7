@@ -32,6 +32,7 @@ import java.io.IOException;
  * 2. Title of the track
  * 3. The loudness of the track
  * 4. The key signature and time signature of the track
+ * 5. The notes (and by extension chords) from the chromagram representation
  */
 public class EchoNestBasicMP3Analyzer implements AbstractAnalyzer {
 
@@ -44,9 +45,7 @@ public class EchoNestBasicMP3Analyzer implements AbstractAnalyzer {
     // An instance of the mp3 File
     private File mp3File;
 
-    // An instance of the frequency note map
-    private static FrequencyNoteMap noteMap = FrequencyNoteMap.getInstance();
-
+    // Key signature extracted from the mp3 file
     private KeySignature keySignature = null;
 
     /**
@@ -131,7 +130,7 @@ public class EchoNestBasicMP3Analyzer implements AbstractAnalyzer {
         } catch (IOException e) {
             logger.error("Trouble uploading file to track analyzer" + e.getMessage());
         } catch (Modulo7InvalidVoiceInstantSizeException | EchoNestException | Modulo7BadIntervalException e) {
-            e.printStackTrace();
+            logger.error(e.getMessage());
         }
 
         // Return null if no song is inferred
