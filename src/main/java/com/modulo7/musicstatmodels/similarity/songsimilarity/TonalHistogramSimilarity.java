@@ -36,7 +36,7 @@ public class TonalHistogramSimilarity implements AbstractSongSimilarity {
 
         AbstractSongVector<TonalHistogramData> tonalHistogramSecond = new TonalHistogram();
         tonalHistogramSecond.computeVectorRepresentation(second);
-        TonalHistogramData internalVectorTwo = tonalHistogram.getInternalRepresentation();
+        TonalHistogramData internalVectorTwo = tonalHistogramSecond.getInternalRepresentation();
 
         try {
             return Modulo7Utils.cosineSimilarity(internalVectorOne.getArrayRepresentation(),

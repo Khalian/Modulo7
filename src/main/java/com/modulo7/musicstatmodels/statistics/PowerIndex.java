@@ -52,6 +52,6 @@ public class PowerIndex implements AbstractStatistic<Double> {
         perfectSum += histogramData.getCountForInterval(IntervalQuantity.PERFECT_OCTAVE);
         perfectSum += histogramData.getCountForInterval(IntervalQuantity.PERFECT_FOURTH);
 
-        return (double)(perfectSum / totalSum);
+        return (double)(perfectSum) / totalSum;
     }
 }

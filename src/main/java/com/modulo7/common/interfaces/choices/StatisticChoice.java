@@ -1,7 +1,5 @@
 package com.modulo7.common.interfaces.choices;
 
-import com.modulo7.musicstatmodels.similarity.songsimilarity.MaxMelodicEditDistanceSimilarity;
-import com.modulo7.musicstatmodels.similarity.songsimilarity.TonalHistogramSimilarity;
 import com.modulo7.musicstatmodels.statistics.HappinessIndex;
 import com.modulo7.musicstatmodels.statistics.MaxMelodicRepeatingFactor;
 import com.modulo7.musicstatmodels.statistics.PowerIndex;
@@ -19,10 +17,10 @@ import java.util.Set;
  */
 public enum StatisticChoice {
 
-    HAPPINESSINDEX("happinessIndex"),
-    SADNESSINDEX("sadnessIndex"),
-    POWERINDEX("powerIndex"),
-    MAXMELODICREPEATINGFACTOR("maxMelodicRepeatingFactor");
+    HAPPINESSINDEX("happinessindex"),
+    SADNESSINDEX("sadnessindex"),
+    POWERINDEX("powerindex"),
+    MAXMELODICREPEATINGFACTOR("maxmelodicrepeatingfactor");
 
     // A list of all the statistic choices as defined
     private static final Set<String> STATISTIC_CHOICES = new HashSet<>();
@@ -51,10 +49,10 @@ public enum StatisticChoice {
 
     // Statistic to class , useful for dynamically calling classes during similarity metric analysis
     private static final Map<String, Class> STATISTIC_TO_CLASS_MAP = new HashMap<String, Class>() {{
-        put("happinessIndex", HappinessIndex.class);
-        put("sadnessIndex", SadnessIndex.class);
-        put("powerIndex", PowerIndex.class);
-        put("maxMelodicRepeatingFactor", MaxMelodicRepeatingFactor.class);
+        put("happinessindex", HappinessIndex.class);
+        put("sadnessindex", SadnessIndex.class);
+        put("powerindex", PowerIndex.class);
+        put("maxmelodicrepeatingfactor", MaxMelodicRepeatingFactor.class);
     }};
 
     private String choice;

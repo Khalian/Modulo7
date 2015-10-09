@@ -16,7 +16,12 @@ import java.util.stream.Collectors;
  * Created by asanyal on 8/5/2015.
  *
  * A class for parsing queries provided to the query engine
- * of the
+ * for parsing custom queries passed by the user
+ *
+ * This query parser creates an expression list, input list and expr Oprs
+ * to the processing engine for more convenient parsing
+ *
+ * It directly uses generated code from the antlr parser
  */
 public class Modulo7QueryParser {
 

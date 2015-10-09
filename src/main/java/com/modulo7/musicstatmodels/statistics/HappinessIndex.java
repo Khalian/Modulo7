@@ -43,6 +43,6 @@ public class HappinessIndex implements AbstractStatistic<Double> {
         majorSum += histogramData.getCountForInterval(IntervalQuantity.MAJOR_SIXTH);
         majorSum += histogramData.getCountForInterval(IntervalQuantity.MAJOR_SEVENTH);
 
-        return (double)(majorSum / totalSum);
+        return (double)(majorSum) / totalSum;
     }
 }

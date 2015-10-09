@@ -46,7 +46,7 @@ public class RankEngineOnSimilarity {
         }
 
         Double[] similarityScoreVals = similarityScore.keySet().toArray(new Double[similarityScore.keySet().size()]);
-        Arrays.sort(similarityScoreVals);
+        Arrays.sort(similarityScoreVals, Collections.reverseOrder());
 
         for (Double key : similarityScoreVals) {
             rankOrder.add(similarityScore.get(key));

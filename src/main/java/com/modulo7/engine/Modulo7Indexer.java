@@ -6,6 +6,7 @@ import com.modulo7.common.interfaces.AbstractCriteria;
 import com.modulo7.common.utils.Modulo7Utils;
 import com.modulo7.musicstatmodels.criteria.PolyphonyCriteria;
 import com.modulo7.musicstatmodels.representation.metadata.KeySignature;
+import com.modulo7.musicstatmodels.representation.metadata.SongMetadata;
 import com.modulo7.musicstatmodels.representation.polyphonic.Song;
 import com.modulo7.musicstatmodels.representation.metadata.TimeSignature;
 import com.modulo7.nlp.Lyrics;
@@ -147,15 +148,41 @@ public class Modulo7Indexer {
     }
 
     /**
-     * Method to add additional songs to a given index
+     * Method to add additional songs by parsing from a given directory to an index
+     *
      * @param newDir
+     * @throws Modulo7ParseException
+     * @throws Modulo7InvalidFileOperationExeption
+     * @throws EchoNestException
+     * @throws Modulo7InvalidMusicXMLFile
+     * @throws Modulo7IndexingDirError
+     * @throws Modulo7NoSuchFileException
+     * @throws InvalidMidiDataException
      */
-    public void addAdditionalSongsToIndex(final String newDir) {
+    public void addAdditionalSongsToIndex(final String newDir) throws Modulo7ParseException, Modulo7InvalidFileOperationExeption,
+            EchoNestException, Modulo7InvalidMusicXMLFile, Modulo7IndexingDirError, Modulo7NoSuchFileException, InvalidMidiDataException {
         final Set<String> newFilesToIndex = Modulo7Utils.listAllFiles(newDir);
 
         for (final String newFile : newFilesToIndex) {
-            incrementalIndexArtists(newFile);
+            incrementalIndexASong(newFile);
         }
+    }
+
+    /**
+     * Index a single file
+     * @param singleSongLocation
+     * @throws Modulo7ParseException
+     * @throws Modulo7InvalidFileOperationExeption
+     * @throws EchoNestException
+     * @throws Modulo7InvalidMusicXMLFile
+     * @throws Modulo7IndexingDirError
+     * @throws Modulo7NoSuchFileException
+     * @throws InvalidMidiDataException
+     */
+    public void addSingleAdditionalSongToIndex(final String singleSongLocation) throws Modulo7ParseException,
+            Modulo7InvalidFileOperationExeption, EchoNestException, Modulo7InvalidMusicXMLFile, Modulo7IndexingDirError,
+            Modulo7NoSuchFileException, InvalidMidiDataException {
+        incrementalIndexASong(singleSongLocation);
     }
 
     /**
@@ -376,8 +403,13 @@ public class Modulo7Indexer {
      */
     private synchronized void incrementalIndexTimeSignatures(final String location) {
         final Song song = engine.getSongGivenLocationInMemoryVersion(location);
-        final TimeSignature signature = song.getMetadata().getTimeSignature();
-        addSongToTimeSignatureIndex(signature, song);
+        SongMetadata metadata = song.getMetadata();
+        if (metadata != null) {
+            final TimeSignature signature = song.getMetadata().getTimeSignature();
+            if (signature != null) {
+                addSongToTimeSignatureIndex(signature, song);
+            }
+        }
     }
 
     /**
@@ -386,8 +418,13 @@ public class Modulo7Indexer {
      */
     private synchronized void incrementalIndexKeySignatures(final String location) {
         final Song song = engine.getSongGivenLocationInMemoryVersion(location);
-        final KeySignature signature = song.getMetadata().getKeySignature();
-        addSongToKeySignatureIndex(signature, song);
+        SongMetadata metadata = song.getMetadata();
+        if (metadata != null) {
+            final KeySignature signature = song.getMetadata().getKeySignature();
+            if (signature != null) {
+                addSongToKeySignatureIndex(signature, song);
+            }
+        }
     }
 
     /**

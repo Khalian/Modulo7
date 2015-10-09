@@ -43,6 +43,6 @@ public class SadnessIndex implements AbstractStatistic<Double> {
         minorSum += histogramData.getCountForInterval(IntervalQuantity.MINOR_SIXTH);
         minorSum += histogramData.getCountForInterval(IntervalQuantity.MINOR_SEVENTH);
 
-        return (double)(minorSum / totalSum);
+        return (double)(minorSum) / totalSum;
     }
 }

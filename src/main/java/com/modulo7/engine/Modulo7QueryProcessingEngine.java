@@ -116,7 +116,17 @@ public class Modulo7QueryProcessingEngine {
 
                 bestSet = evaluateBestSetFromStatistic(statistic, relationalOp, value, candidateSet);
 
-                final String exprOpr =  exprOprs.get(i);
+            } else if (criteriaMatcher.find()) {
+                String[] components = expr.split(" ");
+                final String criteria = components[0];
+                final String assertion = components[1];
+                final String predicate = components[2];
+
+                bestSet = evaluateBestSetFromCriteria(criteria, assertion, predicate, candidateSet);
+            }
+
+            if (exprOprs.size() > 0) {
+                final String exprOpr = exprOprs.get(i);
 
                 if (exprOpr.equals("or")) {
                     bestSet.addAll(candidateSet);
@@ -126,15 +136,8 @@ public class Modulo7QueryProcessingEngine {
                     bestSet.addAll(candidateSet);
                     candidateSet = originalCandidateSet;
                 }
-
-            } else if (criteriaMatcher.find()) {
-                String[] components = expr.split(" ");
-                final String criteria = components[0];
-                final String assertion = components[1];
-                final String predicate = components[2];
-
-                bestSet = evaluateBestSetFromCriteria(criteria, assertion, predicate, candidateSet);
             }
+
         }
 
         return bestSet;

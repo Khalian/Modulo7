@@ -26,7 +26,7 @@ public enum SongSimilarityChoices {
     // Song similarity to class , useful for dynamically calling classes during similarity metric analysis
     private static final Map<String, Class> SONG_SIMILARITY_TO_CLASS_MAP = new HashMap<String, Class>() {{
         put("maxmelodiceditdistance", MaxMelodicEditDistanceSimilarity.class);
-        put("tonalhistogramsimilarity", TonalHistogramSimilarity.class);
+        put("tonalhistogram", TonalHistogramSimilarity.class);
     }};
 
     /**

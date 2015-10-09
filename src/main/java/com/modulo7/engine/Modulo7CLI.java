@@ -7,6 +7,7 @@ import com.modulo7.common.interfaces.choices.SongSimilarityChoices;
 import com.modulo7.common.exceptions.Modulo7NoSuchSimilarityMeasureException;
 import com.modulo7.musicstatmodels.representation.metadata.KeySignature;
 import com.modulo7.musicstatmodels.representation.metadata.ScaleType;
+import com.modulo7.musicstatmodels.representation.metadata.TimeSignature;
 import com.modulo7.musicstatmodels.representation.polyphonic.Song;
 import com.modulo7.nlp.Lyrics;
 import org.apache.commons.cli.*;
@@ -167,6 +168,8 @@ public class Modulo7CLI {
                 if (e instanceof Modulo7NoSuchSimilarityMeasureException) {
                     SongSimilarityChoices.listAllSimilarityMeasures();
                 }
+            } catch (InvalidMidiDataException | EchoNestException e) {
+                logger.error(e.getMessage());
             }
         }
     }
@@ -183,7 +186,9 @@ public class Modulo7CLI {
      * @throws Modulo7NoSuchSimilarityMeasureException
      */
     private static void exectuteChoice(final Modulo7CLIChoice testNum, final Scanner in) throws Modulo7BadKeyException,
-            Modulo7MalformedM7SQLQuery, Modulo7QueryProcessingException, Modulo7DataBaseNotSerializedException, Modulo7NoSuchSimilarityMeasureException {
+            Modulo7MalformedM7SQLQuery, Modulo7QueryProcessingException, Modulo7DataBaseNotSerializedException,
+            Modulo7NoSuchSimilarityMeasureException, InvalidMidiDataException, Modulo7InvalidFileOperationExeption,
+            EchoNestException, Modulo7IndexingDirError, Modulo7ParseException, Modulo7NoSuchFileException, Modulo7InvalidMusicXMLFile {
         switch (testNum) {
             case INPUT_CUSTOM_QUERY:
                 System.out.println("Consumer is going into custom query mode, now changing to Modulo7 SQL parser mode \n");
@@ -206,7 +211,7 @@ public class Modulo7CLI {
 
             // Rank on a similarity order
             case RANK_ON_SIMILARITY_ORDER:
-                System.out.println("Enter a similarity measure:");
+                System.out.print("Enter a similarity measure:");
                 final String similarityMeasure = in.next();
 
                 Class similarityChoice = SongSimilarityChoices.getSongSimilarityGivenChoice(similarityMeasure);
@@ -217,9 +222,9 @@ public class Modulo7CLI {
                     try {
                         AbstractSongSimilarity similarity = (AbstractSongSimilarity) similarityChoice.newInstance();
                         RankEngineOnSimilarity engineOnSimilarity = new RankEngineOnSimilarity(similarity);
-                        System.out.println("Enter the location of a song to rank the rest of the database against");
+                        System.out.print("Enter the location of a song to rank the rest of the database against:");
                         final String candidateSongLocation = in.next();
-                        indexer.addAdditionalSongsToIndex(candidateSongLocation);
+                        indexer.addSingleAdditionalSongToIndex(candidateSongLocation);
                         final List<String> rankedOrder =
                                 engineOnSimilarity.relevantRankOrdering(indexer.engine, indexer.getSongObjectGivenLocation(candidateSongLocation));
 
@@ -233,7 +238,9 @@ public class Modulo7CLI {
                             rank++;
                         }
 
-                    } catch (InstantiationException | IllegalAccessException e) {
+                    } catch (InstantiationException | IllegalAccessException | InvalidMidiDataException |
+                            Modulo7InvalidFileOperationExeption | EchoNestException | Modulo7IndexingDirError |
+                            Modulo7ParseException | Modulo7NoSuchFileException | Modulo7InvalidMusicXMLFile e) {
                         logger.error(e.getMessage());
                     }
                 }
@@ -245,12 +252,22 @@ public class Modulo7CLI {
             case RET_SONGS_FOR_GIVEN_KEY_SIGNATURE:
                 System.out.print("Please enter the key:");
                 final String key = in.next();
-                System.out.print("\nPlease enter the Scale:");
+                System.out.print("Please enter the Scale:");
                 final String inScale = in.next();
                 ScaleType scaleType = ScaleType.getScaleTypeFromString(inScale);
                 final KeySignature desiredKeySignature = new KeySignature(key, scaleType);
                 final Set<Song> relevantSongObjects = indexer.getKeySignatureIndexedSet(desiredKeySignature);
                 printAllRelevantSongLocations(relevantSongObjects);
+                break;
+
+            case RET_SONGS_FOR_GIVEN_TIME_SIGNATURE:
+                System.out.print("Please enter the number of beats per measure:");
+                final Integer num = in.nextInt();
+                System.out.print("Please enter which note gets the beat:");
+                final Integer dem = in.nextInt();
+                final TimeSignature desiredTimeSignature = new TimeSignature(num, dem);
+                final Set<Song> relevantSongs = indexer.getTimeSignatureIndexedSet(desiredTimeSignature);
+                printAllRelevantSongLocations(relevantSongs);
                 break;
 
             // Returns a list of songs for a given artist
@@ -282,10 +299,12 @@ public class Modulo7CLI {
                      break;
 
             case SERIALIZE_DATABASE:
-                     System.out.println("\n");
+                     System.out.print("Input the root directory from which to serialize songs to:");
+                     final String location = in.next();
+                     indexer.addAdditionalSongsToIndex(location);
                      break;
 
-            case EXIT : System.out.println("\nExitting from Modulo7");
+            case EXIT : System.out.println("Exitting from Modulo7");
                      System.exit(0);
                      break;
 
