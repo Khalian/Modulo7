@@ -2,7 +2,7 @@ package com.modulo7.common.utils;
 
 import com.modulo7.common.exceptions.Modulo7NoSuchFileException;
 import com.modulo7.musicstatmodels.representation.polyphonic.Song;
-import com.modulo7.nlp.Lyrics;
+import com.modulo7.nlp.lyrics.Lyrics;
 import org.apache.avro.Schema;
 import org.apache.avro.file.CodecFactory;
 import org.apache.avro.file.DataFileReader;

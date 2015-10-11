@@ -23,8 +23,7 @@ import com.modulo7.musicstatmodels.representation.monophonic.Voice;
 import com.modulo7.musicstatmodels.representation.monophonic.VoiceInstant;
 import com.modulo7.musicstatmodels.representation.polyphonic.Song;
 import com.modulo7.musicstatmodels.vectorspacemodels.vectorspacerepresentations.songvectors.PitchDurationHistogram;
-import com.modulo7.musicstatmodels.vectorspacemodels.vectorspacerepresentations.songvectors.TonalDurationHistogram;
-import com.modulo7.nlp.Lyrics;
+import com.modulo7.nlp.lyrics.Lyrics;
 import org.apache.log4j.Logger;
 
 import javax.sound.midi.*;

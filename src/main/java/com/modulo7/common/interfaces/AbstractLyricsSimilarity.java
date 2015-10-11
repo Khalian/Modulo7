@@ -1,6 +1,6 @@
 package com.modulo7.common.interfaces;
 
-import com.modulo7.nlp.Lyrics;
+import com.modulo7.nlp.lyrics.Lyrics;
 
 /**
  * Created by asanyal on 10/2/15.

@@ -1,8 +1,9 @@
-package com.modulo7.nlp;
+package com.modulo7.nlp.lyrics;
 
 import com.modulo7.common.exceptions.Modulo7InvalidFileOperationExeption;
 import com.modulo7.common.exceptions.Modulo7ParseException;
 import com.modulo7.common.utils.Modulo7Globals;
+import com.modulo7.nlp.NLPUtils;
 import org.apache.lucene.queryparser.classic.ParseException;
 
 import java.io.*;

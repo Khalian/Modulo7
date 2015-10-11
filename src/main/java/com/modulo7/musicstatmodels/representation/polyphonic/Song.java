@@ -5,7 +5,7 @@ import com.modulo7.crawler.utils.MusicSources;
 import com.modulo7.musicstatmodels.representation.metadata.KeySignature;
 import com.modulo7.musicstatmodels.representation.metadata.SongMetadata;
 import com.modulo7.musicstatmodels.representation.monophonic.Voice;
-import com.modulo7.nlp.Lyrics;
+import com.modulo7.nlp.lyrics.Lyrics;
 import org.apache.avro.Schema;
 import org.apache.avro.reflect.ReflectData;
 

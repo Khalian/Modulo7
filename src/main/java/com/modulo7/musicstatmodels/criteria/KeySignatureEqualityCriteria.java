@@ -12,7 +12,7 @@ import com.modulo7.musicstatmodels.representation.polyphonic.Song;
  */
 public class KeySignatureEqualityCriteria implements AbstractCriteria {
 
-    // Key signature element
+    // Desired Key signature element
     private KeySignature keySignature;
 
     /**

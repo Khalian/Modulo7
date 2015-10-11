@@ -9,7 +9,7 @@ import com.modulo7.musicstatmodels.representation.metadata.KeySignature;
 import com.modulo7.musicstatmodels.representation.metadata.ScaleType;
 import com.modulo7.musicstatmodels.representation.metadata.TimeSignature;
 import com.modulo7.musicstatmodels.representation.polyphonic.Song;
-import com.modulo7.nlp.Lyrics;
+import com.modulo7.nlp.lyrics.Lyrics;
 import org.apache.commons.cli.*;
 import org.apache.log4j.Logger;
 
@@ -17,8 +17,6 @@ import javax.sound.midi.InvalidMidiDataException;
 import java.util.List;
 import java.util.Scanner;
 import java.util.Set;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
 
 import static com.modulo7.engine.Modulo7CLIChoice.*;
 import static com.modulo7.engine.Modulo7CLIChoice.LIST_NUM_SONGS_INDEXED;

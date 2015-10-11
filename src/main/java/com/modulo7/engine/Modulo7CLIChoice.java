@@ -20,7 +20,7 @@ public enum Modulo7CLIChoice {
     EXIT(9),
     INVALID_CHOICE(-1);
 
-    int choice;
+    final int choice;
 
     Modulo7CLIChoice(int choice) {
         this.choice = choice;
@@ -33,14 +33,14 @@ public enum Modulo7CLIChoice {
      */
     public static Modulo7CLIChoice parseChoice(final int choiceNum) {
         switch (choiceNum) {
-            case 1 : return RET_SONGS_FOR_GIVEN_ARTIST;
+            case 1: return RET_SONGS_FOR_GIVEN_ARTIST;
             case 2: return RANK_ON_SIMILARITY_ORDER;
             case 3: return RET_SONGS_FOR_GIVEN_KEY_SIGNATURE;
             case 4: return RET_SONGS_FOR_GIVEN_TIME_SIGNATURE;
             case 5: return RET_LYRICS_GIVEN_SONG;
             case 6: return LIST_NUM_SONGS_INDEXED;
             case 7: return INPUT_CUSTOM_QUERY;
-            case 8 : return SERIALIZE_DATABASE;
+            case 8: return SERIALIZE_DATABASE;
             case 9: return EXIT;
             default: return INVALID_CHOICE;
         }

@@ -15,7 +15,7 @@ import com.modulo7.musicstatmodels.representation.metadata.TimeSignature;
 import com.modulo7.musicstatmodels.representation.monophonic.Voice;
 import com.modulo7.musicstatmodels.representation.monophonic.VoiceInstant;
 import com.modulo7.musicstatmodels.representation.polyphonic.Song;
-import com.modulo7.nlp.Lyrics;
+import com.modulo7.nlp.lyrics.Lyrics;
 import com.modulo7.othersources.BasicMusicXMLParser;
 import org.junit.Assert;
 import org.junit.Test;

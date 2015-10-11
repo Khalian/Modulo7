@@ -1,5 +1,6 @@
-package com.modulo7.nlp;
+package com.modulo7.nlp.lyrics;
 
+import com.modulo7.nlp.NLPUtils;
 import org.apache.lucene.analysis.standard.StandardAnalyzer;
 import org.apache.lucene.document.Document;
 import org.apache.lucene.index.DirectoryReader;

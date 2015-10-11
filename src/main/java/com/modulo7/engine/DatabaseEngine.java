@@ -10,7 +10,7 @@ import com.modulo7.common.utils.Modulo7Utils;
 import com.modulo7.crawler.utils.MusicSources;
 import com.modulo7.image.AudiverisSheetAnalyzer;
 import com.modulo7.musicstatmodels.representation.polyphonic.Song;
-import com.modulo7.nlp.Lyrics;
+import com.modulo7.nlp.lyrics.Lyrics;
 import com.modulo7.othersources.BasicMusicXMLParser;
 import org.apache.commons.io.FilenameUtils;
 
@@ -19,7 +19,6 @@ import java.io.File;
 import java.util.*;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
-import java.util.concurrent.RunnableFuture;
 import java.util.stream.Collectors;
 
 /**

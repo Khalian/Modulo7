@@ -9,16 +9,14 @@ import com.modulo7.musicstatmodels.representation.metadata.KeySignature;
 import com.modulo7.musicstatmodels.representation.metadata.SongMetadata;
 import com.modulo7.musicstatmodels.representation.polyphonic.Song;
 import com.modulo7.musicstatmodels.representation.metadata.TimeSignature;
-import com.modulo7.nlp.Lyrics;
-import com.modulo7.nlp.LyricsIndexer;
+import com.modulo7.nlp.lyrics.Lyrics;
+import com.modulo7.nlp.lyrics.LyricsIndexer;
 
 import javax.sound.midi.InvalidMidiDataException;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
 
 /**
  * Created by asanyal on 9/10/15.
@@ -494,5 +492,13 @@ public class Modulo7Indexer {
     public Song getSongObjectGivenLocation(final String candidateSongLocation)
             throws Modulo7DataBaseNotSerializedException {
         return engine.getSongGivenLocation(candidateSongLocation);
+    }
+
+    /**
+     * Check is verbose ouput is set for Modulo7 indexer
+     * @return
+     */
+    public boolean isVerboseIndexing() {
+        return verboseIndexing;
     }
 }

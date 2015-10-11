@@ -1,4 +1,4 @@
-package com.modulo7.nlp;
+package com.modulo7.nlp.lyrics;
 
 import com.modulo7.common.exceptions.Modulo7IndexingDirError;
 import org.apache.lucene.document.Document;

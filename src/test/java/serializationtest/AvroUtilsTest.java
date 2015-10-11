@@ -10,7 +10,7 @@ import com.modulo7.common.exceptions.Modulo7InvalidMusicXMLFile;
 import com.modulo7.common.exceptions.Modulo7NoSuchFileException;
 import com.modulo7.common.utils.AvroUtils;
 import com.modulo7.musicstatmodels.representation.polyphonic.Song;
-import com.modulo7.nlp.Lyrics;
+import com.modulo7.nlp.lyrics.Lyrics;
 import com.modulo7.othersources.BasicMusicXMLParser;
 import org.junit.Assert;
 import org.junit.Test;

@@ -1,7 +1,7 @@
 package com.modulo7.musicstatmodels.similarity.lyricssimilarity;
 
 import com.modulo7.common.interfaces.AbstractLyricsSimilarity;
-import com.modulo7.nlp.Lyrics;
+import com.modulo7.nlp.lyrics.Lyrics;
 import org.apache.lucene.search.similarities.DefaultSimilarity;
 import org.apache.lucene.search.similarities.TFIDFSimilarity;
 

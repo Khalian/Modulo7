@@ -188,7 +188,7 @@ dependencies {
     compile group: 'org.hdfgroup', name:'hdf-java', version:'2.6.1'
     compile group: 'org.apache.hadoop', name:'hadoop-core', version:'1.2.1'
     compile group: 'org.apache.avro', name:'avro-mapred', version:'1.7.7'
-
+    compile group: 'com.likethecolor', name:'alchemy', version:'1.1.6'
 
     // Test compile artifacts
     testCompile 'junit:junit:4.12'
@@ -198,7 +198,6 @@ dependencies {
 }
 
 generateGrammarSource {
-    maxHeapSize = "128m"
     arguments += ["-visitor", "-long-messages"]
     outputs.upToDateWhen { false }
 
