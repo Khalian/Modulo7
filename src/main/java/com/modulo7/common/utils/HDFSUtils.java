@@ -25,7 +25,6 @@ import java.io.OutputStream;
  */
 public class HDFSUtils {
 
-
     // Acquire the reflective schema from Modulo7 class
     private static final Schema schema = Song.getSongSchema();
 

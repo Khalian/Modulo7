@@ -14,9 +14,7 @@ import org.apache.commons.cli.*;
 import org.apache.log4j.Logger;
 
 import javax.sound.midi.InvalidMidiDataException;
-import java.util.List;
-import java.util.Scanner;
-import java.util.Set;
+import java.util.*;
 
 import static com.modulo7.engine.Modulo7CLIChoice.*;
 import static com.modulo7.engine.Modulo7CLIChoice.LIST_NUM_SONGS_INDEXED;
@@ -45,7 +43,7 @@ public class Modulo7CLI {
     // Index destination directory, all indexed files (if serialization is enabled) are stored here
     private static final String INDEX_DIR = "index_dest_dir";
 
-    // Is the data base in memory
+    // Is the data base in memory, or should it also be persisted on disk
     private static final String PERSIST_ON_DISK = "in_memory";
 
     // Is metadata to be filled up by Modulo7, in order to compensate for missing information
@@ -92,17 +90,17 @@ public class Modulo7CLI {
      * @param args
      * @throws ParseException
      * @throws Modulo7InvalidArgsException
-     * @throws Modulo7InvalidFileOperationExeption
+     * @throws com.modulo7.common.exceptions.Modulo7InvalidFileOperationException
      * @throws EchoNestException
      * @throws Modulo7InvalidMusicXMLFile
      * @throws Modulo7ParseException
-     * @throws Modulo7NoSuchFileException
+     * @throws com.modulo7.common.exceptions.Modulo7NoSuchFileOrDirectoryException
      * @throws InvalidMidiDataException
      * @throws Modulo7IndexingDirError
      */
     public static void main(String args[]) throws ParseException, Modulo7InvalidArgsException,
-            Modulo7InvalidFileOperationExeption, EchoNestException, Modulo7InvalidMusicXMLFile,
-            Modulo7ParseException, Modulo7NoSuchFileException, InvalidMidiDataException, Modulo7IndexingDirError {
+            Modulo7InvalidFileOperationException, EchoNestException, Modulo7InvalidMusicXMLFile,
+            Modulo7ParseException, Modulo7NoSuchFileOrDirectoryException, InvalidMidiDataException, Modulo7IndexingDirError {
 
         CommandLine commandLine = Modulo7CLI.getServerCommand(args);
         System.out.println("Indexing the given data");
@@ -168,12 +166,15 @@ public class Modulo7CLI {
                 }
             } catch (InvalidMidiDataException | EchoNestException e) {
                 logger.error(e.getMessage());
+            } catch (NoSuchElementException e) {
+                System.out.println("Bad input in the CLI" + e + " exitting");
+                System.exit(0);
             }
         }
     }
 
     /**
-     * Method which exectutes a given choice in Modulo7, entry point to all the other sub components
+     * Method which executes a given choice in Modulo7, entry point to all the other sub components
      * of Modulo7
      *
      * @param testNum
@@ -185,8 +186,8 @@ public class Modulo7CLI {
      */
     private static void exectuteChoice(final Modulo7CLIChoice testNum, final Scanner in) throws Modulo7BadKeyException,
             Modulo7MalformedM7SQLQuery, Modulo7QueryProcessingException, Modulo7DataBaseNotSerializedException,
-            Modulo7NoSuchSimilarityMeasureException, InvalidMidiDataException, Modulo7InvalidFileOperationExeption,
-            EchoNestException, Modulo7IndexingDirError, Modulo7ParseException, Modulo7NoSuchFileException, Modulo7InvalidMusicXMLFile {
+            Modulo7NoSuchSimilarityMeasureException, InvalidMidiDataException, Modulo7InvalidFileOperationException,
+            EchoNestException, Modulo7IndexingDirError, Modulo7ParseException, Modulo7NoSuchFileOrDirectoryException, Modulo7InvalidMusicXMLFile {
         switch (testNum) {
             case INPUT_CUSTOM_QUERY:
                 System.out.println("Consumer is going into custom query mode, now changing to Modulo7 SQL parser mode \n");
@@ -237,8 +238,8 @@ public class Modulo7CLI {
                         }
 
                     } catch (InstantiationException | IllegalAccessException | InvalidMidiDataException |
-                            Modulo7InvalidFileOperationExeption | EchoNestException | Modulo7IndexingDirError |
-                            Modulo7ParseException | Modulo7NoSuchFileException | Modulo7InvalidMusicXMLFile e) {
+                            Modulo7InvalidFileOperationException | EchoNestException | Modulo7IndexingDirError |
+                            Modulo7ParseException | Modulo7NoSuchFileOrDirectoryException | Modulo7InvalidMusicXMLFile e) {
                         logger.error(e.getMessage());
                     }
                 }
@@ -299,7 +300,8 @@ public class Modulo7CLI {
             case SERIALIZE_DATABASE:
                      System.out.print("Input the root directory from which to serialize songs to:");
                      final String location = in.next();
-                     indexer.addAdditionalSongsToIndex(location);
+                     indexer.putSongsToLocation(location);
+                     System.out.println("Songs serialized, going to main menu");
                      break;
 
             case EXIT : System.out.println("Exitting from Modulo7");

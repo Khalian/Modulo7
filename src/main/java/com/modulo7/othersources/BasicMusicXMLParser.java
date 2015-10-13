@@ -81,13 +81,13 @@ public class BasicMusicXMLParser implements AbstractAnalyzer {
      * @param  filename
      * @throws IOException
      */
-    public BasicMusicXMLParser(final String filename) throws Modulo7InvalidMusicXMLFile, Modulo7NoSuchFileException {
+    public BasicMusicXMLParser(final String filename) throws Modulo7InvalidMusicXMLFile, Modulo7NoSuchFileOrDirectoryException {
 
         final File input = new File(filename);
         try {
             doc = Jsoup.parse(input, "UTF-8", filename);
         } catch (IOException e) {
-            throw new Modulo7NoSuchFileException("No such musicxml file found in location" + filename);
+            throw new Modulo7NoSuchFileOrDirectoryException("No such musicxml file found in location" + filename);
         }
 
         checkIfValidMusicXMLFile(filename);

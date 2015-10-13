@@ -85,7 +85,7 @@ public class MidiToSongConverter implements AbstractAnalyzer {
      * Basic constructor for the midi to song converter
      * @param midiFileLocation
      */
-    public MidiToSongConverter(final String midiFileLocation) throws InvalidMidiDataException, Modulo7NoSuchFileException {
+    public MidiToSongConverter(final String midiFileLocation) throws InvalidMidiDataException, Modulo7NoSuchFileOrDirectoryException {
         // Gets the sequence of events from a midi file, we can then acquire the various parameters from the midi
         // sequences to construct voice instants
         Sequence midiSequence;
@@ -93,7 +93,7 @@ public class MidiToSongConverter implements AbstractAnalyzer {
         try {
             midiSequence = MidiSystem.getSequence(new File(midiFileLocation));
         } catch (IOException e) {
-            throw new Modulo7NoSuchFileException("No such file found in location:" + midiFileLocation);
+            throw new Modulo7NoSuchFileOrDirectoryException("No such file found in location:" + midiFileLocation);
         }
 
         numTicks = midiSequence.getTickLength();

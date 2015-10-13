@@ -1,7 +1,7 @@
 package com.modulo7.common.interfaces.choices;
 
-import com.modulo7.musicstatmodels.similarity.songsimilarity.MaxMelodicEditDistanceSimilarity;
-import com.modulo7.musicstatmodels.similarity.songsimilarity.TonalHistogramSimilarity;
+import com.modulo7.musicstatmodels.similarity.songsimilarity.*;
+import com.modulo7.musicstatmodels.similarity.voicesimilarity.NaturalContourSimilarity;
 
 import java.util.HashMap;
 import java.util.HashSet;
@@ -16,8 +16,13 @@ import java.util.Set;
 public enum SongSimilarityChoices {
 
     MAX_MELODIC_EDIT_DISTANCE_SIMILARITY("maxmelodiceditdistance"),
-    TONAL_HISTOGRAM_SIMILARITY("tonalhistogram");
+    TONAL_HISTOGRAM_SIMILARITY("tonalhistogram"),
+    WEIGHTED_TONAL_HISTOGRAM_SIMILARITY("weighedtonalhistogram"),
+    //NATURAL_SONG_CONTOUR_SIMILARITY("naturalsongcontour"),
+    GROSS_SONG_CONTOUR_SIMILARITY("grosssongcontour"),
+    SCM_TRIGRAM_SONG_SIMILARITY("scmtrigramforsong");
 
+    // Regular expression detailing one of the choices for song similarity
     public static final String REGEXP_REP;
 
     // A list of all the song similarity choices
@@ -27,6 +32,10 @@ public enum SongSimilarityChoices {
     private static final Map<String, Class> SONG_SIMILARITY_TO_CLASS_MAP = new HashMap<String, Class>() {{
         put("maxmelodiceditdistance", MaxMelodicEditDistanceSimilarity.class);
         put("tonalhistogram", TonalHistogramSimilarity.class);
+        put("weighedtonalhistogram", WeightedTonalHistogramSimilarity.class);
+        //put("naturalsongcontour", NaturalContourSimilarity.class);
+        put("scmtrigramforsong", SCMNGramSongSimilarity.class);
+        put("grosssongcontour", GrossSongContourSilimarity.class);
     }};
 
     /**
@@ -62,9 +71,7 @@ public enum SongSimilarityChoices {
      */
     public static void listAllSimilarityMeasures() {
         System.out.println("The available similarity measure choices are :");
-        for (final String simChoice : SONG_SIMILARITY_CHOICES) {
-            System.out.println(simChoice);
-        }
+        SONG_SIMILARITY_CHOICES.forEach(System.out::println);
     }
 
     /**

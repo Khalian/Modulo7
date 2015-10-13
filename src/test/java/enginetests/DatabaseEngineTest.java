@@ -30,15 +30,15 @@ public class DatabaseEngineTest {
      * @throws InvalidMidiDataException
      * @throws Modulo7InvalidMusicXMLFile
      * @throws EchoNestException
-     * @throws Modulo7NoSuchFileException
+     * @throws com.modulo7.common.exceptions.Modulo7NoSuchFileOrDirectoryException
      * @throws Modulo7DataBaseNotSerializedException
      * @throws IOException
-     * @throws Modulo7InvalidFileOperationExeption
+     * @throws com.modulo7.common.exceptions.Modulo7InvalidFileOperationException
      * @throws Modulo7ParseException
      */
     @Test
-    public void dataBaseSantiyTest() throws InvalidMidiDataException, Modulo7InvalidMusicXMLFile, EchoNestException, Modulo7NoSuchFileException,
-            Modulo7DataBaseNotSerializedException, IOException, Modulo7InvalidFileOperationExeption, Modulo7ParseException, Modulo7InvalidArgsException {
+    public void dataBaseSantiyTest() throws InvalidMidiDataException, Modulo7InvalidMusicXMLFile, EchoNestException, Modulo7NoSuchFileOrDirectoryException,
+            Modulo7DataBaseNotSerializedException, IOException, Modulo7InvalidFileOperationException, Modulo7ParseException, Modulo7InvalidArgsException {
         File file = new File("./src/test/testdataSerialization/");
         file.mkdir();
         DatabaseEngine engine = new DatabaseEngine("./src/test/testdata", "./src/test/testdataSerialization/");
@@ -55,16 +55,16 @@ public class DatabaseEngineTest {
      * @throws InvalidMidiDataException
      * @throws Modulo7InvalidMusicXMLFile
      * @throws EchoNestException
-     * @throws Modulo7NoSuchFileException
+     * @throws com.modulo7.common.exceptions.Modulo7NoSuchFileOrDirectoryException
      * @throws Modulo7BadKeyException
      * @throws Modulo7IndexingDirError
      * @throws IOException
-     * @throws Modulo7InvalidFileOperationExeption
+     * @throws com.modulo7.common.exceptions.Modulo7InvalidFileOperationException
      * @throws Modulo7ParseException
      */
     @Test
     public void m7IndexerSanityTest() throws InvalidMidiDataException, Modulo7InvalidMusicXMLFile, EchoNestException,
-            Modulo7NoSuchFileException, Modulo7BadKeyException, Modulo7IndexingDirError, IOException, Modulo7InvalidFileOperationExeption,
+            Modulo7NoSuchFileOrDirectoryException, Modulo7BadKeyException, Modulo7IndexingDirError, IOException, Modulo7InvalidFileOperationException,
             Modulo7ParseException, Modulo7InvalidArgsException {
         File file = new File("./src/test/testdataSerialization/");
         file.mkdir();

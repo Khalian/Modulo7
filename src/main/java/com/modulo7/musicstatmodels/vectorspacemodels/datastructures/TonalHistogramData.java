@@ -38,7 +38,7 @@ public class TonalHistogramData {
      * Gets an array representation of the vectorized data
      * @return
      */
-    public List<Integer> getArrayRepresentation() {
+    public List<Number> getArrayRepresentation() {
         Integer[] array = new Integer[13];
 
         for (Map.Entry<IntervalQuantity, Integer> histogramElem : intervalHistogram.entrySet()) {

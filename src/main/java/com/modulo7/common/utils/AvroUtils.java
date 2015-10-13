@@ -1,6 +1,6 @@
 package com.modulo7.common.utils;
 
-import com.modulo7.common.exceptions.Modulo7NoSuchFileException;
+import com.modulo7.common.exceptions.Modulo7NoSuchFileOrDirectoryException;
 import com.modulo7.musicstatmodels.representation.polyphonic.Song;
 import com.modulo7.nlp.lyrics.Lyrics;
 import org.apache.avro.Schema;
@@ -43,7 +43,7 @@ public class AvroUtils {
      * @param destinationFileName
      * @param song
      */
-    public static void serialize(final String destinationFileName, final Song song) throws Modulo7NoSuchFileException {
+    public static void serialize(final String destinationFileName, final Song song) throws Modulo7NoSuchFileOrDirectoryException {
 
         DatumWriter<Song> writer = new ReflectDatumWriter<>(Song.class);
         DataFileWriter<Song> fileWriter = new DataFileWriter<>(writer);
@@ -54,7 +54,7 @@ public class AvroUtils {
             fileWriter.append(song);
             fileWriter.close();
         } catch (IOException e) {
-            throw new Modulo7NoSuchFileException("Cant create file in location :" + destinationFileName);
+            throw new Modulo7NoSuchFileOrDirectoryException("Cant create file in location :" + destinationFileName);
         }
     }
 
@@ -67,7 +67,7 @@ public class AvroUtils {
      * @param sourceFileName
      * @return
      */
-    public static Song deserialize(final String sourceFileName) throws Modulo7NoSuchFileException {
+    public static Song deserialize(final String sourceFileName) throws Modulo7NoSuchFileOrDirectoryException {
 
         File sourceFile = new File(sourceFileName);
 
@@ -76,7 +76,7 @@ public class AvroUtils {
         try {
             dataFileReader = new DataFileReader<>(sourceFile, reader);
         } catch (IOException e) {
-            throw new Modulo7NoSuchFileException("No such file" + sourceFileName);
+            throw new Modulo7NoSuchFileOrDirectoryException("No such file" + sourceFileName);
         }
 
         /**
@@ -95,9 +95,9 @@ public class AvroUtils {
      *
      * @param destinationFileName
      * @param lyrics
-     * @throws Modulo7NoSuchFileException
+     * @throws com.modulo7.common.exceptions.Modulo7NoSuchFileOrDirectoryException
      */
-    public static void serialize(final String destinationFileName, final Lyrics lyrics) throws Modulo7NoSuchFileException {
+    public static void serialize(final String destinationFileName, final Lyrics lyrics) throws Modulo7NoSuchFileOrDirectoryException {
         // Acquire the reflective schema from Modulo7 class
         final Schema schema= ReflectData.get().getSchema(Lyrics.class);
 
@@ -110,7 +110,7 @@ public class AvroUtils {
             fileWriter.append(lyrics);
             fileWriter.close();
         } catch (IOException e) {
-            throw new Modulo7NoSuchFileException("Cant create file in location :" + destinationFileName);
+            throw new Modulo7NoSuchFileOrDirectoryException("Cant create file in location :" + destinationFileName);
         }
     }
 
@@ -119,9 +119,9 @@ public class AvroUtils {
      *
      * @param sourceFileName
      * @return
-     * @throws Modulo7NoSuchFileException
+     * @throws com.modulo7.common.exceptions.Modulo7NoSuchFileOrDirectoryException
      */
-    public static Lyrics deserializeLyricsObject(final String sourceFileName) throws Modulo7NoSuchFileException {
+    public static Lyrics deserializeLyricsObject(final String sourceFileName) throws Modulo7NoSuchFileOrDirectoryException {
         File sourceFile = new File(sourceFileName);
 
         DatumReader<Lyrics> reader = new ReflectDatumReader<>(Lyrics.class);
@@ -129,7 +129,7 @@ public class AvroUtils {
         try {
             dataFileReader = new DataFileReader<>(sourceFile, reader);
         } catch (IOException e) {
-            throw new Modulo7NoSuchFileException("No such file" + sourceFileName);
+            throw new Modulo7NoSuchFileOrDirectoryException("No such file" + sourceFileName);
         }
 
         /**

@@ -39,7 +39,7 @@ public class MusicXMLTest {
      */
     @Test
     public void musicXMLMetaDataAcquisitionTest() throws Modulo7InvalidMusicXMLFile,
-            Modulo7InvalidCircleOfFifthsDistance, Modulo7BadKeyException, Modulo7NoSuchFileException {
+            Modulo7InvalidCircleOfFifthsDistance, Modulo7BadKeyException, Modulo7NoSuchFileOrDirectoryException {
 
         final String attributesTestData = "./src/test/testdata/musicxml/attributesTestData.xml";
         BasicMusicXMLParser xmlParser = new BasicMusicXMLParser(attributesTestData);
@@ -85,7 +85,7 @@ public class MusicXMLTest {
      */
     @Test
     public void musicXMLSanityParseTest() throws Modulo7InvalidMusicXMLFile,
-            Modulo7InvalidCircleOfFifthsDistance, Modulo7BadKeyException, Modulo7NoSuchFileException {
+            Modulo7InvalidCircleOfFifthsDistance, Modulo7BadKeyException, Modulo7NoSuchFileOrDirectoryException {
 
         final String basicScoreData = "./src/test/testdata/musicxml/musicXMLTest.xml";
         BasicMusicXMLParser xmlParser = new BasicMusicXMLParser(basicScoreData);
@@ -100,7 +100,7 @@ public class MusicXMLTest {
      * Unit test case to parse whether a chord is present or not
      */
     @Test
-    public void musicXMLChordParseTest() throws Modulo7InvalidMusicXMLFile, Modulo7NoSuchFileException {
+    public void musicXMLChordParseTest() throws Modulo7InvalidMusicXMLFile, Modulo7NoSuchFileOrDirectoryException {
         final String chordScoreData = "./src/test/testdata/musicxml/chord.xml";
         BasicMusicXMLParser xmlParser = new BasicMusicXMLParser(chordScoreData);
 
@@ -131,11 +131,11 @@ public class MusicXMLTest {
      * together
      *
      * @throws Modulo7InvalidMusicXMLFile
-     * @throws Modulo7NoSuchFileException
+     * @throws com.modulo7.common.exceptions.Modulo7NoSuchFileOrDirectoryException
      * @throws Modulo7WrongNoteType
      */
     @Test
-    public void musicXMLComplicatedChordParseTest() throws Modulo7InvalidMusicXMLFile, Modulo7NoSuchFileException, Modulo7WrongNoteType {
+    public void musicXMLComplicatedChordParseTest() throws Modulo7InvalidMusicXMLFile, Modulo7NoSuchFileOrDirectoryException, Modulo7WrongNoteType {
         final String chordScoreData = "./src/test/testdata/musicxml/complicatedChord.xml";
         BasicMusicXMLParser xmlParser = new BasicMusicXMLParser(chordScoreData);
 
@@ -171,10 +171,10 @@ public class MusicXMLTest {
      * xml file
      *
      * @throws Modulo7InvalidMusicXMLFile
-     * @throws Modulo7NoSuchFileException
+     * @throws com.modulo7.common.exceptions.Modulo7NoSuchFileOrDirectoryException
      */
     @Test
-    public void musicXMLLyricsParseTest() throws Modulo7InvalidMusicXMLFile, Modulo7NoSuchFileException {
+    public void musicXMLLyricsParseTest() throws Modulo7InvalidMusicXMLFile, Modulo7NoSuchFileOrDirectoryException {
 
         final String basicScoreData = "./src/test/testdata/musicxml/musicXMLTest.xml";
         BasicMusicXMLParser xmlParser = new BasicMusicXMLParser(basicScoreData);

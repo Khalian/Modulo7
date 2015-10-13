@@ -30,11 +30,14 @@ public class Modulo7Globals {
     // Audiveris jar location
     public static final String AUDIVERIS_JAR_LOCATION = Modulo7Utils.stringAssign(System.getenv("AUDIVERIS_JAR_LOCATION"));
 
+    // Extensions for avro serialized files via m7
+    public static final String EXTENSION_TO_SERIALIZED_FILES = ".m7";
+
     // The number of processors available to Modulo7, this allows Modulo7 to build a simple threading model
     public static final int NUM_OF_CORES = Runtime.getRuntime().availableProcessors();
 
     /**
-     * Static block declaring all the gloabals
+     * Static block declaring all the globals
      */
     static {
         final String osName = System.getProperty("os.name");

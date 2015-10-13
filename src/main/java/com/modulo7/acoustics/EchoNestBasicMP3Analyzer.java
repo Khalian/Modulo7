@@ -4,12 +4,12 @@ import com.echonest.api.v4.*;
 import com.modulo7.common.exceptions.Modulo7BadIntervalException;
 import com.modulo7.common.exceptions.Modulo7BadKeyException;
 import com.modulo7.common.exceptions.Modulo7InvalidVoiceInstantSizeException;
-import com.modulo7.common.exceptions.Modulo7NoSuchFileException;
+import com.modulo7.common.exceptions.Modulo7NoSuchFileOrDirectoryException;
 import com.modulo7.common.interfaces.AbstractAnalyzer;
-import com.modulo7.common.utils.FrequencyNoteMap;
 import com.modulo7.common.utils.Modulo7Utils;
 import com.modulo7.crawler.utils.CrawlerHelper;
 import com.modulo7.crawler.utils.MusicSources;
+import com.modulo7.musicstatmodels.representation.metadata.TimeSignature;
 import com.modulo7.musicstatmodels.representation.polyphonic.Song;
 import com.modulo7.musicstatmodels.representation.metadata.KeySignature;
 import com.modulo7.musicstatmodels.representation.metadata.SongMetadata;
@@ -32,7 +32,7 @@ import java.io.IOException;
  * 2. Title of the track
  * 3. The loudness of the track
  * 4. The key signature and time signature of the track
- * 5. The notes (and by extension chords) from the chromagram representation
+ * 5. The notes (and by extension chords) from the chroma gram representation
  */
 public class EchoNestBasicMP3Analyzer implements AbstractAnalyzer {
 
@@ -53,14 +53,14 @@ public class EchoNestBasicMP3Analyzer implements AbstractAnalyzer {
      *
      * @throws EchoNestException
      */
-    public EchoNestBasicMP3Analyzer(final String filePath) throws EchoNestException, Modulo7NoSuchFileException {
+    public EchoNestBasicMP3Analyzer(final String filePath) throws EchoNestException, Modulo7NoSuchFileOrDirectoryException {
 
         en = new EchoNestAPI(CrawlerHelper.ECHO_NEST_API_KEY);
 
         mp3File = new File(filePath);
 
         if (!mp3File.exists()) {
-            throw new Modulo7NoSuchFileException("No file :" + filePath);
+            throw new Modulo7NoSuchFileOrDirectoryException("No file :" + filePath);
         }
     }
 
@@ -87,7 +87,8 @@ public class EchoNestBasicMP3Analyzer implements AbstractAnalyzer {
                 final String artistName = Modulo7Utils.stringAssign(track.getArtistName());
 
                 // Gets the time signature
-                final int timeSignature = track.getTimeSignature();
+                final int timeSignatureRatio = track.getTimeSignature();
+                TimeSignature timeSignature =  guessTimeSigntureRatio(timeSignatureRatio);
 
                 // Getting the key signature information from the echo nest meta data analysis in integer format
                 final int key = track.getKey();
@@ -120,7 +121,13 @@ public class EchoNestBasicMP3Analyzer implements AbstractAnalyzer {
                 if (keySignature == null) {
                     return new Song(voiceOfSong, new SongMetadata(artistName, title, (int) tempo), MusicSources.MP3, duration);
                 } else {
-                    return new Song(voiceOfSong, new SongMetadata(keySignature, artistName, title, (int) tempo), MusicSources.MP3, duration);
+                    if (timeSignature == null) {
+                        return new Song(voiceOfSong, new SongMetadata(keySignature, artistName, title, (int) tempo),
+                                    MusicSources.MP3, duration);
+                    } else {
+                        return new Song(voiceOfSong, new SongMetadata(keySignature, timeSignature, artistName, title,
+                                (int) tempo), MusicSources.MP3, duration);
+                    }
                 }
 
             } else {
@@ -134,6 +141,20 @@ public class EchoNestBasicMP3Analyzer implements AbstractAnalyzer {
         }
 
         // Return null if no song is inferred
+        return null;
+    }
+
+    /**
+     * Returns the time singatures numerator and denominator based on
+     * @param timeSignatureRatio
+     * @return
+     */
+    private TimeSignature guessTimeSigntureRatio(final int timeSignatureRatio) {
+        if (timeSignatureRatio == 1) {
+            // Common time sig
+            return new TimeSignature(4, 4);
+        }
+
         return null;
     }
 }

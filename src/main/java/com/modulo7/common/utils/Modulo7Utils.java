@@ -1,6 +1,7 @@
 package com.modulo7.common.utils;
 
 import com.modulo7.common.exceptions.Modulo7InvalidArgsException;
+import com.modulo7.common.exceptions.Modulo7NoSuchFileOrDirectoryException;
 import com.modulo7.common.exceptions.Modulo7VectorSizeMismatchException;
 import com.modulo7.musicstatmodels.representation.monophonic.Voice;
 import com.modulo7.musicstatmodels.representation.monophonic.VoiceInstant;
@@ -95,24 +96,28 @@ public class Modulo7Utils {
      * List all files in a directory recursively and returns their canonical path as a list
      * @param directoryName
      */
-    public static Set<String> listAllFiles(final String directoryName) {
+    public static Set<String> listAllFiles(final String directoryName) throws Modulo7NoSuchFileOrDirectoryException {
         final File dirFileHandle = new File(directoryName);
 
-        // Gets all the files including the ones in the subdirectory
-        final List<File> files =
-                (List<File>) FileUtils.listFiles(dirFileHandle, TrueFileFilter.INSTANCE, TrueFileFilter.INSTANCE);
-
-        return files.stream().map(File::getAbsolutePath).collect(Collectors.toSet());
+        try {
+            // Gets all the files including the ones in the subdirectory
+            final List<File> files =
+                    (List<File>) FileUtils.listFiles(dirFileHandle, TrueFileFilter.INSTANCE, TrueFileFilter.INSTANCE);
+            return files.stream().map(File::getAbsolutePath).collect(Collectors.toSet());
+        } catch (IllegalArgumentException e) {
+            throw new Modulo7NoSuchFileOrDirectoryException("No such directory" + directoryName);
+        }
     }
 
     /**
-     * Acquires the cosine similarity between two vectors
+     * Acquires the cosine similarity between two vectors for arbitrary numbers
+     *
      *
      * @param vectorA
      * @param vectorB
      * @return
      */
-    public static double cosineSimilarity(final List<Integer> vectorA, final List<Integer> vectorB)
+    public static double cosineSimilarity(final List<Number> vectorA, final List<Number> vectorB)
             throws Modulo7VectorSizeMismatchException {
 
         if (vectorA.size() != vectorB.size()) {
@@ -123,9 +128,9 @@ public class Modulo7Utils {
         double normA = 0.0;
         double normB = 0.0;
         for (int i = 0; i < vectorA.size(); i++) {
-            dotProduct += vectorA.get(i) * vectorB.get(i);
-            normA += Math.pow(vectorA.get(i), 2);
-            normB += Math.pow(vectorB.get(i), 2);
+            dotProduct += vectorA.get(i).doubleValue() * vectorB.get(i).doubleValue();
+            normA += Math.pow(vectorA.get(i).doubleValue(), 2);
+            normB += Math.pow(vectorB.get(i).doubleValue(), 2);
         }
         return dotProduct / (Math.sqrt(normA) * Math.sqrt(normB));
     }
@@ -220,4 +225,35 @@ public class Modulo7Utils {
     public static String getAudiverisJarLocation() {
         return Modulo7Globals.AUDIVERIS_JAR_LOCATION;
     }
+
+    /**
+     * Add count to n gram map
+     * @param ngram
+     * @param ngramMap
+     */
+    public static void addToCount(final String ngram, final Map<String, Integer> ngramMap) {
+        if (ngramMap.containsKey(ngram)) {
+            Integer currCount = ngramMap.get(ngram);
+            ngramMap.put(ngram, currCount + 1);
+        } else {
+            ngramMap.put(ngram, 1);
+        }
+    }
+
+    /**
+     * Get the sum over a map of n grams
+     * @param ngramMap
+     * @return
+     */
+    public static int sumOverNGramFreqs(final Map<String, Integer> ngramMap) {
+
+        int total = 0;
+
+        for (Map.Entry<String, Integer> entry : ngramMap.entrySet()) {
+            total += entry.getValue();
+        }
+
+        return total;
+    }
+
 }

@@ -1,7 +1,7 @@
 package nlptests;
 
 import com.modulo7.common.exceptions.Modulo7IndexingDirError;
-import com.modulo7.common.exceptions.Modulo7InvalidFileOperationExeption;
+import com.modulo7.common.exceptions.Modulo7InvalidFileOperationException;
 import com.modulo7.common.exceptions.Modulo7ParseException;
 import com.modulo7.nlp.lyrics.Lyrics;
 import com.modulo7.nlp.lyrics.LyricsIndexer;
@@ -27,14 +27,14 @@ public class LyricsIndexerTest {
     /**
      * A sanity test with indexing exactly one object and returning it based on a score
      *
-     * @throws com.modulo7.common.exceptions.Modulo7InvalidFileOperationExeption
+     * @throws com.modulo7.common.exceptions.Modulo7InvalidFileOperationException
      * @throws ParseException
      * @throws Modulo7IndexingDirError
      * @throws IOException
      * @throws Modulo7ParseException
      */
     @Test
-    public void lyricsIndexerSanityTest() throws ParseException, Modulo7IndexingDirError, Modulo7InvalidFileOperationExeption,
+    public void lyricsIndexerSanityTest() throws ParseException, Modulo7IndexingDirError, Modulo7InvalidFileOperationException,
             IOException, Modulo7ParseException {
 
         LyricsIndexer indexer = new LyricsIndexer();
@@ -58,11 +58,11 @@ public class LyricsIndexerTest {
      *
      * @throws IOException
      * @throws Modulo7IndexingDirError
-     * @throws Modulo7InvalidFileOperationExeption
+     * @throws com.modulo7.common.exceptions.Modulo7InvalidFileOperationException
      * @throws Modulo7ParseException
      */
     @Test
-    public void lyricsIndexerTest() throws IOException, Modulo7IndexingDirError, Modulo7InvalidFileOperationExeption, Modulo7ParseException {
+    public void lyricsIndexerTest() throws IOException, Modulo7IndexingDirError, Modulo7InvalidFileOperationException, Modulo7ParseException {
         LyricsIndexer indexer = new LyricsIndexer();
 
         Lyrics lyrics = new Lyrics("Barbie girl", "aqua", new File("./src/test/testdata/lyrics/barbie_girl"));

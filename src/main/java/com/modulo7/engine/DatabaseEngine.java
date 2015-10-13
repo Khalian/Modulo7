@@ -79,7 +79,7 @@ public class DatabaseEngine implements Runnable {
      * @param sourceDirectory
      * @param destinationDirectory
      */
-    public DatabaseEngine(final String sourceDirectory, final String destinationDirectory) throws Modulo7InvalidArgsException {
+    public DatabaseEngine(final String sourceDirectory, final String destinationDirectory) throws Modulo7InvalidArgsException, Modulo7NoSuchFileOrDirectoryException {
         this.destinationDirectory = destinationDirectory;
         this.sourceDirectory = sourceDirectory;
         this.databaseName = DEFAULT_ENGINE_NAME;
@@ -102,7 +102,8 @@ public class DatabaseEngine implements Runnable {
      * @param sourceDirectory
      * @param destinationDirectory
      */
-    public DatabaseEngine(final String databaseName, final String sourceDirectory, final String destinationDirectory) throws Modulo7InvalidArgsException {
+    public DatabaseEngine(final String databaseName, final String sourceDirectory, final String destinationDirectory) throws Modulo7InvalidArgsException,
+            Modulo7NoSuchFileOrDirectoryException {
         this.destinationDirectory = destinationDirectory;
         this.sourceDirectory = sourceDirectory;
         this.databaseName = databaseName;
@@ -125,7 +126,8 @@ public class DatabaseEngine implements Runnable {
      * @param dstDir
      * @param verboseOutput
      */
-    public DatabaseEngine(final String srcDir, final String dstDir, final boolean verboseOutput) throws Modulo7InvalidArgsException {
+    public DatabaseEngine(final String srcDir, final String dstDir, final boolean verboseOutput) throws Modulo7InvalidArgsException,
+            Modulo7NoSuchFileOrDirectoryException {
         this.destinationDirectory = dstDir;
         this.sourceDirectory = srcDir;
         this.verboseOutput = verboseOutput;
@@ -150,7 +152,7 @@ public class DatabaseEngine implements Runnable {
      * @throws Modulo7InvalidArgsException
      */
     public DatabaseEngine(final String srcDir, final String dstDir, final boolean verboseOutput, final int numThreads)
-            throws Modulo7InvalidArgsException {
+            throws Modulo7InvalidArgsException, Modulo7NoSuchFileOrDirectoryException {
         this.destinationDirectory = dstDir;
         this.sourceDirectory = srcDir;
         this.verboseOutput = verboseOutput;
@@ -170,17 +172,17 @@ public class DatabaseEngine implements Runnable {
      *
      * @param songLocation
      * @throws EchoNestException
-     * @throws Modulo7NoSuchFileException
+     * @throws com.modulo7.common.exceptions.Modulo7NoSuchFileOrDirectoryException
      * @throws InvalidMidiDataException
      * @throws Modulo7InvalidMusicXMLFile
-     * @throws Modulo7InvalidFileOperationExeption
+     * @throws com.modulo7.common.exceptions.Modulo7InvalidFileOperationException
      * @throws Modulo7ParseException
      *
      * @return whether to incrementally add to database or not
      *
      */
-    public synchronized boolean incrementalAddToDatabase(final String songLocation) throws EchoNestException, Modulo7NoSuchFileException,
-            InvalidMidiDataException, Modulo7InvalidMusicXMLFile, Modulo7InvalidFileOperationExeption, Modulo7ParseException {
+    public synchronized boolean incrementalAddToDatabase(final String songLocation) throws EchoNestException, Modulo7NoSuchFileOrDirectoryException,
+            InvalidMidiDataException, Modulo7InvalidMusicXMLFile, Modulo7InvalidFileOperationException, Modulo7ParseException {
 
         if (songLocationMap.containsKey(songLocation)) {
             return false;
@@ -198,13 +200,13 @@ public class DatabaseEngine implements Runnable {
      *
      * @throws InvalidMidiDataException
      * @throws EchoNestException
-     * @throws Modulo7NoSuchFileException
+     * @throws com.modulo7.common.exceptions.Modulo7NoSuchFileOrDirectoryException
      * @throws Modulo7InvalidMusicXMLFile
-     * @throws Modulo7InvalidFileOperationExeption
+     * @throws com.modulo7.common.exceptions.Modulo7InvalidFileOperationException
      * @throws Modulo7ParseException
      */
     public synchronized void buildInMemoryDataBaseFromScratch() throws InvalidMidiDataException,
-            EchoNestException, Modulo7NoSuchFileException, Modulo7InvalidMusicXMLFile, Modulo7InvalidFileOperationExeption,
+            EchoNestException, Modulo7NoSuchFileOrDirectoryException, Modulo7InvalidMusicXMLFile, Modulo7InvalidFileOperationException,
             Modulo7ParseException {
         for (final String songLocation : songLocations) {
             parseSource(songLocation);
@@ -217,14 +219,14 @@ public class DatabaseEngine implements Runnable {
      * Parse a given source
      * @param songLocation
      * @throws InvalidMidiDataException
-     * @throws Modulo7NoSuchFileException
+     * @throws com.modulo7.common.exceptions.Modulo7NoSuchFileOrDirectoryException
      * @throws EchoNestException
      * @throws Modulo7InvalidMusicXMLFile
      * @throws Modulo7ParseException
-     * @throws Modulo7InvalidFileOperationExeption
+     * @throws com.modulo7.common.exceptions.Modulo7InvalidFileOperationException
      */
-    private Song parseSource(final String songLocation) throws InvalidMidiDataException, Modulo7NoSuchFileException,
-            EchoNestException, Modulo7InvalidMusicXMLFile, Modulo7ParseException, Modulo7InvalidFileOperationExeption {
+    private Song parseSource(final String songLocation) throws InvalidMidiDataException, Modulo7NoSuchFileOrDirectoryException,
+            EchoNestException, Modulo7InvalidMusicXMLFile, Modulo7ParseException, Modulo7InvalidFileOperationException {
 
         Song song = null;
 
@@ -262,15 +264,15 @@ public class DatabaseEngine implements Runnable {
      * Method to serialize and both get a song
      *
      * @throws Modulo7InvalidMusicXMLFile
-     * @throws Modulo7NoSuchFileException
+     * @throws com.modulo7.common.exceptions.Modulo7NoSuchFileOrDirectoryException
      * @throws EchoNestException
      * @throws InvalidMidiDataException
-     * @throws Modulo7InvalidFileOperationExeption
+     * @throws com.modulo7.common.exceptions.Modulo7InvalidFileOperationException
      * @throws Modulo7ParseException
      */
     public synchronized void dynamicBuildDataSet() throws Modulo7InvalidMusicXMLFile,
-            Modulo7NoSuchFileException, EchoNestException, InvalidMidiDataException,
-            Modulo7InvalidFileOperationExeption, Modulo7ParseException {
+            Modulo7NoSuchFileOrDirectoryException, EchoNestException, InvalidMidiDataException,
+            Modulo7InvalidFileOperationException, Modulo7ParseException {
         for (final String songLocation : songLocations) {
             final Song song = parseSource(songLocation);
             serializeAndPutToDisk(songLocation, song);
@@ -284,9 +286,9 @@ public class DatabaseEngine implements Runnable {
      * Method to serialize a song object and put to appropriate location in disk
      * @param songLocation
      * @param song
-     * @throws Modulo7NoSuchFileException
+     * @throws com.modulo7.common.exceptions.Modulo7NoSuchFileOrDirectoryException
      */
-    private synchronized void serializeAndPutToDisk(final String songLocation, final Song song) throws Modulo7NoSuchFileException {
+    private synchronized void serializeAndPutToDisk(final String songLocation, final Song song) throws Modulo7NoSuchFileOrDirectoryException {
         final String finalSerializedLocation = destinationDirectory + File.separator + FilenameUtils.getBaseName(songLocation) + ".m7";
         AvroUtils.serialize(finalSerializedLocation, song);
         serializedSongLocationSet.put(songLocation, finalSerializedLocation);
@@ -295,15 +297,15 @@ public class DatabaseEngine implements Runnable {
     /**
      * Serialize and put database in a given location
      *
-     * @throws Modulo7NoSuchFileException
+     * @throws com.modulo7.common.exceptions.Modulo7NoSuchFileOrDirectoryException
      * @throws InvalidMidiDataException
      * @throws Modulo7InvalidMusicXMLFile
      * @throws EchoNestException
-     * @throws Modulo7InvalidFileOperationExeption
+     * @throws com.modulo7.common.exceptions.Modulo7InvalidFileOperationException
      * @throws Modulo7ParseException
      */
-    public synchronized void serializeDataSetAndMoveToDisk() throws Modulo7NoSuchFileException, InvalidMidiDataException,
-            Modulo7InvalidMusicXMLFile, EchoNestException, Modulo7InvalidFileOperationExeption, Modulo7ParseException {
+    public synchronized void serializeDataSetAndMoveToDisk() throws Modulo7NoSuchFileOrDirectoryException, InvalidMidiDataException,
+            Modulo7InvalidMusicXMLFile, EchoNestException, Modulo7InvalidFileOperationException, Modulo7ParseException {
 
         if (!isDataBaseConstructedInMemory) {
             buildInMemoryDataBaseFromScratch();
@@ -332,7 +334,7 @@ public class DatabaseEngine implements Runnable {
      * @param keepDiskCopy
      */
     public synchronized void deserializeDataSetAndBuildInMemory(final boolean keepDiskCopy) throws Modulo7DataBaseNotSerializedException,
-            Modulo7NoSuchFileException {
+            Modulo7NoSuchFileOrDirectoryException {
 
         if (!isDataBasePresentOnDisk) {
             throw new Modulo7DataBaseNotSerializedException("Engine database has not been serialized, " +

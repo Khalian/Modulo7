@@ -2,6 +2,8 @@ package com.modulo7.common.interfaces.choices;
 
 import com.modulo7.musicstatmodels.criteria.KeySignatureEqualityCriteria;
 import com.modulo7.musicstatmodels.criteria.PolyphonyCriteria;
+import com.modulo7.musicstatmodels.criteria.PositiveLyricsIntentCriteria;
+import com.modulo7.musicstatmodels.criteria.TimeSignatureEqualityCriteria;
 import com.modulo7.musicstatmodels.statistics.HappinessIndex;
 import com.modulo7.musicstatmodels.statistics.MaxMelodicRepeatingFactor;
 import com.modulo7.musicstatmodels.statistics.PowerIndex;
@@ -19,7 +21,10 @@ import java.util.Set;
  */
 public enum CriteriaChoice {
     KEY_SIGNATURE_EQUALITY_CRITERIA("keysignatureequalto"),
-    POLYPHONIC_CRITERIA("polyphonic");
+    POLYPHONIC_CRITERIA("polyphonic"),
+    TIME_SIGNATURE_EQUALITY_CRITERIA("timesignatureequalto"),
+    POSITIVE_LYRICAL_INTENT_CRITERIA("positivelyrics");
+
 
     // A set of all criteria choices
     private static final Set<String> CRITERIA_CHOICES = new HashSet<>();
@@ -49,6 +54,8 @@ public enum CriteriaChoice {
     private static final Map<String, Class> CRITERIA_TO_CLASS_MAP = new HashMap<String, Class>() {{
         put("keysignatureequalto", KeySignatureEqualityCriteria.class);
         put("polyphonic", PolyphonyCriteria.class);
+        put("timesignatureequalto", TimeSignatureEqualityCriteria.class);
+        put("positivelyrics", PositiveLyricsIntentCriteria.class);
     }};
 
     private String criteriaChoice;

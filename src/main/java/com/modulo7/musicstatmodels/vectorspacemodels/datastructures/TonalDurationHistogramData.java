@@ -41,7 +41,7 @@ public class TonalDurationHistogramData {
      * Gets an array representation of the vectorized data
      * @return
      */
-    public List<Double> getArrayRepresentation() {
+    public List<Number> getArrayRepresentation() {
         Double[] array = new Double[12];
 
         for (Map.Entry<IntervalQuantity, Double> histogramElem : intervalHistogram.entrySet()) {

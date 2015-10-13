@@ -1,4 +1,4 @@
-package com.modulo7.musicstatmodels.similarity.songsimilarity;
+package com.modulo7.musicstatmodels.similarity.genericsimilarity;
 
 import com.modulo7.common.exceptions.Modulo7BadIntervalException;
 import com.modulo7.common.exceptions.Modulo7WrongNoteType;
@@ -6,7 +6,6 @@ import com.modulo7.common.interfaces.AbstractSongSimilarity;
 import com.modulo7.common.interfaces.AbstractVoiceSimilarity;
 import com.modulo7.common.utils.Modulo7Globals;
 import com.modulo7.musicstatmodels.representation.polyphonic.Song;
-import com.modulo7.musicstatmodels.similarity.genericsimilarity.GenericMaximalVoiceSimilarity;
 import com.modulo7.musicstatmodels.vectorspacemodels.contour.ContourSongRep;
 import com.modulo7.musicstatmodels.vectorspacemodels.contour.voicecontour.NaturalContour;
 import org.apache.log4j.Logger;

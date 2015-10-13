@@ -131,7 +131,7 @@ public class VectorSpaceModelsTest {
         TonalHistogramData data = histogram.getInternalRepresentation();
 
         Assert.assertEquals(data.getSize(), 13);
-        List<Integer> intervalArrayRep = data.getArrayRepresentation();
+        List<Number> intervalArrayRep = data.getArrayRepresentation();
         Assert.assertEquals(intervalArrayRep.size(), 13);
         Assert.assertEquals(data.getCountForInterval(IntervalQuantity.MINOR_SECOND), 6);
         Assert.assertEquals(data.getHistogramTotalSum(), 8);    

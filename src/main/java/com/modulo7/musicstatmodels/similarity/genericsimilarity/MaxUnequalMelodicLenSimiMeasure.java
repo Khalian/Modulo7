@@ -65,8 +65,8 @@ public class MaxUnequalMelodicLenSimiMeasure<T extends AbstractVoiceSimilarity> 
     private Voice getSubVoice(final Voice originalVoice, final int firstVoiceInstant, final int lastVoiceInstant) {
         final Voice newVoice = new Voice();
 
-        for (int i = firstVoiceInstant; i <= lastVoiceInstant; i++) {
-            newVoice.addVoiceInstant(originalVoice.getVoiceInstantAtPostion(firstVoiceInstant));
+        for (int i = firstVoiceInstant; i < lastVoiceInstant; i++) {
+            newVoice.addVoiceInstant(originalVoice.getVoiceInstantAtPostion(i));
         }
 
         newVoice.setVoiceTag(originalVoice.getVoiceTag());

@@ -11,12 +11,9 @@ import com.modulo7.musicstatmodels.similarity.voicesimilarity.GrossContourSimila
 public class GrossSongContourSilimarity extends GenericMaximalVoiceSimilarity<GrossContourSimilarity> {
 
     /**
-     * Basic constructor for generic maximal similarity
-     *
-     * @param similarityMeasure (The internal similarity measure used inside generic maximal voice similarity)
-     * must be of type gross contour similarity
+     * Basic constructor for gross contour similarity
      */
-    public GrossSongContourSilimarity(final GrossContourSimilarity similarityMeasure) {
-        super(similarityMeasure);
+    public GrossSongContourSilimarity() {
+        super(new GrossContourSimilarity());
     }
 }

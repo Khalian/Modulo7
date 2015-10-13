@@ -1,6 +1,6 @@
 package com.modulo7.nlp.lyrics;
 
-import com.modulo7.common.exceptions.Modulo7InvalidFileOperationExeption;
+import com.modulo7.common.exceptions.Modulo7InvalidFileOperationException;
 import com.modulo7.common.exceptions.Modulo7ParseException;
 import com.modulo7.common.utils.Modulo7Globals;
 import com.modulo7.nlp.NLPUtils;
@@ -75,10 +75,10 @@ public class Lyrics implements Serializable {
      * @param albumName
      * @param fileLyrics
      *
-     * @throws Modulo7InvalidFileOperationExeption
+     * @throws com.modulo7.common.exceptions.Modulo7InvalidFileOperationException
      * @throws Modulo7ParseException
      */
-    public Lyrics(final String artist, final String albumName, final File fileLyrics) throws Modulo7InvalidFileOperationExeption, Modulo7ParseException {
+    public Lyrics(final String artist, final String albumName, final File fileLyrics) throws Modulo7InvalidFileOperationException, Modulo7ParseException {
 
         try {
             FileInputStream fstream = new FileInputStream(fileLyrics);
@@ -102,7 +102,7 @@ public class Lyrics implements Serializable {
             // Introducing basic stemming into lyrics object, removing redundant words
             this.lyricsOfSong = NLPUtils.stemmer(lyricsInSingleLine.toString());
         } catch (IOException ie) {
-            throw new Modulo7InvalidFileOperationExeption(ie.getMessage());
+            throw new Modulo7InvalidFileOperationException(ie.getMessage());
         } catch (ParseException e) {
            throw new Modulo7ParseException(e);
         }

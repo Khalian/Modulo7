@@ -131,6 +131,23 @@ public class SongMetadata implements Serializable {
     }
 
     /**
+     * Constructor containing every element for song metadata
+     * @param keySignature
+     * @param timeSignature
+     * @param artistName
+     * @param title
+     * @param tempo
+     */
+    public SongMetadata(final KeySignature keySignature, final TimeSignature timeSignature,
+                        final String artistName, final String title, final int tempo) {
+        this.keySignature = keySignature;
+        this.timeSignature = timeSignature;
+        this.artistName = artistName;
+        this.titleOfTrack = title;
+        this.tempo = tempo;
+    }
+
+    /**
      * Setter for key signature
      * @param keySignature
      */

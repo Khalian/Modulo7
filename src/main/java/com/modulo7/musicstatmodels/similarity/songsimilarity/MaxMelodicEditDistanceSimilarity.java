@@ -12,9 +12,8 @@ public class MaxMelodicEditDistanceSimilarity extends GenericMaximalVoiceSimilar
 
     /**
      * Edit distance over an entire song pairwise and then returns the maximum
-     * @param similarityMeasure
      */
-    public MaxMelodicEditDistanceSimilarity(final RawMelodicEditDistanceSimilarity similarityMeasure) {
-        super(similarityMeasure);
+    public MaxMelodicEditDistanceSimilarity() {
+        super(new RawMelodicEditDistanceSimilarity());
     }
 }

@@ -3,7 +3,7 @@ package parsertests;
 import com.echonest.api.v4.EchoNestException;
 import com.modulo7.acoustics.EchoNestBasicMP3Analyzer;
 import com.modulo7.acoustics.MidiToSongConverter;
-import com.modulo7.common.exceptions.Modulo7NoSuchFileException;
+import com.modulo7.common.exceptions.Modulo7NoSuchFileOrDirectoryException;
 import com.modulo7.common.interfaces.AbstractAnalyzer;
 import com.modulo7.musicstatmodels.representation.polyphonic.Song;
 import org.junit.Assert;
@@ -22,7 +22,7 @@ import java.io.IOException;
 public class ComparisonsTest {
 
     @Test
-    public void midiMp3Comparison() throws EchoNestException, Modulo7NoSuchFileException, InvalidMidiDataException, IOException {
+    public void midiMp3Comparison() throws EchoNestException, Modulo7NoSuchFileOrDirectoryException, InvalidMidiDataException, IOException {
 
         final String mp3Location = "./src/test/testdata/mp3/Bach_SMD.mp3";
         AbstractAnalyzer mp3Analyzer = new EchoNestBasicMP3Analyzer(mp3Location);

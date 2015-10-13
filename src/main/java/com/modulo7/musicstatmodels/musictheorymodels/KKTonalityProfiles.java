@@ -141,9 +141,14 @@ public class KKTonalityProfiles {
         TonalDurationHistogram durationHistogram = new TonalDurationHistogram();
         durationHistogram.computeVectorRepresentation(song);
 
-        final List<Double> tonalDurationsList = durationHistogram.getInternalRepresentation().getArrayRepresentation();
-        Double[] tonalDurationsHistogramArray = tonalDurationsList.toArray(new Double[tonalDurationsList.size()]);
-        double[] tonalDurationsArray = ArrayUtils.toPrimitive(tonalDurationsHistogramArray);
+        final List<Number> tonalDurationsList = durationHistogram.getInternalRepresentation().getArrayRepresentation();
+        Double[] tonalDurationsnHistogramArray = new Double[tonalDurationsList.size()];
+
+        for (int i = 0; i < tonalDurationsList.size(); i++) {
+            tonalDurationsnHistogramArray[i] = tonalDurationsList.get(i).doubleValue();
+        }
+
+        double[] tonalDurationsArray = ArrayUtils.toPrimitive(tonalDurationsnHistogramArray);
         assert (tonalDurationsArray.length == 12);
 
         final double thisScore, thatScore;

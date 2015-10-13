@@ -2,17 +2,20 @@ package com.modulo7.engine;
 
 import com.echonest.api.v4.EchoNestException;
 import com.modulo7.common.exceptions.*;
-import com.modulo7.common.interfaces.AbstractCriteria;
+import com.modulo7.common.utils.AvroUtils;
+import com.modulo7.common.utils.Modulo7Globals;
 import com.modulo7.common.utils.Modulo7Utils;
-import com.modulo7.musicstatmodels.criteria.PolyphonyCriteria;
 import com.modulo7.musicstatmodels.representation.metadata.KeySignature;
 import com.modulo7.musicstatmodels.representation.metadata.SongMetadata;
 import com.modulo7.musicstatmodels.representation.polyphonic.Song;
 import com.modulo7.musicstatmodels.representation.metadata.TimeSignature;
 import com.modulo7.nlp.lyrics.Lyrics;
 import com.modulo7.nlp.lyrics.LyricsIndexer;
+import org.apache.commons.io.FilenameUtils;
 
 import javax.sound.midi.InvalidMidiDataException;
+import javax.tools.FileObject;
+import java.io.File;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
@@ -38,12 +41,6 @@ public class Modulo7Indexer {
     // Songs indexed on artists playing
     private Map<String, Set<Song>> artistIndex = new HashMap<>();
 
-    // Songs indexed on the fact that they are homophonic
-    private Map<String, Song> mophonicIndex = new HashMap<>();
-
-    // Songs indexed on the fact that they are polyphonic
-    private Map<String, Song> polyphonicIndex = new HashMap<>();
-
     // Lyrics indexer for all the sub components
     private LyricsIndexer lyricsIndexer;
 
@@ -60,12 +57,12 @@ public class Modulo7Indexer {
      * @throws InvalidMidiDataException
      * @throws Modulo7InvalidMusicXMLFile
      * @throws EchoNestException
-     * @throws Modulo7NoSuchFileException
+     * @throws com.modulo7.common.exceptions.Modulo7NoSuchFileOrDirectoryException
      * @throws Modulo7IndexingDirError
      * @throws Modulo7ParseException
      */
     public Modulo7Indexer(final String srcDir, final String dstDir) throws InvalidMidiDataException, Modulo7InvalidMusicXMLFile,
-            EchoNestException, Modulo7NoSuchFileException, Modulo7IndexingDirError, Modulo7InvalidFileOperationExeption,
+            EchoNestException, Modulo7NoSuchFileOrDirectoryException, Modulo7IndexingDirError, Modulo7InvalidFileOperationException,
             Modulo7ParseException, Modulo7InvalidArgsException {
         engine = new DatabaseEngine(srcDir, dstDir);
         engine.buildInMemoryDataBaseFromScratch();
@@ -84,12 +81,12 @@ public class Modulo7Indexer {
      * @throws InvalidMidiDataException
      * @throws Modulo7InvalidMusicXMLFile
      * @throws EchoNestException
-     * @throws Modulo7NoSuchFileException
+     * @throws com.modulo7.common.exceptions.Modulo7NoSuchFileOrDirectoryException
      * @throws Modulo7ParseException
      */
     public Modulo7Indexer(final String srcDir, final String dstDir, final boolean persistOnDisk, final boolean verboseIndexing)
-            throws InvalidMidiDataException, Modulo7InvalidMusicXMLFile, EchoNestException, Modulo7NoSuchFileException,
-            Modulo7InvalidFileOperationExeption, Modulo7ParseException, Modulo7InvalidArgsException {
+            throws InvalidMidiDataException, Modulo7InvalidMusicXMLFile, EchoNestException, Modulo7NoSuchFileOrDirectoryException,
+            Modulo7InvalidFileOperationException, Modulo7ParseException, Modulo7InvalidArgsException {
         engine = new DatabaseEngine(srcDir, dstDir, verboseIndexing);
         engine.buildInMemoryDataBaseFromScratch();
         lyricsIndexer = new LyricsIndexer();
@@ -112,14 +109,14 @@ public class Modulo7Indexer {
      * @throws InvalidMidiDataException
      * @throws Modulo7InvalidMusicXMLFile
      * @throws EchoNestException
-     * @throws Modulo7NoSuchFileException
-     * @throws Modulo7InvalidFileOperationExeption
+     * @throws com.modulo7.common.exceptions.Modulo7NoSuchFileOrDirectoryException
+     * @throws com.modulo7.common.exceptions.Modulo7InvalidFileOperationException
      * @throws Modulo7ParseException
      * @throws Modulo7InvalidArgsException
      */
     public Modulo7Indexer(final String srcDir, final String dstDir, final boolean persistOnDisk, final boolean verboseIndexing, final int numThreads)
-            throws InvalidMidiDataException, Modulo7InvalidMusicXMLFile, EchoNestException, Modulo7NoSuchFileException,
-            Modulo7InvalidFileOperationExeption, Modulo7ParseException, Modulo7InvalidArgsException {
+            throws InvalidMidiDataException, Modulo7InvalidMusicXMLFile, EchoNestException, Modulo7NoSuchFileOrDirectoryException,
+            Modulo7InvalidFileOperationException, Modulo7ParseException, Modulo7InvalidArgsException {
         engine = new DatabaseEngine(srcDir, dstDir, verboseIndexing, numThreads);
         engine.buildInMemoryDataBaseFromScratch();
         lyricsIndexer = new LyricsIndexer();
@@ -142,7 +139,6 @@ public class Modulo7Indexer {
         indexTimeSignatures();
         indexLyrics();
         indexArtists();
-        indexPolyphony();
     }
 
     /**
@@ -150,15 +146,15 @@ public class Modulo7Indexer {
      *
      * @param newDir
      * @throws Modulo7ParseException
-     * @throws Modulo7InvalidFileOperationExeption
+     * @throws com.modulo7.common.exceptions.Modulo7InvalidFileOperationException
      * @throws EchoNestException
      * @throws Modulo7InvalidMusicXMLFile
      * @throws Modulo7IndexingDirError
-     * @throws Modulo7NoSuchFileException
+     * @throws com.modulo7.common.exceptions.Modulo7NoSuchFileOrDirectoryException
      * @throws InvalidMidiDataException
      */
-    public void addAdditionalSongsToIndex(final String newDir) throws Modulo7ParseException, Modulo7InvalidFileOperationExeption,
-            EchoNestException, Modulo7InvalidMusicXMLFile, Modulo7IndexingDirError, Modulo7NoSuchFileException, InvalidMidiDataException {
+    public void addAdditionalSongsToIndex(final String newDir) throws Modulo7ParseException, Modulo7InvalidFileOperationException,
+            EchoNestException, Modulo7InvalidMusicXMLFile, Modulo7IndexingDirError, Modulo7NoSuchFileOrDirectoryException, InvalidMidiDataException {
         final Set<String> newFilesToIndex = Modulo7Utils.listAllFiles(newDir);
 
         for (final String newFile : newFilesToIndex) {
@@ -170,36 +166,17 @@ public class Modulo7Indexer {
      * Index a single file
      * @param singleSongLocation
      * @throws Modulo7ParseException
-     * @throws Modulo7InvalidFileOperationExeption
+     * @throws com.modulo7.common.exceptions.Modulo7InvalidFileOperationException
      * @throws EchoNestException
      * @throws Modulo7InvalidMusicXMLFile
      * @throws Modulo7IndexingDirError
-     * @throws Modulo7NoSuchFileException
+     * @throws com.modulo7.common.exceptions.Modulo7NoSuchFileOrDirectoryException
      * @throws InvalidMidiDataException
      */
     public void addSingleAdditionalSongToIndex(final String singleSongLocation) throws Modulo7ParseException,
-            Modulo7InvalidFileOperationExeption, EchoNestException, Modulo7InvalidMusicXMLFile, Modulo7IndexingDirError,
-            Modulo7NoSuchFileException, InvalidMidiDataException {
+            Modulo7InvalidFileOperationException, EchoNestException, Modulo7InvalidMusicXMLFile, Modulo7IndexingDirError,
+            Modulo7NoSuchFileOrDirectoryException, InvalidMidiDataException {
         incrementalIndexASong(singleSongLocation);
-    }
-
-    /**
-     * Method to index songs as monophonic and polyphonic
-     */
-    private synchronized void indexPolyphony() {
-
-        final AbstractCriteria polyphonyCriteria = new PolyphonyCriteria();
-
-        for (final String songLocation : engine.getSongLocationSet()) {
-            final Song song = engine.getSongGivenLocationInMemoryVersion(songLocation);
-
-            // If the song is polyphonic
-            if (polyphonyCriteria.getCriteriaEvaluation(song)) {
-                polyphonicIndex.put(songLocation, song);
-            } else {
-                mophonicIndex.put(songLocation, song);
-            }
-        }
     }
 
     /**
@@ -340,13 +317,13 @@ public class Modulo7Indexer {
      * @throws InvalidMidiDataException
      * @throws Modulo7InvalidMusicXMLFile
      * @throws EchoNestException
-     * @throws com.modulo7.common.exceptions.Modulo7InvalidFileOperationExeption
-     * @throws Modulo7NoSuchFileException
+     * @throws com.modulo7.common.exceptions.Modulo7InvalidFileOperationException
+     * @throws com.modulo7.common.exceptions.Modulo7NoSuchFileOrDirectoryException
      * @throws Modulo7IndexingDirError
      * @throws Modulo7ParseException
      */
     public void incrementalIndexASong(final String location) throws InvalidMidiDataException, Modulo7InvalidMusicXMLFile,
-            EchoNestException, Modulo7InvalidFileOperationExeption, Modulo7NoSuchFileException, Modulo7IndexingDirError, Modulo7ParseException {
+            EchoNestException, Modulo7InvalidFileOperationException, Modulo7NoSuchFileOrDirectoryException, Modulo7IndexingDirError, Modulo7ParseException {
         boolean toIndex = engine.incrementalAddToDatabase(location);
 
         if (toIndex) {
@@ -354,24 +331,6 @@ public class Modulo7Indexer {
             incrementalIndexTimeSignatures(location);
             incrementalIndexLyrics(location);
             incrementalIndexArtists(location);
-            incrementatalIndexPolyphony(location);
-        }
-    }
-
-    /**
-     * Incremental version of the polyphony index
-     * @param location
-     */
-    private synchronized void incrementatalIndexPolyphony(final String location) {
-
-        final AbstractCriteria polyphonyCriteria = new PolyphonyCriteria();
-        final Song song = engine.getSongGivenLocationInMemoryVersion(location);
-
-        // If the song is polyphonic
-        if (polyphonyCriteria.getCriteriaEvaluation(song)) {
-            polyphonicIndex.put(location, song);
-        } else {
-            mophonicIndex.put(location, song);
         }
     }
 
@@ -500,5 +459,27 @@ public class Modulo7Indexer {
      */
     public boolean isVerboseIndexing() {
         return verboseIndexing;
+    }
+
+    /**
+     * Put serialized songs to location
+     * @param location
+     */
+    public void putSongsToLocation(String location) throws Modulo7DataBaseNotSerializedException, Modulo7NoSuchFileOrDirectoryException {
+
+        for (final Song song : getAllSongs()) {
+            final String destLoc = location + File.separator + FilenameUtils.getBaseName(engine.getLocationGivenSong(song)) + Modulo7Globals.EXTENSION_TO_SERIALIZED_FILES;
+            File destFile = new File(destLoc);
+            if (!destFile.exists()) {
+                AvroUtils.serialize(destLoc, song);
+                if (isVerboseIndexing()) {
+                    System.out.println("Serializing to location" + destLoc);
+                }
+            } else {
+                if (isVerboseIndexing()) {
+                    System.out.println("File at location " + destLoc + " already exists");
+                }
+            }
+        }
     }
 }

@@ -3,7 +3,7 @@ package parsertests;
 import com.echonest.api.v4.EchoNestException;
 import com.modulo7.common.interfaces.AbstractAnalyzer;
 import com.modulo7.acoustics.EchoNestBasicMP3Analyzer;
-import com.modulo7.common.exceptions.Modulo7NoSuchFileException;
+import com.modulo7.common.exceptions.Modulo7NoSuchFileOrDirectoryException;
 import com.modulo7.crawler.utils.MusicSources;
 import com.modulo7.musicstatmodels.representation.polyphonic.Song;
 import org.junit.Assert;
@@ -25,7 +25,7 @@ public class MP3Test {
             Song song = analyzer.getSongRepresentation();
             Assert.assertNotNull(song);
             Assert.assertEquals(song.getSource(), MusicSources.MP3);
-        } catch (EchoNestException | Modulo7NoSuchFileException e) {
+        } catch (EchoNestException | Modulo7NoSuchFileOrDirectoryException e) {
             e.printStackTrace();
         }
     }
