@@ -216,17 +216,17 @@ public class FrequencyNoteMap {
         notePositionMap.put(Note.GSHARP5, 72);
 
         notePositionMap.put(Note.A6, 73);
-        notePositionMap.put(Note.ASHARP7, 74);
+        notePositionMap.put(Note.ASHARP6, 74);
         notePositionMap.put(Note.B6, 75);
         notePositionMap.put(Note.C6, 76);
-        notePositionMap.put(Note.CSHARP7, 77);
+        notePositionMap.put(Note.CSHARP6, 77);
         notePositionMap.put(Note.D6, 78);
-        notePositionMap.put(Note.DSHARP7, 79);
+        notePositionMap.put(Note.DSHARP6, 79);
         notePositionMap.put(Note.E6, 80);
         notePositionMap.put(Note.F6, 81);
-        notePositionMap.put(Note.FSHARP7, 82);
+        notePositionMap.put(Note.FSHARP6, 82);
         notePositionMap.put(Note.G6, 83);
-        notePositionMap.put(Note.GSHARP7, 84);
+        notePositionMap.put(Note.GSHARP6, 84);
 
         notePositionMap.put(Note.A7, 85);
         notePositionMap.put(Note.ASHARP7, 86);
@@ -349,7 +349,13 @@ public class FrequencyNoteMap {
      * @return
      */
     public int getPositionGivenNote(final Note note) {
-        return notePositionMap.get(note);
+        try {
+            return notePositionMap.get(note);
+        } catch(NullPointerException ne) {
+            // TODO : Fix this
+        }
+
+        return 0;
     }
 
     /**

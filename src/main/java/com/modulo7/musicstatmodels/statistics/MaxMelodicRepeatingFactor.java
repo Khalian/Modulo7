@@ -1,5 +1,6 @@
 package com.modulo7.musicstatmodels.statistics;
 
+import com.modulo7.common.exceptions.Modulo7BadNoteException;
 import com.modulo7.common.exceptions.Modulo7InvalidVoiceInstantSizeException;
 import com.modulo7.common.interfaces.AbstractStatistic;
 import com.modulo7.musicstatmodels.preprocessing.VoiceToMelodyConversion;
@@ -49,7 +50,7 @@ public class MaxMelodicRepeatingFactor implements AbstractStatistic<Double> {
 
                 longestFactor = Math.max(longestFactor, fractionOfRepeatation);
 
-            } catch (Modulo7InvalidVoiceInstantSizeException e) {
+            } catch (Modulo7InvalidVoiceInstantSizeException | Modulo7BadNoteException e) {
                 logger.error(e.getMessage());
             }
         }

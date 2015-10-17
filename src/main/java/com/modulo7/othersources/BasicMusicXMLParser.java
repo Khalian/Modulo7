@@ -228,7 +228,7 @@ public class BasicMusicXMLParser implements AbstractAnalyzer {
                             setOfNotes = new HashSet<>();
                             i = j - 1;
                             break;
-                        } catch (Modulo7InvalidVoiceInstantSizeException | Modulo7BadIntervalException e) {
+                        } catch (Modulo7InvalidVoiceInstantSizeException | Modulo7BadIntervalException | Modulo7BadNoteException e) {
                             e.printStackTrace();
                         }
                     }
@@ -240,7 +240,7 @@ public class BasicMusicXMLParser implements AbstractAnalyzer {
                 try {
                     VoiceInstant newVoiceInstant = new VoiceInstant(setOfNotes);
                     Modulo7Utils.addVoiceInstantToVoiceMap(voiceIndextoVoiceMap, newVoiceInstant, voiceIndex);
-                } catch (Modulo7InvalidVoiceInstantSizeException | Modulo7BadIntervalException e) {
+                } catch (Modulo7InvalidVoiceInstantSizeException | Modulo7BadIntervalException | Modulo7BadNoteException e) {
                     e.printStackTrace();
                 }
             }

@@ -69,7 +69,7 @@ public class PreprocessingTest {
      * @throws Modulo7BadIntervalException
      */
     @Test
-    public void voiceToMelodyConversionSanityTest() throws Modulo7InvalidVoiceInstantSizeException, Modulo7BadIntervalException {
+    public void voiceToMelodyConversionSanityTest() throws Modulo7InvalidVoiceInstantSizeException, Modulo7BadIntervalException, Modulo7BadNoteException {
 
         final Voice voice = new Voice();
 

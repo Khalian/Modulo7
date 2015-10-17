@@ -1,5 +1,6 @@
 package com.modulo7.musicstatmodels.preprocessing;
 
+import com.modulo7.common.exceptions.Modulo7BadNoteException;
 import com.modulo7.common.exceptions.Modulo7InvalidVoiceInstantSizeException;
 import com.modulo7.musicstatmodels.representation.buildingblocks.ChordQuality;
 import com.modulo7.musicstatmodels.representation.buildingblocks.Note;
@@ -26,7 +27,7 @@ public class VoiceToMelodyConversion {
      * @return
      * @throws Modulo7InvalidVoiceInstantSizeException
      */
-    public static Voice melodyConversion(final Voice inputVoice) throws Modulo7InvalidVoiceInstantSizeException {
+    public static Voice melodyConversion(final Voice inputVoice) throws Modulo7InvalidVoiceInstantSizeException, Modulo7BadNoteException {
 
         Voice copyOfVoice = SerializationUtils.clone(inputVoice);
         List<VoiceInstant> voiceSequence = copyOfVoice.getVoiceSequence();

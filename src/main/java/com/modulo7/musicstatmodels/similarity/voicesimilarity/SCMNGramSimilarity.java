@@ -58,7 +58,7 @@ public class SCMNGramSimilarity implements AbstractVoiceSimilarity {
             String ngram = "";
             for (int k = i; k < i + N; k++)
                 ngram += secondSplit[k];
-                Modulo7Utils.addToCount(ngram, distinctTrigramsInOne);
+                Modulo7Utils.addToCount(ngram, distinctTrigramsInTwo);
         }
 
         return (double) (Modulo7Utils.sumOverNGramFreqs(distinctTrigramsInOne) + Modulo7Utils.sumOverNGramFreqs(distinctTrigramsInTwo))

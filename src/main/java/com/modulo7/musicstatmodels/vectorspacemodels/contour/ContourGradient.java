@@ -1,6 +1,7 @@
 package com.modulo7.musicstatmodels.vectorspacemodels.contour;
 
 import com.modulo7.common.exceptions.Modulo7BadIntervalException;
+import com.modulo7.common.exceptions.Modulo7BadNoteException;
 import com.modulo7.common.exceptions.Modulo7WrongNoteType;
 import com.modulo7.common.interfaces.AbstractContour;
 import com.modulo7.musicstatmodels.musictheorymodels.Interval;
@@ -45,7 +46,7 @@ public class ContourGradient<T extends AbstractContour> {
      * @throws Modulo7BadIntervalException
      * @throws Modulo7WrongNoteType
      */
-    public Voice getGradient(final Voice voice) throws Modulo7BadIntervalException, Modulo7WrongNoteType {
+    public Voice getGradient(final Voice voice) throws Modulo7BadIntervalException, Modulo7WrongNoteType, Modulo7BadNoteException {
 
         // Gradient vector for
         final LinkedHashMap<Integer, VoiceInstant> extemumNotes = internalContourRepresentation.getContourRepresentaionOfVoice(voice);
@@ -63,17 +64,19 @@ public class ContourGradient<T extends AbstractContour> {
             VoiceInstant v2 = extemumNotes.get(location2);
 
             final int interval = Interval.getInterval(v2, v1).getIntervalQuantity().getQuantity();
-            final double durationDiff = v2.getDuration() - v1.getDuration();
+            final double duration = v1.getDuration();
 
-            final double gradient = interval / durationDiff;
+            final double gradient = interval / duration;
 
             // Alter the voice based on contour computation
             for (int j = location1; j <= location2; j++) {
                 final VoiceInstant currInstant = voice.getVoiceInstantAtPostion(j);
-                final double currDifference = currInstant.getDuration() - v1.getDuration();
-                final int estimatedInterval = (int) (currDifference * gradient);
-                VoiceInstant shiftedInstance = VoiceInstant.getShiftedInstance(currInstant, estimatedInterval);
-                voice.reassignVoiceInstance(shiftedInstance, j);
+                if (currInstant.isAllValid()) {
+                    final double currDifference = currInstant.getDuration() - v1.getDuration();
+                    final int estimatedInterval = (int) (currDifference * gradient);
+                    VoiceInstant shiftedInstance = VoiceInstant.getShiftedInstance(currInstant, estimatedInterval);
+                    voice.reassignVoiceInstance(shiftedInstance, j);
+                }
             }
         }
 

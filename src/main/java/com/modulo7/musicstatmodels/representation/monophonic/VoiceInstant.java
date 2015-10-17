@@ -1,6 +1,7 @@
 package com.modulo7.musicstatmodels.representation.monophonic;
 
 import com.modulo7.common.exceptions.Modulo7BadIntervalException;
+import com.modulo7.common.exceptions.Modulo7BadNoteException;
 import com.modulo7.common.exceptions.Modulo7InvalidVoiceInstantSizeException;
 import com.modulo7.common.exceptions.Modulo7WrongNoteType;
 import com.modulo7.common.utils.Modulo7Globals;
@@ -67,11 +68,13 @@ public class VoiceInstant implements Serializable {
      * @param duration
      */
     public VoiceInstant(final HashSet<Note> noteSet, final double duration, final double attack)
-            throws Modulo7InvalidVoiceInstantSizeException, Modulo7BadIntervalException {
+            throws Modulo7InvalidVoiceInstantSizeException, Modulo7BadIntervalException, Modulo7BadNoteException {
 
         if (noteSet.size() == 0) {
             throw new Modulo7InvalidVoiceInstantSizeException("Voice Instant Cannot be of size" + noteSet.size());
         }
+
+        checkIfAllValidNotes(noteSet);
 
         setOfNotes = noteSet;
 
@@ -95,7 +98,7 @@ public class VoiceInstant implements Serializable {
      * @param duration
      */
     public VoiceInstant(final Note note, final double duration, final double attack)
-            throws Modulo7InvalidVoiceInstantSizeException {
+            throws Modulo7InvalidVoiceInstantSizeException, Modulo7BadNoteException {
 
         checkIfValidNote(note);
 
@@ -111,8 +114,10 @@ public class VoiceInstant implements Serializable {
      * Check if a single note is valid or not
      * @param note
      */
-    private void checkIfValidNote(final Note note) {
-        assert (note != null);
+    private void checkIfValidNote(final Note note) throws Modulo7BadNoteException {
+        if (note == null) {
+            throw new Modulo7BadNoteException("You cannot add null note");
+        }
     }
 
     /**
@@ -123,7 +128,7 @@ public class VoiceInstant implements Serializable {
      * @param duration
      */
     public VoiceInstant(final HashSet<Note> noteSet, final double duration)
-            throws Modulo7InvalidVoiceInstantSizeException, Modulo7BadIntervalException {
+            throws Modulo7InvalidVoiceInstantSizeException, Modulo7BadIntervalException, Modulo7BadNoteException {
 
         if (noteSet.size() == 0) {
             throw new Modulo7InvalidVoiceInstantSizeException("Voice Instant Cannot be of size" + noteSet.size());
@@ -154,7 +159,7 @@ public class VoiceInstant implements Serializable {
      * @param chordQuality
      */
     public VoiceInstant(final HashSet<Note> noteSet, final double duration, final ChordQuality chordQuality)
-            throws Modulo7InvalidVoiceInstantSizeException, Modulo7BadIntervalException {
+            throws Modulo7InvalidVoiceInstantSizeException, Modulo7BadIntervalException, Modulo7BadNoteException {
 
         if (noteSet.size() == 0) {
             throw new Modulo7InvalidVoiceInstantSizeException("Voice Instant Cannot be of size" + noteSet.size());
@@ -185,7 +190,7 @@ public class VoiceInstant implements Serializable {
      * @param duration
      */
     public VoiceInstant(final HashSet<Note> noteSet, final NoteDuration theoreticalDuration, final double duration)
-            throws Modulo7InvalidVoiceInstantSizeException, Modulo7BadIntervalException {
+            throws Modulo7InvalidVoiceInstantSizeException, Modulo7BadIntervalException, Modulo7BadNoteException {
 
         if (noteSet.size() == 0) {
             throw new Modulo7InvalidVoiceInstantSizeException("Voice Instant Cannot be of size" + noteSet.size());
@@ -216,7 +221,7 @@ public class VoiceInstant implements Serializable {
      * @param duration
      */
     public VoiceInstant(final Note note, final double duration)
-            throws Modulo7InvalidVoiceInstantSizeException {
+            throws Modulo7InvalidVoiceInstantSizeException, Modulo7BadNoteException {
 
         checkIfValidNote(note);
 
@@ -237,8 +242,8 @@ public class VoiceInstant implements Serializable {
      * @param theoreticalDuration
      * @param duration
      */
-    public VoiceInstant(final Note note, final NoteDuration theoreticalDuration, final double duration)
-            throws Modulo7InvalidVoiceInstantSizeException {
+    private VoiceInstant(final Note note, final NoteDuration theoreticalDuration, final double duration)
+            throws Modulo7InvalidVoiceInstantSizeException, Modulo7BadNoteException {
 
         checkIfValidNote(note);
 
@@ -256,7 +261,7 @@ public class VoiceInstant implements Serializable {
      *
      * @param noteSet
      */
-    public VoiceInstant(final HashSet<Note> noteSet) throws Modulo7InvalidVoiceInstantSizeException, Modulo7BadIntervalException {
+    public VoiceInstant(final HashSet<Note> noteSet) throws Modulo7InvalidVoiceInstantSizeException, Modulo7BadIntervalException, Modulo7BadNoteException {
 
         if (noteSet.size() == 0) {
             throw new Modulo7InvalidVoiceInstantSizeException("Voice Instant Cannot be of size" + noteSet.size());
@@ -282,7 +287,7 @@ public class VoiceInstant implements Serializable {
      *
      * @param note
      */
-    public VoiceInstant(final Note note) throws Modulo7InvalidVoiceInstantSizeException {
+    public VoiceInstant(final Note note) throws Modulo7InvalidVoiceInstantSizeException, Modulo7BadNoteException {
 
         checkIfValidNote(note);
 
@@ -362,9 +367,9 @@ public class VoiceInstant implements Serializable {
      * Check if all valid notes are present, i.e sanity test for notes being not null
      * @param notes
      */
-    private void checkIfAllValidNotes(HashSet<Note> notes) {
+    private void checkIfAllValidNotes(HashSet<Note> notes) throws Modulo7BadNoteException {
        for (Note note : notes) {
-           assert (note != null);
+           checkIfValidNote(note);
        }
     }
 
@@ -524,5 +529,23 @@ public class VoiceInstant implements Serializable {
         }
 
         return thisNote.getNoteValue().equals(thatNote.getNoteValue());
+    }
+
+    /**
+     * Check if all notes are actually valid
+     * @return
+     */
+    public boolean isAllValid() {
+
+        if (setOfNotes == null) {
+            return false;
+        }
+
+        for (Note note : setOfNotes) {
+            if (note == null)
+                return false;
+        }
+
+        return true;
     }
 }

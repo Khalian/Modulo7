@@ -1,7 +1,7 @@
 package com.modulo7.common.interfaces.choices;
 
+import com.modulo7.musicstatmodels.similarity.contoursimilarity.NaturalContourSimilarity;
 import com.modulo7.musicstatmodels.similarity.songsimilarity.*;
-import com.modulo7.musicstatmodels.similarity.voicesimilarity.NaturalContourSimilarity;
 
 import java.util.HashMap;
 import java.util.HashSet;
@@ -18,9 +18,10 @@ public enum SongSimilarityChoices {
     MAX_MELODIC_EDIT_DISTANCE_SIMILARITY("maxmelodiceditdistance"),
     TONAL_HISTOGRAM_SIMILARITY("tonalhistogram"),
     WEIGHTED_TONAL_HISTOGRAM_SIMILARITY("weighedtonalhistogram"),
-    //NATURAL_SONG_CONTOUR_SIMILARITY("naturalsongcontour"),
+    NATURAL_SONG_CONTOUR_SIMILARITY("naturalsongcontour"),
     GROSS_SONG_CONTOUR_SIMILARITY("grosssongcontour"),
-    SCM_TRIGRAM_SONG_SIMILARITY("scmtrigramforsong");
+    SCM_TRIGRAM_SONG_SIMILARITY("scmtrigramforsong"),
+    UKKONNEN_SONG_SIMILARITY("ukkonenmeasure");
 
     // Regular expression detailing one of the choices for song similarity
     public static final String REGEXP_REP;
@@ -33,9 +34,10 @@ public enum SongSimilarityChoices {
         put("maxmelodiceditdistance", MaxMelodicEditDistanceSimilarity.class);
         put("tonalhistogram", TonalHistogramSimilarity.class);
         put("weighedtonalhistogram", WeightedTonalHistogramSimilarity.class);
-        //put("naturalsongcontour", NaturalContourSimilarity.class);
+        put("naturalsongcontour", NaturalContourSimilarity.class);
         put("scmtrigramforsong", SCMNGramSongSimilarity.class);
         put("grosssongcontour", GrossSongContourSilimarity.class);
+        put("ukkonenmeasure", UkkonnenSongSimilarity.class);
     }};
 
     /**

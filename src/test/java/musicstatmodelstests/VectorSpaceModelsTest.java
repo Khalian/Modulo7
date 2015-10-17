@@ -1,5 +1,6 @@
 package musicstatmodelstests;
 
+import com.modulo7.common.exceptions.Modulo7BadNoteException;
 import com.modulo7.common.exceptions.Modulo7InvalidVoiceInstantSizeException;
 import com.modulo7.common.interfaces.*;
 import com.modulo7.crawler.utils.MusicSources;
@@ -37,7 +38,7 @@ public class VectorSpaceModelsTest {
      * In this particular melody, there are no contour
      */
     @Test
-    public void steinBeckContourSanityTest() throws Modulo7InvalidVoiceInstantSizeException {
+    public void steinBeckContourSanityTest() throws Modulo7InvalidVoiceInstantSizeException, Modulo7BadNoteException {
         Voice testVoice = new Voice();
         testVoice.addVoiceInstant(new VoiceInstant(Note.ASHARP0));
         testVoice.addVoiceInstant(new VoiceInstant(Note.B0));
@@ -58,7 +59,7 @@ public class VectorSpaceModelsTest {
      * @throws com.modulo7.common.exceptions.Modulo7InvalidVoiceInstantSizeException
      */
     @Test
-    public void steinbeckContour() throws Modulo7InvalidVoiceInstantSizeException {
+    public void steinbeckContour() throws Modulo7InvalidVoiceInstantSizeException, Modulo7BadNoteException {
         Voice testVoice = new Voice();
         testVoice.addVoiceInstant(new VoiceInstant(Note.ASHARP1));
         testVoice.addVoiceInstant(new VoiceInstant(Note.B1));
@@ -78,7 +79,7 @@ public class VectorSpaceModelsTest {
      * @throws com.modulo7.common.exceptions.Modulo7InvalidVoiceInstantSizeException
      */
     @Test
-    public void voiceVectorPitchSanityTest() throws Modulo7InvalidVoiceInstantSizeException {
+    public void voiceVectorPitchSanityTest() throws Modulo7InvalidVoiceInstantSizeException, Modulo7BadNoteException {
         Voice testVoice = new Voice();
         testVoice.addVoiceInstant(new VoiceInstant(Note.ASHARP1));
         testVoice.addVoiceInstant(new VoiceInstant(Note.B1));
@@ -102,7 +103,7 @@ public class VectorSpaceModelsTest {
      * @throws com.modulo7.common.exceptions.Modulo7InvalidVoiceInstantSizeException
      */
     @Test
-    public void songVectorSanityTest() throws Modulo7InvalidVoiceInstantSizeException {
+    public void songVectorSanityTest() throws Modulo7InvalidVoiceInstantSizeException, Modulo7BadNoteException {
         Voice testVoice1 = new Voice();
 
         testVoice1.addVoiceInstant(new VoiceInstant(Note.ASHARP1));
@@ -142,7 +143,7 @@ public class VectorSpaceModelsTest {
      * and sanity tests whether the cumulative durations are properly accounted for
      */
     @Test
-    public void tonalDurationHistogramDataSanityTest() throws Modulo7InvalidVoiceInstantSizeException {
+    public void tonalDurationHistogramDataSanityTest() throws Modulo7InvalidVoiceInstantSizeException, Modulo7BadNoteException {
         Voice testVoice1 = new Voice();
 
         testVoice1.addVoiceInstant(new VoiceInstant(Note.ASHARP1, 1.0));
@@ -183,7 +184,7 @@ public class VectorSpaceModelsTest {
      * @throws com.modulo7.common.exceptions.Modulo7InvalidVoiceInstantSizeException
      */
     @Test
-    public void grossContourSanityTest() throws Modulo7InvalidVoiceInstantSizeException {
+    public void grossContourSanityTest() throws Modulo7InvalidVoiceInstantSizeException, Modulo7BadNoteException {
         Voice testVoice1 = new Voice();
 
         testVoice1.addVoiceInstant(new VoiceInstant(Note.ASHARP1, 1.0));
@@ -204,7 +205,7 @@ public class VectorSpaceModelsTest {
      * @throws Modulo7InvalidVoiceInstantSizeException
      */
     @Test
-    public void voiceTonalSanitylHistogramSimilarity() throws Modulo7InvalidVoiceInstantSizeException {
+    public void voiceTonalSanitylHistogramSimilarity() throws Modulo7InvalidVoiceInstantSizeException, Modulo7BadNoteException {
         Voice testVoice1 = new Voice();
 
         testVoice1.addVoiceInstant(new VoiceInstant(Note.ASHARP1, 1.0));
@@ -232,7 +233,7 @@ public class VectorSpaceModelsTest {
      * Test case for mullensiefen contour
      */
     @Test
-    public void mullensiefenContourTest() throws Modulo7InvalidVoiceInstantSizeException {
+    public void mullensiefenContourTest() throws Modulo7InvalidVoiceInstantSizeException, Modulo7BadNoteException {
         Voice testVoice = new Voice();
         testVoice.addVoiceInstant(new VoiceInstant(Note.ASHARP1));
         testVoice.addVoiceInstant(new VoiceInstant(Note.B1));

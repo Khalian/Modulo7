@@ -84,6 +84,25 @@ public enum ChordQuality {
     }
 
     /**
+     * Gets the root note associated with the chord
+     * @return
+     */
+    public static Note getTopNoteFromChord(final Set<Note> noteSet) {
+
+        // Position the array
+        List<Integer> notePositionArray = new ArrayList<>();
+
+        for (final Note note : noteSet) {
+            int positionOnKeyboard = noteMap.getPositionGivenNote(note);
+            notePositionArray.add(positionOnKeyboard);
+        }
+
+        Collections.sort(notePositionArray);
+
+        return noteMap.getNoteGivenPosition(notePositionArray.get(notePositionArray.size() - 1));
+    }
+
+    /**
      * Estimate whether the chord is a minor chord or not
      * @param noteSet
      * @return

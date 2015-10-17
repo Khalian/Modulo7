@@ -22,6 +22,10 @@ public class SteinbeckContour implements AbstractContour {
     // Logger for steinbeck contour
     private Logger logger = Logger.getLogger(SteinbeckContour.class);
 
+    public SteinbeckContour() {
+
+    }
+
     @Override
     public LinkedHashMap<Integer, VoiceInstant> getContourRepresentaionOfVoice(final Voice voice) {
 

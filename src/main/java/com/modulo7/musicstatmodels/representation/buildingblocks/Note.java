@@ -136,7 +136,31 @@ public enum Note {
      * @return
      */
     public static Note getNoteValue(final String noteValue, final int octaveNumber) throws Modulo7BadNoteException {
-        if (noteValue.equalsIgnoreCase("A") && octaveNumber == 1) {
+        if (noteValue.equalsIgnoreCase("A") && octaveNumber == 0) {
+            return Note.A0;
+        } else if (noteValue.equalsIgnoreCase("A#") && octaveNumber == 0) {
+            return Note.ASHARP0;
+        } else if (noteValue.equalsIgnoreCase("B") && octaveNumber == 0) {
+            return Note.B0;
+        } else if (noteValue.equalsIgnoreCase("C") && octaveNumber == 0) {
+            return Note.C0;
+        } else if (noteValue.equalsIgnoreCase("C#") && octaveNumber == 0) {
+            return Note.CSHARP0;
+        } else if (noteValue.equalsIgnoreCase("D") && octaveNumber == 0) {
+            return Note.D0;
+        }  else if (noteValue.equalsIgnoreCase("D#") && octaveNumber == 0) {
+            return Note.DSHARP0;
+        } else if (noteValue.equalsIgnoreCase("E") && octaveNumber == 0) {
+            return Note.E0;
+        } else if (noteValue.equalsIgnoreCase("F") && octaveNumber == 0) {
+            return Note.F0;
+        } else if (noteValue.equalsIgnoreCase("F#") && octaveNumber == 0) {
+            return Note.FSHARP0;
+        } else if (noteValue.equalsIgnoreCase("G") && octaveNumber == 0) {
+            return Note.G0;
+        } else if (noteValue.equalsIgnoreCase("G#") && octaveNumber == 0) {
+            return Note.GSHARP0;
+        } else if (noteValue.equalsIgnoreCase("A") && octaveNumber == 1) {
             return Note.A1;
         } else if (noteValue.equalsIgnoreCase("A#") && octaveNumber == 1) {
             return Note.ASHARP1;

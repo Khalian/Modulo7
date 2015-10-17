@@ -1,6 +1,7 @@
 package musicstatmodelstests;
 
 import com.modulo7.common.exceptions.Modulo7BadKeyException;
+import com.modulo7.common.exceptions.Modulo7BadNoteException;
 import com.modulo7.common.exceptions.Modulo7InvalidVoiceInstantSizeException;
 import com.modulo7.crawler.utils.MusicSources;
 import com.modulo7.common.interfaces.AbstractCriteria;
@@ -30,7 +31,7 @@ public class CriteriaTest {
      * @throws com.modulo7.common.exceptions.Modulo7InvalidVoiceInstantSizeException
      */
     @Test
-    public void polyphonyCriteriaTest() throws Modulo7InvalidVoiceInstantSizeException {
+    public void polyphonyCriteriaTest() throws Modulo7InvalidVoiceInstantSizeException, Modulo7BadNoteException {
         AbstractCriteria criteria = new PolyphonyCriteria();
 
         Voice voice = new Voice();
@@ -59,7 +60,7 @@ public class CriteriaTest {
      * @throws com.modulo7.common.exceptions.Modulo7InvalidVoiceInstantSizeException
      */
     @Test
-    public void keySignatureCriteriaTest() throws Modulo7BadKeyException, Modulo7InvalidVoiceInstantSizeException {
+    public void keySignatureCriteriaTest() throws Modulo7BadKeyException, Modulo7InvalidVoiceInstantSizeException, Modulo7BadNoteException {
         AbstractCriteria criteria = new KeySignatureEqualityCriteria(new KeySignature("C", ScaleType.MAJOR));
 
         Voice voice = new Voice();

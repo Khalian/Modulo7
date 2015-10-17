@@ -2,13 +2,15 @@ package com.modulo7.musicstatmodels.representation.metadata;
 
 import com.modulo7.common.utils.Modulo7Globals;
 
+import java.io.Serializable;
+
 /**
  * Created by asanyal on 7/25/2015.
  * <p>
  *
  * Metadata associated with the time signature of the song
  */
-public class TimeSignature {
+public class TimeSignature implements Serializable {
 
     // Which note of the measure is the associated with the beat, e,g
     // if val = 1 then whole notes get the beat, if val = 4, then quarter note gets

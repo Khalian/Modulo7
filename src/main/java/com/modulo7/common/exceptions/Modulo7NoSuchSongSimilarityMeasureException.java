@@ -5,9 +5,9 @@ package com.modulo7.common.exceptions;
  *
  * Exception which states no such similarity measure was found
  */
-public class Modulo7NoSuchSimilarityMeasureException extends Modulo7BaseException {
+public class Modulo7NoSuchSongSimilarityMeasureException extends Modulo7BaseException {
 
-    public Modulo7NoSuchSimilarityMeasureException(final String message) {
+    public Modulo7NoSuchSongSimilarityMeasureException(final String message) {
         super(message);
     }
 }

@@ -1,6 +1,7 @@
 package musicstatmodelstests;
 
 import com.modulo7.common.exceptions.Modulo7BadIntervalException;
+import com.modulo7.common.exceptions.Modulo7BadNoteException;
 import com.modulo7.common.exceptions.Modulo7InvalidVoiceInstantSizeException;
 import com.modulo7.common.interfaces.AbstractStringContour;
 import com.modulo7.common.interfaces.AbstractVoiceSimilarity;
@@ -27,7 +28,7 @@ public class SimilarityTests {
      * @throws Modulo7BadIntervalException
      */
     @Test
-    public void leveinsteinSimilaritySanityTest() throws Modulo7InvalidVoiceInstantSizeException, Modulo7BadIntervalException {
+    public void leveinsteinSimilaritySanityTest() throws Modulo7InvalidVoiceInstantSizeException, Modulo7BadIntervalException, Modulo7BadNoteException {
 
         AbstractVoiceSimilarity similarity = new RawMelodicEditDistanceSimilarity();
 
@@ -44,7 +45,7 @@ public class SimilarityTests {
      * @throws Modulo7InvalidVoiceInstantSizeException
      */
     @Test
-    public void grossContourSimilaritySanityTest() throws Modulo7InvalidVoiceInstantSizeException {
+    public void grossContourSimilaritySanityTest() throws Modulo7InvalidVoiceInstantSizeException, Modulo7BadNoteException {
         Voice newVoice = new Voice();
 
         newVoice.addVoiceInstant(new VoiceInstant(Note.A0));

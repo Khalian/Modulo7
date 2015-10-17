@@ -1,7 +1,9 @@
 package com.modulo7.musicstatmodels.similarity.genericsimilarity;
 
 import com.modulo7.common.exceptions.Modulo7BadIntervalException;
+import com.modulo7.common.exceptions.Modulo7BadNoteException;
 import com.modulo7.common.exceptions.Modulo7WrongNoteType;
+import com.modulo7.common.interfaces.AbstractContour;
 import com.modulo7.common.interfaces.AbstractSongSimilarity;
 import com.modulo7.common.interfaces.AbstractVoiceSimilarity;
 import com.modulo7.common.utils.Modulo7Globals;
@@ -15,33 +17,36 @@ import org.apache.log4j.Logger;
  *
  * A similarity measure using natural song contour on arbitrary voice similarity measures
  */
-public class NaturalSongContourSimilarity<T extends AbstractVoiceSimilarity> implements AbstractSongSimilarity {
+public class SongContourSimilarity<T extends AbstractVoiceSimilarity, V extends AbstractContour> implements AbstractSongSimilarity {
 
     // Logger for natural song contour similarity measure
-    private static Logger logger = Logger.getLogger(NaturalSongContourSimilarity.class);
+    private static Logger logger = Logger.getLogger(SongContourSimilarity.class);
 
     private T internalVoiceSimilarity;
+
+    private V internalContourRep;
 
     /**
      * Basic constructor for natural song contour similarity
      * @param internalVoiceSimilarity
      */
-    public NaturalSongContourSimilarity(final T internalVoiceSimilarity) {
+    public SongContourSimilarity(final T internalVoiceSimilarity, final V internalContourRep) {
         this.internalVoiceSimilarity = internalVoiceSimilarity;
+        this.internalContourRep = internalContourRep;
     }
 
     @Override
     public double getSimilarity(final Song first, final Song second) {
 
-        ContourSongRep<NaturalContour> songRep = new ContourSongRep<>(new NaturalContour());
+        ContourSongRep<V> songRep = new ContourSongRep<>(internalContourRep);
 
         try {
             Song firstContourRepSong = songRep.getContourizedSongRep(first);
             Song secondContourRepSong = songRep.getContourizedSongRep(second);
 
-            GenericMaximalVoiceSimilarity<T> similarity = new GenericMaximalVoiceSimilarity<>(internalVoiceSimilarity);
+            GenericMaximalVoiceSimilarity<T> similarity = new GenericMaximalVoiceSimilarity<T>(internalVoiceSimilarity);
             return similarity.getSimilarity(firstContourRepSong, secondContourRepSong);
-        } catch (Modulo7BadIntervalException | Modulo7WrongNoteType e) {
+        } catch (Modulo7BadIntervalException | Modulo7WrongNoteType | Modulo7BadNoteException e) {
             logger.error(e.getMessage());
         }
 

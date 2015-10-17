@@ -23,8 +23,12 @@ public class MullensiefenContour implements AbstractContour {
     // Logger for mullensiefen contour
     private Logger logger = Logger.getLogger(MullensiefenContour.class);
 
+    public MullensiefenContour() {
+
+    }
+
     @Override
-    public LinkedHashMap<Integer, VoiceInstant> getContourRepresentaionOfVoice(Voice voice) {
+    public LinkedHashMap<Integer, VoiceInstant> getContourRepresentaionOfVoice(final Voice voice) {
 
             AbstractContour naturalContour = new NaturalContour();
             LinkedHashMap<Integer, VoiceInstant> naturalExtemumNotes = naturalContour.getContourRepresentaionOfVoice(voice);

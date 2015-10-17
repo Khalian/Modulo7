@@ -33,8 +33,8 @@ public class GenericMaximalVoiceSimilarity<T extends AbstractVoiceSimilarity> im
 
         // Its expected that both voices would be of different lengths, if thats the case
         // automatically apply an unequal similarity measurement criteria
-        final MaxUnequalMelodicLenSimiMeasure<T> unequalSimilarity =
-                new MaxUnequalMelodicLenSimiMeasure<>(internalVoiceSimilarity);
+        final SmithWatermanSimilarity<T> unequalSimilarity =
+                new SmithWatermanSimilarity<>(internalVoiceSimilarity);
 
         for (final Voice firstVoice : first.getVoices()) {
             for (final Voice secondVoice : second.getVoices()) {

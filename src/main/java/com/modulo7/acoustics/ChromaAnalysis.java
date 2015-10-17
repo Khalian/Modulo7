@@ -2,6 +2,7 @@ package com.modulo7.acoustics;
 
 import com.modulo7.common.exceptions.Modulo7BadChordException;
 import com.modulo7.common.exceptions.Modulo7BadIntervalException;
+import com.modulo7.common.exceptions.Modulo7BadNoteException;
 import com.modulo7.common.exceptions.Modulo7InvalidVoiceInstantSizeException;
 import com.modulo7.common.utils.FrequencyNoteMap;
 import com.modulo7.musicstatmodels.representation.buildingblocks.Note;
@@ -35,7 +36,7 @@ public class ChromaAnalysis {
      * @return The line Instant representation of the chroma vector
      */
     public static VoiceInstant getLineInstantFromVector(final double[] noteChromaVector, final double duration)
-            throws Modulo7InvalidVoiceInstantSizeException, Modulo7BadIntervalException {
+            throws Modulo7InvalidVoiceInstantSizeException, Modulo7BadIntervalException, Modulo7BadNoteException {
 
         // First check whether the chroma vector is valid
         assert (noteChromaVector.length == 12);
@@ -74,6 +75,8 @@ public class ChromaAnalysis {
                 return new VoiceInstant(chromaNotes, duration, estimator.getQuality());
             } catch (Modulo7BadChordException e) {
                 logger.error(e.getMessage());
+            } catch (Modulo7BadNoteException e) {
+                e.printStackTrace();
             }
 
         }

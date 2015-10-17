@@ -20,6 +20,10 @@ public class NaturalContour implements AbstractContour {
     // Logger for natural contour
     private static final Logger logger = Logger.getLogger(NaturalContour.class);
 
+    public NaturalContour() {
+
+    }
+
     /**
      * Gets the voice representation of the natural contour only exressing the
      * contour extremum notes

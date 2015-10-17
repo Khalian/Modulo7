@@ -3,21 +3,26 @@ package com.modulo7.engine;
 import com.echonest.api.v4.EchoNestException;
 import com.modulo7.common.exceptions.*;
 import com.modulo7.common.interfaces.AbstractSongSimilarity;
+import com.modulo7.common.interfaces.AbstractVoiceSimilarity;
 import com.modulo7.common.interfaces.choices.SongSimilarityChoices;
-import com.modulo7.common.exceptions.Modulo7NoSuchSimilarityMeasureException;
+import com.modulo7.common.interfaces.choices.VoiceSimilarityChoices;
 import com.modulo7.musicstatmodels.representation.metadata.KeySignature;
 import com.modulo7.musicstatmodels.representation.metadata.ScaleType;
 import com.modulo7.musicstatmodels.representation.metadata.TimeSignature;
 import com.modulo7.musicstatmodels.representation.polyphonic.Song;
+import com.modulo7.musicstatmodels.similarity.genericsimilarity.SongContourSimilarity;
 import com.modulo7.nlp.lyrics.Lyrics;
 import org.apache.commons.cli.*;
 import org.apache.log4j.Logger;
 
 import javax.sound.midi.InvalidMidiDataException;
-import java.util.*;
+import java.lang.reflect.InvocationTargetException;
+import java.util.List;
+import java.util.NoSuchElementException;
+import java.util.Scanner;
+import java.util.Set;
 
 import static com.modulo7.engine.Modulo7CLIChoice.*;
-import static com.modulo7.engine.Modulo7CLIChoice.LIST_NUM_SONGS_INDEXED;
 
 /**
  * Created by asanyal on 9/11/15.
@@ -161,8 +166,10 @@ public class Modulo7CLI {
                 exectuteChoice(Modulo7CLIChoice.parseChoice(testNum), in);
             } catch (Modulo7BaseException e) {
                 System.out.println(e.getMessage());
-                if (e instanceof Modulo7NoSuchSimilarityMeasureException) {
+                if (e instanceof Modulo7NoSuchSongSimilarityMeasureException) {
                     SongSimilarityChoices.listAllSimilarityMeasures();
+                } else if (e instanceof  Modulo7NoSuchVoiceSimilarityMeasureException) {
+                    VoiceSimilarityChoices.listAllSimilarityMeasures();
                 }
             } catch (InvalidMidiDataException | EchoNestException e) {
                 logger.error(e.getMessage());
@@ -182,12 +189,13 @@ public class Modulo7CLI {
      * @throws Modulo7MalformedM7SQLQuery
      * @throws Modulo7QueryProcessingException
      * @throws Modulo7DataBaseNotSerializedException
-     * @throws Modulo7NoSuchSimilarityMeasureException
+     * @throws com.modulo7.common.exceptions.Modulo7NoSuchSongSimilarityMeasureException
      */
     private static void exectuteChoice(final Modulo7CLIChoice testNum, final Scanner in) throws Modulo7BadKeyException,
             Modulo7MalformedM7SQLQuery, Modulo7QueryProcessingException, Modulo7DataBaseNotSerializedException,
-            Modulo7NoSuchSimilarityMeasureException, InvalidMidiDataException, Modulo7InvalidFileOperationException,
-            EchoNestException, Modulo7IndexingDirError, Modulo7ParseException, Modulo7NoSuchFileOrDirectoryException, Modulo7InvalidMusicXMLFile {
+            Modulo7NoSuchSongSimilarityMeasureException, InvalidMidiDataException, Modulo7InvalidFileOperationException,
+            EchoNestException, Modulo7IndexingDirError, Modulo7ParseException, Modulo7NoSuchFileOrDirectoryException,
+            Modulo7InvalidMusicXMLFile, Modulo7NoSuchVoiceSimilarityMeasureException {
         switch (testNum) {
             case INPUT_CUSTOM_QUERY:
                 System.out.println("Consumer is going into custom query mode, now changing to Modulo7 SQL parser mode \n");
@@ -216,16 +224,33 @@ public class Modulo7CLI {
                 Class similarityChoice = SongSimilarityChoices.getSongSimilarityGivenChoice(similarityMeasure);
 
                 if (similarityChoice == null) {
-                    throw new Modulo7NoSuchSimilarityMeasureException("No such similarity measure " + similarityMeasure);
+                    throw new Modulo7NoSuchSongSimilarityMeasureException("No such song similarity measure " + similarityMeasure);
                 } else {
                     try {
-                        AbstractSongSimilarity similarity = (AbstractSongSimilarity) similarityChoice.newInstance();
+
+                        AbstractSongSimilarity similarity;
+
+                        if (SongContourSimilarity.class.isAssignableFrom(similarityChoice)) {
+                            System.out.print("You seem to have chosen a contour similarity class, in that case input a internal voice similarity measure:");
+                            final String voiceSimilarity = in.next();
+                            Class voiceSimClass = VoiceSimilarityChoices.getVoiceSimilarityGivenChoice(voiceSimilarity);
+
+                            if (voiceSimClass == null) {
+                                throw new Modulo7NoSuchVoiceSimilarityMeasureException("No such voice similarity measure" + voiceSimilarity);
+                            }
+
+                            AbstractVoiceSimilarity voiceSim = (AbstractVoiceSimilarity) voiceSimClass.newInstance();
+                            similarity = (AbstractSongSimilarity) similarityChoice.getConstructor(AbstractVoiceSimilarity.class).newInstance(voiceSim);
+                        } else {
+                            similarity = (AbstractSongSimilarity) similarityChoice.newInstance();
+                        }
+
                         RankEngineOnSimilarity engineOnSimilarity = new RankEngineOnSimilarity(similarity);
                         System.out.print("Enter the location of a song to rank the rest of the database against:");
                         final String candidateSongLocation = in.next();
                         indexer.addSingleAdditionalSongToIndex(candidateSongLocation);
                         final List<String> rankedOrder =
-                                engineOnSimilarity.relevantRankOrdering(indexer.engine, indexer.getSongObjectGivenLocation(candidateSongLocation));
+                                    engineOnSimilarity.relevantRankOrdering(indexer.engine, indexer.getSongObjectGivenLocation(candidateSongLocation));
 
                         System.out.println("The ranked order of the songs are");
 
@@ -237,9 +262,10 @@ public class Modulo7CLI {
                             rank++;
                         }
 
-                    } catch (InstantiationException | IllegalAccessException | InvalidMidiDataException |
-                            Modulo7InvalidFileOperationException | EchoNestException | Modulo7IndexingDirError |
-                            Modulo7ParseException | Modulo7NoSuchFileOrDirectoryException | Modulo7InvalidMusicXMLFile e) {
+                    } catch (InstantiationException | IllegalAccessException | InvalidMidiDataException
+                            | Modulo7InvalidFileOperationException | EchoNestException | Modulo7IndexingDirError
+                            | Modulo7ParseException | Modulo7NoSuchFileOrDirectoryException | Modulo7InvalidMusicXMLFile
+                            | NoSuchMethodException | InvocationTargetException e) {
                         logger.error(e.getMessage());
                     }
                 }

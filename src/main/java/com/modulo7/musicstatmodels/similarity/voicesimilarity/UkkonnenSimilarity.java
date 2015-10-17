@@ -13,6 +13,7 @@ import java.util.Map;
  * Ukkonnen measure as described in SIMILIE technical documentation
  */
 public class UkkonnenSimilarity implements AbstractVoiceSimilarity {
+
     // Compute the distinct N grams in the first voice
     private Map<String, Integer> distinctTrigramsInOne = new HashMap<>();
 
@@ -56,11 +57,10 @@ public class UkkonnenSimilarity implements AbstractVoiceSimilarity {
             String ngram = "";
             for (int k = i; k < i + N; k++)
                 ngram += secondSplit[k];
-            Modulo7Utils.addToCount(ngram, distinctTrigramsInOne);
+            Modulo7Utils.addToCount(ngram, distinctTrigramsInTwo);
         }
 
         return (double) (Math.abs(Modulo7Utils.sumOverNGramFreqs(distinctTrigramsInOne) - Modulo7Utils.sumOverNGramFreqs(distinctTrigramsInTwo)))
                 / (firstSplit.length + secondSplit.length - 2*(N - 1));
     }
-
 }

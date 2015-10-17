@@ -1,10 +1,7 @@
 package com.modulo7.acoustics;
 
 import com.echonest.api.v4.*;
-import com.modulo7.common.exceptions.Modulo7BadIntervalException;
-import com.modulo7.common.exceptions.Modulo7BadKeyException;
-import com.modulo7.common.exceptions.Modulo7InvalidVoiceInstantSizeException;
-import com.modulo7.common.exceptions.Modulo7NoSuchFileOrDirectoryException;
+import com.modulo7.common.exceptions.*;
 import com.modulo7.common.interfaces.AbstractAnalyzer;
 import com.modulo7.common.utils.Modulo7Utils;
 import com.modulo7.crawler.utils.CrawlerHelper;
@@ -136,7 +133,7 @@ public class EchoNestBasicMP3Analyzer implements AbstractAnalyzer {
             }
         } catch (IOException e) {
             logger.error("Trouble uploading file to track analyzer" + e.getMessage());
-        } catch (Modulo7InvalidVoiceInstantSizeException | EchoNestException | Modulo7BadIntervalException e) {
+        } catch (Modulo7InvalidVoiceInstantSizeException | EchoNestException | Modulo7BadIntervalException | Modulo7BadNoteException e) {
             logger.error(e.getMessage());
         }
 

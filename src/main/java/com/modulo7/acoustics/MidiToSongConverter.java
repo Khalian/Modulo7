@@ -157,7 +157,7 @@ public class MidiToSongConverter implements AbstractAnalyzer {
                             } else {
                                 noteDuration = Modulo7Globals.UNKNOWN;
                             }
-                            VoiceInstant instant = new VoiceInstant(Note.getNoteValue(noteName), noteDuration, velocity);
+                            VoiceInstant instant = new VoiceInstant(Note.getNoteValue(noteName, octave), noteDuration, velocity);
                             Modulo7Utils.addVoiceInstantToVoiceMap(voiceToChannelMap, instant, trackNumber);
                         } catch (Modulo7InvalidVoiceInstantSizeException | Modulo7BadNoteException e) {
                             logger.error(e.getMessage());

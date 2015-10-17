@@ -98,7 +98,7 @@ public class Interval {
 
         int numHalfSteps = Math.abs(numHalfStepsWithSign);
 
-        if (numHalfSteps % 12 == 0 && numHalfSteps == 0) {
+        if (numHalfSteps == 0) {
             return IntervalQuantity.PERFECT_UNISON;
         } else if (numHalfSteps % 12 == 1) {
             return IntervalQuantity.MINOR_SECOND;
@@ -122,7 +122,7 @@ public class Interval {
             return IntervalQuantity.MINOR_SEVENTH;
         } else if (numHalfSteps % 12 == 11) {
             return IntervalQuantity.MAJOR_SEVENTH;
-        } else if (numHalfSteps % 12 == 12) {
+        } else if (numHalfSteps % 12 == 0) {
             return IntervalQuantity.PERFECT_OCTAVE;
         } else {
             throw new Modulo7BadIntervalException("No interval associated with half step distance " + numHalfSteps);

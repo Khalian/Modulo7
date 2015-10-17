@@ -1,5 +1,6 @@
 package musicstatmodelstests;
 
+import com.modulo7.common.exceptions.Modulo7BadNoteException;
 import com.modulo7.common.exceptions.Modulo7InvalidVoiceInstantSizeException;
 import com.modulo7.common.interfaces.AbstractStatistic;
 import com.modulo7.crawler.utils.MusicSources;
@@ -19,7 +20,7 @@ import org.junit.Test;
 public class MaxMelodicRepeatingFactorTest {
 
     @Test
-    public void maxMelodicRepeatingFactor() throws Modulo7InvalidVoiceInstantSizeException {
+    public void maxMelodicRepeatingFactor() throws Modulo7InvalidVoiceInstantSizeException, Modulo7BadNoteException {
         AbstractStatistic<Double> maxMelodicRepeatingFactor = new MaxMelodicRepeatingFactor();
 
         Voice testVoice = new Voice();
