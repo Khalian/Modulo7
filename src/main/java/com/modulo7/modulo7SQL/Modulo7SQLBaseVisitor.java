@@ -26,20 +26,6 @@ public class Modulo7SQLBaseVisitor<T> extends AbstractParseTreeVisitor<T> implem
 	 * <p>The default implementation returns the result of calling
 	 * {@link #visitChildren} on {@code ctx}.</p>
 	 */
-	@Override public T visitPreprocess_clause(Modulo7SQLParser.Preprocess_clauseContext ctx) { return visitChildren(ctx); }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation returns the result of calling
-	 * {@link #visitChildren} on {@code ctx}.</p>
-	 */
-	@Override public T visitPreprocess_criteria(Modulo7SQLParser.Preprocess_criteriaContext ctx) { return visitChildren(ctx); }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation returns the result of calling
-	 * {@link #visitChildren} on {@code ctx}.</p>
-	 */
 	@Override public T visitFrom_clause(Modulo7SQLParser.From_clauseContext ctx) { return visitChildren(ctx); }
 	/**
 	 * {@inheritDoc}

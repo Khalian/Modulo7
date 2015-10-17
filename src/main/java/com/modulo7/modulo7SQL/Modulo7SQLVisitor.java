@@ -19,18 +19,6 @@ public interface Modulo7SQLVisitor<T> extends ParseTreeVisitor<T> {
 	 */
 	T visitSelect_clause(Modulo7SQLParser.Select_clauseContext ctx);
 	/**
-	 * Visit a parse tree produced by {@link Modulo7SQLParser#preprocess_clause}.
-	 * @param ctx the parse tree
-	 * @return the visitor result
-	 */
-	T visitPreprocess_clause(Modulo7SQLParser.Preprocess_clauseContext ctx);
-	/**
-	 * Visit a parse tree produced by {@link Modulo7SQLParser#preprocess_criteria}.
-	 * @param ctx the parse tree
-	 * @return the visitor result
-	 */
-	T visitPreprocess_criteria(Modulo7SQLParser.Preprocess_criteriaContext ctx);
-	/**
 	 * Visit a parse tree produced by {@link Modulo7SQLParser#from_clause}.
 	 * @param ctx the parse tree
 	 * @return the visitor result

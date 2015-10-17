@@ -87,19 +87,20 @@ public class Modulo7QueryProcessingEngine {
         final Set<Song> allSongs = indexer.getAllSongs();
 
         // The set of all relevant songs
-        Set<Song> relevantSongs = new HashSet<>();
+        Set<Song> requisiteSourceSongs = new HashSet<>();
 
         // From the query, extract the input types to be returned
         final Set<String> inputTypes = componentsOfQuery.getInputs();
 
         // Get only those songs that are asked as a part of the input types
-        relevantSongs.addAll(allSongs.stream().filter(song -> inputTypes.contains(song.getSource().getStringRepresentation())).collect(Collectors.toList()));
+        requisiteSourceSongs.addAll(allSongs.stream().filter(song -> inputTypes.contains(song.getSource().getStringRepresentation())).collect(Collectors.toList()));
 
         List<String> exprList = componentsOfQuery.getExprList();
         List<String> exprOprs = componentsOfQuery.getExprOprList();
 
-        Set<Song> bestSet = relevantSongs;
-        Set<Song> candidateSet = relevantSongs;
+        Set<Song> bestSet = requisiteSourceSongs;
+        Set<Song> candidateSet = requisiteSourceSongs;
+        Set<Song> relevantSongs = new HashSet<>();
 
         for (int i = 0; i < exprList.size(); i++) {
 
@@ -125,22 +126,28 @@ public class Modulo7QueryProcessingEngine {
                 bestSet = evaluateBestSetFromCriteria(criteria, assertion, predicate, candidateSet);
             }
 
-            if (exprOprs.size() > 0) {
+            if (exprOprs.size() > 0 && i < exprOprs.size()) {
                 final String exprOpr = exprOprs.get(i);
 
                 if (exprOpr.equals("or")) {
-                    bestSet.addAll(candidateSet);
-                    candidateSet = relevantSongs;
+                    relevantSongs.addAll(bestSet);
+                    candidateSet = requisiteSourceSongs;
                 } else {
-                    Set<Song> originalCandidateSet = new HashSet<>(candidateSet);
-                    bestSet.addAll(candidateSet);
-                    candidateSet = originalCandidateSet;
+                    relevantSongs = bestSet;
+                    candidateSet = relevantSongs;
+                }
+            } else if (exprOprs.size() == 0) {
+                relevantSongs = bestSet;
+            } else {
+                if (exprOprs.get(exprOprs.size() - 1).equals("or")) {
+                    relevantSongs.addAll(bestSet);
+                } else {
+                    relevantSongs = bestSet;
                 }
             }
-
         }
 
-        return bestSet;
+        return relevantSongs;
     }
 
     /**

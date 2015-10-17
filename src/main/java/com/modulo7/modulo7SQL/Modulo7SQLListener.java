@@ -20,26 +20,6 @@ public interface Modulo7SQLListener extends ParseTreeListener {
 	 */
 	void exitSelect_clause(Modulo7SQLParser.Select_clauseContext ctx);
 	/**
-	 * Enter a parse tree produced by {@link Modulo7SQLParser#preprocess_clause}.
-	 * @param ctx the parse tree
-	 */
-	void enterPreprocess_clause(Modulo7SQLParser.Preprocess_clauseContext ctx);
-	/**
-	 * Exit a parse tree produced by {@link Modulo7SQLParser#preprocess_clause}.
-	 * @param ctx the parse tree
-	 */
-	void exitPreprocess_clause(Modulo7SQLParser.Preprocess_clauseContext ctx);
-	/**
-	 * Enter a parse tree produced by {@link Modulo7SQLParser#preprocess_criteria}.
-	 * @param ctx the parse tree
-	 */
-	void enterPreprocess_criteria(Modulo7SQLParser.Preprocess_criteriaContext ctx);
-	/**
-	 * Exit a parse tree produced by {@link Modulo7SQLParser#preprocess_criteria}.
-	 * @param ctx the parse tree
-	 */
-	void exitPreprocess_criteria(Modulo7SQLParser.Preprocess_criteriaContext ctx);
-	/**
 	 * Enter a parse tree produced by {@link Modulo7SQLParser#from_clause}.
 	 * @param ctx the parse tree
 	 */
