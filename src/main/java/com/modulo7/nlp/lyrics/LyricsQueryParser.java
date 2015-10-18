@@ -9,6 +9,7 @@ import org.apache.lucene.queryparser.classic.QueryParser;
 import org.apache.lucene.search.IndexSearcher;
 import org.apache.lucene.search.Query;
 import org.apache.lucene.search.TopDocs;
+import org.apache.lucene.search.TotalHitCountCollector;
 import org.apache.lucene.store.FSDirectory;
 import org.apache.lucene.util.Version;
 
@@ -35,7 +36,23 @@ public class LyricsQueryParser {
     }
 
     /**
-     * Performs a search on the query string based on the lyrics field, which is also the default
+     * Performs a search on the query string based on the lyrics field, which is also the default along with the
+     * the number of top documents needed
+     *
+     * @param queryString
+     * @return
+     * @throws IOException
+     * @throws ParseException
+     */
+    public TopDocs performLyricsSearch(final String queryString) throws IOException, ParseException {
+        TotalHitCountCollector collector = new TotalHitCountCollector();
+        Query query = parser.parse(NLPUtils.stemmer(queryString));
+        searcher.search(query, collector);
+        return searcher.search(query, Math.max(1, collector.getTotalHits()));
+    }
+
+    /**
+     * Performs a search on the query string based on the lyrics field, which is also t
      *
      * @param queryString
      * @param numTopDocs

@@ -13,9 +13,12 @@ import com.modulo7.musicstatmodels.representation.polyphonic.Song;
 import com.modulo7.musicstatmodels.similarity.genericsimilarity.SongContourSimilarity;
 import com.modulo7.nlp.lyrics.Lyrics;
 import org.apache.commons.cli.*;
+import org.apache.commons.cli.ParseException;
 import org.apache.log4j.Logger;
+import org.apache.lucene.queryparser.classic.*;
 
 import javax.sound.midi.InvalidMidiDataException;
+import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
 import java.util.List;
 import java.util.NoSuchElementException;
@@ -156,6 +159,7 @@ public class Modulo7CLI {
                 System.out.println(RET_LYRICS_GIVEN_SONG.choice + ". List out the lyrics of a song given the song name");
                 System.out.println(LIST_NUM_SONGS_INDEXED.choice + ". List the number of songs indexed");
                 System.out.println(INPUT_CUSTOM_QUERY.choice + ". Input a custom modulo7 SQL query");
+                System.out.println(LYRICS_QUERY.choice + ". Input a lyrics snippet with options");
                 System.out.println(SERIALIZE_DATABASE.choice + ". Serialize database into disk at a given location");
                 System.out.println(EXIT.choice + ". Exit from Modulo7");
                 System.out.println("");
@@ -171,7 +175,7 @@ public class Modulo7CLI {
                 } else if (e instanceof  Modulo7NoSuchVoiceSimilarityMeasureException) {
                     VoiceSimilarityChoices.listAllSimilarityMeasures();
                 }
-            } catch (InvalidMidiDataException | EchoNestException e) {
+            } catch (InvalidMidiDataException | EchoNestException | org.apache.lucene.queryparser.classic.ParseException | IOException e) {
                 logger.error(e.getMessage());
             } catch (NoSuchElementException e) {
                 System.out.println("Bad input in the CLI" + e + " exitting");
@@ -195,7 +199,7 @@ public class Modulo7CLI {
             Modulo7MalformedM7SQLQuery, Modulo7QueryProcessingException, Modulo7DataBaseNotSerializedException,
             Modulo7NoSuchSongSimilarityMeasureException, InvalidMidiDataException, Modulo7InvalidFileOperationException,
             EchoNestException, Modulo7IndexingDirError, Modulo7ParseException, Modulo7NoSuchFileOrDirectoryException,
-            Modulo7InvalidMusicXMLFile, Modulo7NoSuchVoiceSimilarityMeasureException {
+            Modulo7InvalidMusicXMLFile, Modulo7NoSuchVoiceSimilarityMeasureException, IOException, org.apache.lucene.queryparser.classic.ParseException {
         switch (testNum) {
             case INPUT_CUSTOM_QUERY:
                 System.out.println("Consumer is going into custom query mode, now changing to Modulo7 SQL parser mode \n");
@@ -271,6 +275,29 @@ public class Modulo7CLI {
                 }
 
                 System.out.println("Now enter the location of the song that you wish to compare against the database");
+                break;
+
+            case LYRICS_QUERY:
+                System.out.println("Enter a snippet of lyrics, Modulo7 will rank parsed lyrics");
+                Scanner customLyricsIn = new Scanner(System.in);
+                customLyricsIn.useDelimiter("\n");
+                final String lyricsSnippet = customLyricsIn.nextLine();
+                List<String> rankedOrderLyrics = indexer.rankLyrics(lyricsSnippet);
+
+                if (rankedOrderLyrics.size() == 0) {
+                    System.out.println("There are no lyrics that satisfy the query");
+                    break ;
+                }
+
+                int rank = 1;
+
+                System.out.println("Lyrics satisfying query in ranked order are:");
+
+                for (final String lyrics : rankedOrderLyrics) {
+                    System.out.println(rank + ":" + lyrics);
+                    rank++;
+                }
+
                 break;
 
             // Case for returning all songs for a given key signature

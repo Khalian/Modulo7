@@ -123,10 +123,8 @@ public class BasicMusicXMLParser implements AbstractAnalyzer {
     private void checkIfValidMusicXMLFile(final String filename) throws Modulo7InvalidMusicXMLFile {
         // Check if the document contains notes and is infact a valid music xml file
         if (doc.getElementsByTag("note").isEmpty()){
-            if (doc.getElementsByTag("note").isEmpty()){
-                logger.error("Please check that your music xml file is encoded in UTF-8 or UTF-16 and contains notes.");
-                throw new Modulo7InvalidMusicXMLFile("Bad music xml file:" + filename);
-            }
+            logger.error("Please check that your music xml file is encoded in UTF-8 or UTF-16 and contains notes.");
+            throw new Modulo7InvalidMusicXMLFile("Bad music xml file:" + filename);
         }
     }
 

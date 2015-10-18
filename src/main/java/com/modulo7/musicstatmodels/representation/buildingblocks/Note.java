@@ -42,8 +42,11 @@ public enum Note {
     A7("A", 7), ASHARP7("A#", 7), B7("B", 7), C7("C", 7), CSHARP7("C#", 7), D7("D", 7), DSHARP7("D#", 7), E7("E", 7),
     F7("F", 7), FSHARP7("F#", 7), G7("G", 7), GSHARP7("G#", 7),
 
-    A8("A", 8), ASHARP8("A#", 8), B8("B", 8), C8("C", 8), CSHARP8("C#", 0), D8("D", 8), DSHARP8("D#", 8), E8("E", 8),
-    F8("F", 8), FSHARP8("F#", 8), G8("G", 8), GSHARP8("G#", 8);
+    A8("A", 8), ASHARP8("A#", 8), B8("B", 8), C8("C", 8), CSHARP8("C#", 8), D8("D", 8), DSHARP8("D#", 8), E8("E", 8),
+    F8("F", 8), FSHARP8("F#", 8), G8("G", 8), GSHARP8("G#", 8),
+
+    A9("A", 9), ASHARP9("A#", 9), B9("B", 9), C9("C", 9), CSHARP9("C#", 9), D9("D", 8), DSHARP9("D#", 9), E9("E", 9),
+    F9("F", 9), FSHARP9("F#", 9), G9("G", 9), GSHARP9("G#", 9);
 
     // The value of the node
     private String noteValue;
@@ -86,11 +89,11 @@ public enum Note {
      * or not
      */
     private void validOctaveNumberCheck(final int octaveNumber) throws Modulo7InvalidOctaveRangeException {
-        if (octaveNumber >= 0 && octaveNumber <= 8) {
+        if (octaveNumber >= 0 && octaveNumber <= 9) {
 
         } else {
             throw new Modulo7InvalidOctaveRangeException("Octave Number :" + octaveNumber + " is not in range" +
-                    "in between 0 and 8");
+                    "in between 0 and 9");
         }
     }
 
@@ -352,8 +355,32 @@ public enum Note {
             return Note.G8;
         } else if (noteValue.equalsIgnoreCase("G#") && octaveNumber == 8) {
             return Note.GSHARP8;
+        } else if (noteValue.equalsIgnoreCase("A") && octaveNumber == 9) {
+            return Note.A9;
+        } else if (noteValue.equalsIgnoreCase("A#") && octaveNumber == 9) {
+            return Note.ASHARP9;
+        } else if (noteValue.equalsIgnoreCase("B") && octaveNumber == 9) {
+            return Note.B9;
+        } else if (noteValue.equalsIgnoreCase("C") && octaveNumber == 9) {
+            return Note.C9;
+        } else if (noteValue.equalsIgnoreCase("C#") && octaveNumber == 9) {
+            return Note.CSHARP9;
+        } else if (noteValue.equalsIgnoreCase("D") && octaveNumber == 9) {
+            return Note.D9;
+        }  else if (noteValue.equalsIgnoreCase("D#") && octaveNumber == 9) {
+            return Note.DSHARP9;
+        } else if (noteValue.equalsIgnoreCase("E") && octaveNumber == 9) {
+            return Note.E9;
+        } else if (noteValue.equalsIgnoreCase("F") && octaveNumber == 9) {
+            return Note.F9;
+        } else if (noteValue.equalsIgnoreCase("F#") && octaveNumber == 9) {
+            return Note.FSHARP9;
+        } else if (noteValue.equalsIgnoreCase("G") && octaveNumber == 9) {
+            return Note.G9;
+        } else if (noteValue.equalsIgnoreCase("G#") && octaveNumber == 9) {
+            return Note.GSHARP9;
         } else {
-            throw new Modulo7BadNoteException("Bad note: " + noteValue + "and " + octaveNumber);
+            throw new Modulo7BadNoteException("Bad note: " + noteValue + " and " + octaveNumber);
         }
     }
 

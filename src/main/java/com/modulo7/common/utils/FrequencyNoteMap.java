@@ -254,6 +254,19 @@ public class FrequencyNoteMap {
         notePositionMap.put(Note.G8, 107);
         notePositionMap.put(Note.GSHARP8, 108);
 
+        notePositionMap.put(Note.A9, 109);
+        notePositionMap.put(Note.ASHARP9, 110);
+        notePositionMap.put(Note.B9, 111);
+        notePositionMap.put(Note.C9, 112);
+        notePositionMap.put(Note.CSHARP9, 113);
+        notePositionMap.put(Note.D9, 114);
+        notePositionMap.put(Note.DSHARP9, 115);
+        notePositionMap.put(Note.E9, 116);
+        notePositionMap.put(Note.F9, 117);
+        notePositionMap.put(Note.FSHARP9, 118);
+        notePositionMap.put(Note.G9, 119);
+        notePositionMap.put(Note.GSHARP9, 120);
+
         basicNotePositionMap.put(Note.A4, 0);
         basicNotePositionMap.put(Note.ASHARP4, 1);
         basicNotePositionMap.put(Note.B4, 2);

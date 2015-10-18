@@ -9,8 +9,10 @@ import com.likethecolor.alchemy.api.entity.SentimentAlchemyEntity;
  */
 public class SentimentModel {
 
+    // The score the sentiment, positive scores are for happy lyrics and negative scores are for sad or angry lyrics
     private double score;
 
+    // The intent of the sentiment
     private SentimentAlchemyEntity.TYPE intent;
 
     /**
@@ -25,10 +27,18 @@ public class SentimentModel {
         assert (score >= -1.0 && score <= 1.0);
     }
 
+    /**
+     * Gets the score
+     * @return
+     */
     public double getScore() {
         return score;
     }
 
+    /**
+     * Gets the sentiment type
+     * @return
+     */
     public SentimentAlchemyEntity.TYPE getIntent() {
         return intent;
     }

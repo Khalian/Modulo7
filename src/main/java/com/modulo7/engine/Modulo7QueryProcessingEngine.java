@@ -147,6 +147,11 @@ public class Modulo7QueryProcessingEngine {
             }
         }
 
+        // Special case in which no expressions are present
+        if (exprList.size() == 0) {
+            relevantSongs.addAll(requisiteSourceSongs);
+        }
+
         return relevantSongs;
     }
 

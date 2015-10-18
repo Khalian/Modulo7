@@ -53,6 +53,33 @@ public class LyricsIndexerTest {
     }
 
     /**
+     * Lyrics test, but number of documents are not specified
+     *
+     * @throws IOException
+     * @throws Modulo7InvalidFileOperationException
+     * @throws Modulo7ParseException
+     * @throws Modulo7IndexingDirError
+     * @throws ParseException
+     */
+    @Test
+    public void lyricsInderTestForGenericLyricsSearch() throws IOException, Modulo7InvalidFileOperationException,
+            Modulo7ParseException, Modulo7IndexingDirError, ParseException {
+        LyricsIndexer indexer = new LyricsIndexer();
+
+        FileUtils.deleteDirectory(new File(indexer.getIndexDirLocation()));
+
+        Lyrics lyrics = new Lyrics("Barbie girl", "aqua", new File("./src/test/testdata/lyrics/barbie_girl"));
+
+        indexer.indexLyrics(lyrics);
+
+        LyricsQueryParser queryParser = new LyricsQueryParser(LyricsIndexer.getDefaultIndexDir());
+        TopDocs docs = queryParser.performLyricsSearch("Barbie");
+        Assert.assertEquals(docs.totalHits, 1);
+
+        FileUtils.deleteDirectory(new File(indexer.getIndexDirLocation()));
+    }
+
+    /**
      * A slightly more involved lyrics indexer test which involves two file to index instead of one
      * in the sanity test case
      *

@@ -21,7 +21,6 @@ import java.util.stream.Collectors;
  * Created by asanyal on 7/20/2015.
  *
  * Various Utilities for Modulo7
- *
  */
 public class Modulo7Utils {
 
@@ -145,9 +144,18 @@ public class Modulo7Utils {
         long result = input[0];
 
         for (int i = 1; i < input.length; i++)
-            result = Modulo7Utils.gcd(result, input[i]);
+            result = Modulo7Utils.gcdTwoNums(result, input[i]);
 
         return result;
+    }
+
+    public static long gcdTwoNums(long a, long b) {
+        while (b > 0) {
+            long temp = b;
+            b = a % b; // % is remainder
+            a = temp;
+        }
+        return a;
     }
 
     /**

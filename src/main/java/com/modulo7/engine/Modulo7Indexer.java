@@ -11,15 +11,17 @@ import com.modulo7.musicstatmodels.representation.polyphonic.Song;
 import com.modulo7.musicstatmodels.representation.metadata.TimeSignature;
 import com.modulo7.nlp.lyrics.Lyrics;
 import com.modulo7.nlp.lyrics.LyricsIndexer;
+import com.modulo7.nlp.lyrics.LyricsQueryParser;
 import org.apache.commons.io.FilenameUtils;
+import org.apache.lucene.queryparser.classic.ParseException;
+import org.apache.lucene.search.ScoreDoc;
+import org.apache.lucene.search.TopDocs;
 
 import javax.sound.midi.InvalidMidiDataException;
 import javax.tools.FileObject;
 import java.io.File;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Map;
-import java.util.Set;
+import java.io.IOException;
+import java.util.*;
 
 /**
  * Created by asanyal on 9/10/15.
@@ -468,7 +470,8 @@ public class Modulo7Indexer {
     public void putSongsToLocation(String location) throws Modulo7DataBaseNotSerializedException, Modulo7NoSuchFileOrDirectoryException {
 
         for (final Song song : getAllSongs()) {
-            final String destLoc = location + File.separator + FilenameUtils.getBaseName(engine.getLocationGivenSong(song)) + Modulo7Globals.EXTENSION_TO_SERIALIZED_FILES;
+            final String destLoc = location + File.separator +
+                    FilenameUtils.getBaseName(engine.getLocationGivenSong(song)) + Modulo7Globals.EXTENSION_TO_SERIALIZED_FILES;
             File destFile = new File(destLoc);
             if (!destFile.exists()) {
                 AvroUtils.serialize(destLoc, song);
@@ -481,5 +484,26 @@ public class Modulo7Indexer {
                 }
             }
         }
+    }
+
+    /**
+     * Return a ranked order of lyrics based on TF IDF representation and cosine similarity
+     *
+     * @param lyricsSnippet
+     * @return
+     * @throws IOException
+     * @throws ParseException
+     */
+    public List<String> rankLyrics(final String lyricsSnippet) throws IOException, ParseException {
+
+        final List<String> lyrics = new ArrayList<>();
+
+        final LyricsQueryParser queryParser = new LyricsQueryParser(lyricsIndexer.getIndexDirLocation());
+        final TopDocs docs = queryParser.performLyricsSearch(lyricsSnippet);
+        for (ScoreDoc doc : docs.scoreDocs) {
+            lyrics.add(doc.toString());
+        }
+
+        return lyrics;
     }
 }

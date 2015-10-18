@@ -16,8 +16,9 @@ public enum Modulo7CLIChoice {
     RET_LYRICS_GIVEN_SONG(5),
     LIST_NUM_SONGS_INDEXED(6),
     INPUT_CUSTOM_QUERY(7),
-    SERIALIZE_DATABASE(8),
-    EXIT(9),
+    LYRICS_QUERY(8),
+    SERIALIZE_DATABASE(9),
+    EXIT(10),
     INVALID_CHOICE(-1);
 
     final int choice;
@@ -40,8 +41,9 @@ public enum Modulo7CLIChoice {
             case 5: return RET_LYRICS_GIVEN_SONG;
             case 6: return LIST_NUM_SONGS_INDEXED;
             case 7: return INPUT_CUSTOM_QUERY;
-            case 8: return SERIALIZE_DATABASE;
-            case 9: return EXIT;
+            case 8: return LYRICS_QUERY;
+            case 9: return SERIALIZE_DATABASE;
+            case 10: return EXIT;
             default: return INVALID_CHOICE;
         }
     }
