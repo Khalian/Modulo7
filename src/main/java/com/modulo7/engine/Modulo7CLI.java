@@ -20,10 +20,7 @@ import org.apache.lucene.queryparser.classic.*;
 import javax.sound.midi.InvalidMidiDataException;
 import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
-import java.util.List;
-import java.util.NoSuchElementException;
-import java.util.Scanner;
-import java.util.Set;
+import java.util.*;
 
 import static com.modulo7.engine.Modulo7CLIChoice.*;
 
@@ -177,6 +174,9 @@ public class Modulo7CLI {
                 }
             } catch (InvalidMidiDataException | EchoNestException | org.apache.lucene.queryparser.classic.ParseException | IOException e) {
                 logger.error(e.getMessage());
+            } catch (InputMismatchException ie) {
+                System.out.println("Input to Modulo7 is wrong because " + ie.toString() + "exitting");
+                System.exit(0);
             } catch (NoSuchElementException e) {
                 System.out.println("Bad input in the CLI" + e + " exitting");
                 System.exit(0);

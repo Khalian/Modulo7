@@ -4,6 +4,7 @@ import com.modulo7.common.exceptions.Modulo7WrongNoteType;
 import com.modulo7.common.utils.Modulo7Globals;
 import com.modulo7.musicstatmodels.representation.buildingblocks.ChordQuality;
 import com.modulo7.musicstatmodels.representation.buildingblocks.Note;
+import com.modulo7.musicstatmodels.statistics.MaxRangeOfSong;
 import org.apache.log4j.Logger;
 
 import java.io.Serializable;
@@ -197,5 +198,42 @@ public class Voice implements Serializable {
      */
     public void reassignVoiceInstance(final VoiceInstant shiftedInstance, final int position) {
         voiceSequence.set(position, shiftedInstance);
+    }
+
+    /**
+     * Given a constructed voice, estimate its voice class
+     * @return
+     */
+    public VoiceClass estimateVoiceClass() {
+        Note[] topAndBottom = MaxRangeOfSong.getTopAndBottomNote(this);
+
+        Note bottomNote = topAndBottom[0];
+        Note topNote = topAndBottom[1];
+
+        boolean isSoprano = Note.isHigherPitch(bottomNote, Note.B4) && Note.isLowerPitch(topNote, Note.ASHARP5);
+
+        if (isSoprano) {
+            return VoiceClass.SOPRAN0;
+        }
+
+        boolean isAlto = Note.isHigherPitch(bottomNote, Note.FSHARP3) && Note.isLowerPitch(topNote, Note.FSHARP5);
+
+        if (isAlto) {
+            return VoiceClass.ALTO;
+        }
+
+        boolean isTenor = Note.isHigherPitch(bottomNote, Note.B3) && Note.isLowerPitch(topNote, Note.ASHARP4);
+
+        if (isTenor) {
+            return VoiceClass.TENOR;
+        }
+
+        boolean isBass = Note.isHigherPitch(bottomNote, Note.B2) && Note.isLowerPitch(topNote, Note.F4);
+
+        if (isBass) {
+            return VoiceClass.BASS;
+        }
+
+        return VoiceClass.GENERIC;
     }
 }

@@ -48,4 +48,33 @@ public class MaxRangeOfSong implements AbstractStatistic {
 
         return (double) (overallMax - overallMin);
     }
+
+    /**
+     * Gets the highest and lowest note in a voice
+     * Useful for voice classification
+     *
+     * @param voice
+     * @return
+     */
+    public static Note[] getTopAndBottomNote(final Voice voice) {
+        int minLoc = Integer.MAX_VALUE;
+        int maxLoc = -Integer.MAX_VALUE;
+
+        for (final VoiceInstant instant : voice.getVoiceSequence()) {
+            final Note topNote = ChordQuality.getTopNoteFromChord(instant.getAllNotesofInstant());
+            final Note rootNote = ChordQuality.getRootNoteFromChord(instant.getAllNotesofInstant());
+
+            minLoc = Math.min(minLoc, noteMap.getPositionGivenNote(rootNote));
+            maxLoc = Math.max(maxLoc, noteMap.getPositionGivenNote(topNote));
+        }
+
+        final Note bottomNote = noteMap.getNoteGivenPosition(minLoc);
+        final Note topNote = noteMap.getNoteGivenPosition(maxLoc);
+
+        Note[] topAndBottom = new Note[2];
+        topAndBottom[0] = bottomNote;
+        topAndBottom[1] = topNote;
+
+        return topAndBottom;
+    }
 }
