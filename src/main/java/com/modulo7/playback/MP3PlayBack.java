@@ -2,6 +2,7 @@ package com.modulo7.playback;
 
 import javazoom.jl.decoder.JavaLayerException;
 import javazoom.jl.player.Player;
+import org.apache.log4j.Logger;
 
 import java.io.BufferedInputStream;
 import java.io.FileInputStream;
@@ -16,6 +17,10 @@ public class MP3PlayBack implements AbstractPlayBack {
 
     private String mp3File;
 
+    // Logger for mp3 playback
+    private static final Logger logger =Logger.getLogger(MP3PlayBack.class);
+
+    // Default playback constructor
     public MP3PlayBack(final String fileName) {
         mp3File = fileName;
     }
@@ -29,7 +34,7 @@ public class MP3PlayBack implements AbstractPlayBack {
             Player player = new Player(bis);
             player.play();
         } catch (FileNotFoundException | JavaLayerException e) {
-            e.printStackTrace();
+            logger.error(e.getMessage());
         }
 
     }

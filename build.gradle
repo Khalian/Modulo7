@@ -190,6 +190,10 @@ dependencies {
     compile group: 'org.apache.avro', name:'avro-mapred', version:'1.7.7'
     compile group: 'com.likethecolor', name:'alchemy', version:'1.1.6'
     compile group: 'javazoom', name:'jlayer', version:'1.0.1'
+    compile group: 'xom', name:'xom', version:'1.2.5'
+
+
+    compile files('resources/externalDeps/jfugue-5.0.4.jar')
 
     // Test compile artifacts
     testCompile 'junit:junit:4.12'
