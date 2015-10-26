@@ -34,6 +34,6 @@ public class MaxMelodicRepeatingFactorTest {
 
         Double repeatingFraction = maxMelodicRepeatingFactor.getStatistic(testSong);
 
-        Assert.assertEquals(repeatingFraction, 0.33, 0.004);
+        Assert.assertEquals(repeatingFraction, 0.4, 0.0);
     }
 }

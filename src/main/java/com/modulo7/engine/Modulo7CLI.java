@@ -83,6 +83,8 @@ public class Modulo7CLI {
     // CLI spacing to separate discrete regions in descriptions
     private static final String CLI_SPACING = " : ";
 
+    private static PlaybackEngine playBackEngine;
+
     // An indexer element for the Modulo7 CLI driver class
     private static Modulo7Indexer indexer;
 
@@ -124,6 +126,8 @@ public class Modulo7CLI {
             indexer = new Modulo7Indexer(srcDir, indexDir, persistOnDisk, verboseOutput);
         }
 
+        playBackEngine = new PlaybackEngine(indexer.engine);
+
         indexer.indexData();
         System.out.println("Welcome to Modulo7 interactive prompt for analysis of the vector space models");
         interactiveCLI();
@@ -158,6 +162,7 @@ public class Modulo7CLI {
                 System.out.println(INPUT_CUSTOM_QUERY.choice + ". Input a custom modulo7 SQL query");
                 System.out.println(LYRICS_QUERY.choice + ". Input a lyrics snippet with options");
                 System.out.println(SERIALIZE_DATABASE.choice + ". Serialize database into disk at a given location");
+                System.out.println(PLAYBACK_SONG.choice + ". Playback a certain song in the Modulo7 database");
                 System.out.println(EXIT.choice + ". Exit from Modulo7");
                 System.out.println("");
 
@@ -231,11 +236,10 @@ public class Modulo7CLI {
                     throw new Modulo7NoSuchSongSimilarityMeasureException("No such song similarity measure " + similarityMeasure);
                 } else {
                     try {
-
                         AbstractSongSimilarity similarity;
 
                         if (SongContourSimilarity.class.isAssignableFrom(similarityChoice)) {
-                            System.out.print("You seem to have chosen a contour similarity class, in that case input a internal voice similarity measure:");
+                            System.out.print("You seem to have chosen a contour similarity class, in that case input a internal voice similarity measure");
                             final String voiceSimilarity = in.next();
                             Class voiceSimClass = VoiceSimilarityChoices.getVoiceSimilarityGivenChoice(voiceSimilarity);
 
@@ -256,6 +260,17 @@ public class Modulo7CLI {
                         final List<String> rankedOrder =
                                     engineOnSimilarity.relevantRankOrdering(indexer.engine, indexer.getSongObjectGivenLocation(candidateSongLocation));
 
+                        System.out.print("Do you wish to set a particular number of songs to be displayed as relevant(y/n)?:");
+
+                        String res = in.next();
+
+                        int maxNum = Integer.MAX_VALUE;
+
+                        if (res.equalsIgnoreCase("y")) {
+                            System.out.print("Enter of relevant songs for viewing:");
+                            maxNum = in.nextInt();
+                        }
+
                         System.out.println("The ranked order of the songs are");
 
                         int rank = 1;
@@ -264,6 +279,9 @@ public class Modulo7CLI {
                         for (final String elem : rankedOrder) {
                             System.out.println(rank + ":" + elem);
                             rank++;
+                            if (rank > maxNum) {
+                                break;
+                            }
                         }
 
                     } catch (InstantiationException | IllegalAccessException | InvalidMidiDataException
@@ -347,7 +365,7 @@ public class Modulo7CLI {
                 break;
 
             case LIST_NUM_SONGS_INDEXED :
-                     System.out.println("\nThere are " + indexer.getNumSongsIndexed() + " song sources indexed by Modulo7");
+                     System.out.println("\nThere are " + indexer.getNumSongsIndexed() + " song sources indexed by Modulo7\n");
                      break;
 
             case SERIALIZE_DATABASE:
@@ -356,6 +374,11 @@ public class Modulo7CLI {
                      indexer.putSongsToLocation(location);
                      System.out.println("Songs serialized, going to main menu");
                      break;
+
+            case PLAYBACK_SONG:
+                    System.out.println("Enter song location to play");
+                    final String playbackLocation = in.next();
+                    playBackEngine.playSong(playbackLocation);
 
             case EXIT : System.out.println("Exitting from Modulo7");
                      System.exit(0);

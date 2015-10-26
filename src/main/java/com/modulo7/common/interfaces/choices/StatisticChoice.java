@@ -1,9 +1,6 @@
 package com.modulo7.common.interfaces.choices;
 
-import com.modulo7.musicstatmodels.statistics.HappinessIndex;
-import com.modulo7.musicstatmodels.statistics.MaxMelodicRepeatingFactor;
-import com.modulo7.musicstatmodels.statistics.PowerIndex;
-import com.modulo7.musicstatmodels.statistics.SadnessIndex;
+import com.modulo7.musicstatmodels.statistics.*;
 
 import java.util.HashMap;
 import java.util.HashSet;
@@ -13,14 +10,19 @@ import java.util.Set;
 /**
  * Created by asanyal on 9/23/15.
  *
- * Different types of statistics defined
+ * Different types of statistics defined as choices, acts as a mapping between choices
+ * to locations
  */
 public enum StatisticChoice {
 
     HAPPINESSINDEX("happinessindex"),
     SADNESSINDEX("sadnessindex"),
     POWERINDEX("powerindex"),
-    MAXMELODICREPEATINGFACTOR("maxmelodicrepeatingfactor");
+    MAXMELODICREPEATINGFACTOR("maxmelodicrepeatingfactor"),
+    LONGESTCHORDPROGRESSION("longestchordprogression"),
+    MAXRANGEOFSONG("maxrangeofsong"),
+    LYRICALSEMANTICINTENT("lyricalsemanticintent"),
+    NUMVOICES("numvoices");
 
     // A list of all the statistic choices as defined
     private static final Set<String> STATISTIC_CHOICES = new HashSet<>();
@@ -53,6 +55,10 @@ public enum StatisticChoice {
         put("sadnessindex", SadnessIndex.class);
         put("powerindex", PowerIndex.class);
         put("maxmelodicrepeatingfactor", MaxMelodicRepeatingFactor.class);
+        put("maxrangeofsong", MaxRangeOfSong.class);
+        put("longestchordprogression", LongestChordProgression.class);
+        put("lyricalsemanticintent", LyricalSemanticIntent.class);
+        put("numvoices", NumVoices.class);
     }};
 
     private String choice;

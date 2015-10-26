@@ -9,6 +9,7 @@ import com.modulo7.musicstatmodels.representation.polyphonic.Song;
 import org.apache.log4j.Logger;
 
 import java.util.Arrays;
+import java.util.Comparator;
 
 /**
  * Created by asanyal on 9/23/15.
@@ -22,8 +23,6 @@ import java.util.Arrays;
  * Thanks !!
  *
  * NOTE : This statistic implicitly applied a generic voice to melody preprocessing technique
- *
- * TODO: Fix it so that sharps dont cause problems
  */
 public class MaxMelodicRepeatingFactor implements AbstractStatistic<Double> {
 
@@ -40,13 +39,16 @@ public class MaxMelodicRepeatingFactor implements AbstractStatistic<Double> {
         double longestFactor = -Double.MAX_VALUE;
 
         for (final Voice voice : song.getVoices()) {
-            final Voice melodicProprocessVoice;
+            final Voice melodicPreprocessVoice;
             try {
-                melodicProprocessVoice = VoiceToMelodyConversion.melodyConversion(voice);
-                String voiceStringRep = melodicProprocessVoice.getDocumentRepresentation();
-                String repeatingMelody = longestRepeatingString(voiceStringRep);
+                melodicPreprocessVoice = VoiceToMelodyConversion.melodyConversion(voice);
+                String voiceStringRep = melodicPreprocessVoice.getDocumentRepresentation();
 
-                double fractionOfRepeatation = (double) repeatingMelody.length() / voiceStringRep.length();
+                String[] voiceComponents = voiceStringRep.split(" ");
+
+                String[] repeatingMelody = longestRepeatingString(voiceStringRep);
+
+                double fractionOfRepeatation = (double) repeatingMelody.length / voiceComponents.length;
 
                 longestFactor = Math.max(longestFactor, fractionOfRepeatation);
 
@@ -64,13 +66,34 @@ public class MaxMelodicRepeatingFactor implements AbstractStatistic<Double> {
      * @param t
      * @return
      */
-    private String longestCommonPrefix(final String s, final String t) {
-        int n = Math.min(s.length(), t.length());
+    private String[] longestCommonPrefix(final String[] s, final String[] t) {
+        int n = Math.min(s.length, t.length);
         for (int i = 0; i < n; i++) {
-            if (s.charAt(i) != t.charAt(i))
-                return s.substring(0, i);
+            if (!s[i].equals(t[i]))
+                return subcomponentOfString(s, 0, i);
         }
-        return s.substring(0, n);
+        return subcomponentOfString(s, 0, n);
+    }
+
+    /**
+     * An analogue to substring but over chunked strings instead of string itself
+     *
+     * @param baseComponents
+     * @param firstIndex
+     * @param secondIndex
+     * @return
+     */
+    private String[] subcomponentOfString(final String[] baseComponents, final int firstIndex, final int secondIndex) {
+        String[] subcomponents = new String[secondIndex - firstIndex];
+
+        int j = 0;
+
+        for (int i = firstIndex; i < secondIndex; i++) {
+            subcomponents[j] = baseComponents[i];
+            j++;
+        }
+
+        return subcomponents;
     }
 
     /**
@@ -78,25 +101,50 @@ public class MaxMelodicRepeatingFactor implements AbstractStatistic<Double> {
      * @param s
      * @return
      */
-    public String longestRepeatingString(final String s) {
+    public String[] longestRepeatingString(final String s) {
 
         // form the N suffixes
-        int N  = s.length();
-        String[] suffixes = new String[N];
+
+        String[] components = s.split(" ");
+        int N  = components.length;
+
+        String[][] suffixes = new String[N][N];
         for (int i = 0; i < N; i++) {
-            suffixes[i] = s.substring(i, N);
+            suffixes[i] = subcomponentOfString(components, i, N);
         }
 
         // sort them
-        Arrays.sort(suffixes);
+        Arrays.sort(suffixes, new ComponentComparator());
 
         // find longest repeated substring by comparing adjacent sorted suffixes
-        String lrs = "";
+        String[] lrs = new String[0];
         for (int i = 0; i < N - 1; i++) {
-            String x = longestCommonPrefix(suffixes[i], suffixes[i + 1]);
-            if (x.length() > lrs.length())
+            String[] x = longestCommonPrefix(suffixes[i], suffixes[i + 1]);
+            if (x.length > lrs.length)
                 lrs = x;
         }
         return lrs;
+    }
+}
+
+class ComponentComparator implements Comparator<String[]> {
+
+    @Override
+    public int compare(final String[] firstString, final String[] secondString) {
+
+        String first = totalStringRep(firstString);
+        String second = totalStringRep(secondString);
+
+        return first.compareTo(second);
+    }
+
+    private String totalStringRep(final String[] components) {
+        StringBuilder builder = new StringBuilder();
+
+        for (final String component: components) {
+            builder.append(component);
+        }
+
+        return builder.toString();
     }
 }

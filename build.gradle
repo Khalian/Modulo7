@@ -143,9 +143,6 @@ test {
     minHeapSize = "128m"
     maxHeapSize = "1024m"
 
-    // set JVM arguments for the test JVM(s)
-    jvmArgs '-XX:MaxPermSize=512m'
-
     // listen to events in the test execution lifecycle
     beforeTest { descriptor ->
         logger.lifecycle("Running test: " + descriptor)
