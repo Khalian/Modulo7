@@ -34,7 +34,7 @@ public class UkkonnenSimilarity implements AbstractVoiceSimilarity {
     /**
      * SCMNGramSim
      */
-    public UkkonnenSimilarity() {
+    public  UkkonnenSimilarity() {
     }
 
     @Override

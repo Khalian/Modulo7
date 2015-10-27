@@ -65,7 +65,7 @@ public class Modulo7Indexer {
      */
     public Modulo7Indexer(final String srcDir, final String dstDir) throws InvalidMidiDataException, Modulo7InvalidMusicXMLFile,
             EchoNestException, Modulo7NoSuchFileOrDirectoryException, Modulo7IndexingDirError, Modulo7InvalidFileOperationException,
-            Modulo7ParseException, Modulo7InvalidArgsException {
+            Modulo7ParseException, Modulo7InvalidArgsException, InterruptedException {
         engine = new DatabaseEngine(srcDir, dstDir);
         engine.buildInMemoryDataBaseFromScratch();
         lyricsIndexer = new LyricsIndexer();
@@ -88,38 +88,8 @@ public class Modulo7Indexer {
      */
     public Modulo7Indexer(final String srcDir, final String dstDir, final boolean persistOnDisk, final boolean verboseIndexing)
             throws InvalidMidiDataException, Modulo7InvalidMusicXMLFile, EchoNestException, Modulo7NoSuchFileOrDirectoryException,
-            Modulo7InvalidFileOperationException, Modulo7ParseException, Modulo7InvalidArgsException {
+            Modulo7InvalidFileOperationException, Modulo7ParseException, Modulo7InvalidArgsException, InterruptedException {
         engine = new DatabaseEngine(srcDir, dstDir, verboseIndexing);
-        engine.buildInMemoryDataBaseFromScratch();
-        lyricsIndexer = new LyricsIndexer();
-
-        if (persistOnDisk) {
-            engine.serializeDataSetAndMoveToDisk();
-        }
-
-        this.verboseIndexing = verboseIndexing;
-    }
-
-    /**
-     * Constructor similar to the above, but accepts the number of threads in the thread pool
-     *
-     * @param srcDir
-     * @param dstDir
-     * @param persistOnDisk
-     * @param verboseIndexing
-     * @param numThreads
-     * @throws InvalidMidiDataException
-     * @throws Modulo7InvalidMusicXMLFile
-     * @throws EchoNestException
-     * @throws com.modulo7.common.exceptions.Modulo7NoSuchFileOrDirectoryException
-     * @throws com.modulo7.common.exceptions.Modulo7InvalidFileOperationException
-     * @throws Modulo7ParseException
-     * @throws Modulo7InvalidArgsException
-     */
-    public Modulo7Indexer(final String srcDir, final String dstDir, final boolean persistOnDisk, final boolean verboseIndexing, final int numThreads)
-            throws InvalidMidiDataException, Modulo7InvalidMusicXMLFile, EchoNestException, Modulo7NoSuchFileOrDirectoryException,
-            Modulo7InvalidFileOperationException, Modulo7ParseException, Modulo7InvalidArgsException {
-        engine = new DatabaseEngine(srcDir, dstDir, verboseIndexing, numThreads);
         engine.buildInMemoryDataBaseFromScratch();
         lyricsIndexer = new LyricsIndexer();
 

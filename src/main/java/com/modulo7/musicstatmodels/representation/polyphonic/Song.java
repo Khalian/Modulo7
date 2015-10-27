@@ -12,6 +12,7 @@ import org.apache.avro.reflect.ReflectData;
 import java.io.Serializable;
 import java.util.HashSet;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 /**
  * Created by asanyal on 7/23/2015.
@@ -183,13 +184,8 @@ public class Song implements Serializable {
      * @return
      */
     public Set<String> getDocumentRepresentation() {
-        Set<String> doc = new HashSet<>();
 
-        for (Voice voice : voicesOfSong) {
-            doc.add(voice.getDocumentRepresentation());
-        }
-
-        return doc;
+        return voicesOfSong.stream().map(Voice::getDocumentRepresentation).collect(Collectors.toSet());
     }
 
     /**

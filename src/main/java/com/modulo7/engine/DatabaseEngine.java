@@ -6,6 +6,7 @@ import com.modulo7.acoustics.MidiToSongConverter;
 import com.modulo7.common.exceptions.*;
 import com.modulo7.common.interfaces.AbstractAnalyzer;
 import com.modulo7.common.utils.AvroUtils;
+import com.modulo7.common.utils.Modulo7Globals;
 import com.modulo7.common.utils.Modulo7Utils;
 import com.modulo7.crawler.utils.MusicSources;
 import com.modulo7.image.AudiverisSheetAnalyzer;
@@ -19,6 +20,7 @@ import java.io.File;
 import java.util.*;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
+import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
 
 /**
@@ -26,10 +28,8 @@ import java.util.stream.Collectors;
  *
  * Builds a complete Modulo7 Serialized database from the various source files that modulo7
  * supports and optionally serialize it to disk
- *
- * TODO : Build a multithreaded version that performs better, in process
  */
-public class DatabaseEngine implements Runnable {
+public class DatabaseEngine {
 
     // Source Directory or base location from all types of files are loaded by the parsers
     private String sourceDirectory;
@@ -69,8 +69,18 @@ public class DatabaseEngine implements Runnable {
     // A boolean flag which indicates if the data base has been serialized on disk or not
     private boolean isDataBasePresentOnDisk = false;
 
-    // A thread pool artifact that is created at run time
-    private ExecutorService databaseThreadPool;
+    // Depending on the number of cores, construct threads
+    private DatabaseThreadHelper[] threadPool = new DatabaseThreadHelper[Modulo7Globals.NUM_OF_CORES];
+
+    /**
+     * Intitializing database thread pool
+     * @param verboseOutput
+     */
+    private void initDatabaseThreadPool(final boolean verboseOutput) {
+        for (int i = 0; i < Modulo7Globals.NUM_OF_CORES; i++) {
+            threadPool[i] = new DatabaseThreadHelper(verboseOutput);
+        }
+    }
 
     /**
      * Basic database engine constructor, this constructors accepts a source directory
@@ -79,7 +89,8 @@ public class DatabaseEngine implements Runnable {
      * @param sourceDirectory
      * @param destinationDirectory
      */
-    public DatabaseEngine(final String sourceDirectory, final String destinationDirectory) throws Modulo7InvalidArgsException, Modulo7NoSuchFileOrDirectoryException {
+    public DatabaseEngine(final String sourceDirectory, final String destinationDirectory)
+            throws Modulo7InvalidArgsException, Modulo7NoSuchFileOrDirectoryException {
         this.destinationDirectory = destinationDirectory;
         this.sourceDirectory = sourceDirectory;
         this.databaseName = DEFAULT_ENGINE_NAME;
@@ -91,31 +102,7 @@ public class DatabaseEngine implements Runnable {
 
         songLocations.addAll(allSongLocations.stream().filter(MusicSources::checkIfSupportedExtension).collect(Collectors.toList()));
 
-        databaseThreadPool = Executors.newFixedThreadPool(1);
-    }
-
-    /**
-     * Basic database engine constructor, this constructors accepts a source directory
-     * which is a root directory from all the required files  are fetched. Once its fetched
-     *
-     * @param databaseName
-     * @param sourceDirectory
-     * @param destinationDirectory
-     */
-    public DatabaseEngine(final String databaseName, final String sourceDirectory, final String destinationDirectory) throws Modulo7InvalidArgsException,
-            Modulo7NoSuchFileOrDirectoryException {
-        this.destinationDirectory = destinationDirectory;
-        this.sourceDirectory = sourceDirectory;
-        this.databaseName = databaseName;
-
-        Modulo7Utils.removeDuplicateFilesFromDirectory(sourceDirectory);
-
-        // Recursively descend and list all the files that
-        Set<String> allSongLocations = Modulo7Utils.listAllFiles(sourceDirectory);
-
-        songLocations.addAll(allSongLocations.stream().filter(MusicSources::checkIfSupportedExtension).collect(Collectors.toList()));
-
-        databaseThreadPool = Executors.newFixedThreadPool(1);
+        initDatabaseThreadPool(false);
     }
 
     /**
@@ -139,32 +126,7 @@ public class DatabaseEngine implements Runnable {
 
         songLocations.addAll(allSongLocations.stream().filter(MusicSources::checkIfSupportedExtension).collect(Collectors.toList()));
 
-        databaseThreadPool = Executors.newFixedThreadPool(1);
-    }
-
-    /**
-     * Init with number of threads in the executor pool
-     *
-     * @param srcDir
-     * @param dstDir
-     * @param verboseOutput
-     * @param numThreads
-     * @throws Modulo7InvalidArgsException
-     */
-    public DatabaseEngine(final String srcDir, final String dstDir, final boolean verboseOutput, final int numThreads)
-            throws Modulo7InvalidArgsException, Modulo7NoSuchFileOrDirectoryException {
-        this.destinationDirectory = dstDir;
-        this.sourceDirectory = srcDir;
-        this.verboseOutput = verboseOutput;
-
-        Modulo7Utils.removeDuplicateFilesFromDirectory(sourceDirectory);
-
-        // Recursively descend and list all the files that
-        Set<String> allSongLocations = Modulo7Utils.listAllFiles(sourceDirectory);
-
-        songLocations.addAll(allSongLocations.stream().filter(MusicSources::checkIfSupportedExtension).collect(Collectors.toList()));
-
-        databaseThreadPool = Executors.newFixedThreadPool(numThreads);
+        initDatabaseThreadPool(verboseOutput);
     }
 
     /**
@@ -194,7 +156,7 @@ public class DatabaseEngine implements Runnable {
     }
 
     /**
-     * A method to build and in memory database from scratch
+     * A method to  and in memory database from scratch
      *
      * Consumer can serialize the information later on
      *
@@ -205,18 +167,44 @@ public class DatabaseEngine implements Runnable {
      * @throws com.modulo7.common.exceptions.Modulo7InvalidFileOperationException
      * @throws Modulo7ParseException
      */
-    public synchronized void buildInMemoryDataBaseFromScratch() throws InvalidMidiDataException,
-            EchoNestException, Modulo7NoSuchFileOrDirectoryException, Modulo7InvalidMusicXMLFile, Modulo7InvalidFileOperationException,
-            Modulo7ParseException {
-        for (final String songLocation : songLocations) {
-            parseSource(songLocation);
-        }
+    public void buildInMemoryDataBaseFromScratch() throws InvalidMidiDataException,
+            EchoNestException, Modulo7NoSuchFileOrDirectoryException, Modulo7InvalidMusicXMLFile,
+            Modulo7InvalidFileOperationException, Modulo7ParseException, InterruptedException {
+
+        concurrentConstructDatabase();
 
         isDataBaseConstructedInMemory = true;
     }
 
     /**
+     * Implementation in which database is concurrently constructed
+     */
+    private void concurrentConstructDatabase() throws InterruptedException {
+        int i = 0;
+
+        for (final String songLocation : songLocations) {
+            threadPool[i % Modulo7Globals.NUM_OF_CORES].addSongSourceLocation(songLocation);
+            i++;
+        }
+
+        ExecutorService es = Executors.newCachedThreadPool();
+
+        for (int k = 0; k < Modulo7Globals.NUM_OF_CORES; k++) {
+            es.execute(threadPool[k]);
+        }
+        es.shutdown();
+
+        while(!es.awaitTermination(1, TimeUnit.MINUTES));
+
+        for (int k = 0; k < Modulo7Globals.NUM_OF_CORES; k++) {
+            songLocationMap.putAll(threadPool[k].getSongLocationMap());
+            inverseSongLocationMap.putAll(threadPool[k].getInverseSongLocationMap());
+        }
+    }
+
+    /**
      * Parse a given source
+     *
      * @param songLocation
      * @throws InvalidMidiDataException
      * @throws com.modulo7.common.exceptions.Modulo7NoSuchFileOrDirectoryException
@@ -305,7 +293,7 @@ public class DatabaseEngine implements Runnable {
      * @throws Modulo7ParseException
      */
     public synchronized void serializeDataSetAndMoveToDisk() throws Modulo7NoSuchFileOrDirectoryException, InvalidMidiDataException,
-            Modulo7InvalidMusicXMLFile, EchoNestException, Modulo7InvalidFileOperationException, Modulo7ParseException {
+            Modulo7InvalidMusicXMLFile, EchoNestException, Modulo7InvalidFileOperationException, Modulo7ParseException, InterruptedException {
 
         if (!isDataBaseConstructedInMemory) {
             buildInMemoryDataBaseFromScratch();
@@ -490,10 +478,5 @@ public class DatabaseEngine implements Runnable {
      */
     protected Set<Song> getAllSongs() {
         return inverseSongLocationMap.keySet();
-    }
-
-    @Override
-    public void run() {
-        // TODO : Stub impl, need to implement
     }
 }

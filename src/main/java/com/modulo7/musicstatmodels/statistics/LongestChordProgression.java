@@ -30,7 +30,7 @@ public class LongestChordProgression implements AbstractStatistic<Double> {
                     bestSeen += 1;
                 } else {
                     longestSeenSoFar = Math.max(longestSeenSoFar, bestSeen);
-                    // Rest best Seen to 0, the reason is, chord progression seen ends here
+                    // Rest best Seen to 0, the reason is, chord progression seen ends here, so reset it
                     bestSeen = 0;
                 }
             }

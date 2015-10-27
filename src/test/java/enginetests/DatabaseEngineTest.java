@@ -38,7 +38,8 @@ public class DatabaseEngineTest {
      */
     @Test
     public void dataBaseSantiyTest() throws InvalidMidiDataException, Modulo7InvalidMusicXMLFile, EchoNestException, Modulo7NoSuchFileOrDirectoryException,
-            Modulo7DataBaseNotSerializedException, IOException, Modulo7InvalidFileOperationException, Modulo7ParseException, Modulo7InvalidArgsException {
+            Modulo7DataBaseNotSerializedException, IOException, Modulo7InvalidFileOperationException, Modulo7ParseException,
+            Modulo7InvalidArgsException, InterruptedException {
         File file = new File("./src/test/testdataSerialization/");
         file.mkdir();
         DatabaseEngine engine = new DatabaseEngine("./src/test/testdata", "./src/test/testdataSerialization/");
@@ -65,7 +66,7 @@ public class DatabaseEngineTest {
     @Test
     public void m7IndexerSanityTest() throws InvalidMidiDataException, Modulo7InvalidMusicXMLFile, EchoNestException,
             Modulo7NoSuchFileOrDirectoryException, Modulo7BadKeyException, Modulo7IndexingDirError, IOException, Modulo7InvalidFileOperationException,
-            Modulo7ParseException, Modulo7InvalidArgsException {
+            Modulo7ParseException, Modulo7InvalidArgsException, InterruptedException {
         File file = new File("./src/test/testdataSerialization/");
         file.mkdir();
         Modulo7Indexer indexer = new Modulo7Indexer("./src/test/testdata", "./src/test/testdataSerialization/");

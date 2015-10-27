@@ -1,7 +1,9 @@
 package com.modulo7.common.interfaces.choices;
 
+import com.modulo7.musicstatmodels.similarity.contoursimilarity.MullensefsteinContourSimilarity;
 import com.modulo7.musicstatmodels.similarity.contoursimilarity.NaturalContourSimilarity;
 import com.modulo7.musicstatmodels.similarity.songsimilarity.*;
+import com.modulo7.musicstatmodels.vectorspacemodels.contour.voicecontour.MullensiefenContour;
 
 import java.util.HashMap;
 import java.util.HashSet;
@@ -19,6 +21,7 @@ public enum SongSimilarityChoices {
     TONAL_HISTOGRAM_SIMILARITY("tonalhistogram"),
     WEIGHTED_TONAL_HISTOGRAM_SIMILARITY("weighedtonalhistogram"),
     NATURAL_SONG_CONTOUR_SIMILARITY("naturalsongcontour"),
+    MULLENSEFSTEIN_SONG_CONTOUR("mullensefsteincontour"),
     GROSS_SONG_CONTOUR_SIMILARITY("grosssongcontour"),
     SCM_TRIGRAM_SONG_SIMILARITY("scmtrigramforsong"),
     UKKONNEN_SONG_SIMILARITY("ukkonenmeasure");
@@ -35,6 +38,7 @@ public enum SongSimilarityChoices {
         put("tonalhistogram", TonalHistogramSimilarity.class);
         put("weighedtonalhistogram", WeightedTonalHistogramSimilarity.class);
         put("naturalsongcontour", NaturalContourSimilarity.class);
+        put("mullensefsteincontour", MullensefsteinContourSimilarity.class);
         put("scmtrigramforsong", SCMNGramSongSimilarity.class);
         put("grosssongcontour", GrossSongContourSilimarity.class);
         put("ukkonenmeasure", UkkonnenSongSimilarity.class);

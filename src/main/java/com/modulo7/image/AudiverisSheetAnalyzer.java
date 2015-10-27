@@ -14,6 +14,8 @@ import org.apache.log4j.Logger;
 import java.io.File;
 import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
+import java.util.LinkedList;
+import java.util.Queue;
 
 /**
  * Created by asanyal on 9/1/15.
@@ -36,7 +38,7 @@ public class AudiverisSheetAnalyzer implements AbstractAnalyzer {
     // Loaded audiveris jar
     private static JarRunner jr;
 
-    // Logger class for audeveris sheet music analyzer
+    // Logger class for audiveris sheet music analyzer
     private static final Logger logger = Logger.getLogger(AudiverisSheetAnalyzer.class);
 
     /**

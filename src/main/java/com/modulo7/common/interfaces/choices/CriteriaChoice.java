@@ -26,6 +26,7 @@ public enum CriteriaChoice {
     // A set of all criteria choices
     private static final Set<String> CRITERIA_CHOICES = new HashSet<>();
 
+    // Regular expression for criteria, so one of the choices are picked u[
     public static final String REGEXP_REP;
 
     static {

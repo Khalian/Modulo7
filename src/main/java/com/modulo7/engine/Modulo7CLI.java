@@ -67,12 +67,6 @@ public class Modulo7CLI {
     private static final String PERSIST_ON_DISK_DESC = "Whether Modulo7 should keep the indexed data in memory " +
             "or serialize it to disk/db";
 
-    // The number of threads to startup up the modulo7 database engine with
-    private static final String NUM_THREADS = "num_threads";
-
-    // Num threads desc
-    private static final String NUM_THREADS_DESC = "The number of threads to startup up the modulo7 database engine with";
-
     // A description of is a metadata fix needed option
     private static final String IS_METADATA_FIX_NEEDED_DESC = "Whether Modulo7 attempts to complete its metadata or leaves " +
             "it incomplete if unspecified in the music source files";
@@ -107,7 +101,8 @@ public class Modulo7CLI {
      */
     public static void main(String args[]) throws ParseException, Modulo7InvalidArgsException,
             Modulo7InvalidFileOperationException, EchoNestException, Modulo7InvalidMusicXMLFile,
-            Modulo7ParseException, Modulo7NoSuchFileOrDirectoryException, InvalidMidiDataException, Modulo7IndexingDirError {
+            Modulo7ParseException, Modulo7NoSuchFileOrDirectoryException, InvalidMidiDataException,
+            Modulo7IndexingDirError, InterruptedException {
 
         CommandLine commandLine = Modulo7CLI.getServerCommand(args);
         System.out.println("Indexing the given data");
@@ -116,15 +111,9 @@ public class Modulo7CLI {
         final String indexDir = commandLine.getOptionValue(INDEX_DIR);
         final boolean persistOnDisk = commandLine.hasOption(PERSIST_ON_DISK);
         final boolean verboseOutput = commandLine.hasOption(VERBOSE_OUTPUT);
-        final boolean hasNumberThreads = commandLine.hasOption(NUM_THREADS);
 
         // Init the database with a set number of threads
-        if (hasNumberThreads) {
-            final int numThreads = Integer.parseInt(commandLine.getOptionValue(NUM_THREADS));
-            indexer = new Modulo7Indexer(srcDir, indexDir, persistOnDisk, verboseOutput, numThreads);
-        } else {
-            indexer = new Modulo7Indexer(srcDir, indexDir, persistOnDisk, verboseOutput);
-        }
+        indexer = new Modulo7Indexer(srcDir, indexDir, persistOnDisk, verboseOutput);
 
         playBackEngine = new PlaybackEngine(indexer.engine);
 
@@ -239,7 +228,7 @@ public class Modulo7CLI {
                         AbstractSongSimilarity similarity;
 
                         if (SongContourSimilarity.class.isAssignableFrom(similarityChoice)) {
-                            System.out.print("You seem to have chosen a contour similarity class, in that case input a internal voice similarity measure");
+                            System.out.print("You seem to have chosen a contour similarity class, in that case input a internal voice similarity measure:");
                             final String voiceSimilarity = in.next();
                             Class voiceSimClass = VoiceSimilarityChoices.getVoiceSimilarityGivenChoice(voiceSimilarity);
 
@@ -418,8 +407,6 @@ public class Modulo7CLI {
                     IS_METADATA_FIX_NEEDED_DESC);
             m7Options.addOption(VERBOSE_OUTPUT, false,
                     VERBOSE_OUTPUT_DESC);
-            m7Options.addOption(NUM_THREADS, false,
-                    NUM_THREADS_DESC);
 
             CommandLineParser parser = new DefaultParser();
 
@@ -445,7 +432,6 @@ public class Modulo7CLI {
         System.out.println(PERSIST_ON_DISK + CLI_SPACING + PERSIST_ON_DISK_DESC);
         System.out.println(IS_METADATA_FIX_NEEDED + CLI_SPACING + IS_METADATA_FIX_NEEDED_DESC);
         System.out.println(VERBOSE_OUTPUT + CLI_SPACING + VERBOSE_OUTPUT_DESC);
-        System.out.println(NUM_THREADS + CLI_SPACING + NUM_THREADS_DESC);
         System.out.println("");
     }
 
