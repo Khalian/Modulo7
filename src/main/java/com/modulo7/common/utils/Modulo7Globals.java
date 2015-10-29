@@ -1,5 +1,9 @@
 package com.modulo7.common.utils;
 
+import com.modulo7.musicstatmodels.similarity.contoursimilarity.MullensefsteinContourSimilarity;
+import com.modulo7.musicstatmodels.similarity.contoursimilarity.NaturalContourSimilarity;
+import com.modulo7.musicstatmodels.similarity.songsimilarity.*;
+
 import java.util.HashMap;
 import java.util.Map;
 
@@ -20,6 +24,15 @@ public class Modulo7Globals {
     // Notes in western music, only sharps taken into account
     public static final String[] NOTE_NAMES_ONLY_SHARPS = {"A", "A#", "B", "C", "C#", "D", "D#",
             "E", "F", "F#", "G", "G#"};
+
+    // Harmonic equivalency between flats and sharps
+    public static final Map<String, String> HARMONIC_EQUIVALENT = new HashMap<String, String>() {{
+        put("AB", "G#");
+        put("BB", "A#");
+        put("CB", "B");
+        put("DB", "C#");
+        put("EB", "D#");
+    }};
 
     // A place holder for unknown quantities
     public static final int UNKNOWN = -1;

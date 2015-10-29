@@ -155,6 +155,11 @@ public class KKTonalityProfiles {
 
         if (thisOne.getScale().equals(ScaleType.MAJOR)) {
             List<Double> thisProfileList = KKTonalityProfiles.MAJOR_CHORD_PROFILES.get(thisOne.getKey());
+
+            if (thisProfileList == null) {
+                System.out.println("There is a null here where it should not be");
+            }
+
             double[] thisProfileArray = ArrayUtils.toPrimitive(thisProfileList.toArray(new Double[thisProfileList.size()]));
             thisScore = new PearsonsCorrelation().correlation(thisProfileArray, tonalDurationsArray);
         } else {

@@ -1,3 +1,6 @@
+Since this part of the code is not meant to be a part of the production grade
+part of the software but rather the part in which
+
                     GNU GENERAL PUBLIC LICENSE
                        Version 3, 29 June 2007
 

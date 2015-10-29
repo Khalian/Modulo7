@@ -239,7 +239,7 @@ public class BasicMusicXMLParser implements AbstractAnalyzer {
                     VoiceInstant newVoiceInstant = new VoiceInstant(setOfNotes);
                     Modulo7Utils.addVoiceInstantToVoiceMap(voiceIndextoVoiceMap, newVoiceInstant, voiceIndex);
                 } catch (Modulo7InvalidVoiceInstantSizeException | Modulo7BadIntervalException | Modulo7BadNoteException e) {
-                    e.printStackTrace();
+                    logger.error(e.getMessage());
                 }
             }
         }

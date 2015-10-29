@@ -31,6 +31,10 @@ public class KeySignature implements Serializable {
     private static final Set westernKeys =
             new HashSet<>(Arrays.asList(Modulo7Globals.NOTE_NAMES));
 
+    // The only thing here that is valid is there are only sharps
+    private static final Set<String> onlySharpKeys =
+            new HashSet<>(Arrays.asList(Modulo7Globals.NOTE_NAMES_ONLY_SHARPS));
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -65,7 +69,13 @@ public class KeySignature implements Serializable {
             throw new Modulo7BadKeyException("Bad key : " + key + " Please init with valid key for key signature");
         }
 
-        this.key = key.toUpperCase();
+        // This is the case in which the key is determined to be flat, choose harmonic equivalent of that
+        if (!KeySignature.onlySharpKeys.contains(key)) {
+            this.key = Modulo7Globals.HARMONIC_EQUIVALENT.get(key.toUpperCase());
+        } else {
+            this.key = key.toUpperCase();
+        }
+
         this.scale = scale;
     }
 
