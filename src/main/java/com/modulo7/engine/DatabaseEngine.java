@@ -187,7 +187,7 @@ public class DatabaseEngine {
             i++;
         }
 
-            ExecutorService es = Executors.newCachedThreadPool();
+        ExecutorService es = Executors.newCachedThreadPool();
 
         for (int k = 0; k < Modulo7Globals.NUM_OF_CORES; k++) {
             es.execute(threadPool[k]);

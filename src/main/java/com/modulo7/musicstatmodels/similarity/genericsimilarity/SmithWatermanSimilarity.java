@@ -80,7 +80,7 @@ public class SmithWatermanSimilarity<T extends AbstractVoiceSimilarity> implemen
             }
         }
 
-        return smithWaterSonMatrix[shorterLength - 1][longerLength - 1];
+        return smithWaterSonMatrix[shorterLength - 1][longerLength - 1] / longerLength;
     }
 
     /**

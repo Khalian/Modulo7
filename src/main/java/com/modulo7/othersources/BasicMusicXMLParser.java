@@ -3,6 +3,7 @@ package com.modulo7.othersources;
 import java.io.File;
 import java.io.IOException;
 import java.util.*;
+import java.util.stream.Collectors;
 
 import com.modulo7.common.interfaces.AbstractAnalyzer;
 import com.modulo7.common.exceptions.*;
@@ -72,11 +73,24 @@ public class BasicMusicXMLParser implements AbstractAnalyzer {
     // Lyrics portion of music xml, if its present
     private Lyrics lyrics = new Lyrics();
 
+    // A research case in which the inference algorithm is under test
+    private boolean forcedInfer = false;
+
+    // As the name of the member suggests, whether the M7 parser inferred the key signature or not.
+    private boolean keySignatureWasInferred = false;
+
+    // Check if key signature is present in the music xml file
+    private boolean keySigInMusicXMLFile = false;
+
     // A clef element
     private Clef clef;
 
+    // Hypothetical key signature, in an inference
+    private KeySignature forcedInferredSignature;
+
     /**
-     * Basic constructor takes as input the filename and applies
+     * Basic constructor takes as input the filename and applies jsoup
+     * to parse and build a song
      *
      * @param  filename
      * @throws IOException
@@ -91,6 +105,28 @@ public class BasicMusicXMLParser implements AbstractAnalyzer {
         }
 
         checkIfValidMusicXMLFile(filename);
+    }
+
+    /**
+     * Basic constructor takes as input the filename and applies jsoup
+     * to build and parse the song
+     *
+     * Also contains the variable which denotes whether a forced inference is needed or not
+     *
+     * @param  filename
+     * @throws IOException
+     */
+    public BasicMusicXMLParser(final String filename, final boolean forcedInfer) throws Modulo7InvalidMusicXMLFile, Modulo7NoSuchFileOrDirectoryException {
+
+        final File input = new File(filename);
+        try {
+            doc = Jsoup.parse(input, "UTF-8", filename);
+        } catch (IOException e) {
+            throw new Modulo7NoSuchFileOrDirectoryException("No such musicxml file found in location" + filename);
+        }
+
+        checkIfValidMusicXMLFile(filename);
+        this.forcedInfer = forcedInfer;
     }
 
     /**
@@ -137,7 +173,7 @@ public class BasicMusicXMLParser implements AbstractAnalyzer {
     public Song getSongRepresentation() {
 
         // Init the lines as a map between line index (also called voice in music xml jargon)
-        for (Element note : this.doc.getElementsByTag("Note")) {
+        for (final Element note : this.doc.getElementsByTag("Note")) {
 
             // Acquire the voice of the note in question
             final String voiceOfNote = note.getElementsByTag("voice").text();
@@ -157,19 +193,12 @@ public class BasicMusicXMLParser implements AbstractAnalyzer {
 
             // Populate the note duals data structure
             if (noteDuals.get(voiceNumber) == null) {
-                noteDuals.put(voiceNumber, new ArrayList<NoteAndIsChordDual>());
+                noteDuals.put(voiceNumber, new ArrayList<>());
             }
         }
 
         // Gets the number of divisions and a multiplier for the length of the song
         getDivisionInformation();
-
-        // Acquires the key signature from the music xml file and stores as the key signature element
-        try {
-            acquireKeySignatureFromMusicXMLFile();
-        } catch (Modulo7InvalidCircleOfFifthsDistance | Modulo7BadKeyException e) {
-            e.printStackTrace();
-        }
 
         // acquires the notes
         getNotes();
@@ -182,6 +211,13 @@ public class BasicMusicXMLParser implements AbstractAnalyzer {
 
         // Crunch notestreams into chords
         crunchChords();
+
+        // Acquires the key signature from the music xml file and stores as the key signature element
+        try {
+            acquireKeySignatureFromMusicXMLFile();
+        } catch (Modulo7InvalidCircleOfFifthsDistance | Modulo7BadKeyException e) {
+            logger.error(e.getMessage());
+        }
 
         // Acquire the voices from a hash set
         final HashSet<Voice> voiceSet = new HashSet<>(voiceIndextoVoiceMap.values());
@@ -264,8 +300,9 @@ public class BasicMusicXMLParser implements AbstractAnalyzer {
                 break;
             }
 
-            // Set the time signature if both beat and beats per divisioninformation exists
+            // Set the time signature if both beat and beats per division information exists
             if (beat != null && beatType != null)
+
                 timeSignature = new TimeSignature(beat, beatType);
         }
     }
@@ -279,12 +316,12 @@ public class BasicMusicXMLParser implements AbstractAnalyzer {
             String sign = null;
             Integer line = null;
 
-            for (Element thisSign : thisClef.getElementsByTag("sign")) {
+            for (final Element thisSign : thisClef.getElementsByTag("sign")) {
                 sign = thisSign.text();
                 break;
             }
 
-            for (Element thisLine : thisClef.getElementsByTag("line")) {
+            for (final Element thisLine : thisClef.getElementsByTag("line")) {
                 line = Integer.parseInt(thisLine.text());
                 break;
             }
@@ -323,6 +360,7 @@ public class BasicMusicXMLParser implements AbstractAnalyzer {
      * @return The type of scale
      */
     public ScaleType getScaleType() {
+
         // Acquire the scale information
         for (Element thisKey : this.doc.getElementsByTag("mode")) {
             final String mode = thisKey.text();
@@ -354,20 +392,16 @@ public class BasicMusicXMLParser implements AbstractAnalyzer {
             logger.debug("Fifth : " + fifthsAwayFromMode);
 
             if (typeOfScale != null) {
+                if (forcedInfer) {
+                    forcedInferredSignature = inferKey(fifthsAwayFromMode);
+                }
+
+                keySigInMusicXMLFile = true;
+
                 return CircleOfFifths.getKeyGivenFifthDistance(typeOfScale, fifthsAwayFromMode);
+
             } else {
-                // This happens when the mode information is not present but the fifths information is present
-                String candidateMajor = CircleOfFifths.getKeyGivenFifthDistance(ScaleType.MAJOR, fifthsAwayFromMode);
-                KeySignature candidateMajorKeySig = new KeySignature(candidateMajor, ScaleType.MAJOR);
-
-                String candidateMinor = CircleOfFifths.getKeyGivenFifthDistance(ScaleType.MINOR, fifthsAwayFromMode);
-                KeySignature candidateMinorKeySig = new KeySignature(candidateMinor, ScaleType.MINOR);
-
-                HashSet<Voice> setOfVoices = new HashSet<>(voiceIndextoVoiceMap.values());
-
-                Song song = new Song(setOfVoices, MusicSources.UNKNOWN);
-
-                KKTonalityProfiles.estimateBetterKeySignature(candidateMajorKeySig, candidateMinorKeySig, song);
+                keySignature = inferKey(fifthsAwayFromMode);
             }
         }
 
@@ -376,13 +410,42 @@ public class BasicMusicXMLParser implements AbstractAnalyzer {
     }
 
     /**
+     * Helper method to infer the key signature in a song
+     *
+     * @param fifthsAwayFromMode
+     * @throws Modulo7BadKeyException
+     * @throws Modulo7InvalidCircleOfFifthsDistance
+     */
+    private KeySignature inferKey(final int fifthsAwayFromMode) throws Modulo7BadKeyException, Modulo7InvalidCircleOfFifthsDistance {
+
+        // This happens when the mode information is not present but the fifths information is present
+        String candidateMajor = CircleOfFifths.getKeyGivenFifthDistance(ScaleType.MAJOR, fifthsAwayFromMode);
+        KeySignature candidateMajorKeySig = new KeySignature(candidateMajor, ScaleType.MAJOR);
+
+        String candidateMinor = CircleOfFifths.getKeyGivenFifthDistance(ScaleType.MINOR, fifthsAwayFromMode);
+        KeySignature candidateMinorKeySig = new KeySignature(candidateMinor, ScaleType.MINOR);
+
+        HashSet<Voice> setOfVoices = new HashSet<>(voiceIndextoVoiceMap.values());
+
+        Song song = new Song(setOfVoices, MusicSources.UNKNOWN);
+
+        keySignatureWasInferred = true;
+
+        boolean isMajorCandidateBetter = KKTonalityProfiles.estimateBetterKeySignature(candidateMajorKeySig, candidateMinorKeySig, song);
+        if (isMajorCandidateBetter) {
+            return candidateMajorKeySig;
+        } else {
+            return candidateMinorKeySig;
+        }
+    }
+
+    /**
      * Gets the number of divisions and a multiplier for each division in a given
      * music XML file and populates it
      */
     private void getDivisionInformation() {
-        for (Element thisdiv : this.doc.getElementsByTag("divisions")) {
-            divisions.add(Integer.valueOf(thisdiv.text()));
-        }
+
+        divisions.addAll(this.doc.getElementsByTag("divisions").stream().map(thisdiv -> Integer.valueOf(thisdiv.text())).collect(Collectors.toList()));
 
         if (!this.doc.getElementsByTag("divisions").isEmpty()) {
 
@@ -499,7 +562,7 @@ public class BasicMusicXMLParser implements AbstractAnalyzer {
                                         Modulo7Utils.addNoteDualToVoiceMap(noteDuals, new NoteAndIsChordDual(actualNote, true, duration, type), currentVoiceIndex);
                                     }
                                 } catch (Modulo7BadNoteException | Modulo7BadAccidentalException e) {
-                                    e.printStackTrace();
+                                    logger.error(e.getMessage());
                                 }
                             }
                         }
@@ -528,6 +591,34 @@ public class BasicMusicXMLParser implements AbstractAnalyzer {
      */
     public Clef getClef() {
         return clef;
+    }
+
+    /**
+     * Check whether the key signature was actually inferred or present inside the music xml file
+     * @return
+     */
+    public boolean keySigWasInferred() {
+        return keySignatureWasInferred;
+    }
+
+    /**
+     * Returns an inferred key signature
+     * @return
+     */
+    public KeySignature getForcedInferredSignature() {
+        return forcedInferredSignature;
+    }
+
+    /**
+     * Getter for key signature
+     * @return
+     */
+    public KeySignature getKeySignature() {
+        return keySignature;
+    }
+
+    public boolean isKeySigInMusicXMLFile() {
+        return keySigInMusicXMLFile;
     }
 }
 

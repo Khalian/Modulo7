@@ -2,17 +2,17 @@ package researchtests;
 
 import com.modulo7.common.exceptions.Modulo7InvalidMusicXMLFile;
 import com.modulo7.common.exceptions.Modulo7NoSuchFileOrDirectoryException;
-import com.modulo7.common.interfaces.AbstractAnalyzer;
 import com.modulo7.common.utils.Modulo7Utils;
+import com.modulo7.musicstatmodels.representation.metadata.KeySignature;
 import com.modulo7.musicstatmodels.representation.polyphonic.Song;
 import com.modulo7.pureresearch.MXLReader;
 import org.apache.log4j.Logger;
 import org.junit.Test;
 
+import java.util.HashMap;
 import java.util.HashSet;
+import java.util.Map;
 import java.util.Set;
-
-// import javax.sound.midi.InvalidMidiDataException;
 
 /**
  * Created by asanyal on 9/14/15.
@@ -49,6 +49,8 @@ public class ResearchTestCase {
     }
     */
 
+    // The distribution of key signatures
+    // private Map<KeySignature, Integer> countsOfKeySignatures = new HashMap<>();
 
     /**
      * Benchmarking for the mxl files, useful to test for the accuracy and efficacy of the tonal search
@@ -57,6 +59,7 @@ public class ResearchTestCase {
      * @throws Modulo7NoSuchFileOrDirectoryException
      * @throws Modulo7InvalidMusicXMLFile
      */
+
     /*
     @Test
     public void testAllMXLs() throws Modulo7NoSuchFileOrDirectoryException {
@@ -65,13 +68,27 @@ public class ResearchTestCase {
         final Set<String> wikifoniaDataset = Modulo7Utils.listAllFiles("/home/asanyal/Downloads/Wikifonia/");
         final Set<Song> allSongs = new HashSet<>();
 
+        int inferred = 0;
+        int correctInferred = 0;
+        int keySigInFile = 0;
+
         for (final String location : wikifoniaDataset) {
-            AbstractAnalyzer analyzer = null;
+            MXLReader analyzer;
             try {
-                analyzer = new MXLReader(location);
+                analyzer = new MXLReader(location, true);
                 Song song = analyzer.getSongRepresentation();
                 if (song != null) {
-                    allSongs.add(analyzer.getSongRepresentation());
+                    allSongs.add(song);
+                    if (analyzer.isForceKeySigInfer()) {
+                        inferred++;
+                            if (analyzer.isKeySignatureInMusicXMLFile()) {
+                            addToCountMap(analyzer.getActualKeySignature());
+                            keySigInFile++;
+                            if (analyzer.getActualKeySignature().equals(analyzer.getInferredKeySignature())) {
+                                correctInferred++;
+                            }
+                        }
+                    }
                 }
             } catch (Modulo7InvalidMusicXMLFile e) {
                 logger.error(e.getMessage());
@@ -79,6 +96,15 @@ public class ResearchTestCase {
         }
 
         System.out.println("haha");
+    }
+
+    private void addToCountMap(final KeySignature actualKeySignature) {
+        Integer count = countsOfKeySignatures.get(actualKeySignature);
+        if (count == null) {
+            countsOfKeySignatures.put(actualKeySignature, 1);
+        } else {
+            countsOfKeySignatures.put(actualKeySignature, count + 1);
+        }
     }
     */
 }

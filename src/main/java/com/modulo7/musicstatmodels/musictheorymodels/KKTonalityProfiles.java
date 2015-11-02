@@ -155,11 +155,6 @@ public class KKTonalityProfiles {
 
         if (thisOne.getScale().equals(ScaleType.MAJOR)) {
             List<Double> thisProfileList = KKTonalityProfiles.MAJOR_CHORD_PROFILES.get(thisOne.getKey());
-
-            if (thisProfileList == null) {
-                System.out.println("There is a null here where it should not be");
-            }
-
             double[] thisProfileArray = ArrayUtils.toPrimitive(thisProfileList.toArray(new Double[thisProfileList.size()]));
             thisScore = new PearsonsCorrelation().correlation(thisProfileArray, tonalDurationsArray);
         } else {
@@ -169,13 +164,13 @@ public class KKTonalityProfiles {
         }
 
         if (thatOne.getScale().equals(ScaleType.MAJOR)) {
-            List<Double> thisProfileList = KKTonalityProfiles.MAJOR_CHORD_PROFILES.get(thatOne.getKey());
-            double[] thisProfileArray = ArrayUtils.toPrimitive(thisProfileList.toArray(new Double[thisProfileList.size()]));
-            thatScore = new PearsonsCorrelation().correlation(thisProfileArray, tonalDurationsArray);
+            List<Double> thatProfileList = KKTonalityProfiles.MAJOR_CHORD_PROFILES.get(thatOne.getKey());
+            double[] thatProfileArray = ArrayUtils.toPrimitive(thatProfileList.toArray(new Double[thatProfileList.size()]));
+            thatScore = new PearsonsCorrelation().correlation(thatProfileArray, tonalDurationsArray);
         } else {
-            List<Double> thisProfileList = KKTonalityProfiles.MINOR_CHORD_PROFILES.get(thatOne.getKey());
-            double[] thisProfileArray = ArrayUtils.toPrimitive(thisProfileList.toArray(new Double[thisProfileList.size()]));
-            thatScore = new PearsonsCorrelation().correlation(thisProfileArray, tonalDurationsArray);
+            List<Double> thatProfileList = KKTonalityProfiles.MINOR_CHORD_PROFILES.get(thatOne.getKey());
+            double[] thatProfileArray = ArrayUtils.toPrimitive(thatProfileList.toArray(new Double[thatProfileList.size()]));
+            thatScore = new PearsonsCorrelation().correlation(thatProfileArray, tonalDurationsArray);
         }
 
         return thisScore > thatScore;

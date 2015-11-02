@@ -19,7 +19,7 @@ public class Modulo7Globals {
 
     // Notes in western music, both flats and sharps taken into account
     public static final String[] NOTE_NAMES = {"A", "A#", "B", "C", "C#", "D", "D#",
-            "E", "F", "F#", "G", "G#", "Ab", "Bb", "Db", "Eb", "Gb"};
+            "E", "F", "F#", "G", "G#", "Ab", "Bb", "Db", "Eb", "Fb" ,"Gb"};
 
     // Notes in western music, only sharps taken into account
     public static final String[] NOTE_NAMES_ONLY_SHARPS = {"A", "A#", "B", "C", "C#", "D", "D#",
@@ -32,6 +32,8 @@ public class Modulo7Globals {
         put("CB", "B");
         put("DB", "C#");
         put("EB", "D#");
+        put("GB", "F#");
+        put("FB", "E");
     }};
 
     // A place holder for unknown quantities
