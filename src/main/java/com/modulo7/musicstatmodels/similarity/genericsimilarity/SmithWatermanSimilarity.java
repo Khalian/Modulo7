@@ -25,7 +25,6 @@ public class SmithWatermanSimilarity<T extends AbstractVoiceSimilarity> implemen
 
     @Override
     public double getSimilarity(final Voice first, final Voice second) {
-        double bestSim = -Double.MAX_VALUE;
 
         final Voice longerVoice;
         final Voice shorterVoice;

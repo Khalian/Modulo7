@@ -235,16 +235,16 @@ public class Modulo7Utils {
     }
 
     /**
-     * Add count to n gram map
-     * @param ngram
-     * @param ngramMap
+     * Add string count to map
+     * @param entity
+     * @param entityMap
      */
-    public static void addToCount(final String ngram, final Map<String, Integer> ngramMap) {
-        if (ngramMap.containsKey(ngram)) {
-            Integer currCount = ngramMap.get(ngram);
-            ngramMap.put(ngram, currCount + 1);
+    public static void addToCount(final String entity, final Map<String, Integer> entityMap) {
+        if (entityMap.containsKey(entity)) {
+            Integer currCount = entityMap.get(entity);
+            entityMap.put(entity, currCount + 1);
         } else {
-            ngramMap.put(ngram, 1);
+            entityMap.put(entity, 1);
         }
     }
 

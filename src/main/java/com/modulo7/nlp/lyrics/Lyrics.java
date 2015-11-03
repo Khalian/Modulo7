@@ -33,7 +33,7 @@ public class Lyrics implements Serializable {
 
     // A specialized term for denoting terminating phrases, useful for acquring other pieces
     // of analysis like acquiring the lyrical structure
-    private static final String PHRASETERM = " PHRASETERM ";
+    public static final String PHRASETERM = " PHRASETERM ";
 
     /**
      * Default constructor

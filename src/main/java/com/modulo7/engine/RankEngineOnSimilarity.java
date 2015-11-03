@@ -33,12 +33,10 @@ public class RankEngineOnSimilarity {
      * @param refSong
      * @return
      */
-    public List<String> relevantRankOrdering(final DatabaseEngine engine, final Song refSong) {
+    public LinkedHashMap<String, Double> relevantRankOrdering(final DatabaseEngine engine, final Song refSong) {
 
         final Map<String, Song> songMap = engine.getSongLocationMap();
         final Map<Double, String> similarityScore = new HashMap<>();
-
-        final List<String> rankOrder = new ArrayList<>();
 
         for (Map.Entry<String, Song> entry : songMap.entrySet()) {
             final Double similarity = abstractSimilarity.getSimilarity(refSong, entry.getValue());
@@ -48,11 +46,13 @@ public class RankEngineOnSimilarity {
         Double[] similarityScoreVals = similarityScore.keySet().toArray(new Double[similarityScore.keySet().size()]);
         Arrays.sort(similarityScoreVals, Collections.reverseOrder());
 
+        final LinkedHashMap<String, Double> rankOrderMap = new LinkedHashMap<>();
+
         for (Double key : similarityScoreVals) {
-            rankOrder.add(similarityScore.get(key));
+            rankOrderMap.put(similarityScore.get(key), key);
         }
 
-        return rankOrder;
+        return rankOrderMap;
     }
 
     /**

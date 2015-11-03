@@ -85,6 +85,9 @@ public class Modulo7CLI {
     // Logger element in Modulo7 CLI
     private static final Logger logger = Logger.getLogger(Modulo7CLI.class);
 
+    // Is the output verbose or not
+    private static boolean verboseOutput;
+
     /**
      * Entry point to the Modulo7 CLI engine
      *
@@ -110,7 +113,7 @@ public class Modulo7CLI {
         final String srcDir = commandLine.getOptionValue(MUSIC_SOURCES_DIR);
         final String indexDir = commandLine.getOptionValue(INDEX_DIR);
         final boolean persistOnDisk = commandLine.hasOption(PERSIST_ON_DISK);
-        final boolean verboseOutput = commandLine.hasOption(VERBOSE_OUTPUT);
+        verboseOutput = commandLine.hasOption(VERBOSE_OUTPUT);
 
         // Init the database with a set number of threads
         indexer = new Modulo7Indexer(srcDir, indexDir, persistOnDisk, verboseOutput);
@@ -246,7 +249,7 @@ public class Modulo7CLI {
                         System.out.print("Enter the location of a song to rank the rest of the database against:");
                         final String candidateSongLocation = in.next();
                         indexer.addSingleAdditionalSongToIndex(candidateSongLocation);
-                        final List<String> rankedOrder =
+                        final LinkedHashMap<String, Double> rankedOrder =
                                     engineOnSimilarity.relevantRankOrdering(indexer.engine, indexer.getSongObjectGivenLocation(candidateSongLocation));
 
                         System.out.print("Do you wish to set a particular number of songs to be displayed as relevant(y/n)?:");
@@ -265,8 +268,14 @@ public class Modulo7CLI {
                         int rank = 1;
 
                         // Print out the element in ranked order
-                        for (final String elem : rankedOrder) {
-                            System.out.println(rank + ":" + elem);
+                        for (final Map.Entry<String, Double> entry : rankedOrder.entrySet()) {
+                            final String elem = entry.getKey();
+                            System.out.print(rank + ":" + elem);
+                            if (verboseOutput) {
+                                System.out.println(": SIM VAL :" + entry.getValue());
+                            } else {
+                                System.out.println("");
+                            }
                             rank++;
                             if (rank > maxNum) {
                                 break;

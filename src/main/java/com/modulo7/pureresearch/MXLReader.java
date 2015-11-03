@@ -28,7 +28,7 @@ public class MXLReader implements AbstractAnalyzer {
     // The logger for MXL file reader
     private static final Logger logger = Logger.getLogger(MXLReader.class);
 
-    // Is the key siganature inferred
+    // Is the key signature inferred
     private boolean isKeySigInferred = false;
 
     // Actual key signature
