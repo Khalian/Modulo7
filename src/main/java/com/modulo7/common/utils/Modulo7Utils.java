@@ -235,17 +235,29 @@ public class Modulo7Utils {
     }
 
     /**
-     * Add string count to map
+     * Add a count to a map by a certain amount
+     *
+     * @param entity
+     * @param entityMap
+     * @param byAmount
+     */
+    public static void addToCount(final String entity, final Map<String, Integer> entityMap, final Integer byAmount) {
+        if (entityMap.containsKey(entity)) {
+            Integer currCount = entityMap.get(entity);
+            entityMap.put(entity, currCount + byAmount);
+        } else {
+            entityMap.put(entity, byAmount);
+        }
+    }
+
+    /**
+     * Incremental add to the count
+     *
      * @param entity
      * @param entityMap
      */
     public static void addToCount(final String entity, final Map<String, Integer> entityMap) {
-        if (entityMap.containsKey(entity)) {
-            Integer currCount = entityMap.get(entity);
-            entityMap.put(entity, currCount + 1);
-        } else {
-            entityMap.put(entity, 1);
-        }
+        addToCount(entity, entityMap, 1);
     }
 
     /**
