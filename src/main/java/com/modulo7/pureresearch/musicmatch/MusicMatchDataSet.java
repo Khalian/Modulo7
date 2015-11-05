@@ -39,7 +39,8 @@ public class MusicMatchDataSet {
             // # is a comment in the music match file format
             if (!line.startsWith("#")) {
                 if (line.startsWith("%")) {
-                    final String[] words = line.split("");
+                    line = line.replaceAll("%", "");
+                    final String[] words = line.split(",");
                     Collections.addAll(topWords, words);
                 } else {
                     groundTruth.add(new MusicMatchDataElement(line));
@@ -74,7 +75,7 @@ public class MusicMatchDataSet {
 
             for (Map.Entry<Integer, Integer> entry : entryWordCount.entrySet()) {
                 final Integer wordIndex = entry.getKey();
-                final String word = topWords.get(wordIndex);
+                final String word = topWords.get(wordIndex - 1);
                 final Integer wordCountPerWord = entry.getValue();
                 Modulo7Utils.addToCount(word, totalWordCount, wordCountPerWord);
             }

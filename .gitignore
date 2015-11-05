@@ -21,6 +21,7 @@
 *.class
 *.iml
 *.log
+*.m7
 *.pdf
 *.aux
 *.ipr

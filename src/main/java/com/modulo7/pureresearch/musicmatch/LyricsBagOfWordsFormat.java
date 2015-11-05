@@ -4,6 +4,7 @@ import com.modulo7.common.utils.Modulo7Utils;
 import com.modulo7.nlp.lyrics.Lyrics;
 import org.apache.lucene.search.spell.LevensteinDistance;
 
+import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -17,17 +18,18 @@ public class LyricsBagOfWordsFormat {
     // Word count in lyrics
     private Map<String, Integer> wordCount = new HashMap<>();
 
-    // The map constructed from ground truth results
-    private static final Map<String, Integer> groundTruthMap = new HashMap<>();
-
+    // The lyrics object as original version
     private Lyrics lyrics;
 
+    // The ground truth dataset
+    private MusicMatchDataSet groundTruthDataSet;
+
     /**
-     * Construct the bag of words representation
+     * Construct the bag of words representation from lyrics
      *
      * @param lyrics
      */
-    public LyricsBagOfWordsFormat(final Lyrics lyrics) {
+    public void addLyrics(final Lyrics lyrics) {
 
         this.lyrics = lyrics;
 
@@ -37,6 +39,10 @@ public class LyricsBagOfWordsFormat {
             if (lyricsComponent.equals(Lyrics.PHRASETERM))
             Modulo7Utils.addToCount(lyricsComponent, wordCount);
         }
+    }
+
+    public LyricsBagOfWordsFormat(final String groundTruthFile) throws IOException {
+        groundTruthDataSet = new MusicMatchDataSet(groundTruthFile);
     }
 
     /**
@@ -58,6 +64,11 @@ public class LyricsBagOfWordsFormat {
     }
 
 
+    /**
+     * Compute the lyrics accuracy element
+     * @param first
+     * @return
+     */
     public static Double lyricsAccuracy(final LyricsBagOfWordsFormat first) {
         return null;
     }

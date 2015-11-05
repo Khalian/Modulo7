@@ -27,7 +27,7 @@ public class MusicMatchDataElement {
         String[] elements = dataElem.split(",");
         trackID = elements[0];
         mxmTrackID = elements[1];
-        for (int i = 2; i < dataElem.length(); i++) {
+        for (int i = 2; i < elements.length; i++) {
             String count = elements[i];
             String[] elementsOfCount = count.split(":");
             topWordsCount.put(Integer.parseInt(elementsOfCount[0]), Integer.parseInt(elementsOfCount[1]));
