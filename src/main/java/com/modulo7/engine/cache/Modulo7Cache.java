@@ -1,11 +1,12 @@
 package com.modulo7.engine.cache;
 
-import org.apache.log4j.Logger;
+import org.apache.commons.jcs.JCS;
 
-import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.SQLException;
+import java.util.LinkedHashMap;
 import java.util.LinkedHashSet;
+import java.util.Set;
+
+import org.apache.commons.jcs.access.CacheAccess;
 
 /**
  * Created by asanyal on 10/28/15.
@@ -14,16 +15,29 @@ import java.util.LinkedHashSet;
  */
 public class Modulo7Cache {
 
-    // Logger for caching
-    private static final Logger logger = Logger.getLogger(Modulo7Cache.class);
+    // Gets a class level cache
+    private static final CacheAccess<String, Modulo7CacheObject> cache = JCS.getInstance(Modulo7Cache.class.getName());
 
     /**
-     * Method to cache query
+     * Method to cache custom
      *
      * @param query
      * @param queryResults
      */
-    public static void cacheQueryResults(final String query, final LinkedHashSet<String> queryResults) {
+    public void cacheQueryResults(final String query, final Set<String> queryResults) {
+        final Modulo7CustomQueryCacheObject object = new Modulo7CustomQueryCacheObject(queryResults);
+        cache.put(query, object);
+    }
+
+    /**
+     * Method to cache similarity query
+     *
+     * @param query
+     * @param queryResults
+     */
+    public void cacheQueryResults(final String query, final LinkedHashMap<String, Double> queryResults) {
+        final Modulo7SimilarityResultCacheObject object = new Modulo7SimilarityResultCacheObject(queryResults);
+        cache.put(query, object);
     }
 
     /**
@@ -32,7 +46,20 @@ public class Modulo7Cache {
      * @param query
      * @return
      */
-    public static LinkedHashSet<String> getCachedResults(final String query) {
-        return null;
+    public Object getCachedResults(final String query) {
+        Modulo7CacheObject results = cache.get(query);
+
+        if (results != null) {
+            return results.getQueryResults();
+        } else {
+            return null;
+        }
+    }
+
+    /**
+     * A powerful method that invalidates the cache completely
+     */
+    public void invalidateCache() {
+        cache.clear();
     }
 }

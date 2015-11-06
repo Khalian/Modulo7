@@ -1,44 +1,29 @@
 package com.modulo7.engine.cache;
 
-import java.util.LinkedHashSet;
-
 /**
- * Created by asanyal on 11/2/15.
+ * Created by asanyal on 11/6/15.
  *
- * A cached modulo7 object, i.e a query and relevant results to that query
+ * A modulo7 cache object
  */
-public class Modulo7CacheObject {
-
-    // The syntax of the query, i.e command line of the query
-    private String query;
+public class Modulo7CacheObject<T> {
 
     // Set of songs returned in a total order
-    private LinkedHashSet<String> queryResults;
+    private T queryResults;
 
     /**
      * Basic constructor of the cache object
      *
-     * @param query
      * @param queryResults
      */
-    public Modulo7CacheObject(final String query, final LinkedHashSet<String> queryResults) {
-        this.query = query;
+    public Modulo7CacheObject(final T queryResults) {
         this.queryResults = queryResults;
-    }
-
-    /**
-     * Getter for query
-     * @return
-     */
-    public String getQuery() {
-        return query;
     }
 
     /**
      * Get the query results
      * @return
      */
-    public LinkedHashSet<String> getQueryResults() {
+    public T getQueryResults() {
         return queryResults;
     }
 }

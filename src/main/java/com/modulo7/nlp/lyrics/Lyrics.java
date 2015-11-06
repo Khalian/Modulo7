@@ -31,6 +31,9 @@ public class Lyrics implements Serializable {
     // String representation of the lyrics of a song
     private String lyricsOfSong = Modulo7Globals.UNKNOWNSTRING;
 
+    // String representation of lyrics Without any delimiters
+    private String lyricsOfSongNoDelimiters = Modulo7Globals.UNKNOWNSTRING;
+
     // A specialized term for denoting terminating phrases, useful for acquring other pieces
     // of analysis like acquiring the lyrical structure
     public static final String PHRASETERM = " PHRASETERM ";
@@ -85,6 +88,8 @@ public class Lyrics implements Serializable {
             BufferedReader br = new BufferedReader(new InputStreamReader(fstream));
 
             StringBuilder lyricsInSingleLine = new StringBuilder();
+            StringBuilder lyricsInSingleLineNoDelim = new StringBuilder();
+
             String lyricsLine;
 
             //Read File Line By Line and parse the lyrics
@@ -92,6 +97,9 @@ public class Lyrics implements Serializable {
                 //lyricsInSingleLine += lyricsLine + PHRASETERM;
                 lyricsInSingleLine.append(lyricsLine);
                 lyricsInSingleLine.append(PHRASETERM);
+
+                lyricsInSingleLineNoDelim.append(lyricsLine);
+                lyricsInSingleLineNoDelim.append(" ");
             }
 
             br.close();
@@ -101,6 +109,8 @@ public class Lyrics implements Serializable {
 
             // Introducing basic stemming into lyrics object, removing redundant words
             this.lyricsOfSong = NLPUtils.stemmer(lyricsInSingleLine.toString());
+            this.lyricsOfSongNoDelimiters = NLPUtils.stemmer(lyricsInSingleLineNoDelim.toString());
+
         } catch (IOException ie) {
             throw new Modulo7InvalidFileOperationException(ie.getMessage());
         } catch (ParseException e) {
@@ -146,5 +156,13 @@ public class Lyrics implements Serializable {
 
     public String getSongName() {
         return songName;
+    }
+
+    /**
+     * Getter for the lyrics of the song without any delimiters
+     * @return
+     */
+    public String getLyricsOfSongNoDelimiters() {
+        return lyricsOfSongNoDelimiters;
     }
 }

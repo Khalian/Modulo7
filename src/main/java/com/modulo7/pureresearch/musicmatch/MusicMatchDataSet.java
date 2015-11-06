@@ -81,4 +81,20 @@ public class MusicMatchDataSet {
             }
         }
     }
+
+    /**
+     * Gets the estimated word count from the ground truth data
+     *
+     * @param word
+     * @return
+     */
+    public double getExpectedWordCount(final String word) {
+
+        final Double val = estimatedWordCount.get(word);
+        if (val != null) {
+            return val;
+        } else {
+            return 0;
+        }
+    }
 }

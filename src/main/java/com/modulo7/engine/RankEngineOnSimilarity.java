@@ -13,7 +13,6 @@ import java.util.*;
  * In short all similarities are computed and a ranked order to documents are presented
  * the user can choose then to list all the relevant documetns he/she needs
  *
- * TODO : Implement this fully
  */
 public class RankEngineOnSimilarity {
 

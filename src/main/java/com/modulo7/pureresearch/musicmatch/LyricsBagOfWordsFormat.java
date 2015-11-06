@@ -15,76 +15,63 @@ import java.util.Map;
  */
 public class LyricsBagOfWordsFormat {
 
-    // Word count in lyrics
-    private Map<String, Integer> wordCount = new HashMap<>();
-
-    // The lyrics object as original version
-    private Lyrics lyrics;
-
     // The ground truth dataset
     private MusicMatchDataSet groundTruthDataSet;
 
     /**
-     * Construct the bag of words representation from lyrics
+     * Basic constructor for lyrics
      *
-     * @param lyrics
+     * @param groundTruthFile
+     * @throws IOException
      */
-    public void addLyrics(final Lyrics lyrics) {
-
-        this.lyrics = lyrics;
-
-        final String lyricsStr = lyrics.getLyricsOfSong();
-        final String[] lyricsComponents = lyricsStr.split(" ");
-        for (final String lyricsComponent : lyricsComponents) {
-            if (lyricsComponent.equals(Lyrics.PHRASETERM))
-            Modulo7Utils.addToCount(lyricsComponent, wordCount);
-        }
-    }
-
     public LyricsBagOfWordsFormat(final String groundTruthFile) throws IOException {
         groundTruthDataSet = new MusicMatchDataSet(groundTruthFile);
     }
 
     /**
-     * Gets the lyrics content from song, back referencing to original lyrics object
-     * @return
-     */
-    public String getLyricalContent() {
-        return lyrics.getLyricsOfSong();
-    }
-
-    /**
-     * Gets the bag of words count
-     * 
-     * @param word
-     * @return
-     */
-    public Integer getBagOfWordsCount(final String word) {
-        return wordCount.get(word);
-    }
-
-
-    /**
-     * Compute the lyrics accuracy element
+     * Compute the lyrics accuracy of a song's lyrics with respect to the
+     * ground truth data
+     *
      * @param first
      * @return
      */
-    public static Double lyricsAccuracy(final LyricsBagOfWordsFormat first) {
-        return null;
+    public double lyricsAccuracy(final Lyrics first) {
+        final String actualLyrics = first.getLyricsOfSongNoDelimiters().trim();
+        final String[] lyricsComponents = actualLyrics.split(" ");
+        Map<String, Integer> values = new HashMap<>();
+
+        for (final String lyricsComponent : lyricsComponents) {
+            Modulo7Utils.addToCount(lyricsComponent, values);
+        }
+
+        int denom = 0;
+        double num = 0;
+
+        for (Map.Entry<String, Integer> entry : values.entrySet()) {
+            final int observedCount = entry.getValue();
+            final String lyricsComponent = entry.getKey();
+            final double expectedCount = groundTruthDataSet.getExpectedWordCount(lyricsComponent);
+
+            denom += observedCount;
+            num += Math.max(observedCount - Math.abs(expectedCount - observedCount), 0);
+        }
+
+        return num / denom;
     }
 
     /**
      * Gets the lyrics similarity in the original structural format of the lyrics
+     *
      * @param first
      * @param second
      * @return
      */
-    public static Double lyricsSimilarity(final LyricsBagOfWordsFormat first, final LyricsBagOfWordsFormat second) {
+    public static Double lyricsSimilarity(final Lyrics first, final Lyrics second) {
 
         LevensteinDistance distance = new LevensteinDistance();
 
-        final String lyricalContentFirst = first.getLyricalContent();
-        final String lyricalContentSecond = second.getLyricalContent();
+        final String lyricalContentFirst = first.getLyricsOfSong();
+        final String lyricalContentSecond = second.getLyricsOfSong();
         return (double) distance.getDistance(lyricalContentFirst, lyricalContentSecond);
     }
 }

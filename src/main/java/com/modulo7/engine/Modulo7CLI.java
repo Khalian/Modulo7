@@ -6,6 +6,7 @@ import com.modulo7.common.interfaces.AbstractSongSimilarity;
 import com.modulo7.common.interfaces.AbstractVoiceSimilarity;
 import com.modulo7.common.interfaces.choices.SongSimilarityChoices;
 import com.modulo7.common.interfaces.choices.VoiceSimilarityChoices;
+import com.modulo7.engine.cache.Modulo7Cache;
 import com.modulo7.musicstatmodels.representation.metadata.KeySignature;
 import com.modulo7.musicstatmodels.representation.metadata.ScaleType;
 import com.modulo7.musicstatmodels.representation.metadata.TimeSignature;
@@ -15,7 +16,6 @@ import com.modulo7.nlp.lyrics.Lyrics;
 import org.apache.commons.cli.*;
 import org.apache.commons.cli.ParseException;
 import org.apache.log4j.Logger;
-import org.apache.lucene.queryparser.classic.*;
 
 import javax.sound.midi.InvalidMidiDataException;
 import java.io.IOException;
@@ -54,6 +54,9 @@ public class Modulo7CLI {
     // Is metadata to be filled up by Modulo7, in order to compensate for missing information
     private static final String IS_METADATA_FIX_NEEDED = "complete_metadata";
 
+    // Is metadata to be filled up by Modulo7, in order to compensate for missing information
+    private static final String IS_CACHING_ENABLED = "caching_enabled";
+
     // Is the output during processing verbose or not
     private static final String VERBOSE_OUTPUT = "verbose";
 
@@ -71,12 +74,16 @@ public class Modulo7CLI {
     private static final String IS_METADATA_FIX_NEEDED_DESC = "Whether Modulo7 attempts to complete its metadata or leaves " +
             "it incomplete if unspecified in the music source files";
 
+    // A description of the is database in memory option
+    private static final String IS_CACHING_ENABLED_DESC = "Is caching enabled for modulo7 queries";
+
     // A description of the verbose output tags
     private static final String VERBOSE_OUTPUT_DESC = "Whether the output is verbose or not";
 
     // CLI spacing to separate discrete regions in descriptions
     private static final String CLI_SPACING = " : ";
 
+    // An engine to play back modules, TODO : Use the cache module to playback as the results are needed
     private static PlaybackEngine playBackEngine;
 
     // An indexer element for the Modulo7 CLI driver class
@@ -87,6 +94,12 @@ public class Modulo7CLI {
 
     // Is the output verbose or not
     private static boolean verboseOutput;
+
+    // Define a modulo7 cache for queries
+    private static Modulo7Cache cache;
+
+    // Is caching enabled
+    private static boolean isCachingEnabled;
 
     /**
      * Entry point to the Modulo7 CLI engine
@@ -113,6 +126,12 @@ public class Modulo7CLI {
         final String srcDir = commandLine.getOptionValue(MUSIC_SOURCES_DIR);
         final String indexDir = commandLine.getOptionValue(INDEX_DIR);
         final boolean persistOnDisk = commandLine.hasOption(PERSIST_ON_DISK);
+        isCachingEnabled = commandLine.hasOption(IS_CACHING_ENABLED);
+
+        if (isCachingEnabled) {
+            cache = new Modulo7Cache();
+        }
+
         verboseOutput = commandLine.hasOption(VERBOSE_OUTPUT);
 
         // Init the database with a set number of threads
@@ -198,99 +217,14 @@ public class Modulo7CLI {
             EchoNestException, Modulo7IndexingDirError, Modulo7ParseException, Modulo7NoSuchFileOrDirectoryException,
             Modulo7InvalidMusicXMLFile, Modulo7NoSuchVoiceSimilarityMeasureException, IOException, org.apache.lucene.queryparser.classic.ParseException {
         switch (testNum) {
+            // Process a custom query
             case INPUT_CUSTOM_QUERY:
-                System.out.println("Consumer is going into custom query mode, now changing to Modulo7 SQL parser mode \n");
-                System.out.print("Enter input query : ");
-                Scanner customIn = new Scanner(System.in);
-
-                customIn.useDelimiter("\n");
-
-                final String queryStr = customIn.next();
-                System.out.println("");
-                Modulo7QueryProcessingEngine processingEngine;
-                try {
-                    processingEngine = new Modulo7QueryProcessingEngine(queryStr, indexer);
-                    Set<Song> relevantSongs = processingEngine.processQuery();
-                    printAllRelevantSongLocations(relevantSongs);
-                } catch (Modulo7MalformedM7SQLQuery e) {
-                    logger.error(e.getMessage());
-                }
+                customQueryProcess();
                 break;
 
             // Rank on a similarity order
             case RANK_ON_SIMILARITY_ORDER:
-                System.out.print("Enter a similarity measure:");
-                final String similarityMeasure = in.next();
-
-                Class similarityChoice = SongSimilarityChoices.getSongSimilarityGivenChoice(similarityMeasure);
-
-                if (similarityChoice == null) {
-                    throw new Modulo7NoSuchSongSimilarityMeasureException("No such song similarity measure " + similarityMeasure);
-                } else {
-                    try {
-                        AbstractSongSimilarity similarity;
-
-                        if (SongContourSimilarity.class.isAssignableFrom(similarityChoice)) {
-                            System.out.print("You seem to have chosen a contour similarity class, in that case input a internal voice similarity measure:");
-                            final String voiceSimilarity = in.next();
-                            Class voiceSimClass = VoiceSimilarityChoices.getVoiceSimilarityGivenChoice(voiceSimilarity);
-
-                            if (voiceSimClass == null) {
-                                throw new Modulo7NoSuchVoiceSimilarityMeasureException("No such voice similarity measure" + voiceSimilarity);
-                            }
-
-                            AbstractVoiceSimilarity voiceSim = (AbstractVoiceSimilarity) voiceSimClass.newInstance();
-                            similarity = (AbstractSongSimilarity) similarityChoice.getConstructor(AbstractVoiceSimilarity.class).newInstance(voiceSim);
-                        } else {
-                            similarity = (AbstractSongSimilarity) similarityChoice.newInstance();
-                        }
-
-                        RankEngineOnSimilarity engineOnSimilarity = new RankEngineOnSimilarity(similarity);
-                        System.out.print("Enter the location of a song to rank the rest of the database against:");
-                        final String candidateSongLocation = in.next();
-                        indexer.addSingleAdditionalSongToIndex(candidateSongLocation);
-                        final LinkedHashMap<String, Double> rankedOrder =
-                                    engineOnSimilarity.relevantRankOrdering(indexer.engine, indexer.getSongObjectGivenLocation(candidateSongLocation));
-
-                        System.out.print("Do you wish to set a particular number of songs to be displayed as relevant(y/n)?:");
-
-                        String res = in.next();
-
-                        int maxNum = Integer.MAX_VALUE;
-
-                        if (res.equalsIgnoreCase("y")) {
-                            System.out.print("Enter of relevant songs for viewing:");
-                            maxNum = in.nextInt();
-                        }
-
-                        System.out.println("The ranked order of the songs are");
-
-                        int rank = 1;
-
-                        // Print out the element in ranked order
-                        for (final Map.Entry<String, Double> entry : rankedOrder.entrySet()) {
-                            final String elem = entry.getKey();
-                            System.out.print(rank + ":" + elem);
-                            if (verboseOutput) {
-                                System.out.println(": SIM VAL :" + entry.getValue());
-                            } else {
-                                System.out.println("");
-                            }
-                            rank++;
-                            if (rank > maxNum) {
-                                break;
-                            }
-                        }
-
-                    } catch (InstantiationException | IllegalAccessException | InvalidMidiDataException
-                            | Modulo7InvalidFileOperationException | EchoNestException | Modulo7IndexingDirError
-                            | Modulo7ParseException | Modulo7NoSuchFileOrDirectoryException | Modulo7InvalidMusicXMLFile
-                            | NoSuchMethodException | InvocationTargetException e) {
-                        logger.error(e.getMessage());
-                    }
-                }
-
-                System.out.println("Now enter the location of the song that you wish to compare against the database");
+                similarityMeasureProcess(in);
                 break;
 
             case LYRICS_QUERY:
@@ -416,6 +350,8 @@ public class Modulo7CLI {
                     IS_METADATA_FIX_NEEDED_DESC);
             m7Options.addOption(VERBOSE_OUTPUT, false,
                     VERBOSE_OUTPUT_DESC);
+            m7Options.addOption(IS_CACHING_ENABLED, false,
+                    IS_CACHING_ENABLED_DESC);
 
             CommandLineParser parser = new DefaultParser();
 
@@ -441,6 +377,7 @@ public class Modulo7CLI {
         System.out.println(PERSIST_ON_DISK + CLI_SPACING + PERSIST_ON_DISK_DESC);
         System.out.println(IS_METADATA_FIX_NEEDED + CLI_SPACING + IS_METADATA_FIX_NEEDED_DESC);
         System.out.println(VERBOSE_OUTPUT + CLI_SPACING + VERBOSE_OUTPUT_DESC);
+        System.out.println(IS_CACHING_ENABLED + CLI_SPACING + IS_CACHING_ENABLED_DESC);
         System.out.println("");
     }
 
@@ -458,6 +395,173 @@ public class Modulo7CLI {
         } else {
             System.out.println("The locations of relevant songs are :");
             locations.forEach(System.out::println);
+        }
+    }
+
+    /**
+     * Get all the relevant songs
+     *
+     * @param allRelevantSongs
+     * @return
+     * @throws Modulo7DataBaseNotSerializedException
+     */
+    private static Set<String> getAllRelevantSongLocations(final Set<Song> allRelevantSongs) throws Modulo7DataBaseNotSerializedException {
+        return indexer.getLocationsGivenRelevantSongs(allRelevantSongs);
+    }
+
+    /**
+     * Process a custom query
+     */
+    private static void customQueryProcess() {
+        System.out.println("Consumer is going into custom query mode, now changing to Modulo7 SQL parser mode \n");
+        System.out.print("Enter input query : ");
+        Scanner customIn = new Scanner(System.in);
+
+        customIn.useDelimiter("\n");
+
+        final String queryStr = customIn.next();
+        System.out.println("");
+        Modulo7QueryProcessingEngine processingEngine;
+        try {
+            processingEngine = new Modulo7QueryProcessingEngine(queryStr, indexer);
+            if (isCachingEnabled) {
+                final Set<String> cachedSongResults = (Set<String>) cache.getCachedResults(queryStr);
+                if (cachedSongResults == null) {
+                    // Caching was bad revert to normal mode
+                    final Set<Song> relevantSongs = processingEngine.processQuery();
+                    final Set<String> relevantResults = getAllRelevantSongLocations(relevantSongs);
+                    cache.cacheQueryResults(queryStr, new LinkedHashSet<>(relevantResults));
+                } else {
+                    System.out.println("The locations of relevant songs are :");
+                    cachedSongResults.forEach(System.out::println);
+                }
+            }
+            Set<Song> relevantSongs = processingEngine.processQuery();
+            printAllRelevantSongLocations(relevantSongs);
+        } catch (Modulo7MalformedM7SQLQuery | Modulo7QueryProcessingException | Modulo7DataBaseNotSerializedException e) {
+            logger.error(e.getMessage());
+        }
+    }
+
+    /**
+     *  Process the similarity measure
+     *
+     * @param in
+     * @throws Modulo7NoSuchSongSimilarityMeasureException
+     */
+    private static void similarityMeasureProcess(final Scanner in) throws Modulo7NoSuchSongSimilarityMeasureException {
+        System.out.print("Enter a similarity measure:");
+        final String similarityMeasure = in.next();
+        String voiceSimilarity = "";
+
+        Class similarityChoice = SongSimilarityChoices.getSongSimilarityGivenChoice(similarityMeasure);
+
+        if (similarityChoice == null) {
+            throw new Modulo7NoSuchSongSimilarityMeasureException("No such song similarity measure " + similarityMeasure);
+        } else {
+            try {
+                AbstractSongSimilarity similarity;
+
+                if (SongContourSimilarity.class.isAssignableFrom(similarityChoice)) {
+                    System.out.print("You seem to have chosen a contour similarity class, in that case input a internal voice similarity measure:");
+                    voiceSimilarity = in.next();
+                    Class voiceSimClass = VoiceSimilarityChoices.getVoiceSimilarityGivenChoice(voiceSimilarity);
+
+                    if (voiceSimClass == null) {
+                        throw new Modulo7NoSuchVoiceSimilarityMeasureException("No such voice similarity measure" + voiceSimilarity);
+                    }
+
+                    AbstractVoiceSimilarity voiceSim = (AbstractVoiceSimilarity) voiceSimClass.newInstance();
+                    similarity = (AbstractSongSimilarity) similarityChoice.getConstructor(AbstractVoiceSimilarity.class).newInstance(voiceSim);
+                } else {
+                    similarity = (AbstractSongSimilarity) similarityChoice.newInstance();
+                }
+
+                System.out.print("Do you wish to set a particular number of songs to be displayed as relevant(y/n)?:");
+
+                String res = in.next();
+
+                int maxNum = Integer.MAX_VALUE;
+
+                if (res.equalsIgnoreCase("y")) {
+                    System.out.print("Enter of relevant songs for viewing:");
+                    maxNum = in.nextInt();
+                }
+
+                RankEngineOnSimilarity engineOnSimilarity = new RankEngineOnSimilarity(similarity);
+                System.out.print("Enter the location of a song to rank the rest of the database against:");
+                final String candidateSongLocation = in.next();
+
+                final String query = constructSimilarityQuery(similarityMeasure, voiceSimilarity ,candidateSongLocation, maxNum);
+
+                if (isCachingEnabled) {
+                    final LinkedHashMap<String, Double> cachedRankOrder = (LinkedHashMap<String, Double>) cache.getCachedResults(query);
+                    if (cachedRankOrder == null) {
+                        final LinkedHashMap<String, Double> rankedOrder =
+                                engineOnSimilarity.relevantRankOrdering(indexer.engine, indexer.getSongObjectGivenLocation(candidateSongLocation));
+                        cache.cacheQueryResults(query, rankedOrder);
+                        printRankedOrder(rankedOrder, maxNum);
+                    } else {
+                        printRankedOrder(cachedRankOrder, maxNum);
+                    }
+                }
+
+                indexer.addSingleAdditionalSongToIndex(candidateSongLocation);
+                final LinkedHashMap<String, Double> rankedOrder =
+                        engineOnSimilarity.relevantRankOrdering(indexer.engine, indexer.getSongObjectGivenLocation(candidateSongLocation));
+
+                printRankedOrder(rankedOrder, maxNum);
+
+            } catch (InstantiationException | IllegalAccessException | InvalidMidiDataException
+                    | Modulo7InvalidFileOperationException | EchoNestException | Modulo7IndexingDirError
+                    | Modulo7ParseException | Modulo7NoSuchFileOrDirectoryException | Modulo7InvalidMusicXMLFile
+                    | NoSuchMethodException | InvocationTargetException | Modulo7DataBaseNotSerializedException
+                    | Modulo7NoSuchVoiceSimilarityMeasureException e) {
+                logger.error(e.getMessage());
+            }
+        }
+    }
+
+    /**
+     * A query representation of modulo7 similarity queries
+     *
+     * @param similarityMeasure
+     * @param voiceSimilarity
+     * @param candidateSongLocation
+     * @param numSongs
+     *
+     * @return a similarity query
+     */
+    private static String constructSimilarityQuery(final String similarityMeasure,
+                   final String voiceSimilarity, final String candidateSongLocation,
+                   final int numSongs) {
+        return "SIM:" + similarityMeasure + " VOICE_SIM:" + voiceSimilarity + " CANDIDATE:" + candidateSongLocation + " NUM_SONGS:" + numSongs;
+    }
+
+    /**
+     * Print the ranked order of similarity measures
+     *
+     * @param rankedOrder
+     * @param maxNum
+     */
+    private static void printRankedOrder(final LinkedHashMap<String, Double> rankedOrder, final int maxNum) {
+        System.out.println("The ranked order of the songs are");
+
+        int rank = 1;
+
+        // Print out the element in ranked order
+        for (final Map.Entry<String, Double> entry : rankedOrder.entrySet()) {
+            final String elem = entry.getKey();
+            System.out.print(rank + ":" + elem);
+            if (verboseOutput) {
+                System.out.println(": SIM VAL :" + entry.getValue());
+            } else {
+                System.out.println("");
+            }
+            rank++;
+            if (rank > maxNum) {
+                break;
+            }
         }
     }
 }

@@ -11,6 +11,7 @@
 /gradle/*
 /default-lyrics-index-dir/*
 /src/test/researchData/*
+/jcs_swap/*
 
 # Normal Files
 .settings

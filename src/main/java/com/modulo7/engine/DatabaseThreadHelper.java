@@ -54,7 +54,7 @@ public class DatabaseThreadHelper implements Runnable {
     public void run() {
         for (final String location : inputLocations) {
             try {
-                addToSongLocationMap(location, parseSource(location));
+                parseSource(location);
             } catch (InvalidMidiDataException | Modulo7NoSuchFileOrDirectoryException | EchoNestException | Modulo7InvalidMusicXMLFile
                     | Modulo7ParseException | Modulo7InvalidFileOperationException e) {
                 logger.error(e.getMessage());

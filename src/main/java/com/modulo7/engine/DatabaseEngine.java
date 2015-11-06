@@ -240,7 +240,7 @@ public class DatabaseEngine {
             independentLyricsMap.put(songLocation, lyrics);
             inverseIndependentLyricsMap.put(lyrics, songLocation);
         } else if (songLocation.endsWith("m7")) {
-            // Build an in memory datbase from an already serialized one, fastest way to deal with preconstructed database
+            // Build an in memory database from an already serialized one, fastest way to deal with preconstructed database
             song = AvroUtils.deserialize(songLocation);
             addToSongLocationMap(songLocation, song);
         }
@@ -249,7 +249,7 @@ public class DatabaseEngine {
     }
 
     /**
-     * Method to serialize and both get a song
+     * Method to serialize and acquire a song at the same time
      *
      * @throws Modulo7InvalidMusicXMLFile
      * @throws com.modulo7.common.exceptions.Modulo7NoSuchFileOrDirectoryException
