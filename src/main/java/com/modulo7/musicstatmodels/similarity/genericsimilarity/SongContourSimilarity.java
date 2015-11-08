@@ -22,8 +22,10 @@ public class SongContourSimilarity<T extends AbstractVoiceSimilarity, V extends 
     // Logger for natural song contour similarity measure
     private static Logger logger = Logger.getLogger(SongContourSimilarity.class);
 
+    // The internal voice similarity used with the contour similarity
     private T internalVoiceSimilarity;
 
+    // The internal contour representation used in the voice similarity
     private V internalContourRep;
 
     /**

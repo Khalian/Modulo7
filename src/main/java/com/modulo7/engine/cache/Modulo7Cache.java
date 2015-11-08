@@ -15,7 +15,7 @@ import org.apache.commons.jcs.access.CacheAccess;
  */
 public class Modulo7Cache {
 
-    // Gets a class level cache
+    // Gets a class level cache, a singleton for all instance (although by design its only used in Modulo7 CLI)
     private static final CacheAccess<String, Modulo7CacheObject> cache = JCS.getInstance(Modulo7Cache.class.getName());
 
     /**

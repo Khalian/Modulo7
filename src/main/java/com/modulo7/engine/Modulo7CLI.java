@@ -492,7 +492,7 @@ public class Modulo7CLI {
                 System.out.print("Enter the location of a song to rank the rest of the database against:");
                 final String candidateSongLocation = in.next();
 
-                final String query = constructSimilarityQuery(similarityMeasure, voiceSimilarity ,candidateSongLocation, maxNum);
+                final String query = constructSimilarityQuery(similarityMeasure, voiceSimilarity ,candidateSongLocation);
 
                 if (isCachingEnabled) {
                     final LinkedHashMap<String, Double> cachedRankOrder = (LinkedHashMap<String, Double>) cache.getCachedResults(query);
@@ -528,14 +528,12 @@ public class Modulo7CLI {
      * @param similarityMeasure
      * @param voiceSimilarity
      * @param candidateSongLocation
-     * @param numSongs
      *
      * @return a similarity query
      */
     private static String constructSimilarityQuery(final String similarityMeasure,
-                   final String voiceSimilarity, final String candidateSongLocation,
-                   final int numSongs) {
-        return "SIM:" + similarityMeasure + " VOICE_SIM:" + voiceSimilarity + " CANDIDATE:" + candidateSongLocation + " NUM_SONGS:" + numSongs;
+                   final String voiceSimilarity, final String candidateSongLocation) {
+        return "SIM:" + similarityMeasure + " VOICE_SIM:" + voiceSimilarity + " CANDIDATE:" + candidateSongLocation;
     }
 
     /**

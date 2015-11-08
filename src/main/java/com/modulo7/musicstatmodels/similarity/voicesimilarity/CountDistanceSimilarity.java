@@ -1,41 +1,40 @@
 package com.modulo7.musicstatmodels.similarity.voicesimilarity;
 
 import com.modulo7.common.interfaces.AbstractVoiceSimilarity;
-import com.modulo7.common.utils.Modulo7Utils;
 import com.modulo7.musicstatmodels.representation.monophonic.Voice;
 
-import java.util.HashMap;
-import java.util.Map;
+import java.util.HashSet;
+import java.util.Set;
 
 /**
- * Created by asanyal on 10/13/15.
+ * Created by asanyal on 11/7/15.
  *
- * N Gram similarity measure indoctrinated in Modulo7 using the sum common measure
- * measure as defined in NLP literature
+ * Based on the similie technical manual, the count distance similarity is
+ * based on the count(number) of common trigrams, rather than the actual frequecies
  */
-public class SCMNGramSimilarity implements AbstractVoiceSimilarity {
+public class CountDistanceSimilarity implements AbstractVoiceSimilarity {
 
     // Compute the distinct N grams in the first voice
-    private Map<String, Integer> distinctTrigramsInOne = new HashMap<>();
+    private Set<String> distinctTrigramsInOne = new HashSet<>();
 
     // Compute the distinct N grams in the second voice
-    private Map<String, Integer> distinctTrigramsInTwo = new HashMap<>();
+    private Set<String> distinctTrigramsInTwo = new HashSet<>();
 
     // Number of grams, default to 3
     private int N = 3;
 
     /**
-     * SCMNGramSim
+     * CountDistanceSimilarity measure constructor with custom number of grams
      * @param n
      */
-    public SCMNGramSimilarity(final int n) {
+    public CountDistanceSimilarity(final int n) {
         N = n;
     }
 
     /**
-     * SCMNGramSim
+     * CountDistanceSimilarity default constructor
      */
-    public SCMNGramSimilarity() {
+    public  CountDistanceSimilarity() {
     }
 
     @Override
@@ -51,17 +50,20 @@ public class SCMNGramSimilarity implements AbstractVoiceSimilarity {
             String ngram = "";
             for (int k = i; k < i + N; k++)
                 ngram += firstSplit[k];
-            Modulo7Utils.addToCount(ngram, distinctTrigramsInOne);
+            distinctTrigramsInOne.add(ngram);
         }
 
         for (int i = 0; i < secondSplit.length - N; i++) {
             String ngram = "";
             for (int k = i; k < i + N; k++)
                 ngram += secondSplit[k];
-            Modulo7Utils.addToCount(ngram, distinctTrigramsInTwo);
+            distinctTrigramsInTwo.add(ngram);
         }
 
-        return (double) (Modulo7Utils.sumOverNGramFreqs(distinctTrigramsInOne) + Modulo7Utils.sumOverNGramFreqs(distinctTrigramsInTwo))
-                / (firstSplit.length + secondSplit.length - 2*(N - 1));
+        // Intersection of both sets
+        distinctTrigramsInOne.retainAll(distinctTrigramsInTwo);
+
+        return (double) distinctTrigramsInOne.size() / Math.max(firstSplit.length, secondSplit.length);
     }
+
 }

@@ -23,8 +23,9 @@ public enum SongSimilarityChoices {
     NATURAL_SONG_CONTOUR_SIMILARITY("naturalsongcontour"),
     MULLENSEFSTEIN_SONG_CONTOUR("mullensefsteincontour"),
     GROSS_SONG_CONTOUR_SIMILARITY("grosssongcontour"),
-    SCM_TRIGRAM_SONG_SIMILARITY("scmtrigramforsong"),
-    UKKONNEN_SONG_SIMILARITY("ukkonenmeasure");
+    SCM_TRIGRAM_SONG_SIMILARITY("scmtrigram"),
+    UKKONNEN_SONG_SIMILARITY("ukkonenmeasure"),
+    COUNT_DISTANCE_SIMILARITY("countdistancetrigram");
 
     // Regular expression detailing one of the choices for song similarity
     public static final String REGEXP_REP;
@@ -39,9 +40,11 @@ public enum SongSimilarityChoices {
         put("weighedtonalhistogram", WeightedTonalHistogramSimilarity.class);
         put("naturalsongcontour", NaturalContourSimilarity.class);
         put("mullensefsteincontour", MullensefsteinContourSimilarity.class);
-        put("scmtrigramforsong", SCMNGramSongSimilarity.class);
+        put("scmtrigram", SCMNGramSongSimilarity.class);
         put("grosssongcontour", GrossSongContourSilimarity.class);
         put("ukkonenmeasure", UkkonnenSongSimilarity.class);
+        put("countdistancetrigram", CountDistanceSongSimilarity.class);
+
     }};
 
     /**

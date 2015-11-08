@@ -24,7 +24,7 @@ public class UkkonnenSimilarity implements AbstractVoiceSimilarity {
     private int N = 3;
 
     /**
-     * SCMNGramSim
+     * Ukkonnen similarity measure constructor with custom number of grams
      * @param n
      */
     public UkkonnenSimilarity(final int n) {
@@ -32,7 +32,7 @@ public class UkkonnenSimilarity implements AbstractVoiceSimilarity {
     }
 
     /**
-     * SCMNGramSim
+     * Ukkonnen default constructor
      */
     public  UkkonnenSimilarity() {
     }
