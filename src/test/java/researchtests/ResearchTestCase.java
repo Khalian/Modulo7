@@ -6,6 +6,7 @@ import com.modulo7.common.utils.Modulo7Utils;
 import com.modulo7.musicstatmodels.representation.metadata.KeySignature;
 import com.modulo7.musicstatmodels.representation.polyphonic.Song;
 import com.modulo7.pureresearch.MXLReader;
+import com.modulo7.pureresearch.lastfm.LastFMDataSet;
 import com.modulo7.pureresearch.musicmatch.LyricsBagOfWordsFormat;
 import org.apache.log4j.Logger;
 import org.junit.Test;
@@ -114,6 +115,14 @@ public class ResearchTestCase {
     @Test
     public void LyricsGroundTruthResults() throws IOException {
         LyricsBagOfWordsFormat formatLoad = new LyricsBagOfWordsFormat("./src/test/researchData/lyricsdata/mxm_dataset_train.txt");
+    }
+    */
+
+    /*
+    @Test
+    public void lastFMTest() throws Modulo7NoSuchFileOrDirectoryException, IOException {
+        LastFMDataSet dataSet = new LastFMDataSet("./src/test/researchData/lastfm_subset");
+
     }
     */
 }

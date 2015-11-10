@@ -8,7 +8,7 @@ import java.util.Map;
  *
  * Encoding for the music match dataset
  */
-public class MusicMatchDataElement {
+public class BagOfWordsDataElement {
 
     // The track ID
     private String trackID;
@@ -23,7 +23,7 @@ public class MusicMatchDataElement {
      * Construct music match data element from the test or train file
      * @param dataElem
      */
-    public MusicMatchDataElement(final String dataElem) {
+    public BagOfWordsDataElement(final String dataElem) {
         String[] elements = dataElem.split(",");
         trackID = elements[0];
         mxmTrackID = elements[1];

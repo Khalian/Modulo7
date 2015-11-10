@@ -16,7 +16,7 @@ import java.util.Map;
 public class LyricsBagOfWordsFormat {
 
     // The ground truth dataset
-    private MusicMatchDataSet groundTruthDataSet;
+    private BagOfWordsDataSet groundTruthDataSet;
 
     /**
      * Basic constructor for lyrics
@@ -25,7 +25,7 @@ public class LyricsBagOfWordsFormat {
      * @throws IOException
      */
     public LyricsBagOfWordsFormat(final String groundTruthFile) throws IOException {
-        groundTruthDataSet = new MusicMatchDataSet(groundTruthFile);
+        groundTruthDataSet = new BagOfWordsDataSet(groundTruthFile);
     }
 
     /**

@@ -1,5 +1,6 @@
 package com.modulo7.crawler.utils;
 
+import org.apache.log4j.Logger;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -29,18 +30,25 @@ public class GoogleImageGetQuery {
         imageURLs = new HashSet<>();
     }
 
-    public void executeImageSearch(String query) {
+    // Private logger for Google Image get query
+    private static final Logger logger = Logger.getLogger(GoogleImageGetQuery.class);
+
+    /**
+     * Search for images for a given query
+     * @param query
+     */
+    public void executeImageSearch(final String query) {
         try {
             // Convert query to lowercase
-            query = query.toLowerCase();
+            String actualQuery = query.toLowerCase();
 
-            query = query.replaceAll("\\s", "+");
+            actualQuery = actualQuery.replaceAll("\\s", "+");
 
             for (int iter = 0; iter < 100; iter++) {
                 final String GOOGLE_IMAGE_SEARCH =
                         "https://ajax.googleapis.com/ajax/services/search/images?v=1.0&rsz=8&start="+ iter * 8 + "&q=";
 
-                URL url = new URL(GOOGLE_IMAGE_SEARCH + query);
+                URL url = new URL(GOOGLE_IMAGE_SEARCH + actualQuery);
                 URLConnection connection = url.openConnection();
 
                 String line;
@@ -62,12 +70,11 @@ public class GoogleImageGetQuery {
                         }
                     }
                 } catch (JSONException e) {
-                    // In case of bad json parsing, dont crash
-                    continue;
+                    logger.error(e.getMessage());
                 }
             }
         } catch (IOException e) {
-           // In case of IO errors dont crash(TODO : Log this), just pass along
+            logger.error(e.getMessage());
         }
     }
 

@@ -17,7 +17,8 @@ import org.apache.log4j.Logger;
  *
  * A similarity measure using natural song contour on arbitrary voice similarity measures
  */
-public class SongContourSimilarity<T extends AbstractVoiceSimilarity, V extends AbstractContour> implements AbstractSongSimilarity {
+public class SongContourSimilarity<T extends AbstractVoiceSimilarity, V extends AbstractContour>
+        implements AbstractSongSimilarity {
 
     // Logger for natural song contour similarity measure
     private static Logger logger = Logger.getLogger(SongContourSimilarity.class);
@@ -43,8 +44,8 @@ public class SongContourSimilarity<T extends AbstractVoiceSimilarity, V extends 
         ContourSongRep<V> songRep = new ContourSongRep<>(internalContourRep);
 
         try {
-            Song firstContourRepSong = songRep.getContourizedSongRep(first);
-            Song secondContourRepSong = songRep.getContourizedSongRep(second);
+            final Song firstContourRepSong = songRep.getContourizedSongRep(first);
+            final Song secondContourRepSong = songRep.getContourizedSongRep(second);
 
             GenericMaximalVoiceSimilarity<T> similarity = new GenericMaximalVoiceSimilarity<T>(internalVoiceSimilarity);
             return similarity.getSimilarity(firstContourRepSong, secondContourRepSong);

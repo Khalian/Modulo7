@@ -10,13 +10,13 @@ import java.util.*;
  *
  * The entire music match dataset
  */
-public class MusicMatchDataSet {
+public class BagOfWordsDataSet {
 
     // List of top words
     private List<String> topWords = new ArrayList<>();
 
     // Ground truth, all the music match data set elements
-    private Set<MusicMatchDataElement> groundTruth = new HashSet<>();
+    private Set<BagOfWordsDataElement> groundTruth = new HashSet<>();
 
     // Total word count seen till now in the music match data set
     private Map<String, Integer> totalWordCount = new HashMap<>();
@@ -30,12 +30,13 @@ public class MusicMatchDataSet {
      * @param groundTruthFile
      * @throws IOException
      */
-    public MusicMatchDataSet(final String groundTruthFile) throws IOException {
+    public BagOfWordsDataSet(final String groundTruthFile) throws IOException {
         File file = new File(groundTruthFile);
         BufferedReader br = new BufferedReader(new FileReader(file));
 
         String line;
         while ((line = br.readLine()) != null) {
+
             // # is a comment in the music match file format
             if (!line.startsWith("#")) {
                 if (line.startsWith("%")) {
@@ -43,7 +44,7 @@ public class MusicMatchDataSet {
                     final String[] words = line.split(",");
                     Collections.addAll(topWords, words);
                 } else {
-                    groundTruth.add(new MusicMatchDataElement(line));
+                    groundTruth.add(new BagOfWordsDataElement(line));
                 }
             }
         }
@@ -57,7 +58,7 @@ public class MusicMatchDataSet {
      */
     private void estimateExpectedWordCount() {
 
-        int numUniqueWords = topWords.size();
+        final int numUniqueWords = topWords.size();
 
         for (Map.Entry<String, Integer> totalCountEntry : totalWordCount.entrySet()) {
             final String word = totalCountEntry.getKey();
@@ -70,7 +71,7 @@ public class MusicMatchDataSet {
      * Build up the total word count for the ground truth database
      */
     private void estimateTotalWordCount() {
-        for (final MusicMatchDataElement dataSet : groundTruth) {
+        for (final BagOfWordsDataElement dataSet : groundTruth) {
             Map<Integer, Integer> entryWordCount = dataSet.getTopWordsCount();
 
             for (Map.Entry<Integer, Integer> entry : entryWordCount.entrySet()) {
