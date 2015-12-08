@@ -40,6 +40,7 @@ public class MXLReader implements AbstractAnalyzer {
     // Whether inference of key signature is forced or not
     private boolean forceKeySigInfer = false;
 
+    // Whether the key signature is in the music xml file
     private boolean keySignatureInMusicXMLFile = false;
 
     /**
@@ -143,6 +144,10 @@ public class MXLReader implements AbstractAnalyzer {
         return inferredKeySignature;
     }
 
+    /**
+     * Gets if the key signature is in the music xml file
+     * @return
+     */
     public boolean isKeySignatureInMusicXMLFile() {
         return keySignatureInMusicXMLFile;
     }

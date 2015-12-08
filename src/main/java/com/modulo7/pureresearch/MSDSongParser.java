@@ -23,6 +23,9 @@ public class MSDSongParser implements AbstractAnalyzer {
     // The hdf5 file that is taken as an input from the MSD Dataset
     private H5File hdf5File;
 
+    // The track ID of the track
+    private String trackId;
+
     /**
      * Basic song parser object constructor
      * @param filename
@@ -34,7 +37,7 @@ public class MSDSongParser implements AbstractAnalyzer {
     // Key signature parsed from the msd data
     private KeySignature keySignature = null;
 
-    // Logger for MSDSongparser
+    // Logger for MSD Song parser
     private static final Logger logger = Logger.getLogger(MSDSongParser.class);
 
     @Override
@@ -43,6 +46,7 @@ public class MSDSongParser implements AbstractAnalyzer {
             final String titleTrack = HDF5_GETTERS.get_title(hdf5File);
             final String artistName = HDF5_GETTERS.get_artist_name(hdf5File);
             final double duration = HDF5_GETTERS.get_duration(hdf5File);
+            this.trackId = HDF5_GETTERS.get_track_id(hdf5File);
 
             final double[] segementsStart = HDF5_GETTERS.get_segments_start(hdf5File);
             final double[] segmentsPitches = HDF5_GETTERS.get_segments_pitches(hdf5File);
@@ -68,5 +72,13 @@ public class MSDSongParser implements AbstractAnalyzer {
         }
 
         return null;
+    }
+
+    /**
+     * Getter for track ID
+     * @return
+     */
+    public String getTrackId() {
+        return trackId;
     }
 }

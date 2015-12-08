@@ -12,6 +12,7 @@ import com.modulo7.common.utils.AvroUtils;
 import com.modulo7.image.AudiverisSheetAnalyzer;
 import com.modulo7.musicstatmodels.representation.polyphonic.Song;
 import com.modulo7.othersources.BasicMusicXMLParser;
+import com.modulo7.pureresearch.MSDSongParser;
 import org.apache.log4j.Logger;
 
 import javax.sound.midi.InvalidMidiDataException;
@@ -96,6 +97,10 @@ public class DatabaseThreadHelper implements Runnable {
         } else if (songLocation.endsWith("m7")) {
             // Build an in memory database from an already serialized one, fastest way to deal with pre constructed database
             song = AvroUtils.deserialize(songLocation);
+            addToSongLocationMap(songLocation, song);
+        } else if (songLocation.endsWith("h5")) {
+            AbstractAnalyzer analyzer = new MSDSongParser(songLocation);
+            song = analyzer.getSongRepresentation();
             addToSongLocationMap(songLocation, song);
         }
 

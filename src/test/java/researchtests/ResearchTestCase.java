@@ -2,9 +2,11 @@ package researchtests;
 
 import com.modulo7.common.exceptions.Modulo7InvalidMusicXMLFile;
 import com.modulo7.common.exceptions.Modulo7NoSuchFileOrDirectoryException;
+import com.modulo7.common.interfaces.AbstractAnalyzer;
 import com.modulo7.common.utils.Modulo7Utils;
 import com.modulo7.musicstatmodels.representation.metadata.KeySignature;
 import com.modulo7.musicstatmodels.representation.polyphonic.Song;
+import com.modulo7.pureresearch.MSDSongParser;
 import com.modulo7.pureresearch.MXLReader;
 import com.modulo7.pureresearch.lastfm.LastFMDataSet;
 import com.modulo7.pureresearch.musicmatch.LyricsBagOfWordsFormat;
@@ -123,6 +125,28 @@ public class ResearchTestCase {
     public void lastFMTest() throws Modulo7NoSuchFileOrDirectoryException, IOException {
         LastFMDataSet dataSet = new LastFMDataSet("./src/test/researchData/lastfm_subset");
 
+    }
+    */
+
+    /**
+     * Load parts of the million song data set
+     */
+    /*
+    @Test
+    public void msdLoadAndBuildSubsetTest() throws Modulo7NoSuchFileOrDirectoryException {
+
+        final String msdDir = "./src/test/researchData/MillionSongSubset";
+        Set<String> allLocations = Modulo7Utils.listAllFiles(msdDir);
+
+        final Map<String, Song> idSongMap = new HashMap<>();
+
+        for (final String location : allLocations) {
+            MSDSongParser analyzer = new MSDSongParser(location);
+            final Song song = analyzer.getSongRepresentation();
+            idSongMap.put(analyzer.getTrackId(), song);
+        }
+
+        final LastFMDataSet dataSet = new LastFMDataSet("./src/test/researchData/lastfm_subset");
     }
     */
 }

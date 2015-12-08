@@ -40,14 +40,15 @@ import java.util.Vector;
 
 
 /**
- * Class containing static methods to open a HDF5 song file and access its content.
+ * Class containing static methods to open a HDF5 song file and access its content from the MSD
+ * data set
  */
 public class HDF5_GETTERS {
 
     /**
      * Opens an existing HDF5 file with read only access.
      */
-    public static H5File hdf5_open_readonly(String filename) {
+    public static H5File hdf5_open_readonly(final String filename) {
         return new H5File(filename, H5File.READ);
     }
 

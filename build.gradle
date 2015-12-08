@@ -111,7 +111,6 @@ binaries.withType(NativeLibrarySpec) {
 
 // Java specific build configurations
 
-sourceCompatibility = 1.8
 version = '1.0'
 jar {
     manifest {
@@ -132,6 +131,9 @@ jar {
 }
 
 test {
+
+    //
+    classpath = project.sourceSets.test.runtimeClasspath
 
     // Setup the audiveris jar location in gradle build
     environment 'AUDIVERIS_JAR_LOCATION', '/usr/bin/audiveris/AudiverisApp/dist'
