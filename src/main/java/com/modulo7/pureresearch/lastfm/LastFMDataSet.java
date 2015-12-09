@@ -11,6 +11,7 @@ import org.json.JSONObject;
 
 import java.io.*;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 
@@ -85,14 +86,30 @@ public class LastFMDataSet {
     /**
      * Sync the lyrics objects (bag of words format) given the last fm and music match data set
      */
-    public void syncLyrics(final LyricsBagOfWordsFormat bagOfWordsLyrics) {
+    public void syncLyrics(final LyricsBagOfWordsFormat bagOfWordsLyrics) throws IOException {
+
+        final Set<SongBagLyricsAndMetadata> lyricsMappedTagEntries = new HashSet<>();
+
+        int count = 0;
+
         for (Map.Entry<String, SongBagLyricsAndMetadata> entry : songSimilaritySet.entrySet()) {
             final String trackId = entry.getKey();
             final BagOfWordsDataElement element = bagOfWordsLyrics.getBagOfWords(trackId);
             if (element != null) {
-                final SongBagLyricsAndMetadata similaritySet = entry.getValue();
-                similaritySet.addBagOfWords(element);
+                final SongBagLyricsAndMetadata songBagLyrics = entry.getValue();
+                songBagLyrics.addBagOfWords(element);
+                lyricsMappedTagEntries.add(songBagLyrics);
+                count++;
             }
         }
+
+        FileOutputStream fos = new FileOutputStream("./src/test/researchData/lyricsEXPT.ser");
+        ObjectOutputStream oos = new ObjectOutputStream(fos);
+        oos.writeObject(lyricsMappedTagEntries);
+        oos.close();
+        fos.close();
+        System.out.printf("Serialized tag mapped data hashmap.ser");
+
+        System.out.println(count);
     }
 }

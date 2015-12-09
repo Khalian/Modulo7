@@ -2,6 +2,7 @@ package com.modulo7.pureresearch.lastfm;
 
 import com.modulo7.pureresearch.musicmatch.BagOfWordsDataElement;
 
+import java.io.Serializable;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
@@ -12,7 +13,7 @@ import java.util.Set;
  *
  * Song similarity set for an individual entry
  */
-public class SongBagLyricsAndMetadata {
+public class SongBagLyricsAndMetadata implements Serializable {
 
     // The set of the songs (IDs and similarity values together)
     private Set<SongSimilarityElement> similarSet = new HashSet<>();

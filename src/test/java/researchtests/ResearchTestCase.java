@@ -10,11 +10,15 @@ import com.modulo7.nlp.lyrics.Lyrics;
 import com.modulo7.pureresearch.MSDSongParser;
 import com.modulo7.pureresearch.MXLReader;
 import com.modulo7.pureresearch.lastfm.LastFMDataSet;
+import com.modulo7.pureresearch.lastfm.SongBagLyricsAndMetadata;
 import com.modulo7.pureresearch.musicmatch.LyricsBagOfWordsFormat;
 import org.apache.log4j.Logger;
 import org.junit.Test;
 
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.io.ObjectInputStream;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
@@ -151,6 +155,7 @@ public class ResearchTestCase {
     }
     */
 
+    /*
     @Test
     public void lastFMTagPredictorForLyrics() throws IOException {
         LyricsBagOfWordsFormat formatLoad = new LyricsBagOfWordsFormat("./src/test/researchData/lyricsdata/mxm_dataset_train.txt");
@@ -159,4 +164,21 @@ public class ResearchTestCase {
         Lyrics newLyrics = new Lyrics();
         newLyrics.addLyricsElementToSong("I am blah");
     }
+    */
+
+    /**
+     * Gets the last fm tag and lyrics map already serialized
+     * @throws IOException
+     * @throws ClassNotFoundException
+     */
+    /*
+    @Test
+    public void getlastFMTagsLyricsMap() throws IOException, ClassNotFoundException {
+        FileInputStream fis = new FileInputStream("./src/test/researchData/lyricsEXPT.ser");
+        ObjectInputStream ois = new ObjectInputStream(fis);
+        final Set<SongBagLyricsAndMetadata> lyricsMappedTagEntries = (HashSet<SongBagLyricsAndMetadata>) ois.readObject();
+        ois.close();
+        fis.close();
+    }
+    */
 }

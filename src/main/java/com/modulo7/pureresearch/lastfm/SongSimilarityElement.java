@@ -1,11 +1,13 @@
 package com.modulo7.pureresearch.lastfm;
 
+import java.io.Serializable;
+
 /**
  * Created by asanyal on 11/9/15.
  *
  * An element of song similarity
  */
-public class SongSimilarityElement {
+public class SongSimilarityElement implements Serializable {
 
     // Similarity value
     private double similarityValue;

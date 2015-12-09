@@ -1,5 +1,6 @@
 package com.modulo7.pureresearch.musicmatch;
 
+import java.io.Serializable;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -8,7 +9,7 @@ import java.util.Map;
  *
  * Encoding for the music match dataset
  */
-public class BagOfWordsDataElement {
+public class BagOfWordsDataElement implements Serializable {
 
     // The track ID
     private String trackID;
