@@ -74,4 +74,13 @@ public class LyricsBagOfWordsFormat {
         final String lyricalContentSecond = second.getLyricsOfSong();
         return (double) distance.getDistance(lyricalContentFirst, lyricalContentSecond);
     }
+
+    /**
+     * Gets the bag of words for a MSD track ID
+     * @param trackID
+     * @return
+     */
+    public BagOfWordsDataElement getBagOfWords(final String trackID) {
+        return groundTruthDataSet.getBagOfWords(trackID);
+    }
 }

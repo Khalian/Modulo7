@@ -23,6 +23,7 @@ def show_lyrics(s):
     print url
     f = urllib.urlopen(url)
     js = f.read()
+    print js
     f.close()
     dict = json.loads(js)
 

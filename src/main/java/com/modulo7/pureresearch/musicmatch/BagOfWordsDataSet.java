@@ -15,8 +15,8 @@ public class BagOfWordsDataSet {
     // List of top words
     private List<String> topWords = new ArrayList<>();
 
-    // Ground truth, all the music match data set elements
-    private Set<BagOfWordsDataElement> groundTruth = new HashSet<>();
+    // Ground truth, all the music match data set elements, hashed against the
+    private Map<String, BagOfWordsDataElement> groundTruth = new HashMap<>();
 
     // Total word count seen till now in the music match data set
     private Map<String, Integer> totalWordCount = new HashMap<>();
@@ -44,7 +44,8 @@ public class BagOfWordsDataSet {
                     final String[] words = line.split(",");
                     Collections.addAll(topWords, words);
                 } else {
-                    groundTruth.add(new BagOfWordsDataElement(line));
+                    BagOfWordsDataElement element = new BagOfWordsDataElement(line);
+                    groundTruth.put(element.getTrackID(), element);
                 }
             }
         }
@@ -71,7 +72,7 @@ public class BagOfWordsDataSet {
      * Build up the total word count for the ground truth database
      */
     private void estimateTotalWordCount() {
-        for (final BagOfWordsDataElement dataSet : groundTruth) {
+        for (final BagOfWordsDataElement dataSet : groundTruth.values()) {
             Map<Integer, Integer> entryWordCount = dataSet.getTopWordsCount();
 
             for (Map.Entry<Integer, Integer> entry : entryWordCount.entrySet()) {
@@ -97,5 +98,14 @@ public class BagOfWordsDataSet {
         } else {
             return 0;
         }
+    }
+
+    /**
+     * Gets the bag of words ground truth
+     * @param trackID
+     * @return
+     */
+    public BagOfWordsDataElement getBagOfWords(final String trackID) {
+        return groundTruth.get(trackID);
     }
 }

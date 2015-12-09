@@ -6,6 +6,7 @@ import com.modulo7.common.interfaces.AbstractAnalyzer;
 import com.modulo7.common.utils.Modulo7Utils;
 import com.modulo7.musicstatmodels.representation.metadata.KeySignature;
 import com.modulo7.musicstatmodels.representation.polyphonic.Song;
+import com.modulo7.nlp.lyrics.Lyrics;
 import com.modulo7.pureresearch.MSDSongParser;
 import com.modulo7.pureresearch.MXLReader;
 import com.modulo7.pureresearch.lastfm.LastFMDataSet;
@@ -149,4 +150,13 @@ public class ResearchTestCase {
         final LastFMDataSet dataSet = new LastFMDataSet("./src/test/researchData/lastfm_subset");
     }
     */
+
+    @Test
+    public void lastFMTagPredictorForLyrics() throws IOException {
+        LyricsBagOfWordsFormat formatLoad = new LyricsBagOfWordsFormat("./src/test/researchData/lyricsdata/mxm_dataset_train.txt");
+        final LastFMDataSet dataSet = new LastFMDataSet("./src/test/researchData/lastfm_subset");
+        dataSet.syncLyrics(formatLoad);
+        Lyrics newLyrics = new Lyrics();
+        newLyrics.addLyricsElementToSong("I am blah");
+    }
 }
