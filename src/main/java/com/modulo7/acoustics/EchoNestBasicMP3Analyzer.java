@@ -4,8 +4,7 @@ import com.echonest.api.v4.*;
 import com.modulo7.common.exceptions.*;
 import com.modulo7.common.interfaces.AbstractAnalyzer;
 import com.modulo7.common.utils.Modulo7Utils;
-import com.modulo7.crawler.utils.CrawlerHelper;
-import com.modulo7.crawler.utils.MusicSources;
+import com.modulo7.common.utils.MusicSources;
 import com.modulo7.musicstatmodels.representation.metadata.TimeSignature;
 import com.modulo7.musicstatmodels.representation.polyphonic.Song;
 import com.modulo7.musicstatmodels.representation.metadata.KeySignature;
@@ -45,6 +44,9 @@ public class EchoNestBasicMP3Analyzer implements AbstractAnalyzer {
     // Key signature extracted from the mp3 file
     private KeySignature keySignature = null;
 
+    // Hard code API key TODO: Externalize it
+    private static final String ECHO_NEST_API_KEY = "K54MGT0TONSDQDKXE";
+
     /**
      * Constructor of the basic MP3 metadata analyzer
      *
@@ -52,7 +54,7 @@ public class EchoNestBasicMP3Analyzer implements AbstractAnalyzer {
      */
     public EchoNestBasicMP3Analyzer(final String filePath) throws EchoNestException, Modulo7NoSuchFileOrDirectoryException {
 
-        en = new EchoNestAPI(CrawlerHelper.ECHO_NEST_API_KEY);
+        en = new EchoNestAPI(ECHO_NEST_API_KEY);
 
         mp3File = new File(filePath);
 

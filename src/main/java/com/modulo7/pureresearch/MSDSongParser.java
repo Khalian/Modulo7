@@ -2,7 +2,7 @@ package com.modulo7.pureresearch;
 
 import com.modulo7.acoustics.ChromaAnalysis;
 import com.modulo7.common.interfaces.AbstractAnalyzer;
-import com.modulo7.crawler.utils.MusicSources;
+import com.modulo7.common.utils.MusicSources;
 import com.modulo7.musicstatmodels.representation.metadata.KeySignature;
 import com.modulo7.musicstatmodels.representation.metadata.SongMetadata;
 import com.modulo7.musicstatmodels.representation.monophonic.Voice;

@@ -4,7 +4,7 @@ import com.modulo7.common.exceptions.Modulo7InvalidMusicXMLFile;
 import com.modulo7.common.interfaces.AbstractAnalyzer;
 import com.modulo7.common.utils.JarRunner;
 import com.modulo7.common.utils.Modulo7Utils;
-import com.modulo7.crawler.utils.MusicSources;
+import com.modulo7.common.utils.MusicSources;
 import com.modulo7.musicstatmodels.representation.polyphonic.Song;
 import com.modulo7.othersources.BasicMusicXMLParser;
 import org.apache.commons.io.FileUtils;
@@ -14,8 +14,6 @@ import org.apache.log4j.Logger;
 import java.io.File;
 import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
-import java.util.LinkedList;
-import java.util.Queue;
 
 /**
  * Created by asanyal on 9/1/15.

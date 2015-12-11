@@ -11,7 +11,7 @@ import com.modulo7.common.exceptions.*;
 import com.modulo7.common.interfaces.AbstractAnalyzer;
 import com.modulo7.common.utils.Modulo7Globals;
 import com.modulo7.common.utils.Modulo7Utils;
-import com.modulo7.crawler.utils.MusicSources;
+import com.modulo7.common.utils.MusicSources;
 import com.modulo7.musicstatmodels.musictheorymodels.CircleOfFifths;
 import com.modulo7.musicstatmodels.musictheorymodels.KKTonalityProfiles;
 import com.modulo7.musicstatmodels.representation.buildingblocks.Note;

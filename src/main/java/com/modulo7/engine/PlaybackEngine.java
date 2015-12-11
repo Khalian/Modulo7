@@ -1,7 +1,7 @@
 package com.modulo7.engine;
 
 import com.modulo7.common.exceptions.Modulo7DataBaseNotSerializedException;
-import com.modulo7.crawler.utils.MusicSources;
+import com.modulo7.common.utils.MusicSources;
 import com.modulo7.musicstatmodels.representation.polyphonic.Song;
 import com.modulo7.playback.*;
 

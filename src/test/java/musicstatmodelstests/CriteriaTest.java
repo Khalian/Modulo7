@@ -3,7 +3,7 @@ package musicstatmodelstests;
 import com.modulo7.common.exceptions.Modulo7BadKeyException;
 import com.modulo7.common.exceptions.Modulo7BadNoteException;
 import com.modulo7.common.exceptions.Modulo7InvalidVoiceInstantSizeException;
-import com.modulo7.crawler.utils.MusicSources;
+import com.modulo7.common.utils.MusicSources;
 import com.modulo7.common.interfaces.AbstractCriteria;
 import com.modulo7.musicstatmodels.criteria.KeySignatureEqualityCriteria;
 import com.modulo7.musicstatmodels.criteria.PolyphonyCriteria;

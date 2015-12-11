@@ -2,7 +2,7 @@ package com.modulo7.musicstatmodels.similarity.voicesimilarity;
 
 import com.modulo7.common.interfaces.AbstractSongSimilarity;
 import com.modulo7.common.interfaces.AbstractVoiceSimilarity;
-import com.modulo7.crawler.utils.MusicSources;
+import com.modulo7.common.utils.MusicSources;
 import com.modulo7.musicstatmodels.representation.monophonic.Voice;
 import com.modulo7.musicstatmodels.representation.polyphonic.Song;
 import com.modulo7.musicstatmodels.similarity.songsimilarity.TonalHistogramSimilarity;

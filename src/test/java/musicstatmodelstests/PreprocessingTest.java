@@ -1,7 +1,7 @@
 package musicstatmodelstests;
 
 import com.modulo7.common.exceptions.*;
-import com.modulo7.crawler.utils.MusicSources;
+import com.modulo7.common.utils.MusicSources;
 import com.modulo7.musicstatmodels.preprocessing.TonalityAlignment;
 import com.modulo7.musicstatmodels.preprocessing.VoiceToMelodyConversion;
 import com.modulo7.musicstatmodels.representation.buildingblocks.Note;

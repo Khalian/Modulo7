@@ -1,4 +1,4 @@
-package com.modulo7.crawler.utils;
+package com.modulo7.common.utils;
 
 import org.apache.commons.compress.compressors.FileNameUtil;
 import org.apache.commons.io.FilenameUtils;

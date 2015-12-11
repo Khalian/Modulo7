@@ -8,7 +8,7 @@ import com.modulo7.common.interfaces.AbstractAnalyzer;
 import com.modulo7.common.utils.AvroUtils;
 import com.modulo7.common.utils.Modulo7Globals;
 import com.modulo7.common.utils.Modulo7Utils;
-import com.modulo7.crawler.utils.MusicSources;
+import com.modulo7.common.utils.MusicSources;
 import com.modulo7.image.AudiverisSheetAnalyzer;
 import com.modulo7.musicstatmodels.representation.polyphonic.Song;
 import com.modulo7.nlp.lyrics.Lyrics;
