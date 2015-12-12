@@ -16,10 +16,20 @@ public class PlaybackEngine {
     // A handle to the database engine, fast lookup on source and location of song
     private DatabaseEngine engine;
 
+    /**
+     * Constructor for the playback engine
+     * @param engine
+     */
     public PlaybackEngine(final DatabaseEngine engine) {
         this.engine = engine;
     }
 
+    /**
+     * Play a given song
+     *
+     * @param location
+     * @throws Modulo7DataBaseNotSerializedException
+     */
     public void playSong(final String location) throws Modulo7DataBaseNotSerializedException {
 
         final Song song = engine.getSongGivenLocation(location);

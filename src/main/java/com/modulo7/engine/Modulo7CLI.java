@@ -37,6 +37,7 @@ import static com.modulo7.engine.Modulo7CLIChoice.*;
  * complete_metadata - In the event metadata is not present in music sources, whether modulo7 should guess it?
  * verbose - Should the output be verbose, when indexing and computing
  * num_threads - This argument would allow for an optional number of threads to spawn for java
+ * playback - This argument would allow playback of query and
  *
  * This class supports all that modulo7 has to offer including an example standard query set and a custom query engine
  */
@@ -60,6 +61,9 @@ public class Modulo7CLI {
     // Is the output during processing verbose or not
     private static final String VERBOSE_OUTPUT = "verbose";
 
+    // Should Modulo7 invoke a playback for the similarity or query results
+    private static final String DO_PLAYBACK = "playback";
+
     // A description string for music sources dir option
     private static final String MUSIC_SOURCE_DIR_DESC = "The source files root directory to index files from";
 
@@ -79,6 +83,9 @@ public class Modulo7CLI {
 
     // A description of the verbose output tags
     private static final String VERBOSE_OUTPUT_DESC = "Whether the output is verbose or not";
+
+    // Should Modulo7 invoke a playback for the similarity or query results
+    private static final String DO_PLAYBACK_DESC = "Should Modulo7 invoke a playback for the similarity or query results";
 
     // CLI spacing to separate discrete regions in descriptions
     private static final String CLI_SPACING = " : ";
@@ -100,6 +107,9 @@ public class Modulo7CLI {
 
     // Is caching enabled
     private static boolean isCachingEnabled;
+
+    // Is the modulo7 CLI mode in playback mode
+    private static boolean isPlayBackEnabled;
 
     /**
      * Entry point to the Modulo7 CLI engine
@@ -127,6 +137,11 @@ public class Modulo7CLI {
         final String indexDir = commandLine.getOptionValue(INDEX_DIR);
         final boolean persistOnDisk = commandLine.hasOption(PERSIST_ON_DISK);
         isCachingEnabled = commandLine.hasOption(IS_CACHING_ENABLED);
+        isPlayBackEnabled = commandLine.hasOption(DO_PLAYBACK);
+
+        if (isPlayBackEnabled) {
+            playBackEngine = new PlaybackEngine(indexer.engine);
+        }
 
         if (isCachingEnabled) {
             cache = new Modulo7Cache();
@@ -180,7 +195,7 @@ public class Modulo7CLI {
                 // Input a choice at this point
                 System.out.print("Please Input choice:");
                 Integer testNum = in.nextInt();
-                exectuteChoice(Modulo7CLIChoice.parseChoice(testNum), in);
+                executeChoice(Modulo7CLIChoice.parseChoice(testNum), in);
             } catch (Modulo7BaseException e) {
                 System.out.println(e.getMessage());
                 if (e instanceof Modulo7NoSuchSongSimilarityMeasureException) {
@@ -211,7 +226,7 @@ public class Modulo7CLI {
      * @throws Modulo7DataBaseNotSerializedException
      * @throws com.modulo7.common.exceptions.Modulo7NoSuchSongSimilarityMeasureException
      */
-    private static void exectuteChoice(final Modulo7CLIChoice testNum, final Scanner in) throws Modulo7BadKeyException,
+    private static void executeChoice(final Modulo7CLIChoice testNum, final Scanner in) throws Modulo7BadKeyException,
             Modulo7MalformedM7SQLQuery, Modulo7QueryProcessingException, Modulo7DataBaseNotSerializedException,
             Modulo7NoSuchSongSimilarityMeasureException, InvalidMidiDataException, Modulo7InvalidFileOperationException,
             EchoNestException, Modulo7IndexingDirError, Modulo7ParseException, Modulo7NoSuchFileOrDirectoryException,
@@ -352,6 +367,8 @@ public class Modulo7CLI {
                     VERBOSE_OUTPUT_DESC);
             m7Options.addOption(IS_CACHING_ENABLED, false,
                     IS_CACHING_ENABLED_DESC);
+            m7Options.addOption(DO_PLAYBACK, false,
+                    DO_PLAYBACK_DESC);
 
             CommandLineParser parser = new DefaultParser();
 
@@ -378,6 +395,7 @@ public class Modulo7CLI {
         System.out.println(IS_METADATA_FIX_NEEDED + CLI_SPACING + IS_METADATA_FIX_NEEDED_DESC);
         System.out.println(VERBOSE_OUTPUT + CLI_SPACING + VERBOSE_OUTPUT_DESC);
         System.out.println(IS_CACHING_ENABLED + CLI_SPACING + IS_CACHING_ENABLED_DESC);
+        System.out.println(DO_PLAYBACK + CLI_SPACING + DO_PLAYBACK_DESC);
         System.out.println("");
     }
 

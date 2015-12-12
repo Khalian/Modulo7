@@ -171,7 +171,6 @@ public class ResearchTestCase {
      * @throws IOException
      * @throws ClassNotFoundException
      */
-    /*
     @Test
     public void getlastFMTagsLyricsMap() throws IOException, ClassNotFoundException {
         FileInputStream fis = new FileInputStream("./src/test/researchData/lyricsEXPT.ser");
@@ -180,5 +179,4 @@ public class ResearchTestCase {
         ois.close();
         fis.close();
     }
-    */
 }

@@ -102,4 +102,13 @@ public class SongBagLyricsAndMetadata implements Serializable {
     public BagOfWordsDataElement getBagOfWords() {
         return bagOfWords;
     }
+
+    /**
+     * Method to return all tags
+     * @return
+     */
+    public Map<String, Integer> getTags() {
+        return tags;
+    }
+
 }
