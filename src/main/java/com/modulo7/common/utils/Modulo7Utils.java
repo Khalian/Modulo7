@@ -10,6 +10,7 @@ import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.filefilter.TrueFileFilter;
 
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.HashSet;
 import java.util.List;
@@ -276,4 +277,19 @@ public class Modulo7Utils {
         return total;
     }
 
+    /**
+     * Gets the length of a particular file in bytes
+     *
+     * @param fileName
+     * @return
+     * @throws FileNotFoundException
+     */
+    public static long getFileSize(final String fileName) throws FileNotFoundException {
+        final File file = new File(fileName);
+        if (file.exists()) {
+           return file.length();
+        } else {
+            throw new FileNotFoundException("File" + fileName + "not found");
+        }
+    }
 }

@@ -94,6 +94,7 @@ public class Lyrics implements Serializable {
 
             //Read File Line By Line and parse the lyrics
             while ((lyricsLine = br.readLine()) != null) {
+
                 //lyricsInSingleLine += lyricsLine + PHRASETERM;
                 lyricsInSingleLine.append(lyricsLine);
                 lyricsInSingleLine.append(PHRASETERM);

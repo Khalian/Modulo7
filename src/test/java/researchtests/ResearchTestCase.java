@@ -2,27 +2,18 @@ package researchtests;
 
 import com.modulo7.common.exceptions.Modulo7InvalidMusicXMLFile;
 import com.modulo7.common.exceptions.Modulo7NoSuchFileOrDirectoryException;
-import com.modulo7.common.interfaces.AbstractAnalyzer;
+import com.modulo7.common.utils.AvroUtils;
+import com.modulo7.common.utils.Modulo7Globals;
 import com.modulo7.common.utils.Modulo7Utils;
-import com.modulo7.musicstatmodels.representation.metadata.KeySignature;
 import com.modulo7.musicstatmodels.representation.polyphonic.Song;
-import com.modulo7.nlp.lyrics.Lyrics;
-import com.modulo7.pureresearch.MSDSongParser;
 import com.modulo7.pureresearch.MXLReader;
-import com.modulo7.pureresearch.lastfm.LastFMDataSet;
 import com.modulo7.pureresearch.lastfm.SongBagLyricsAndMetadata;
-import com.modulo7.pureresearch.musicmatch.LyricsBagOfWordsFormat;
+import org.apache.commons.io.FilenameUtils;
 import org.apache.log4j.Logger;
 import org.junit.Test;
 
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.IOException;
-import java.io.ObjectInputStream;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Map;
-import java.util.Set;
+import java.io.*;
+import java.util.*;
 
 /**
  * Created by asanyal on 9/14/15.
@@ -33,8 +24,6 @@ import java.util.Set;
  *
  */
 public class ResearchTestCase {
-
-    private static final Logger logger = Logger.getLogger(ResearchTestCase.class);
 
     /*
     @Test
@@ -167,10 +156,53 @@ public class ResearchTestCase {
     */
 
     /**
+     * Wikifonia serialization test, producing a scatter plot of data set
+     *
+     * @throws Modulo7NoSuchFileOrDirectoryException
+     * @throws Modulo7InvalidMusicXMLFile
+     */
+    /*
+    @Test
+    public void wikifoniaSerializationTest() throws Modulo7NoSuchFileOrDirectoryException, Modulo7InvalidMusicXMLFile, FileNotFoundException, UnsupportedEncodingException {
+        Set<String> wikifoniaFiles = Modulo7Utils.listAllFiles("./src/test/researchData/Wikifonia");
+        final Map<Long, Long> lenToSerializedLen = new HashMap<>();
+        for (final String fileLoc : wikifoniaFiles) {
+            final MXLReader reader = new MXLReader(fileLoc, false);
+            final Song songRep = reader.getSongRepresentation();
+            final String fileNameWithoutPath = FilenameUtils.getBaseName(fileLoc);
+            final String serializeLocation = "./src/test/researchData/WikifoniaSerialized/" + fileNameWithoutPath + Modulo7Globals.EXTENSION_TO_SERIALIZED_FILES;
+            AvroUtils.serialize(serializeLocation, songRep);
+
+            File fileSer = new File(serializeLocation);
+            File fileNormal = new File(fileLoc);
+
+            long len = fileNormal.length();
+            long serlen = fileSer.length();
+            lenToSerializedLen.put(len, serlen);
+        }
+
+        final List<Long> lenList = new ArrayList<>(lenToSerializedLen.keySet());
+        Collections.sort(lenList);
+
+        PrintWriter writer = new PrintWriter("./src/test/researchData/NormalVsDeser.csv");
+
+        writer.println("MXL File Size, M7 File Size");
+
+        for (final Long longLen : lenList) {
+            writer.println(longLen + "," + lenToSerializedLen.get(longLen));
+        }
+
+        writer.flush();
+        writer.close();
+    }
+    */
+
+    /**
      * Gets the last fm tag and lyrics map already serialized
      * @throws IOException
      * @throws ClassNotFoundException
      */
+    /*
     @Test
     public void getlastFMTagsLyricsMap() throws IOException, ClassNotFoundException {
         FileInputStream fis = new FileInputStream("./src/test/researchData/lyricsEXPT.ser");
@@ -179,4 +211,5 @@ public class ResearchTestCase {
         ois.close();
         fis.close();
     }
+    */
 }
