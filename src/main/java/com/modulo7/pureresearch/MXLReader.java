@@ -103,16 +103,6 @@ public class MXLReader implements AbstractAnalyzer {
     }
 
     /**
-     * Test case
-     * @param args
-     */
-    public static void main(String args[]) throws Modulo7InvalidMusicXMLFile {
-        AbstractAnalyzer analyzer = new MXLReader("/home/asanyal/Downloads/Wikifonia/Nat Adderly - Teaneck.mxl", false);
-        Song song = analyzer.getSongRepresentation();
-        System.out.println(song.getNumVoices());
-    }
-
-    /**
      * Is the key signature inferred
      * @return
      */

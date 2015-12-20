@@ -6,8 +6,15 @@ import com.modulo7.common.utils.AvroUtils;
 import com.modulo7.common.utils.Modulo7Globals;
 import com.modulo7.common.utils.Modulo7Utils;
 import com.modulo7.musicstatmodels.representation.polyphonic.Song;
+import com.modulo7.nlp.lyrics.Lyrics;
 import com.modulo7.pureresearch.MXLReader;
+import com.modulo7.pureresearch.lastfm.LastFMDataSet;
 import com.modulo7.pureresearch.lastfm.SongBagLyricsAndMetadata;
+import com.modulo7.pureresearch.lastfm.SongBagLyricsComparator;
+import com.modulo7.pureresearch.metadataestimation.NaiveTagEstimation;
+import com.modulo7.pureresearch.metadataestimation.TagEstimation;
+import com.modulo7.pureresearch.musicmatch.BagOfWordsDataElement;
+import com.modulo7.pureresearch.musicmatch.LyricsBagOfWordsFormat;
 import org.apache.commons.io.FilenameUtils;
 import org.apache.log4j.Logger;
 import org.junit.Test;
@@ -150,10 +157,9 @@ public class ResearchTestCase {
         LyricsBagOfWordsFormat formatLoad = new LyricsBagOfWordsFormat("./src/test/researchData/lyricsdata/mxm_dataset_train.txt");
         final LastFMDataSet dataSet = new LastFMDataSet("./src/test/researchData/lastfm_subset");
         dataSet.syncLyrics(formatLoad);
-        Lyrics newLyrics = new Lyrics();
-        newLyrics.addLyricsElementToSong("I am blah");
     }
     */
+
 
     /**
      * Wikifonia serialization test, producing a scatter plot of data set
@@ -202,14 +208,31 @@ public class ResearchTestCase {
      * @throws IOException
      * @throws ClassNotFoundException
      */
-    /*
     @Test
     public void getlastFMTagsLyricsMap() throws IOException, ClassNotFoundException {
         FileInputStream fis = new FileInputStream("./src/test/researchData/lyricsEXPT.ser");
         ObjectInputStream ois = new ObjectInputStream(fis);
         final Set<SongBagLyricsAndMetadata> lyricsMappedTagEntries = (HashSet<SongBagLyricsAndMetadata>) ois.readObject();
+        final List<SongBagLyricsAndMetadata> lyricsMetaBagList = new ArrayList<>(lyricsMappedTagEntries);
+        Collections.sort(lyricsMetaBagList, new SongBagLyricsComparator());
+
+        int totalSize = lyricsMetaBagList.size();
+        int testSize = totalSize / 10;
+
+        final Set<SongBagLyricsAndMetadata> testSet = new HashSet<>();
+        final Set<SongBagLyricsAndMetadata> trainSet = new HashSet<>();
+
+        for (int i = 0; i < testSize; i++) {
+            testSet.add(lyricsMetaBagList.get(i));
+        }
+
+        for (int i = testSize + 1; i < totalSize; i++) {
+            trainSet.add(lyricsMetaBagList.get(i));
+        }
+
+        TagEstimation estimation = new NaiveTagEstimation(testSet, trainSet)
+
         ois.close();
         fis.close();
     }
-    */
 }

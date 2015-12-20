@@ -1,6 +1,8 @@
 package com.modulo7.pureresearch.metadataestimation;
 
 import com.modulo7.pureresearch.lastfm.SongBagLyricsAndMetadata;
+import com.modulo7.pureresearch.metadataestimation.bagofwordslyricssim.*;
+import com.modulo7.pureresearch.musicmatch.BagOfWordsDataElement;
 
 import java.io.FileInputStream;
 import java.io.IOException;
@@ -24,6 +26,10 @@ public abstract class TagEstimation {
 
     // The test set split of the tag estimation algorithm
     protected Set<SongBagLyricsAndMetadata> testSet;
+
+    // Choice of bag of words similarity
+    protected static final BOWSimilarityChoices SIM_CHOICE = BOWSimilarityChoices.COSINE_SIMILARITY;
+
 
     /**
      * Default deserialization constructor for lyrics map to tags
@@ -51,6 +57,16 @@ public abstract class TagEstimation {
     }
 
     /**
+     * Naive tag estimator
+     * @param testSet
+     * @param trainSet
+     */
+    public TagEstimation(final Set<SongBagLyricsAndMetadata> testSet, final Set<SongBagLyricsAndMetadata> trainSet) {
+        this.testSet = testSet;
+        this.trainSet = trainSet;
+    }
+
+    /**
      * Gets the estimated tags for a given
      * @return
      */
@@ -62,5 +78,23 @@ public abstract class TagEstimation {
      * @param second
      * @return
      */
-    public abstract double isSim(final Map<String, Integer> first, final Map<String, Integer> second);
+    protected double simVal(final Map<String, Integer> first, final Map<String, Integer> second, final BOWSimilarityChoices similarityChoice) {
+
+        final BOWSimilarity similarity;
+
+        if (similarityChoice.equals(BOWSimilarityChoices.COSINE_SIMILARITY)) {
+            similarity = new CosineSimilarity(first, second);
+        }  else if (similarityChoice.equals(BOWSimilarityChoices.DICE_SIMILARITY)) {
+            similarity = new DiceSimilarity(first, second);
+        } else if (similarityChoice.equals(BOWSimilarityChoices.JACARD_SIMILARITY)) {
+            similarity = new JacardSimilarity(first, second);
+        } else if (similarityChoice.equals(BOWSimilarityChoices.OVERLAP_SIMILARITY)) {
+            similarity = new OverLapSimilarity(first, second);
+        } else {
+            // Defaults to cosine similarity
+            similarity = new CosineSimilarity(first, second);
+        }
+
+        return similarity.getSimVal();
+    }
 }

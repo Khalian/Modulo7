@@ -1,6 +1,7 @@
 package com.modulo7.pureresearch.metadataestimation;
 
 import com.modulo7.pureresearch.lastfm.SongBagLyricsAndMetadata;
+import com.modulo7.pureresearch.metadataestimation.bagofwordslyricssim.BOWSimilarityChoices;
 import com.modulo7.pureresearch.musicmatch.BagOfWordsDataElement;
 
 import java.io.IOException;
@@ -25,6 +26,15 @@ public class NaiveTagEstimation extends TagEstimation {
         super(lyricsTagMapSerialized);
     }
 
+    /**
+     * Constructor with the test and train sets already defined
+     * @param testSet
+     * @param trainSet
+     */
+    public NaiveTagEstimation(final Set<SongBagLyricsAndMetadata> testSet, final Set<SongBagLyricsAndMetadata> trainSet) {
+        super(testSet, trainSet);
+    }
+
     @Override
     public Map<SongBagLyricsAndMetadata, Map<String, Integer>> getEstimatedTags() {
 
@@ -38,7 +48,7 @@ public class NaiveTagEstimation extends TagEstimation {
             final Map<String, Integer> unionTagSet = new HashMap<>();
             for (final SongBagLyricsAndMetadata trainElem : trainSet) {
                 final Map<String, Integer> trainTags = trainElem.getTags();
-                if (isSim(tags, trainTags) == 1.0) {
+                if (simVal(tags, trainTags, SIM_CHOICE) == 1.0) {
                     unionOfTags.addAll(trainTags.keySet());
                 }
             }
@@ -51,16 +61,5 @@ public class NaiveTagEstimation extends TagEstimation {
         }
 
         return estimatedTags;
-    }
-
-    /**
-     * Checks if two bag of words are similar based on a particular similarity measure
-     * @param first
-     * @param second
-     * @return
-     */
-    @Override
-    public double isSim(Map<String, Integer> first, Map<String, Integer> second) {
-        return 0;
     }
 }

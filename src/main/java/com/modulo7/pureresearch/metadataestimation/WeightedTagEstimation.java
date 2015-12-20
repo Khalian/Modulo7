@@ -36,7 +36,7 @@ public class WeightedTagEstimation extends TagEstimation {
 
             for (final SongBagLyricsAndMetadata trainElem : trainSet) {
                 final Map<String, Integer> trainTags = trainElem.getTags();
-                final double simVal = isSim(tags, trainTags);
+                final double simVal = simVal(tags, trainTags, SIM_CHOICE);
                 weightedTagSet.put(simVal, trainTags);
             }
 
@@ -57,10 +57,5 @@ public class WeightedTagEstimation extends TagEstimation {
         }
 
         return estimatedTags;
-    }
-
-    @Override
-    public double isSim(final Map<String, Integer> first, final Map<String, Integer> second) {
-        return 0;
     }
 }

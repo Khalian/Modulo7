@@ -2,6 +2,7 @@ package com.modulo7.pureresearch.metadataestimation.bagofwordslyricssim;
 
 import org.apache.lucene.search.similarities.BM25Similarity;
 
+import java.util.Map;
 import java.util.Set;
 
 /**
@@ -11,7 +12,7 @@ import java.util.Set;
  */
 public class Modulo7BM25Similarity extends BOWSimilarity {
 
-   public Modulo7BM25Similarity(final Set<String> bog1, final Set<String> bog2) {
+   public Modulo7BM25Similarity(final Map<String, Integer> bog1, final Map<String, Integer> bog2) {
        super(bog1, bog2);
        similarity = new BM25Similarity();
    }

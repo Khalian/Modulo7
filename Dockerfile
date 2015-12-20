@@ -14,7 +14,8 @@ RUN add-apt-repository -y "deb http://archive.ubuntu.com/ubuntu precise universe
     add-apt-repository -y "deb http://archive.ubuntu.com/ubuntu precise-backports main restricted universe multiverse"
 
 Update and upgrade the repositories once
-RUN apt-get update && apt-get -y upgrade
+RUN apt-get -y update
+RUN apt-get -y upgrade
 
 # Install the dependencies of opencv
 RUN apt-get -y remove ffmpeg x264 libx264-dev

@@ -34,9 +34,8 @@ public class MaxFrequencyTagEstimation extends TagEstimation {
             final Map<String, Integer> tagFrequency = new HashMap<>();
             for (final SongBagLyricsAndMetadata trainElem : trainSet) {
                 final Map<String, Integer> trainTags = trainElem.getTags();
-                if (isSim(tags, trainTags) == 1.0) {
+                if (simVal(tags, trainTags, SIM_CHOICE) == 1.0) {
                     for (Map.Entry<String, Integer> tagEntry : trainTags.entrySet()) {
-                        //Modulo7Utils.addToCount(tagEntry.getKey(), trainTags, tagEntry.getValue());
                         Modulo7Utils.addToCount(tagEntry.getKey(), trainTags, 1);
                     }
                 }
@@ -46,10 +45,5 @@ public class MaxFrequencyTagEstimation extends TagEstimation {
         }
 
         return estimatedTags;
-    }
-
-    @Override
-    public double isSim(Map<String, Integer> first, Map<String, Integer> second) {
-            return 0;
     }
 }
