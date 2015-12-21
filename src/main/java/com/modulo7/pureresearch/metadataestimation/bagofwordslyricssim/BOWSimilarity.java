@@ -4,7 +4,9 @@ import org.apache.commons.math.linear.ArrayRealVector;
 import org.apache.commons.math.linear.RealVector;
 import org.apache.lucene.search.similarities.Similarity;
 
+import java.util.HashSet;
 import java.util.Map;
+import java.util.Set;
 
 /**
  * Created by asanyal on 12/12/15.
@@ -30,8 +32,14 @@ public  abstract class BOWSimilarity {
      * @param bog2
      */
     public BOWSimilarity(final Map<String, Integer> bog1, final Map<String, Integer> bog2) {
-        v1 = toRealVector(bog1);
-        v2 = toRealVector(bog2);
+
+        Set<String> terms = new HashSet<>(bog1.keySet());
+        Set<String> otherTerms = new HashSet<>(bog2.keySet());
+
+        terms.addAll(otherTerms);
+
+        v1 = toRealVector(bog1, terms);
+        v2 = toRealVector(bog2, terms);
     }
 
     /**
@@ -43,15 +51,18 @@ public  abstract class BOWSimilarity {
 
     /**
      * Gets the real vector representation of a set of terms
+     *
+     * @param terms
      * @param map
      * @return
      */
-    private RealVector toRealVector(final Map<String, Integer> map) {
-        RealVector vector = new ArrayRealVector(map.keySet().size());
+    private RealVector toRealVector(final Map<String, Integer> map, final Set<String> terms) {
+
+        RealVector vector = new ArrayRealVector(terms.size());
         int i = 0;
 
-        for (String term : map.keySet()) {
-            int value = map.get(term);
+        for (String term : terms) {
+            int value = map.containsKey(term) ? map.get(term) : 0;
             vector.setEntry(i++, value);
         }
 

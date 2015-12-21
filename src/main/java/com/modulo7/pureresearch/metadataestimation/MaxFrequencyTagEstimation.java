@@ -2,10 +2,12 @@ package com.modulo7.pureresearch.metadataestimation;
 
 import com.modulo7.common.utils.Modulo7Utils;
 import com.modulo7.pureresearch.lastfm.SongBagLyricsAndMetadata;
+import com.modulo7.pureresearch.musicmatch.BagOfWordsDataElement;
 
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Set;
 
 /**
  * Created by asanyal on 12/11/15.
@@ -22,6 +24,15 @@ public class MaxFrequencyTagEstimation extends TagEstimation {
         super(lyricsTagMapSerialized);
     }
 
+    /**
+     * Constructor with the test and train sets already defined
+     * @param testSet
+     * @param trainSet
+     */
+    public MaxFrequencyTagEstimation(final Set<SongBagLyricsAndMetadata> testSet, final Set<SongBagLyricsAndMetadata> trainSet) {
+        super(testSet, trainSet);
+    }
+
     @Override
     public Map<SongBagLyricsAndMetadata, Map<String, Integer>> getEstimatedTags() {
 
@@ -29,12 +40,14 @@ public class MaxFrequencyTagEstimation extends TagEstimation {
         final Map<SongBagLyricsAndMetadata, Map<String, Integer>> estimatedTags = new HashMap<>();
 
         for (final SongBagLyricsAndMetadata dataElem : testSet) {
-            final Map<String, Integer> tags = dataElem.getTags();
+            final BagOfWordsDataElement bogTest = dataElem.getBagOfWords();
 
             final Map<String, Integer> tagFrequency = new HashMap<>();
             for (final SongBagLyricsAndMetadata trainElem : trainSet) {
                 final Map<String, Integer> trainTags = trainElem.getTags();
-                if (simVal(tags, trainTags, SIM_CHOICE) == 1.0) {
+                final BagOfWordsDataElement bogTrain = trainElem.getBagOfWords();
+                double simVal = simVal(bogTest, bogTrain, SIM_CHOICE);
+                if (simVal >= THRESHHOLD) {
                     for (Map.Entry<String, Integer> tagEntry : trainTags.entrySet()) {
                         Modulo7Utils.addToCount(tagEntry.getKey(), trainTags, 1);
                     }

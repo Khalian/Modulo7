@@ -30,6 +30,8 @@ public abstract class TagEstimation {
     // Choice of bag of words similarity
     protected static final BOWSimilarityChoices SIM_CHOICE = BOWSimilarityChoices.COSINE_SIMILARITY;
 
+    // Thresh hold value for assessing similarities
+    protected static final double THRESHHOLD = 0.6;
 
     /**
      * Default deserialization constructor for lyrics map to tags
@@ -74,11 +76,14 @@ public abstract class TagEstimation {
 
     /**
      * A comparison between a couple of bag of words data elements
-     * @param first
-     * @param second
+     * @param firstLyrics
+     * @param secondLyrics
      * @return
      */
-    protected double simVal(final Map<String, Integer> first, final Map<String, Integer> second, final BOWSimilarityChoices similarityChoice) {
+    protected double simVal(final BagOfWordsDataElement firstLyrics, final BagOfWordsDataElement secondLyrics, final BOWSimilarityChoices similarityChoice) {
+
+        final Map<String, Integer> first = firstLyrics.getWordToCountsMap();
+        final Map<String, Integer> second = secondLyrics.getWordToCountsMap();
 
         final BOWSimilarity similarity;
 

@@ -3,7 +3,9 @@ package com.modulo7.pureresearch.metadataestimation;
 import com.modulo7.pureresearch.lastfm.SongBagLyricsAndMetadata;
 import com.modulo7.pureresearch.metadataestimation.bagofwordslyricssim.BOWSimilarityChoices;
 import com.modulo7.pureresearch.musicmatch.BagOfWordsDataElement;
+import org.apache.commons.collections.map.HashedMap;
 
+import javax.print.attribute.IntegerSyntax;
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -26,6 +28,7 @@ public class NaiveTagEstimation extends TagEstimation {
         super(lyricsTagMapSerialized);
     }
 
+
     /**
      * Constructor with the test and train sets already defined
      * @param testSet
@@ -42,22 +45,26 @@ public class NaiveTagEstimation extends TagEstimation {
         final Map<SongBagLyricsAndMetadata, Map<String, Integer>> estimatedTags = new HashMap<>();
 
         for (final SongBagLyricsAndMetadata dataElem : testSet) {
-            final Map<String, Integer> tags = dataElem.getTags();
+            final BagOfWordsDataElement testBOG = dataElem.getBagOfWords();
 
-            final Set<String> unionOfTags = new HashSet<>();
+            final Map<String, Integer> unionOfTags = new HashMap<>();
             final Map<String, Integer> unionTagSet = new HashMap<>();
+            final Map<Integer, String> reverseUnion = new HashMap<>();
             for (final SongBagLyricsAndMetadata trainElem : trainSet) {
-                final Map<String, Integer> trainTags = trainElem.getTags();
-                if (simVal(tags, trainTags, SIM_CHOICE) == 1.0) {
-                    unionOfTags.addAll(trainTags.keySet());
+                final BagOfWordsDataElement trainBOG = trainElem.getBagOfWords();
+                double simVal = simVal(testBOG, trainBOG, SIM_CHOICE);
+                if (simVal > THRESHHOLD) {
+                    final Map<String, Integer> trainTags = trainElem.getTags();
+                    final Map<Integer, String> currReverseUnion = new HashMap<>();
+                    for (Map.Entry<String, Integer> train : trainTags.entrySet()) {
+                        currReverseUnion.put(train.getValue(), train.getKey());
+                    }
+                    unionOfTags.putAll(unionTagSet);
+                    reverseUnion.putAll(currReverseUnion);
                 }
             }
 
-            for (final String tag : unionOfTags) {
-                unionTagSet.put(tag, 1);
-            }
-
-            estimatedTags.put(dataElem, unionTagSet);
+            estimatedTags.put(dataElem, unionOfTags);
         }
 
         return estimatedTags;

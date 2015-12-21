@@ -11,8 +11,10 @@ import com.modulo7.pureresearch.MXLReader;
 import com.modulo7.pureresearch.lastfm.LastFMDataSet;
 import com.modulo7.pureresearch.lastfm.SongBagLyricsAndMetadata;
 import com.modulo7.pureresearch.lastfm.SongBagLyricsComparator;
+import com.modulo7.pureresearch.metadataestimation.MaxFrequencyTagEstimation;
 import com.modulo7.pureresearch.metadataestimation.NaiveTagEstimation;
 import com.modulo7.pureresearch.metadataestimation.TagEstimation;
+import com.modulo7.pureresearch.metadataestimation.WeightedTagEstimation;
 import com.modulo7.pureresearch.musicmatch.BagOfWordsDataElement;
 import com.modulo7.pureresearch.musicmatch.LyricsBagOfWordsFormat;
 import org.apache.commons.io.FilenameUtils;
@@ -160,7 +162,6 @@ public class ResearchTestCase {
     }
     */
 
-
     /**
      * Wikifonia serialization test, producing a scatter plot of data set
      *
@@ -203,6 +204,7 @@ public class ResearchTestCase {
     }
     */
 
+
     /**
      * Gets the last fm tag and lyrics map already serialized
      * @throws IOException
@@ -230,9 +232,16 @@ public class ResearchTestCase {
             trainSet.add(lyricsMetaBagList.get(i));
         }
 
-        TagEstimation estimation = new NaiveTagEstimation(testSet, trainSet)
+        final TagEstimation estimation = new NaiveTagEstimation(testSet, trainSet);
+        final TagEstimation weightedTagEstimation = new WeightedTagEstimation(testSet, trainSet);
+        final TagEstimation maxFreqTagEstimation = new MaxFrequencyTagEstimation(testSet, trainSet);
+
+        Map<SongBagLyricsAndMetadata, Map<String, Integer>> naiveTags = estimation.getEstimatedTags();
+        Map<SongBagLyricsAndMetadata, Map<String, Integer>> weightedTags = weightedTagEstimation.getEstimatedTags();
+        Map<SongBagLyricsAndMetadata, Map<String, Integer>> maxFreqTags = maxFreqTagEstimation.getEstimatedTags();
 
         ois.close();
         fis.close();
     }
+
 }

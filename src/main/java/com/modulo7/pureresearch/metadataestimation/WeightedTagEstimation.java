@@ -1,6 +1,7 @@
 package com.modulo7.pureresearch.metadataestimation;
 
 import com.modulo7.pureresearch.lastfm.SongBagLyricsAndMetadata;
+import com.modulo7.pureresearch.musicmatch.BagOfWordsDataElement;
 
 import java.io.IOException;
 import java.util.*;
@@ -22,6 +23,15 @@ public class WeightedTagEstimation extends TagEstimation {
         super(lyricsTagMapSerialized);
     }
 
+    /**
+     * Naive tag estimator
+     * @param testSet
+     * @param trainSet
+     */
+    public WeightedTagEstimation(final Set<SongBagLyricsAndMetadata> testSet, final Set<SongBagLyricsAndMetadata> trainSet) {
+        super(testSet, trainSet);
+    }
+
     @Override
     public Map<SongBagLyricsAndMetadata, Map<String, Integer>> getEstimatedTags() {
 
@@ -31,12 +41,13 @@ public class WeightedTagEstimation extends TagEstimation {
         final Map<SongBagLyricsAndMetadata, Map<String, Integer>> estimatedTags = new HashMap<>();
 
         for (final SongBagLyricsAndMetadata dataElem : testSet) {
-            final Map<String, Integer> tags = dataElem.getTags();
+            final BagOfWordsDataElement bogTest = dataElem.getBagOfWords();
             final Map<Double, Map<String, Integer>> weightedTagSet = new HashMap<>();
 
             for (final SongBagLyricsAndMetadata trainElem : trainSet) {
+                final BagOfWordsDataElement bogTrain = trainElem.getBagOfWords();
                 final Map<String, Integer> trainTags = trainElem.getTags();
-                final double simVal = simVal(tags, trainTags, SIM_CHOICE);
+                final double simVal = simVal(bogTest, bogTrain, SIM_CHOICE);
                 weightedTagSet.put(simVal, trainTags);
             }
 
@@ -53,6 +64,8 @@ public class WeightedTagEstimation extends TagEstimation {
                 }
 
                 counter++;
+
+                estimatedTags.put(dataElem, weightedTagSet.get(val));
             }
         }
 

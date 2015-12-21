@@ -2,6 +2,7 @@ package com.modulo7.pureresearch.musicmatch;
 
 import java.io.Serializable;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -20,18 +21,27 @@ public class BagOfWordsDataElement implements Serializable {
     // Top words and their counts
     private Map<Integer, Integer> topWordsCount = new HashMap<>();
 
+    // Words to count map
+    private Map<String, Integer> wordToCountMap = new HashMap<>();
+
     /**
      * Construct music match data element from the test or train file
      * @param dataElem
+     * @param topWords
      */
-    public BagOfWordsDataElement(final String dataElem) {
+    public BagOfWordsDataElement(final String dataElem, final List<String> topWords) {
         String[] elements = dataElem.split(",");
         trackID = elements[0];
         mxmTrackID = elements[1];
         for (int i = 2; i < elements.length; i++) {
             String count = elements[i];
             String[] elementsOfCount = count.split(":");
-            topWordsCount.put(Integer.parseInt(elementsOfCount[0]), Integer.parseInt(elementsOfCount[1]));
+
+            final Integer index = Integer.parseInt(elementsOfCount[0]);
+            final Integer countOfWord = Integer.parseInt(elementsOfCount[1]);
+
+            topWordsCount.put(index, countOfWord);
+            wordToCountMap.put(topWords.get(index - 1), countOfWord);
         }
     }
 
@@ -52,10 +62,10 @@ public class BagOfWordsDataElement implements Serializable {
     }
 
     /**
-     * Getter for the music match track ID
+     * Gets the word to counts map
      * @return
      */
-    public String getMxmTrackID() {
-        return mxmTrackID;
+    public Map<String, Integer> getWordToCountsMap() {
+        return wordToCountMap;
     }
 }

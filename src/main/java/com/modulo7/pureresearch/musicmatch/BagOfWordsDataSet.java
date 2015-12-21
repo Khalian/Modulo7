@@ -44,7 +44,7 @@ public class BagOfWordsDataSet {
                     final String[] words = line.split(",");
                     Collections.addAll(topWords, words);
                 } else {
-                    BagOfWordsDataElement element = new BagOfWordsDataElement(line);
+                    BagOfWordsDataElement element = new BagOfWordsDataElement(line, topWords);
                     groundTruth.put(element.getTrackID(), element);
                 }
             }
