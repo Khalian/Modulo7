@@ -2,23 +2,15 @@ package researchtests;
 
 import com.modulo7.common.exceptions.Modulo7InvalidMusicXMLFile;
 import com.modulo7.common.exceptions.Modulo7NoSuchFileOrDirectoryException;
-import com.modulo7.common.utils.AvroUtils;
-import com.modulo7.common.utils.Modulo7Globals;
-import com.modulo7.common.utils.Modulo7Utils;
-import com.modulo7.musicstatmodels.representation.polyphonic.Song;
-import com.modulo7.nlp.lyrics.Lyrics;
-import com.modulo7.pureresearch.MXLReader;
 import com.modulo7.pureresearch.lastfm.LastFMDataSet;
 import com.modulo7.pureresearch.lastfm.SongBagLyricsAndMetadata;
 import com.modulo7.pureresearch.lastfm.SongBagLyricsComparator;
-import com.modulo7.pureresearch.metadataestimation.MaxFrequencyTagEstimation;
-import com.modulo7.pureresearch.metadataestimation.NaiveTagEstimation;
-import com.modulo7.pureresearch.metadataestimation.TagEstimation;
-import com.modulo7.pureresearch.metadataestimation.WeightedTagEstimation;
-import com.modulo7.pureresearch.musicmatch.BagOfWordsDataElement;
+import com.modulo7.pureresearch.metadataestimation.TagTratumDatabase;
+import com.modulo7.pureresearch.metadataestimation.tagestimation.MaxFrequencyTagEstimation;
+import com.modulo7.pureresearch.metadataestimation.tagestimation.NaiveTagEstimation;
+import com.modulo7.pureresearch.metadataestimation.tagestimation.TagEstimation;
+import com.modulo7.pureresearch.metadataestimation.tagestimation.WeightedTagEstimation;
 import com.modulo7.pureresearch.musicmatch.LyricsBagOfWordsFormat;
-import org.apache.commons.io.FilenameUtils;
-import org.apache.log4j.Logger;
 import org.junit.Test;
 
 import java.io.*;
@@ -162,6 +154,14 @@ public class ResearchTestCase {
     }
     */
 
+    @Test
+    public void genrePredictorForLyrics() throws IOException {
+        LyricsBagOfWordsFormat formatLoad = new LyricsBagOfWordsFormat("./src/test/researchData/lyricsdata/mxm_dataset_train.txt");
+        final TagTratumDatabase genreLabels = new TagTratumDatabase("./src/test/researchData/genretags/msd_tagtraum_cd1.tag");
+        genreLabels.syncLyrics(formatLoad);
+    }
+
+
     /**
      * Wikifonia serialization test, producing a scatter plot of data set
      *
@@ -210,6 +210,7 @@ public class ResearchTestCase {
      * @throws IOException
      * @throws ClassNotFoundException
      */
+    /*
     @Test
     public void getlastFMTagsLyricsMap() throws IOException, ClassNotFoundException {
         FileInputStream fis = new FileInputStream("./src/test/researchData/lyricsEXPT.ser");
@@ -240,8 +241,11 @@ public class ResearchTestCase {
         Map<SongBagLyricsAndMetadata, Map<String, Integer>> weightedTags = weightedTagEstimation.getEstimatedTags();
         Map<SongBagLyricsAndMetadata, Map<String, Integer>> maxFreqTags = maxFreqTagEstimation.getEstimatedTags();
 
+        // Abandon track, not an efficient test case in the long term
+        double estimatedTagHits = estimateTagHits(naiveTags);
+
         ois.close();
         fis.close();
     }
-
+    */
 }

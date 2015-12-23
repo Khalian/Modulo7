@@ -1,14 +1,10 @@
-package com.modulo7.pureresearch.metadataestimation;
+package com.modulo7.pureresearch.metadataestimation.tagestimation;
 
 import com.modulo7.pureresearch.lastfm.SongBagLyricsAndMetadata;
-import com.modulo7.pureresearch.metadataestimation.bagofwordslyricssim.BOWSimilarityChoices;
 import com.modulo7.pureresearch.musicmatch.BagOfWordsDataElement;
-import org.apache.commons.collections.map.HashedMap;
 
-import javax.print.attribute.IntegerSyntax;
 import java.io.IOException;
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 
@@ -49,7 +45,11 @@ public class NaiveTagEstimation extends TagEstimation {
 
             final Map<String, Integer> unionOfTags = new HashMap<>();
             final Map<String, Integer> unionTagSet = new HashMap<>();
+
+            // A mapping from count to
             final Map<Integer, String> reverseUnion = new HashMap<>();
+
+
             for (final SongBagLyricsAndMetadata trainElem : trainSet) {
                 final BagOfWordsDataElement trainBOG = trainElem.getBagOfWords();
                 double simVal = simVal(testBOG, trainBOG, SIM_CHOICE);

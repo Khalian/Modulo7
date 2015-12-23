@@ -1,4 +1,4 @@
-package com.modulo7.pureresearch.metadataestimation;
+package com.modulo7.pureresearch.metadataestimation.tagestimation;
 
 import com.modulo7.pureresearch.lastfm.SongBagLyricsAndMetadata;
 import com.modulo7.pureresearch.musicmatch.BagOfWordsDataElement;

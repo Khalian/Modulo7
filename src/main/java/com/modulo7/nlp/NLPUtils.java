@@ -97,22 +97,6 @@ public class NLPUtils {
     }
 
     /**
-     * A sample test case for unit testing purposes for the english stemmer
-     *
-     * @throws ParseException
-     */
-    public static void test() throws ParseException {
-
-        String inputSetence = "Hello my name is Arunav Sanyal, I liked horse back riding since I was a child";
-        String[] inputSentenceList = inputSetence.split(" ");
-        List<String> stemmedSentence = NLPUtils.stemmer(inputSentenceList);
-
-        for (String word : stemmedSentence) {
-            System.out.print(word + " ");
-        }
-    }
-
-    /**
      * Unit addition of count to map
      *
      * @param map

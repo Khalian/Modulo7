@@ -21,6 +21,7 @@ import javax.sound.midi.InvalidMidiDataException;
 import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
 import java.util.*;
+import java.util.concurrent.SynchronousQueue;
 
 import static com.modulo7.engine.Modulo7CLIChoice.*;
 
@@ -408,11 +409,21 @@ public class Modulo7CLI {
     private static void printAllRelevantSongLocations(final Set<Song> allRelevantSongs)
             throws Modulo7DataBaseNotSerializedException {
         final Set<String> locations = indexer.getLocationsGivenRelevantSongs(allRelevantSongs);
+
+        if (isPlayBackEnabled) {
+            System.out.println("Modulo7 will playback the songs because playback mode is enabled");
+        }
+
         if (locations.size() == 0) {
             System.out.println("No songs are relevant to your query\n");
         } else {
             System.out.println("The locations of relevant songs are :");
-            locations.forEach(System.out::println);
+            for (final String location : locations) {
+                System.out.println(location);
+                if (isPlayBackEnabled) {
+                    playBackEngine.playSong(location);
+                }
+            }
         }
     }
 
