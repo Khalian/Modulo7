@@ -14,7 +14,10 @@ import java.util.*;
  */
 public class MaxFrequencyGenreEstimation extends GenreEstimation {
 
-    private static final int K_HYPER_PARAMETER = 3;
+    private static final int K_HYPER_PARAMETER = 2;
+
+    // The thresh hold that is allowed for max frequency estimator to work with
+    private double threshHold;
 
     /**
      * Tag estimator default constructor
@@ -22,8 +25,9 @@ public class MaxFrequencyGenreEstimation extends GenreEstimation {
      * @param testSet
      * @param trainSet
      */
-    public MaxFrequencyGenreEstimation(Set<SongBagLyricsGenreMap> testSet, Set<SongBagLyricsGenreMap> trainSet) {
+    public MaxFrequencyGenreEstimation(Set<SongBagLyricsGenreMap> testSet, Set<SongBagLyricsGenreMap> trainSet, final double threshHold) {
         super(testSet, trainSet);
+        this.threshHold = threshHold;
     }
 
     @Override
@@ -41,9 +45,10 @@ public class MaxFrequencyGenreEstimation extends GenreEstimation {
                 final BagOfWordsDataElement bogTrain = trainElem.getBagOfWords();
                 double simVal = TagEstimation.simVal(bogTest, bogTrain, SIM_CHOICE);
 
-                if (simVal >= THRESHHOLD) {
+                if (simVal >= threshHold) {
                     for (final String genreEntry : trainGenres) {
                         Modulo7Utils.addToCount(genreEntry, genreFrequency, 1);
+                        allSeenGenres.add(genreEntry);
                     }
                 }
             }

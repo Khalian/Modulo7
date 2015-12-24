@@ -40,8 +40,9 @@ public class NaiveGenreEstimation extends GenreEstimation {
                 final BagOfWordsDataElement trainBOG = trainElem.getBagOfWords();
                 double simVal = TagEstimation.simVal(testBOG, trainBOG, SIM_CHOICE);
                 if (simVal >= THRESHHOLD) {
-                    final Set<String> trainTags = trainElem.getLabels().getGenreList();
-                    unionOfGenres.addAll(trainTags);
+                    final Set<String> trainGenres = trainElem.getLabels().getGenreList();
+                    unionOfGenres.addAll(trainGenres);
+                    allSeenGenres.addAll(trainGenres);
                 }
             }
 

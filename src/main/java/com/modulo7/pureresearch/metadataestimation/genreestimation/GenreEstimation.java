@@ -3,6 +3,7 @@ package com.modulo7.pureresearch.metadataestimation.genreestimation;
 import com.modulo7.pureresearch.lastfm.SongBagLyricsGenreMap;
 import com.modulo7.pureresearch.metadataestimation.bagofwordslyricssim.BOWSimilarityChoices;
 
+import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 
@@ -23,6 +24,9 @@ public abstract class GenreEstimation {
 
     // The test set split of the tag estimation algorithm
     protected Set<SongBagLyricsGenreMap> testSet;
+
+    // All the seen genres
+    public Set<String> allSeenGenres = new HashSet<>();
 
     // Choice of bag of words similarity
     protected static final BOWSimilarityChoices SIM_CHOICE = BOWSimilarityChoices.COSINE_SIMILARITY;
@@ -46,4 +50,12 @@ public abstract class GenreEstimation {
      * @return
      */
     public abstract Map<SongBagLyricsGenreMap, Set<String>> getEstimatedGenres();
+
+    /**
+     * Gets all the seen genres
+     * @return
+     */
+    public Set<String> getAllSeenGenres() {
+        return allSeenGenres;
+    }
 }

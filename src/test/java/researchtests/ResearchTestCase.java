@@ -4,10 +4,12 @@ import com.modulo7.common.exceptions.Modulo7InvalidMusicXMLFile;
 import com.modulo7.common.exceptions.Modulo7NoSuchFileOrDirectoryException;
 import com.modulo7.pureresearch.lastfm.*;
 import com.modulo7.pureresearch.metadataestimation.PrecRec;
+import com.modulo7.pureresearch.metadataestimation.ROCDataPoint;
 import com.modulo7.pureresearch.metadataestimation.TagTratumDatabase;
 import com.modulo7.pureresearch.metadataestimation.genreestimation.GenreEstimation;
 import com.modulo7.pureresearch.metadataestimation.genreestimation.MaxFrequencyGenreEstimation;
 import com.modulo7.pureresearch.metadataestimation.genreestimation.NaiveGenreEstimation;
+import com.modulo7.pureresearch.metadataestimation.genreestimation.WeightedGenreEstimation;
 import com.modulo7.pureresearch.metadataestimation.tagestimation.MaxFrequencyTagEstimation;
 import com.modulo7.pureresearch.metadataestimation.tagestimation.NaiveTagEstimation;
 import com.modulo7.pureresearch.metadataestimation.tagestimation.TagEstimation;
@@ -210,7 +212,7 @@ public class ResearchTestCase {
 
     /**
      * Gets the last fm tag and lyrics map already serialized
-     * @throws IOException
+     * @throws java.io.IOException
      * @throws ClassNotFoundException
      */
     /*
@@ -252,6 +254,7 @@ public class ResearchTestCase {
     }
     */
 
+    /*
     @Test
     public void genreTagLyricsTest() throws IOException, ClassNotFoundException {
         FileInputStream fis = new FileInputStream("./src/test/researchData/lyricsGenreEXPT.ser");
@@ -280,14 +283,91 @@ public class ResearchTestCase {
         GenreEstimation estimation1 = new MaxFrequencyGenreEstimation(testSet, trainSet);
         Map<SongBagLyricsGenreMap, Set<String>> maxFreqEstimates = estimation1.getEstimatedGenres();
 
-        //final PrecRec naiveAverages = getAverageRecall(naiveGenreEstimates);
-        final PrecRec maxFreqAverages = getAverageRecall(maxFreqEstimates);
+        final PrecRec maxFreqAverages = getAveragePrecRec(maxFreqEstimates);
 
         System.out.println("Recall is " + maxFreqAverages.getRecall() +","+ "Precision is" + maxFreqAverages.getPrecision());
         System.out.print("Hala");
     }
+    */
 
-    private PrecRec getAverageRecall(final Map<SongBagLyricsGenreMap, Set<String>> genreEstimates) {
+    /*
+    @Test
+    public void weightedTagTest() throws IOException, ClassNotFoundException {
+        FileInputStream fis = new FileInputStream("./src/test/researchData/lyricsGenreEXPT.ser");
+        ObjectInputStream ois = new ObjectInputStream(fis);
+        final Set<SongBagLyricsGenreMap> lyricsMappedToGenreEntries = (HashSet<SongBagLyricsGenreMap>) ois.readObject();
+        final List<SongBagLyricsGenreMap> lyricsMetaBagList = new ArrayList<>(lyricsMappedToGenreEntries);
+        Collections.sort(lyricsMetaBagList, new SongBagLyricsGenreComparator());
+
+        double doubleTotalSize = lyricsMetaBagList.size() / 2.5;
+        int totalSize = (int) doubleTotalSize;
+        int testSize = totalSize / 100;
+        final Set<SongBagLyricsGenreMap> testSet = new HashSet<>();
+        final Set<SongBagLyricsGenreMap> trainSet = new HashSet<>();
+
+        for (int i = 0; i < testSize; i++) {
+            testSet.add(lyricsMetaBagList.get(i));
+        }
+
+        for (int i = testSize + 1; i < totalSize; i++) {
+            trainSet.add(lyricsMetaBagList.get(i));
+        }
+
+        PrintWriter writer = new PrintWriter("./src/test/researchData/precRec.csv");
+        writer.println("Precision, Recall");
+
+        for (int i = 0; i < 100; i++) {
+            GenreEstimation weightedGenreEstimation = new WeightedGenreEstimation(testSet, trainSet, i);
+            final Map<SongBagLyricsGenreMap, Set<String>> maxFreqEstimates = weightedGenreEstimation.getEstimatedGenres();
+            final PrecRec precRec = getAveragePrecRec(maxFreqEstimates);
+            writer.println(precRec.getPrecision() + ", " + precRec.getRecall());
+            writer.flush();
+        }
+
+        writer.close();
+    }
+    */
+
+    @Test
+    public void maxFrequencyTagTest() throws IOException, ClassNotFoundException {
+        FileInputStream fis = new FileInputStream("./src/test/researchData/lyricsGenreEXPT.ser");
+        ObjectInputStream ois = new ObjectInputStream(fis);
+        final Set<SongBagLyricsGenreMap> lyricsMappedToGenreEntries = (HashSet<SongBagLyricsGenreMap>) ois.readObject();
+        final List<SongBagLyricsGenreMap> lyricsMetaBagList = new ArrayList<>(lyricsMappedToGenreEntries);
+        Collections.sort(lyricsMetaBagList, new SongBagLyricsGenreComparator());
+
+        double doubleTotalSize = lyricsMetaBagList.size() / 2.5;
+        int totalSize = (int) doubleTotalSize;
+        int testSize = totalSize / 100;
+        final Set<SongBagLyricsGenreMap> testSet = new HashSet<>();
+        final Set<SongBagLyricsGenreMap> trainSet = new HashSet<>();
+
+        for (int i = 0; i < testSize; i++) {
+            testSet.add(lyricsMetaBagList.get(i));
+        }
+
+        for (int i = testSize + 1; i < totalSize; i++) {
+            trainSet.add(lyricsMetaBagList.get(i));
+        }
+
+        // PrintWriter writer = new PrintWriter("./src/test/researchData/maxfreqROC.csv");
+
+        for (int i = 0; i < 100; i++) {
+            double threshHold = (double) (i / 100);
+            GenreEstimation estimation = new MaxFrequencyGenreEstimation(testSet, trainSet,threshHold);
+            final Map<SongBagLyricsGenreMap, Set<String>> maxFreqEstimates = estimation.getEstimatedGenres();
+            Set<String> allSeenGenres = estimation.getAllSeenGenres();
+            final ROCDataPoint point = getROCDataPoint(maxFreqEstimates, allSeenGenres);
+            System.out.println(point.getFalsePositiveRate() )
+        }
+    }
+
+    /**
+     * Gets the average precision and recall values as appropriate
+     * @param genreEstimates
+     * @return
+     */
+    private PrecRec getAveragePrecRec(final Map<SongBagLyricsGenreMap, Set<String>> genreEstimates) {
 
         double recallSum = 0.0;
         double precisionSum = 0.0;
@@ -310,5 +390,36 @@ public class ResearchTestCase {
         precisionSum /= genreEstimates.size();
 
         return new PrecRec(precisionSum, recallSum);
+    }
+
+    /**
+     * Gets an ROC data point
+     * @param genreEstimates
+     * @param allSeenGenres
+     * @return
+     */
+    private ROCDataPoint getROCDataPoint(final Map<SongBagLyricsGenreMap, Set<String>> genreEstimates, final Set<String> allSeenGenres) {
+        double tpr = 0.0;
+        double tnr = 0.0;
+
+        for (Map.Entry<SongBagLyricsGenreMap, Set<String>> genreEstimate : genreEstimates.entrySet()) {
+            Set<String> predictedLabels = genreEstimate.getValue();
+            Set<String> actualLabels = genreEstimate.getKey().getLabels().getGenreList();
+
+            Set<String> intersection = new HashSet<>(predictedLabels);
+            intersection.retainAll(actualLabels);
+
+            tpr += (double) intersection.size() / actualLabels.size();
+
+            final Set<String> notRelevant = new HashSet<>(allSeenGenres);
+            notRelevant.removeAll(actualLabels);
+
+            Set<String> notRelevantRetrieved = new HashSet<>(notRelevant);
+            notRelevantRetrieved.retainAll(predictedLabels);
+
+            tnr += (1.0 - notRelevantRetrieved.size() / notRelevant.size());
+        }
+
+        return new ROCDataPoint(tpr / genreEstimates.size(), tnr / genreEstimates.size());
     }
 }
