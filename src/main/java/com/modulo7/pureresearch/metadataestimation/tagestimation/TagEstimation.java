@@ -59,7 +59,8 @@ public abstract class TagEstimation {
     }
 
     /**
-     * Naive tag estimator
+     * Tag estimator default constructor
+     *
      * @param testSet
      * @param trainSet
      */
@@ -80,7 +81,7 @@ public abstract class TagEstimation {
      * @param secondLyrics
      * @return
      */
-    protected double simVal(final BagOfWordsDataElement firstLyrics, final BagOfWordsDataElement secondLyrics, final BOWSimilarityChoices similarityChoice) {
+    public static double simVal(final BagOfWordsDataElement firstLyrics, final BagOfWordsDataElement secondLyrics, final BOWSimilarityChoices similarityChoice) {
 
         final Map<String, Integer> first = firstLyrics.getWordToCountsMap();
         final Map<String, Integer> second = secondLyrics.getWordToCountsMap();

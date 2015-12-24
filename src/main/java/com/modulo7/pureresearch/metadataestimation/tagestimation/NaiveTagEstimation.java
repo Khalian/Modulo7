@@ -44,23 +44,13 @@ public class NaiveTagEstimation extends TagEstimation {
             final BagOfWordsDataElement testBOG = dataElem.getBagOfWords();
 
             final Map<String, Integer> unionOfTags = new HashMap<>();
-            final Map<String, Integer> unionTagSet = new HashMap<>();
-
-            // A mapping from count to
-            final Map<Integer, String> reverseUnion = new HashMap<>();
-
 
             for (final SongBagLyricsAndMetadata trainElem : trainSet) {
                 final BagOfWordsDataElement trainBOG = trainElem.getBagOfWords();
                 double simVal = simVal(testBOG, trainBOG, SIM_CHOICE);
                 if (simVal > THRESHHOLD) {
                     final Map<String, Integer> trainTags = trainElem.getTags();
-                    final Map<Integer, String> currReverseUnion = new HashMap<>();
-                    for (Map.Entry<String, Integer> train : trainTags.entrySet()) {
-                        currReverseUnion.put(train.getValue(), train.getKey());
-                    }
-                    unionOfTags.putAll(unionTagSet);
-                    reverseUnion.putAll(currReverseUnion);
+                    unionOfTags.putAll(trainTags);
                 }
             }
 

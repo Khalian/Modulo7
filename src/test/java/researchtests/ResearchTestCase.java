@@ -2,10 +2,12 @@ package researchtests;
 
 import com.modulo7.common.exceptions.Modulo7InvalidMusicXMLFile;
 import com.modulo7.common.exceptions.Modulo7NoSuchFileOrDirectoryException;
-import com.modulo7.pureresearch.lastfm.LastFMDataSet;
-import com.modulo7.pureresearch.lastfm.SongBagLyricsAndMetadata;
-import com.modulo7.pureresearch.lastfm.SongBagLyricsComparator;
+import com.modulo7.pureresearch.lastfm.*;
+import com.modulo7.pureresearch.metadataestimation.PrecRec;
 import com.modulo7.pureresearch.metadataestimation.TagTratumDatabase;
+import com.modulo7.pureresearch.metadataestimation.genreestimation.GenreEstimation;
+import com.modulo7.pureresearch.metadataestimation.genreestimation.MaxFrequencyGenreEstimation;
+import com.modulo7.pureresearch.metadataestimation.genreestimation.NaiveGenreEstimation;
 import com.modulo7.pureresearch.metadataestimation.tagestimation.MaxFrequencyTagEstimation;
 import com.modulo7.pureresearch.metadataestimation.tagestimation.NaiveTagEstimation;
 import com.modulo7.pureresearch.metadataestimation.tagestimation.TagEstimation;
@@ -154,13 +156,14 @@ public class ResearchTestCase {
     }
     */
 
+    /*
     @Test
     public void genrePredictorForLyrics() throws IOException {
         LyricsBagOfWordsFormat formatLoad = new LyricsBagOfWordsFormat("./src/test/researchData/lyricsdata/mxm_dataset_train.txt");
         final TagTratumDatabase genreLabels = new TagTratumDatabase("./src/test/researchData/genretags/msd_tagtraum_cd1.tag");
         genreLabels.syncLyrics(formatLoad);
     }
-
+    */
 
     /**
      * Wikifonia serialization test, producing a scatter plot of data set
@@ -248,4 +251,64 @@ public class ResearchTestCase {
         fis.close();
     }
     */
+
+    @Test
+    public void genreTagLyricsTest() throws IOException, ClassNotFoundException {
+        FileInputStream fis = new FileInputStream("./src/test/researchData/lyricsGenreEXPT.ser");
+        ObjectInputStream ois = new ObjectInputStream(fis);
+        final Set<SongBagLyricsGenreMap> lyricsMappedToGenreEntries = (HashSet<SongBagLyricsGenreMap>) ois. readObject();
+        final List<SongBagLyricsGenreMap> lyricsMetaBagList = new ArrayList<>(lyricsMappedToGenreEntries);
+        Collections.sort(lyricsMetaBagList, new SongBagLyricsGenreComparator());
+
+        int totalSize = lyricsMetaBagList.size() / 5;
+        int testSize = totalSize / 100;
+
+        final Set<SongBagLyricsGenreMap> testSet = new HashSet<>();
+        final Set<SongBagLyricsGenreMap> trainSet = new HashSet<>();
+
+        for (int i = 0; i < testSize; i++) {
+            testSet.add(lyricsMetaBagList.get(i));
+        }
+
+        for (int i = testSize + 1; i < totalSize; i++) {
+            trainSet.add(lyricsMetaBagList.get(i));
+        }
+
+        // GenreEstimation estimation = new NaiveGenreEstimation(testSet, trainSet);
+        // Map<SongBagLyricsGenreMap, Set<String>> naiveGenreEstimates = estimation.getEstimatedGenres();
+
+        GenreEstimation estimation1 = new MaxFrequencyGenreEstimation(testSet, trainSet);
+        Map<SongBagLyricsGenreMap, Set<String>> maxFreqEstimates = estimation1.getEstimatedGenres();
+
+        //final PrecRec naiveAverages = getAverageRecall(naiveGenreEstimates);
+        final PrecRec maxFreqAverages = getAverageRecall(maxFreqEstimates);
+
+        System.out.println("Recall is " + maxFreqAverages.getRecall() +","+ "Precision is" + maxFreqAverages.getPrecision());
+        System.out.print("Hala");
+    }
+
+    private PrecRec getAverageRecall(final Map<SongBagLyricsGenreMap, Set<String>> genreEstimates) {
+
+        double recallSum = 0.0;
+        double precisionSum = 0.0;
+
+        for (Map.Entry<SongBagLyricsGenreMap, Set<String>> genreEstimate : genreEstimates.entrySet()) {
+            Set<String> predictedLabels = genreEstimate.getValue();
+            Set<String> actualLabels = genreEstimate.getKey().getLabels().getGenreList();
+
+            Set<String> intersection = new HashSet<>(predictedLabels);
+            intersection.retainAll(actualLabels);
+
+            if (predictedLabels.size() != 0) {
+                precisionSum += (double) intersection.size() / predictedLabels.size();
+            }
+
+            recallSum += (double) intersection.size() / actualLabels.size();
+        }
+
+        recallSum /= genreEstimates.size();
+        precisionSum /= genreEstimates.size();
+
+        return new PrecRec(precisionSum, recallSum);
+    }
 }

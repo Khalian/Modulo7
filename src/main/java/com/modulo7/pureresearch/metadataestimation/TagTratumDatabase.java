@@ -48,6 +48,12 @@ public class TagTratumDatabase implements Serializable {
         }
     }
 
+    /**
+     * Syncs lyrics with their genre definitions for identical msd track IDs
+     *
+     * @param bagOfWordsLyrics
+     * @throws IOException
+     */
     public void syncLyrics(final LyricsBagOfWordsFormat bagOfWordsLyrics) throws IOException {
         final Set<SongBagLyricsGenreMap> lyricsMappedToGenreEntries = new HashSet<>();
 

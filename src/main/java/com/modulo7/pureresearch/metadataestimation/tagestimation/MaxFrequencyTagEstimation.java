@@ -20,7 +20,7 @@ public class MaxFrequencyTagEstimation extends TagEstimation {
      *
      * @param lyricsTagMapSerialized
      */
-    public MaxFrequencyTagEstimation(String lyricsTagMapSerialized) throws IOException, ClassNotFoundException {
+    public MaxFrequencyTagEstimation(final String lyricsTagMapSerialized) throws IOException, ClassNotFoundException {
         super(lyricsTagMapSerialized);
     }
 
