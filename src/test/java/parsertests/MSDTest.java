@@ -18,10 +18,9 @@ public class MSDTest {
      */
     @Test
     public void msdSanityTest() {
-
         final String h5location = "./src/test/testdata/research/test.h5";
         AbstractAnalyzer analyzer = new MSDSongParser(h5location);
         final Song song = analyzer.getSongRepresentation();
         Assert.assertNotNull(song);
     }
-}
+}   

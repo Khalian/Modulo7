@@ -10,7 +10,6 @@ import com.modulo7.musicstatmodels.representation.monophonic.VoiceInstant;
 import org.apache.log4j.Logger;
 
 import java.util.HashSet;
-import java.util.stream.Collectors;
 
 /**
  * Created by asanyal on 9/9/15.
@@ -71,7 +70,11 @@ public class ChromaAnalysis {
             HashSet<Note> chordNotes;
             try {
                 chordNotes = ChordEstimator.estimateChordGivenQualityAndRootNote(estimator.getRootNote(), estimator.getQuality(), estimator.getIntervals());
-                chromaNotes.addAll(chordNotes.stream().collect(Collectors.toList()));
+                // chromaNotes.addAll(chordNotes.stream().collect(Collectors.toList()));
+
+                for (final Note note : chordNotes) {
+                    chromaNotes.add(note);
+                }
                 return new VoiceInstant(chromaNotes, duration, estimator.getQuality());
             } catch (Modulo7BadChordException e) {
                 logger.error(e.getMessage());

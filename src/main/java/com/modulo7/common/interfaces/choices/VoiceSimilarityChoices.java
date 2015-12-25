@@ -80,6 +80,10 @@ public enum VoiceSimilarityChoices {
      */
     public static void listAllSimilarityMeasures() {
         System.out.println("The available similarity measure choices are :");
-        VOICE_SIMILARITY_CHOICES.forEach(System.out::println);
+        // VOICE_SIMILARITY_CHOICES.forEach(System.out::println);
+
+        for (final String simChoice : VOICE_SIMILARITY_CHOICES) {
+            System.out.println(simChoice);
+        }
     }
 }

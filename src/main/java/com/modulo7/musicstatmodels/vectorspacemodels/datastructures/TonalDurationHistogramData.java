@@ -2,10 +2,7 @@ package com.modulo7.musicstatmodels.vectorspacemodels.datastructures;
 
 import com.modulo7.musicstatmodels.musictheorymodels.IntervalQuantity;
 
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 /**
  * Created by asanyal on 9/13/15.
@@ -52,7 +49,10 @@ public class TonalDurationHistogramData {
             array[index % 12] = value;
         }
 
-        return Arrays.asList(array);
+        List<Number> numbers = new ArrayList<>();
+        Collections.addAll(numbers, array);
+
+        return numbers;
     }
 
     /**

@@ -16,7 +16,6 @@ import java.util.List;
 import java.util.Set;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
-import java.util.stream.Collectors;
 
 /**
  * Created by asanyal on 9/21/15.
@@ -93,7 +92,14 @@ public class Modulo7QueryProcessingEngine {
         final Set<String> inputTypes = componentsOfQuery.getInputs();
 
         // Get only those songs that are asked as a part of the input types
-        requisiteSourceSongs.addAll(allSongs.stream().filter(song -> inputTypes.contains(song.getSource().getStringRepresentation())).collect(Collectors.toList()));
+        // requisiteSourceSongs.addAll(allSongs.stream().filter(song -> inputTypes.contains(song.getSource().getStringRepresentation())).collect(Collectors.toList()));
+
+        for (final Song song : allSongs) {
+            if (inputTypes.contains(song.getSource().getStringRepresentation())) {
+                requisiteSourceSongs.add(song);
+            }
+        }
+
 
         List<String> exprList = componentsOfQuery.getExprList();
         List<String> exprOprs = componentsOfQuery.getExprOprList();
@@ -170,7 +176,13 @@ public class Modulo7QueryProcessingEngine {
 
         try {
             AbstractCriteria criteriaObj = (AbstractCriteria) CriteriaChoice.getCriteriaClassGivenStringRep(criteria).newInstance();
-            relevantSet.addAll(candidateSet.stream().filter(song -> criteriaSatisfied(song, criteriaObj, assertion, predicate)).collect(Collectors.toList()));
+            // relevantSet.addAll(candidateSet.stream().filter(song -> criteriaSatisfied(song, criteriaObj, assertion, predicate)).collect(Collectors.toList()));
+
+            for (final Song song : candidateSet) {
+                if (criteriaSatisfied(song, criteriaObj, assertion, predicate)) {
+                    relevantSet.add(song);
+                }
+            }
 
             return relevantSet;
 

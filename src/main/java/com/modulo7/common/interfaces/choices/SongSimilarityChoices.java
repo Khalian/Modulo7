@@ -80,7 +80,10 @@ public enum SongSimilarityChoices {
      */
     public static void listAllSimilarityMeasures() {
         System.out.println("The available similarity measure choices are :");
-        SONG_SIMILARITY_CHOICES.forEach(System.out::println);
+        //SONG_SIMILARITY_CHOICES.forEach(System.out::println);
+        for (final String simChoice : SONG_SIMILARITY_CHOICES) {
+            System.out.println(simChoice);
+        }
     }
 
     /**

@@ -462,7 +462,11 @@ public class Modulo7CLI {
                     cache.cacheQueryResults(queryStr, new LinkedHashSet<>(relevantResults));
                 } else {
                     System.out.println("The locations of relevant songs are :");
-                    cachedSongResults.forEach(System.out::println);
+                    // cachedSongResults.forEach(System.out::println);
+
+                    for (final String cachedResult : cachedSongResults) {
+                        System.out.println(cachedResult);
+                    }
                 }
             }
             Set<Song> relevantSongs = processingEngine.processQuery();

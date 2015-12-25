@@ -50,7 +50,11 @@ public class MullensiefenContour implements AbstractContour {
                 }
             }
 
-        changingNoteIndices.forEach(naturalExtemumNotes::remove);
+        //changingNoteIndices.forEach(naturalExtemumNotes::remove);
+
+        for (final Integer changeNoteIndex : changingNoteIndices) {
+            naturalExtemumNotes.remove(changeNoteIndex);
+        }
 
         return naturalExtemumNotes;
     }

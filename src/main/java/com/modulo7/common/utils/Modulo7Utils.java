@@ -16,7 +16,6 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
-import java.util.stream.Collectors;
 
 /**
  * Created by asanyal on 7/20/2015.
@@ -103,7 +102,12 @@ public class Modulo7Utils {
             // Gets all the files including the ones in the subdirectory
             final List<File> files =
                     (List<File>) FileUtils.listFiles(dirFileHandle, TrueFileFilter.INSTANCE, TrueFileFilter.INSTANCE);
-            return files.stream().map(File::getAbsolutePath).collect(Collectors.toSet());
+            //return files.stream().map(File::getAbsolutePath).collect(Collectors.toSet());
+            Set<String> allFiles = new HashSet<>();
+            for (final File file : files) {
+                allFiles.add(file.getAbsolutePath());
+            }
+            return allFiles;
         } catch (IllegalArgumentException e) {
             throw new Modulo7NoSuchFileOrDirectoryException("No such directory" + directoryName);
         }

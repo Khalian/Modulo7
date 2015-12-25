@@ -48,7 +48,10 @@ public class TonalHistogramData {
             array[index] = value;
         }
 
-        return Arrays.asList(array);
+        List<Number> numbers = new ArrayList<>();
+        Collections.addAll(numbers, array);
+
+        return numbers;
     }
 
     /**

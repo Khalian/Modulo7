@@ -55,8 +55,8 @@ public class MaxFrequencyGenreEstimation extends GenreEstimation {
 
             List<Map.Entry<String, Integer>> vals = new ArrayList<>(genreFrequency.entrySet());
 
-            Collections.sort(vals, (o1, o2) -> (o1.getValue())
-                    .compareTo(o2.getValue()));
+            //Collections.sort(vals, (o1, o2) -> (o1.getValue())
+            //        .compareTo(o2.getValue()));
 
             Collections.reverse(vals);
 

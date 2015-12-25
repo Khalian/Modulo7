@@ -18,11 +18,13 @@ import org.apache.commons.io.FilenameUtils;
 
 import javax.sound.midi.InvalidMidiDataException;
 import java.io.File;
-import java.util.*;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Map;
+import java.util.Set;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.TimeUnit;
-import java.util.stream.Collectors;
 
 /**
  * Created by asanyal on 8/31/15.
@@ -101,7 +103,13 @@ public class DatabaseEngine {
         // Recursively descend and list all the files that
         Set<String> allSongLocations = Modulo7Utils.listAllFiles(sourceDirectory);
 
-        songLocations.addAll(allSongLocations.stream().filter(MusicSources::checkIfSupportedExtension).collect(Collectors.toList()));
+        //songLocations.addAll(allSongLocations.stream().filter(MusicSources::checkIfSupportedExtension).collect(Collectors.toList()));
+
+        for (final String location : allSongLocations) {
+            if (MusicSources.checkIfSupportedExtension(location)) {
+                songLocations.add(location);
+            }
+        }
 
         initDatabaseThreadPool(false);
     }
@@ -125,7 +133,13 @@ public class DatabaseEngine {
         // Recursively descend and list all the files that
         Set<String> allSongLocations = Modulo7Utils.listAllFiles(sourceDirectory);
 
-        songLocations.addAll(allSongLocations.stream().filter(MusicSources::checkIfSupportedExtension).collect(Collectors.toList()));
+        for (final String location : allSongLocations) {
+            if (MusicSources.checkIfSupportedExtension(location)) {
+                songLocations.add(location);
+            }
+        }
+
+        // songLocations.addAll(allSongLocations.stream().filter(MusicSources::checkIfSupportedExtension).collect(Collectors.toList()));
 
         initDatabaseThreadPool(verboseOutput);
     }

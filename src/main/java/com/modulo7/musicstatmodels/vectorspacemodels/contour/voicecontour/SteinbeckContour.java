@@ -64,7 +64,11 @@ public class SteinbeckContour implements AbstractContour {
             voiceInstantIndex++;
         }
 
-        changingNoteIndices.forEach(naturalExtemumNotes::remove);
+        for (final Integer changeNoteIndex : changingNoteIndices) {
+            naturalExtemumNotes.remove(changeNoteIndex);
+        }
+
+        // changingNoteIndices.forEach(naturalExtemumNotes::remove);
 
         return naturalExtemumNotes;
     }

@@ -3,7 +3,6 @@ package com.modulo7.othersources;
 import java.io.File;
 import java.io.IOException;
 import java.util.*;
-import java.util.stream.Collectors;
 
 import com.modulo7.common.interfaces.AbstractAnalyzer;
 import com.modulo7.common.exceptions.*;
@@ -25,6 +24,7 @@ import org.apache.log4j.Logger;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
+import org.jsoup.select.Elements;
 
 /**
  * Created by asanyal on 7/23/2015.
@@ -193,7 +193,8 @@ public class BasicMusicXMLParser implements AbstractAnalyzer {
 
             // Populate the note duals data structure
             if (noteDuals.get(voiceNumber) == null) {
-                noteDuals.put(voiceNumber, new ArrayList<>());
+                List<NoteAndIsChordDual> newList = new ArrayList<>();
+                noteDuals.put(voiceNumber, newList);
             }
         }
 
@@ -445,7 +446,13 @@ public class BasicMusicXMLParser implements AbstractAnalyzer {
      */
     private void getDivisionInformation() {
 
-        divisions.addAll(this.doc.getElementsByTag("divisions").stream().map(thisdiv -> Integer.valueOf(thisdiv.text())).collect(Collectors.toList()));
+        final Elements divElems = this.doc.getElementsByTag("divisions");
+
+        for (final Element element : divElems) {
+            divisions.add(Integer.valueOf(element.text()));
+        }
+
+        // divisions.addAll(this.doc.getElementsByTag("divisions").stream().map(thisdiv -> Integer.valueOf(thisdiv.text())).collect(Collectors.toList()));
 
         if (!this.doc.getElementsByTag("divisions").isEmpty()) {
 
