@@ -328,6 +328,7 @@ public class ResearchTestCase {
     }
     */
 
+    /*
     @Test
     public void maxFrequencyTagTest() throws IOException, ClassNotFoundException {
         FileInputStream fis = new FileInputStream("./src/test/researchData/lyricsGenreEXPT.ser");
@@ -336,7 +337,7 @@ public class ResearchTestCase {
         final List<SongBagLyricsGenreMap> lyricsMetaBagList = new ArrayList<>(lyricsMappedToGenreEntries);
         Collections.sort(lyricsMetaBagList, new SongBagLyricsGenreComparator());
 
-        double doubleTotalSize = lyricsMetaBagList.size() / 2.5;
+        double doubleTotalSize = lyricsMetaBagList.size() / 5.0;
         int totalSize = (int) doubleTotalSize;
         int testSize = totalSize / 100;
         final Set<SongBagLyricsGenreMap> testSet = new HashSet<>();
@@ -350,23 +351,28 @@ public class ResearchTestCase {
             trainSet.add(lyricsMetaBagList.get(i));
         }
 
-        // PrintWriter writer = new PrintWriter("./src/test/researchData/maxfreqROC.csv");
+        //PrintWriter writer = new PrintWriter("./src/test/researchData/maxFreqROC.csv");
+        //writer.println("TPR, FPR");
 
-        for (int i = 0; i < 100; i++) {
-            double threshHold = (double) (i / 100);
-            GenreEstimation estimation = new MaxFrequencyGenreEstimation(testSet, trainSet,threshHold);
+        for (double threshold = 0.00; threshold <= 0.3 ; threshold += 0.01) {
+            GenreEstimation estimation = new MaxFrequencyGenreEstimation(testSet, trainSet, threshold);
             final Map<SongBagLyricsGenreMap, Set<String>> maxFreqEstimates = estimation.getEstimatedGenres();
             Set<String> allSeenGenres = estimation.getAllSeenGenres();
             final ROCDataPoint point = getROCDataPoint(maxFreqEstimates, allSeenGenres);
-            System.out.println(point.getFalsePositiveRate() )
+            System.out.println(point.getTruePositiveRate() + ", " + point.getFalsePositiveRate());
+            //writer.flush();
         }
+
+        //writer.close();
     }
+    */
 
     /**
      * Gets the average precision and recall values as appropriate
      * @param genreEstimates
      * @return
      */
+    /*
     private PrecRec getAveragePrecRec(final Map<SongBagLyricsGenreMap, Set<String>> genreEstimates) {
 
         double recallSum = 0.0;
@@ -391,6 +397,7 @@ public class ResearchTestCase {
 
         return new PrecRec(precisionSum, recallSum);
     }
+    */
 
     /**
      * Gets an ROC data point
@@ -398,9 +405,10 @@ public class ResearchTestCase {
      * @param allSeenGenres
      * @return
      */
+    /*
     private ROCDataPoint getROCDataPoint(final Map<SongBagLyricsGenreMap, Set<String>> genreEstimates, final Set<String> allSeenGenres) {
         double tpr = 0.0;
-        double tnr = 0.0;
+        double fpr = 0.0;
 
         for (Map.Entry<SongBagLyricsGenreMap, Set<String>> genreEstimate : genreEstimates.entrySet()) {
             Set<String> predictedLabels = genreEstimate.getValue();
@@ -417,9 +425,10 @@ public class ResearchTestCase {
             Set<String> notRelevantRetrieved = new HashSet<>(notRelevant);
             notRelevantRetrieved.retainAll(predictedLabels);
 
-            tnr += (1.0 - notRelevantRetrieved.size() / notRelevant.size());
+            fpr += (double) notRelevantRetrieved.size() / notRelevant.size();
         }
 
-        return new ROCDataPoint(tpr / genreEstimates.size(), tnr / genreEstimates.size());
+        return new ROCDataPoint(tpr / genreEstimates.size(), fpr / genreEstimates.size());
     }
+    */
 }

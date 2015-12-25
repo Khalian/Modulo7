@@ -14,14 +14,18 @@ import java.util.Set;
  */
 public class NaiveGenreEstimation extends GenreEstimation {
 
+    // Threshhold
+    private double threshHold;
+
     /**
      * Tag estimator default constructor
      *
      * @param testSet
      * @param trainSet
      */
-    public NaiveGenreEstimation(Set<SongBagLyricsGenreMap> testSet, Set<SongBagLyricsGenreMap> trainSet) {
+    public NaiveGenreEstimation(Set<SongBagLyricsGenreMap> testSet, Set<SongBagLyricsGenreMap> trainSet, final double threshHold) {
         super(testSet, trainSet);
+        this.threshHold = threshHold;
     }
 
     @Override
@@ -39,10 +43,10 @@ public class NaiveGenreEstimation extends GenreEstimation {
             for (final SongBagLyricsGenreMap trainElem : trainSet) {
                 final BagOfWordsDataElement trainBOG = trainElem.getBagOfWords();
                 double simVal = TagEstimation.simVal(testBOG, trainBOG, SIM_CHOICE);
-                if (simVal >= THRESHHOLD) {
-                    final Set<String> trainGenres = trainElem.getLabels().getGenreList();
+                final Set<String> trainGenres = trainElem.getLabels().getGenreList();
+                allSeenGenres.addAll(trainGenres);
+                if (simVal >= threshHold) {
                     unionOfGenres.addAll(trainGenres);
-                    allSeenGenres.addAll(trainGenres);
                 }
             }
 

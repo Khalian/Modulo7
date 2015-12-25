@@ -44,11 +44,11 @@ public class MaxFrequencyGenreEstimation extends GenreEstimation {
                 final Set<String> trainGenres= trainElem.getLabels().getGenreList();
                 final BagOfWordsDataElement bogTrain = trainElem.getBagOfWords();
                 double simVal = TagEstimation.simVal(bogTest, bogTrain, SIM_CHOICE);
+                allSeenGenres.addAll(trainGenres);
 
                 if (simVal >= threshHold) {
                     for (final String genreEntry : trainGenres) {
                         Modulo7Utils.addToCount(genreEntry, genreFrequency, 1);
-                        allSeenGenres.add(genreEntry);
                     }
                 }
             }
@@ -64,7 +64,7 @@ public class MaxFrequencyGenreEstimation extends GenreEstimation {
 
             int maxIndex = Math.min(K_HYPER_PARAMETER, vals.size());
 
-            for (int i = 0; i < maxIndex; i++) {
+           for (int i = 0; i < maxIndex; i++) {
                 estimatedGenreLabels.add(vals.get(i).getKey());
             }
 

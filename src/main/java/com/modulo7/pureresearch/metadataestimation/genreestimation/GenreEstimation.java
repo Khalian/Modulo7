@@ -31,9 +31,6 @@ public abstract class GenreEstimation {
     // Choice of bag of words similarity
     protected static final BOWSimilarityChoices SIM_CHOICE = BOWSimilarityChoices.COSINE_SIMILARITY;
 
-    // Thresh hold value for assessing similarities
-    protected static final double THRESHHOLD = 0.7;
-
     /**
      * Tag estimator default constructor
      *
