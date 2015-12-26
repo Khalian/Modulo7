@@ -2,6 +2,11 @@ package researchtests;
 
 import com.modulo7.common.exceptions.Modulo7InvalidMusicXMLFile;
 import com.modulo7.common.exceptions.Modulo7NoSuchFileOrDirectoryException;
+import com.modulo7.common.utils.AvroUtils;
+import com.modulo7.common.utils.Modulo7Globals;
+import com.modulo7.common.utils.Modulo7Utils;
+import com.modulo7.musicstatmodels.representation.polyphonic.Song;
+import com.modulo7.pureresearch.MSDSongParser;
 import com.modulo7.pureresearch.lastfm.*;
 import com.modulo7.pureresearch.metadataestimation.PrecRec;
 import com.modulo7.pureresearch.metadataestimation.ROCDataPoint;
@@ -15,6 +20,8 @@ import com.modulo7.pureresearch.metadataestimation.tagestimation.NaiveTagEstimat
 import com.modulo7.pureresearch.metadataestimation.tagestimation.TagEstimation;
 import com.modulo7.pureresearch.metadataestimation.tagestimation.WeightedTagEstimation;
 import com.modulo7.pureresearch.musicmatch.LyricsBagOfWordsFormat;
+import org.apache.commons.compress.compressors.FileNameUtil;
+import org.apache.commons.io.FilenameUtils;
 import org.junit.Test;
 
 import java.io.*;
@@ -431,4 +438,105 @@ public class ResearchTestCase {
         return new ROCDataPoint(tpr / genreEstimates.size(), fpr / genreEstimates.size());
     }
     */
+
+    /**
+     * Bench press the msd subset on one comp
+     */
+    /*
+    @Test
+    public void benchPressTest() {
+        try {
+            Set<String> msdFiles = Modulo7Utils.listAllFiles("./src/test/researchData/MillionSongSubset");
+            Set<String> alreadyDone = Modulo7Utils.listAllFileNames("./src/test/researchData/MillionSongSubset");
+
+            for (final String msdFile : msdFiles) {
+                final MSDSongParser parser = new MSDSongParser(msdFile);
+                if (parser.getNumSongs() == 1) {
+                    final Song song = parser.getSongRepresentation();
+                    AvroUtils.serialize("./src/test/researchData/MillionSongSubsetSerialized/" + parser.getTrackId() +
+                            Modulo7Globals.EXTENSION_TO_SERIALIZED_FILES, song);
+                }
+            }
+        } catch (Exception e) {
+            // I dont care
+        }
+    }
+    */
+
+    /**
+     * This test case is effectively building a similarity block which discards non present songs
+     * from the similar song indices
+     */
+    /*
+    @Test
+    public void simMaps() throws Modulo7NoSuchFileOrDirectoryException, IOException {
+        LastFMDataSet dataSet = new LastFMDataSet("./src/test/researchData/lastfm_subset");
+        Map<String, SongBagLyricsAndMetadata> songSims = dataSet.getSongSimilaritySet();
+        Set<String> actualSet = Modulo7Utils.listAllFileNames("./src/test/researchData/MillionSongSubsetSerialized");
+
+        Map<String, SongBagLyricsAndMetadata> relevantSongSims = new HashMap<>();
+
+        for (Map.Entry<String, SongBagLyricsAndMetadata> songSim : songSims.entrySet()) {
+            final String trackId = songSim.getKey();
+            final SongBagLyricsAndMetadata metadata = songSim.getValue();
+            if (actualSet.contains(trackId) && metadata.getNumSongSimilars() > 0) {
+                relevantSongSims.put(trackId, metadata);
+            }
+        }
+
+        final Set<String> relevantSongTrackIds = relevantSongSims.keySet();
+
+        for (Map.Entry<String, SongBagLyricsAndMetadata> relevantSong : relevantSongSims.entrySet()) {
+            final SongBagLyricsAndMetadata metadata = relevantSong.getValue();
+            final Set<SongSimilarityElement> simSet = metadata.getSimilars();
+            final Set<SongSimilarityElement> availableSims = new HashSet<>();
+
+            for (final SongSimilarityElement sim : simSet) {
+                if (relevantSongTrackIds.contains(sim.getSongID())) {
+                    availableSims.add(sim);
+                }
+            }
+
+            metadata.resetSims(availableSims);
+        }
+
+        final Map<String, SongBagLyricsAndMetadata> finalMap = new HashMap<>();
+
+        for (Map.Entry<String, SongBagLyricsAndMetadata> songSim : relevantSongSims.entrySet()) {
+            final SongBagLyricsAndMetadata metadata = songSim.getValue();
+            if (metadata.getNumSongSimilars() > 0) {
+                finalMap.put(songSim.getKey(), metadata);
+            }
+        }
+
+        FileOutputStream fos = new FileOutputStream("./src/test/researchData/sims.ser");
+        ObjectOutputStream oos = new ObjectOutputStream(fos);
+        oos.writeObject(finalMap);
+        oos.close();
+        fos.close();
+        System.out.printf("Serialized tag mapped data sims.ser");
+    }
+    */
+
+    @Test
+    public void queryTest() throws IOException, ClassNotFoundException, Modulo7NoSuchFileOrDirectoryException {
+        FileInputStream fis = new FileInputStream("./src/test/researchData/sims.ser");
+        ObjectInputStream ois = new ObjectInputStream(fis);
+        final Map<String, SongBagLyricsAndMetadata> mappedEntries = (HashMap<String, SongBagLyricsAndMetadata>) ois.readObject();
+        final Set<String> keys = mappedEntries.keySet();
+        final Map<String, SongTotalMeta> completeMapping = new HashMap<>();
+
+        final Set<String> allFiles = Modulo7Utils.listAllFiles("./src/test/researchData/MillionSongSubsetSerialized");
+
+        for (final String file : allFiles) {
+            final String trackId = FilenameUtils.getBaseName(file);
+            if (keys.contains(trackId)) {
+                final Song song = AvroUtils.deserialize(file);
+                final SongTotalMeta totalMeta = new SongTotalMeta(song, mappedEntries.get(trackId));
+                completeMapping.put(trackId, totalMeta);
+            }
+        }
+
+        
+    }
 }

@@ -7,6 +7,7 @@ import com.modulo7.musicstatmodels.representation.monophonic.Voice;
 import com.modulo7.musicstatmodels.representation.monophonic.VoiceInstant;
 import com.modulo7.othersources.NoteAndIsChordDual;
 import org.apache.commons.io.FileUtils;
+import org.apache.commons.io.FilenameUtils;
 import org.apache.commons.io.filefilter.TrueFileFilter;
 
 import java.io.File;
@@ -92,8 +93,10 @@ public class Modulo7Utils {
     }
 
     /**
-     * List all files in a directory recursively and returns their canonical path as a list
+     * Goes through a directory recursively and lists all the canonical paths
      * @param directoryName
+     * @return
+     * @throws Modulo7NoSuchFileOrDirectoryException
      */
     public static Set<String> listAllFiles(final String directoryName) throws Modulo7NoSuchFileOrDirectoryException {
         final File dirFileHandle = new File(directoryName);
@@ -106,6 +109,29 @@ public class Modulo7Utils {
             Set<String> allFiles = new HashSet<>();
             for (final File file : files) {
                 allFiles.add(file.getAbsolutePath());
+            }
+            return allFiles;
+        } catch (IllegalArgumentException e) {
+            throw new Modulo7NoSuchFileOrDirectoryException("No such directory" + directoryName);
+        }
+    }
+
+    /**
+     * Lists all the file names that are present given inside a given directory
+     * @param directoryName
+     * @return
+     * @throws Modulo7NoSuchFileOrDirectoryException
+     */
+    public static Set<String> listAllFileNames(final String directoryName) throws Modulo7NoSuchFileOrDirectoryException {
+        final File dirFileHandle = new File(directoryName);
+        try {
+            // Gets all the files including the ones in the subdirectory
+            final List<File> files =
+                    (List<File>) FileUtils.listFiles(dirFileHandle, TrueFileFilter.INSTANCE, TrueFileFilter.INSTANCE);
+            //return files.stream().map(File::getAbsolutePath).collect(Collectors.toSet());
+            Set<String> allFiles = new HashSet<>();
+            for (final File file : files) {
+                allFiles.add(FilenameUtils.removeExtension(file.getName()));
             }
             return allFiles;
         } catch (IllegalArgumentException e) {

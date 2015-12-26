@@ -16,7 +16,7 @@ import java.util.Map;
 import java.util.Set;
 
 /**
- * Created by asanyal on 11/9/15.
+ * Created by asanyal on 11/9/1
  *
  * This data set contains the last fm data for song level similarity
  */
@@ -81,6 +81,14 @@ public class LastFMDataSet {
         } catch (Modulo7NoSuchFileOrDirectoryException | IOException e) {
             logger.error(e.getMessage());
         }
+    }
+
+    /**
+     * Song similarity set getter
+     * @return
+     */
+    public Map<String, SongBagLyricsAndMetadata>  getSongSimilaritySet() {
+        return songSimilaritySet;
     }
 
     /**

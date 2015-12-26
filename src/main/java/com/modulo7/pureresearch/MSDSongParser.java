@@ -1,6 +1,8 @@
 package com.modulo7.pureresearch;
 
 import com.modulo7.acoustics.ChromaAnalysis;
+import com.modulo7.acoustics.EchoNestKeySignatureEstimator;
+import com.modulo7.common.exceptions.Modulo7BadKeyException;
 import com.modulo7.common.interfaces.AbstractAnalyzer;
 import com.modulo7.common.utils.MusicSources;
 import com.modulo7.musicstatmodels.representation.metadata.KeySignature;
@@ -26,12 +28,21 @@ public class MSDSongParser implements AbstractAnalyzer {
     // The track ID of the track
     private String trackId;
 
+    // The number of songs in this msd hdf5 file
+    private int numSongs;
+
     /**
      * Basic song parser object constructor
      * @param filename
      */
-    public MSDSongParser(final String filename) {
+    public MSDSongParser(final String filename)  {
         this.hdf5File = HDF5_GETTERS.hdf5_open_readonly(filename);
+        try {
+            this.trackId = HDF5_GETTERS.get_track_id(hdf5File);
+        } catch (Exception e) {
+            logger.error(e.getMessage());
+        }
+        this.numSongs = HDF5_GETTERS.get_num_songs(hdf5File);
     }
 
     // Key signature parsed from the msd data
@@ -46,10 +57,18 @@ public class MSDSongParser implements AbstractAnalyzer {
             final String titleTrack = HDF5_GETTERS.get_title(hdf5File);
             final String artistName = HDF5_GETTERS.get_artist_name(hdf5File);
             final double duration = HDF5_GETTERS.get_duration(hdf5File);
-            this.trackId = HDF5_GETTERS.get_track_id(hdf5File);
-
             final double[] segementsStart = HDF5_GETTERS.get_segments_start(hdf5File);
             final double[] segmentsPitches = HDF5_GETTERS.get_segments_pitches(hdf5File);
+
+            // Getting the key signature information from the echo nest meta data analysis in integer format
+            final int key = HDF5_GETTERS.get_key(hdf5File);
+            final int mode = HDF5_GETTERS.get_mode(hdf5File);
+
+            try {
+                keySignature = EchoNestKeySignatureEstimator.estimateKeySignature(key, mode);
+            } catch (Modulo7BadKeyException e) {
+                logger.error(e.getMessage());
+            }
 
             Voice voice = new Voice();
 
@@ -80,5 +99,13 @@ public class MSDSongParser implements AbstractAnalyzer {
      */
     public String getTrackId() {
         return trackId;
+    }
+
+    /**
+     * Gets the number of songs in this hdf5 file
+     * @return
+     */
+    public int getNumSongs() {
+        return numSongs;
     }
 }

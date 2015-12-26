@@ -111,4 +111,32 @@ public class SongBagLyricsAndMetadata implements Serializable {
         return tags;
     }
 
+    /**
+     * Gets the number of song that are deemed similar to this song
+     * in the ground truth
+     *
+     * @return
+     */
+    public int getNumSongSimilars() {
+        return similarSet.size();
+    }
+
+    /**
+     * Gets the similar songs track ids for this song
+     * @return
+     */
+    public Set<SongSimilarityElement> getSimilars() {
+        return similarSet;
+    }
+
+    /**
+     * Change the similar set
+     *
+     * BE CAREFUL WHEN YOU USE THIS METHOD, IT OVERRIDES AN INTERNAL REFERENCE
+     *
+     * @param actualSims
+     */
+    public void resetSims(final Set<SongSimilarityElement> actualSims) {
+        similarSet = actualSims;
+    }
 }

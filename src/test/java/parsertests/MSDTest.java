@@ -23,4 +23,4 @@ public class MSDTest {
         final Song song = analyzer.getSongRepresentation();
         Assert.assertNotNull(song);
     }
-}   
+}
