@@ -65,8 +65,6 @@ public class Modulo7QueryProcessingEngine {
      * The method which actually processes a query and then prunes out songs which dont satisfy the query
      * thereby returning a set of songs which do
      *
-     * TODO : Finish its implementation
-     *
      * @return
      * @throws Modulo7QueryProcessingException
      */
@@ -99,7 +97,6 @@ public class Modulo7QueryProcessingEngine {
                 requisiteSourceSongs.add(song);
             }
         }
-
 
         List<String> exprList = componentsOfQuery.getExprList();
         List<String> exprOprs = componentsOfQuery.getExprOprList();

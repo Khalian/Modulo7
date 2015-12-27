@@ -18,6 +18,7 @@ import java.util.Set;
  */
 public enum CriteriaChoice {
     KEY_SIGNATURE_EQUALITY_CRITERIA("keysignatureequalto"),
+    SCALE_EQUALITY_CRITERIA("scaleequalto"),
     POLYPHONIC_CRITERIA("polyphonic"),
     TIME_SIGNATURE_EQUALITY_CRITERIA("timesignatureequalto"),
     POSITIVE_LYRICAL_INTENT_CRITERIA("positivelyrics"),

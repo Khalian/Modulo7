@@ -1,10 +1,14 @@
 package researchtests;
 
-import com.modulo7.common.exceptions.Modulo7InvalidMusicXMLFile;
-import com.modulo7.common.exceptions.Modulo7NoSuchFileOrDirectoryException;
+import com.echonest.api.v4.EchoNestException;
+import com.modulo7.common.exceptions.*;
 import com.modulo7.common.utils.AvroUtils;
 import com.modulo7.common.utils.Modulo7Globals;
 import com.modulo7.common.utils.Modulo7Utils;
+import com.modulo7.engine.Modulo7CLI;
+import com.modulo7.engine.Modulo7Indexer;
+import com.modulo7.engine.Modulo7QueryProcessingEngine;
+import com.modulo7.musicstatmodels.representation.metadata.ScaleType;
 import com.modulo7.musicstatmodels.representation.polyphonic.Song;
 import com.modulo7.pureresearch.MSDSongParser;
 import com.modulo7.pureresearch.lastfm.*;
@@ -24,6 +28,7 @@ import org.apache.commons.compress.compressors.FileNameUtil;
 import org.apache.commons.io.FilenameUtils;
 import org.junit.Test;
 
+import javax.sound.midi.InvalidMidiDataException;
 import java.io.*;
 import java.util.*;
 
@@ -519,12 +524,16 @@ public class ResearchTestCase {
     */
 
     @Test
-    public void queryTest() throws IOException, ClassNotFoundException, Modulo7NoSuchFileOrDirectoryException {
+    public void queryTest() throws IOException, ClassNotFoundException, Modulo7NoSuchFileOrDirectoryException, Modulo7InvalidArgsException,
+            InterruptedException, EchoNestException, Modulo7InvalidFileOperationException, Modulo7InvalidMusicXMLFile,
+            Modulo7IndexingDirError, Modulo7ParseException, InvalidMidiDataException, Modulo7MalformedM7SQLQuery,
+            Modulo7QueryProcessingException, Modulo7DataBaseNotSerializedException {
+
         FileInputStream fis = new FileInputStream("./src/test/researchData/sims.ser");
         ObjectInputStream ois = new ObjectInputStream(fis);
         final Map<String, SongBagLyricsAndMetadata> mappedEntries = (HashMap<String, SongBagLyricsAndMetadata>) ois.readObject();
         final Set<String> keys = mappedEntries.keySet();
-        final Map<String, SongTotalMeta> completeMapping = new HashMap<>();
+        final Map<String, SongTotalMeta> semicompleteMapping = new HashMap<>();
 
         final Set<String> allFiles = Modulo7Utils.listAllFiles("./src/test/researchData/MillionSongSubsetSerialized");
 
@@ -533,10 +542,87 @@ public class ResearchTestCase {
             if (keys.contains(trackId)) {
                 final Song song = AvroUtils.deserialize(file);
                 final SongTotalMeta totalMeta = new SongTotalMeta(song, mappedEntries.get(trackId));
+                semicompleteMapping.put(trackId, totalMeta);
+                AvroUtils.serialize("./src/test/researchData/MillionSongSubsetFinal/" + trackId + Modulo7Globals.EXTENSION_TO_SERIALIZED_FILES, song);
+            }
+        }
+
+        FileInputStream fis2 = new FileInputStream("./src/test/researchData/lyricsGenreEXPT.ser");
+        ObjectInputStream ois2 = new ObjectInputStream(fis2);
+        final Set<SongBagLyricsGenreMap> lyricsToGenreEntries = (HashSet<SongBagLyricsGenreMap>) ois2.readObject();
+        final Map<String, SongBagLyricsGenreMap> lyricsMapToGenre = new HashMap<>();
+
+        for (final SongBagLyricsGenreMap map : lyricsToGenreEntries) {
+            lyricsMapToGenre.put(map.getTrackID(), map);
+        }
+
+        final Map<String, SongTotalMeta> completeMapping = new HashMap<>();
+        Map<String, Integer> allSeenGenres = new HashMap<>();
+
+        for (Map.Entry<String, SongTotalMeta> total : semicompleteMapping.entrySet()) {
+            final String trackId = total.getKey();
+            final SongTotalMeta totalMeta = total.getValue();
+            SongBagLyricsGenreMap lyricsMeta = lyricsMapToGenre.get(trackId);
+            if (lyricsMeta != null) {
+                Set<String> allGenres = lyricsMeta.getLabels().getGenreList();
+
+                for (final String genre : allGenres) {
+                    Modulo7Utils.addToCount(genre, allSeenGenres);
+                }
+
+                totalMeta.addGenres(lyricsMeta.getLabels().getGenreList());
                 completeMapping.put(trackId, totalMeta);
             }
         }
 
-        
+        final Modulo7Indexer indexer = new Modulo7Indexer("./src/test/researchData/MillionSongSubsetFinal/", "/src/test/researchData/idontcare");
+        final Set<String> queries = new HashSet<>();
+
+        queries.add("select mp3 from default_database where happinessindex > 0.11 and sadnessindex < 0.05;");
+
+        for (final String query : queries) {
+            final Modulo7QueryProcessingEngine processingEngine = new Modulo7QueryProcessingEngine(query, indexer);
+            final Set<Song> returnedSongs = processingEngine.processQuery();
+            final Set<Song> returnedSongsWithRightMode = new HashSet<>();
+
+            for (final Song song : returnedSongs) {
+                if (song.getMetadata().getKeySignature().getScale().equals(ScaleType.MAJOR)) {
+                    returnedSongsWithRightMode.add(song);
+                }
+            }
+
+            final Set<String> songLocations = indexer.getLocationsGivenRelevantSongs(returnedSongsWithRightMode);
+            PrecRec blah = crossCheckAccuracy(completeMapping, songLocations);
+            System.out.println("haha");
+        }
+    }
+
+    private PrecRec crossCheckAccuracy(final Map<String, SongTotalMeta> completeMapping, final Set<String> songLocations) {
+
+        final Set<String> predictedTrackIds = new HashSet<>();
+        for (final String location : songLocations) {
+            final String trackId = FilenameUtils.getBaseName(location);
+            predictedTrackIds.add(trackId);
+        }
+
+        final Set<String> actualTrackIds = new HashSet<>();
+
+        for (Map.Entry<String, SongTotalMeta> completeMappingElem : completeMapping.entrySet()) {
+            final String trackId = completeMappingElem.getKey();
+            final SongTotalMeta totalMeta = completeMappingElem.getValue();
+
+            if (totalMeta.getMetadata().getTags().containsKey("happy") || totalMeta.getMetadata().getTags().containsKey("Happy") ||
+                    totalMeta.getMetadata().getTags().containsKey("happy song") || totalMeta.getMetadata().getTags().containsKey("Happy song")) {
+                actualTrackIds.add(trackId);
+            }
+        }
+
+        final Set<String> intersection = new HashSet<>(predictedTrackIds);
+        intersection.retainAll(actualTrackIds);
+
+        double prec = (double) intersection.size() / predictedTrackIds.size();
+        double rec = (double) intersection.size() / actualTrackIds.size();
+
+        return new PrecRec(prec, rec);
     }
 }
