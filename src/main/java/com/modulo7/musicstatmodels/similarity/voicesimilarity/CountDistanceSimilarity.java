@@ -14,12 +14,6 @@ import java.util.Set;
  */
 public class CountDistanceSimilarity implements AbstractVoiceSimilarity {
 
-    // Compute the distinct N grams in the first voice
-    private Set<String> distinctTrigramsInOne = new HashSet<>();
-
-    // Compute the distinct N grams in the second voice
-    private Set<String> distinctTrigramsInTwo = new HashSet<>();
-
     // Number of grams, default to 3
     private int N = 3;
 
@@ -39,6 +33,12 @@ public class CountDistanceSimilarity implements AbstractVoiceSimilarity {
 
     @Override
     public double getSimilarity(final Voice first, final Voice second) {
+
+        // Compute the distinct N grams in the first voice
+        final Set<String> distinctTrigramsInOne = new HashSet<>();
+
+        // Compute the distinct N grams in the second voice
+        final Set<String> distinctTrigramsInTwo = new HashSet<>();
 
         final String firstSetDoc = first.getDocumentRepresentation();
         final String secondSetDoc = second.getDocumentRepresentation();

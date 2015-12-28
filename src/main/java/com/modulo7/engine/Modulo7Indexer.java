@@ -476,4 +476,12 @@ public class Modulo7Indexer {
 
         return lyrics;
     }
+
+    /**
+     * Gets an access to the data base engine
+     * @return
+     */
+    public DatabaseEngine getEngine() {
+        return engine;
+    }
 }

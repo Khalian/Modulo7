@@ -525,7 +525,7 @@ public class Modulo7CLI {
                 System.out.print("Enter the location of a song to rank the rest of the database against:");
                 final String candidateSongLocation = in.next();
 
-                final String query = constructSimilarityQuery(similarityMeasure, voiceSimilarity ,candidateSongLocation);
+                final String query = constructSimilarityQuery(similarityMeasure, voiceSimilarity, candidateSongLocation);
 
                 if (isCachingEnabled) {
                     final LinkedHashMap<String, Double> cachedRankOrder = (LinkedHashMap<String, Double>) cache.getCachedResults(query);

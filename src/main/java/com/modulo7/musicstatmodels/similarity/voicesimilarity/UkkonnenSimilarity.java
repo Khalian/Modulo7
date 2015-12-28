@@ -14,12 +14,6 @@ import java.util.Map;
  */
 public class UkkonnenSimilarity implements AbstractVoiceSimilarity {
 
-    // Compute the distinct N grams in the first voice
-    private Map<String, Integer> distinctTrigramsInOne = new HashMap<>();
-
-    // Compute the distinct N grams in the second voice
-    private Map<String, Integer> distinctTrigramsInTwo = new HashMap<>();
-
     // Number of grams, default to 3
     private int N = 3;
 
@@ -39,6 +33,12 @@ public class UkkonnenSimilarity implements AbstractVoiceSimilarity {
 
     @Override
     public double getSimilarity(final Voice first, final Voice second) {
+
+        // Compute the distinct N grams in the first voice
+        final Map<String, Integer> distinctTrigramsInOne = new HashMap<>();
+
+        // Compute the distinct N grams in the second voice
+        final Map<String, Integer> distinctTrigramsInTwo = new HashMap<>();
 
         final String firstSetDoc = first.getDocumentRepresentation();
         final String secondSetDoc = second.getDocumentRepresentation();
@@ -60,7 +60,7 @@ public class UkkonnenSimilarity implements AbstractVoiceSimilarity {
             Modulo7Utils.addToCount(ngram, distinctTrigramsInTwo);
         }
 
-        return (double) (Math.abs(Modulo7Utils.sumOverNGramFreqs(distinctTrigramsInOne) - Modulo7Utils.sumOverNGramFreqs(distinctTrigramsInTwo)))
+        return 1 - (double) (Math.abs(Modulo7Utils.sumOverNGramFreqs(distinctTrigramsInOne) - Modulo7Utils.sumOverNGramFreqs(distinctTrigramsInTwo)))
                 / (firstSplit.length + secondSplit.length - 2*(N - 1));
     }
 }

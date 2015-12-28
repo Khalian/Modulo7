@@ -308,6 +308,28 @@ public class Modulo7Utils {
     }
 
     /**
+     * Get the sum over a map of n grams but only over the terms
+     * @param ngramMap
+     * @param terms
+     * @return
+     */
+    public static int sumOverNGramFreqs(final Map<String, Integer> ngramMap, final Set<String> terms) {
+
+        int total = 0;
+
+        for (final String term : terms) {
+            Integer val = ngramMap.get(term);
+            if (val == null) {
+                val = 0;
+            }
+
+            total += val;
+        }
+
+        return total;
+    }
+
+    /**
      * Gets the length of a particular file in bytes
      *
      * @param fileName

@@ -2,14 +2,17 @@ package researchtests;
 
 import com.echonest.api.v4.EchoNestException;
 import com.modulo7.common.exceptions.*;
+import com.modulo7.common.interfaces.AbstractSongSimilarity;
 import com.modulo7.common.utils.AvroUtils;
 import com.modulo7.common.utils.Modulo7Globals;
 import com.modulo7.common.utils.Modulo7Utils;
 import com.modulo7.engine.Modulo7CLI;
 import com.modulo7.engine.Modulo7Indexer;
 import com.modulo7.engine.Modulo7QueryProcessingEngine;
+import com.modulo7.engine.RankEngineOnSimilarity;
 import com.modulo7.musicstatmodels.representation.metadata.ScaleType;
 import com.modulo7.musicstatmodels.representation.polyphonic.Song;
+import com.modulo7.musicstatmodels.similarity.songsimilarity.SCMNGramSongSimilarity;
 import com.modulo7.pureresearch.MSDSongParser;
 import com.modulo7.pureresearch.lastfm.*;
 import com.modulo7.pureresearch.metadataestimation.PrecRec;
@@ -523,11 +526,13 @@ public class ResearchTestCase {
     }
     */
 
+    /*
     @Test
     public void queryTest() throws IOException, ClassNotFoundException, Modulo7NoSuchFileOrDirectoryException, Modulo7InvalidArgsException,
             InterruptedException, EchoNestException, Modulo7InvalidFileOperationException, Modulo7InvalidMusicXMLFile,
             Modulo7IndexingDirError, Modulo7ParseException, InvalidMidiDataException, Modulo7MalformedM7SQLQuery,
             Modulo7QueryProcessingException, Modulo7DataBaseNotSerializedException {
+
 
         FileInputStream fis = new FileInputStream("./src/test/researchData/sims.ser");
         ObjectInputStream ois = new ObjectInputStream(fis);
@@ -547,6 +552,8 @@ public class ResearchTestCase {
             }
         }
 
+
+        /*
         FileInputStream fis2 = new FileInputStream("./src/test/researchData/lyricsGenreEXPT.ser");
         ObjectInputStream ois2 = new ObjectInputStream(fis2);
         final Set<SongBagLyricsGenreMap> lyricsToGenreEntries = (HashSet<SongBagLyricsGenreMap>) ois2.readObject();
@@ -558,7 +565,18 @@ public class ResearchTestCase {
 
         final Map<String, SongTotalMeta> completeMapping = new HashMap<>();
         Map<String, Integer> allSeenGenres = new HashMap<>();
+        */
 
+        /*
+        FileOutputStream fos = new FileOutputStream("./src/test/researchData/simTotals.ser");
+        ObjectOutputStream oos = new ObjectOutputStream(fos);
+        oos.writeObject(semicompleteMapping);
+        oos.close();
+        fos.close();
+        System.out.printf("Serialized tag mapped data simTotals.ser");
+
+
+        /*
         for (Map.Entry<String, SongTotalMeta> total : semicompleteMapping.entrySet()) {
             final String trackId = total.getKey();
             final SongTotalMeta totalMeta = total.getValue();
@@ -595,8 +613,130 @@ public class ResearchTestCase {
             PrecRec blah = crossCheckAccuracy(completeMapping, songLocations);
             System.out.println("haha");
         }
+    */
+
+    @Test
+    public void simsTest() throws IOException, ClassNotFoundException, Modulo7InvalidMusicXMLFile, Modulo7ParseException,
+            InterruptedException, Modulo7InvalidArgsException, Modulo7InvalidFileOperationException, Modulo7NoSuchFileOrDirectoryException,
+            InvalidMidiDataException, EchoNestException, Modulo7IndexingDirError {
+
+        FileInputStream fis2 = new FileInputStream("./src/test/researchData/simTotals.ser");
+        ObjectInputStream ois2 = new ObjectInputStream(fis2);
+        final Map<String, SongTotalMeta> sims  = (Map<String, SongTotalMeta>) ois2.readObject();
+
+        double averageSims = 0.0;
+
+        for (Map.Entry<String, SongTotalMeta> sim : sims.entrySet()) {
+            averageSims += sim.getValue().getMetadata().getNumSongSimilars();
+        }
+
+        averageSims /= sims.size();
+
+        List<String> trackIds = new ArrayList<>(sims.keySet());
+        Collections.sort(trackIds);
+
+        int testSetSize = trackIds.size() / 10;
+
+        final Set<SongTotalMeta> totalTestMeta = new HashSet<>();
+        final Set<SongTotalMeta> totalTrainMeta = new HashSet<>();
+
+        for (int i = 0; i < testSetSize; i++) {
+            totalTestMeta.add(sims.get(trackIds.get(i)));
+        }
+
+        for (int i = testSetSize + 1; i < sims.size(); i++) {
+            totalTrainMeta.add(sims.get(trackIds.get(i)));
+        }
+
+        AbstractSongSimilarity similarity = new SCMNGramSongSimilarity();
+        RankEngineOnSimilarity engineOnSimilarity = new RankEngineOnSimilarity(similarity);
+
+        final Modulo7Indexer indexer = new Modulo7Indexer("./src/test/researchData/MillionSongSubsetFinal/", "/src/test/researchData/idontcare");
+
+        for (final SongTotalMeta meta : totalTestMeta) {
+
+            final LinkedHashMap<String, Integer> tagHitRateGroundTruth = getTagHitRate(meta, totalTrainMeta);
+
+            final LinkedHashMap<String, Double> rankedOrder =
+                    engineOnSimilarity.relevantRankOrdering(indexer.getEngine(), meta.getSong());
+
+            final LinkedHashMap<String, Double> trackIDRankOrder = cleanFilePathInRankOrder(rankedOrder);
+
+            final PrecRec precRec = getHitRatePrecRec(tagHitRateGroundTruth, trackIDRankOrder);
+        }
+
+        System.out.println("Lol");
     }
 
+    private PrecRec getHitRatePrecRec(final LinkedHashMap<String, Integer> tagHitRateGroundTruth, final LinkedHashMap<String, Double> trackIDRankOrder) {
+        return null;
+    }
+
+
+    private LinkedHashMap<String, Double> cleanFilePathInRankOrder(final LinkedHashMap<String, Double> rankedOrder) {
+        LinkedHashMap<String, Double> cleanedMap = new LinkedHashMap<>();
+
+        for (Map.Entry<String, Double> entry : rankedOrder.entrySet()) {
+            cleanedMap.put(FilenameUtils.getBaseName(entry.getKey()), entry.getValue());
+        }
+
+        return cleanedMap;
+    }
+
+
+    /**
+     * Gets tag hit rate of particular set of songs versus a song
+     * @param meta
+     * @param totalTrainMeta
+     * @return
+     */
+    private LinkedHashMap<String, Integer> getTagHitRate(final SongTotalMeta meta, final Set<SongTotalMeta> totalTrainMeta) {
+        final Map<String, Integer> tagHitRatesUnOrdered = new HashMap<>();
+
+        for (final SongTotalMeta trainMeta : totalTrainMeta) {
+            Integer hitRate = getParticularHitRate(meta.getMetadata().getTags(), trainMeta.getMetadata().getTags());
+            tagHitRatesUnOrdered.put(trainMeta.getMetadata().getTrackID(), hitRate);
+        }
+
+        List<Map.Entry<String, Integer>> listOfTagHits = new ArrayList<>(tagHitRatesUnOrdered.entrySet());
+
+        Collections.sort(listOfTagHits, new Comparator<Map.Entry<String, Integer>>() {
+            @Override
+            public int compare(Map.Entry<String, Integer> firstEntry, Map.Entry<String, Integer> secondEntry) {
+                return firstEntry.getValue().compareTo(secondEntry.getValue());
+            }
+        });
+
+        Collections.reverse(listOfTagHits);
+
+        LinkedHashMap<String, Integer> orderedTagHitRate = new LinkedHashMap<>();
+
+        for (Map.Entry<String, Integer> order : listOfTagHits) {
+            orderedTagHitRate.put(order.getKey(), order.getValue());
+        }
+
+        return orderedTagHitRate;
+    }
+
+
+    private Integer getParticularHitRate(final Map<String, Integer> thisTags, final Map<String, Integer> thatTags) {
+        Set<String> thisOne = thisTags.keySet();
+        Set<String> thatOne = thatTags.keySet();
+
+        int counter = 0;
+
+        for (final String thisOneTag : thisOne) {
+            for (final String thatOneTag : thatOne) {
+                if (thisOneTag.equalsIgnoreCase(thatOneTag))
+                    counter++;
+            }
+        }
+
+        return counter;
+    }
+
+
+    /*
     private PrecRec crossCheckAccuracy(final Map<String, SongTotalMeta> completeMapping, final Set<String> songLocations) {
 
         final Set<String> predictedTrackIds = new HashSet<>();
@@ -625,4 +765,5 @@ public class ResearchTestCase {
 
         return new PrecRec(prec, rec);
     }
+    */
 }
