@@ -12,7 +12,7 @@ import com.modulo7.engine.Modulo7QueryProcessingEngine;
 import com.modulo7.engine.RankEngineOnSimilarity;
 import com.modulo7.musicstatmodels.representation.metadata.ScaleType;
 import com.modulo7.musicstatmodels.representation.polyphonic.Song;
-import com.modulo7.musicstatmodels.similarity.songsimilarity.SCMNGramSongSimilarity;
+import com.modulo7.musicstatmodels.similarity.songsimilarity.*;
 import com.modulo7.pureresearch.MSDSongParser;
 import com.modulo7.pureresearch.lastfm.*;
 import com.modulo7.pureresearch.metadataestimation.PrecRec;
@@ -615,6 +615,7 @@ public class ResearchTestCase {
         }
     */
 
+    /*
     @Test
     public void simsTest() throws IOException, ClassNotFoundException, Modulo7InvalidMusicXMLFile, Modulo7ParseException,
             InterruptedException, Modulo7InvalidArgsException, Modulo7InvalidFileOperationException, Modulo7NoSuchFileOrDirectoryException,
@@ -623,14 +624,6 @@ public class ResearchTestCase {
         FileInputStream fis2 = new FileInputStream("./src/test/researchData/simTotals.ser");
         ObjectInputStream ois2 = new ObjectInputStream(fis2);
         final Map<String, SongTotalMeta> sims  = (Map<String, SongTotalMeta>) ois2.readObject();
-
-        double averageSims = 0.0;
-
-        for (Map.Entry<String, SongTotalMeta> sim : sims.entrySet()) {
-            averageSims += sim.getValue().getMetadata().getNumSongSimilars();
-        }
-
-        averageSims /= sims.size();
 
         List<String> trackIds = new ArrayList<>(sims.keySet());
         Collections.sort(trackIds);
@@ -648,10 +641,20 @@ public class ResearchTestCase {
             totalTrainMeta.add(sims.get(trackIds.get(i)));
         }
 
-        AbstractSongSimilarity similarity = new SCMNGramSongSimilarity();
+        double averagePrec = 0.0;
+        double averageRecall = 0.0;
+
+        AbstractSongSimilarity similarity = new TonalHistogramSimilarity();
         RankEngineOnSimilarity engineOnSimilarity = new RankEngineOnSimilarity(similarity);
 
-        final Modulo7Indexer indexer = new Modulo7Indexer("./src/test/researchData/MillionSongSubsetFinal/", "/src/test/researchData/idontcare");
+        for (final SongTotalMeta train : totalTrainMeta) {
+            AvroUtils.serialize("./src/test/researchData/MillionSongSubsetFinalTrain/" +
+                    train.getMetadata().getTrackID() + Modulo7Globals.EXTENSION_TO_SERIALIZED_FILES, train.getSong());
+        }
+
+        final Modulo7Indexer indexer = new Modulo7Indexer("./src/test/researchData/MillionSongSubsetFinalTrain/", "/src/test/researchData/idontcare");
+
+        int validTestMetaSize = totalTestMeta.size();
 
         for (final SongTotalMeta meta : totalTestMeta) {
 
@@ -661,15 +664,67 @@ public class ResearchTestCase {
                     engineOnSimilarity.relevantRankOrdering(indexer.getEngine(), meta.getSong());
 
             final LinkedHashMap<String, Double> trackIDRankOrder = cleanFilePathInRankOrder(rankedOrder);
-
             final PrecRec precRec = getHitRatePrecRec(tagHitRateGroundTruth, trackIDRankOrder);
+
+            if (precRec.isValid()) {
+                averagePrec += precRec.getPrecision();
+                averageRecall += precRec.getRecall();
+            } else {
+                validTestMetaSize--;
+            }
         }
 
-        System.out.println("Lol");
+        averagePrec /= validTestMetaSize;
+        averageRecall /= validTestMetaSize;
+
+        System.out.println("Average recall is " + averageRecall + "Average precision is " + averagePrec);
+    }
+    */
+
+
+    /**
+     * @param tagHitRateGroundTruth
+     * @param trackIDRankOrder
+     * @return
+     */
+    /*
+    private PrecRec getHitRatePrecRec(final LinkedHashMap<String, Integer> tagHitRateGroundTruth,
+            final LinkedHashMap<String, Double> trackIDRankOrder) {
+
+        final Set<String> actual = new HashSet<>();
+        final Set<String> predicted = new HashSet<>();
+
+        for (final Map.Entry<String, Integer> tagHitGround : tagHitRateGroundTruth.entrySet()) {
+           final int val = tagHitGround.getValue();
+
+           if (val > 0) {
+               actual.add(tagHitGround.getKey());
+           }
+        }
+
+        final int relDocNum = actual.size();
+
+        int counter = 0;
+
+        for (final Map.Entry<String, Double> trackIDElem : trackIDRankOrder.entrySet()) {
+            predicted.add(trackIDElem.getKey());
+            if (counter >= relDocNum)
+                break;
+            else
+                counter++;
+        }
+
+        return getPrecRec(actual, predicted);
     }
 
-    private PrecRec getHitRatePrecRec(final LinkedHashMap<String, Integer> tagHitRateGroundTruth, final LinkedHashMap<String, Double> trackIDRankOrder) {
-        return null;
+    private PrecRec getPrecRec(final Set<String> actual, final Set<String> predicted) {
+        final Set<String> intersection = new HashSet<>(actual);
+        intersection.retainAll(predicted);
+
+        double precision = (double) intersection.size() / predicted.size();
+        double recall = (double) intersection.size() / actual.size();
+
+        return new PrecRec(precision, recall);
     }
 
 
@@ -682,6 +737,7 @@ public class ResearchTestCase {
 
         return cleanedMap;
     }
+    */
 
 
     /**
@@ -690,6 +746,7 @@ public class ResearchTestCase {
      * @param totalTrainMeta
      * @return
      */
+    /*
     private LinkedHashMap<String, Integer> getTagHitRate(final SongTotalMeta meta, final Set<SongTotalMeta> totalTrainMeta) {
         final Map<String, Integer> tagHitRatesUnOrdered = new HashMap<>();
 

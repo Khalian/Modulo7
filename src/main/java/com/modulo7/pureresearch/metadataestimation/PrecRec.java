@@ -23,4 +23,16 @@ public class PrecRec {
     public double getRecall() {
         return recall;
     }
+
+    /**
+     * When the number of actually relevant documents = 0
+     * recall can be NaN and precision can be 0
+     *
+     * A safety check against that outcome is the precRec
+     *
+     * @return
+     */
+    public boolean isValid() {
+        return !(precision == 0.0 && Double.isNaN(recall));
+    }
 }
