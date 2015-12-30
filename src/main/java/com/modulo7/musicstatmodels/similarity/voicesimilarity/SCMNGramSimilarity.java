@@ -5,7 +5,9 @@ import com.modulo7.common.utils.Modulo7Utils;
 import com.modulo7.musicstatmodels.representation.monophonic.Voice;
 
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Map;
+import java.util.Set;
 
 /**
  * Created by asanyal on 10/13/15.
@@ -14,12 +16,6 @@ import java.util.Map;
  * measure as defined in NLP literature
  */
 public class SCMNGramSimilarity implements AbstractVoiceSimilarity {
-
-    // Compute the distinct N grams in the first voice
-    private Map<String, Integer> distinctTrigramsInOne = new HashMap<>();
-
-    // Compute the distinct N grams in the second voice
-    private Map<String, Integer> distinctTrigramsInTwo = new HashMap<>();
 
     // Number of grams, default to 3
     private int N = 3;
@@ -41,6 +37,12 @@ public class SCMNGramSimilarity implements AbstractVoiceSimilarity {
     @Override
     public double getSimilarity(final Voice first, final Voice second) {
 
+        // Compute the distinct N grams in the first voice
+        final Map<String, Integer> distinctTrigramsInOne = new HashMap<>();
+
+        // Compute the distinct N grams in the second voice
+        final Map<String, Integer> distinctTrigramsInTwo = new HashMap<>();
+
         final String firstSetDoc = first.getDocumentRepresentation();
         final String secondSetDoc = second.getDocumentRepresentation();
 
@@ -61,7 +63,12 @@ public class SCMNGramSimilarity implements AbstractVoiceSimilarity {
             Modulo7Utils.addToCount(ngram, distinctTrigramsInTwo);
         }
 
-        return (double) (Modulo7Utils.sumOverNGramFreqs(distinctTrigramsInOne) + Modulo7Utils.sumOverNGramFreqs(distinctTrigramsInTwo))
-                / (firstSplit.length + secondSplit.length - 2*(N - 1));
+        final Set<String> commonTrigrams = new HashSet<>(distinctTrigramsInOne.keySet());
+        commonTrigrams.retainAll(distinctTrigramsInTwo.keySet());
+
+        int trigramSum = (Modulo7Utils.sumOverNGramFreqs(distinctTrigramsInOne, commonTrigrams) +
+                Modulo7Utils.sumOverNGramFreqs(distinctTrigramsInTwo, commonTrigrams));
+
+        return (double) trigramSum / (firstSplit.length + secondSplit.length - 2*(N - 1));
     }
 }

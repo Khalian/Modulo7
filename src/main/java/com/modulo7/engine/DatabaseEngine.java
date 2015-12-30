@@ -49,7 +49,7 @@ public class DatabaseEngine {
     // A hash map between location and songs in Modulo7 format and
     private Map<String, Song> songLocationMap = new HashMap<>();
 
-    // A hash map between indepedent lyrics object in Modulo7 format
+    // A hash map between independent lyrics object in Modulo7 format
     private Map<String, Lyrics> independentLyricsMap = new HashMap<>();
 
     // A map containing song location to the deserialized location
@@ -244,10 +244,6 @@ public class DatabaseEngine {
             // Build an in memory database from an already serialized one, fastest way to deal with preconstructed database
             song = AvroUtils.deserialize(songLocation);
             addToSongLocationMap(songLocation, song);
-        } else if (songLocation.endsWith("h5")) {
-            AbstractAnalyzer analyzer = new MSDSongParser(songLocation);
-            song = analyzer.getSongRepresentation();
-            addToSongLocationMap(songLocation, song);
         }
 
         return song;
@@ -281,8 +277,10 @@ public class DatabaseEngine {
      * @param song
      * @throws com.modulo7.common.exceptions.Modulo7NoSuchFileOrDirectoryException
      */
-    private synchronized void serializeAndPutToDisk(final String songLocation, final Song song) throws Modulo7NoSuchFileOrDirectoryException {
-        final String finalSerializedLocation = destinationDirectory + File.separator + FilenameUtils.getBaseName(songLocation) + ".m7";
+    private synchronized void serializeAndPutToDisk(final String songLocation, final Song song)
+            throws Modulo7NoSuchFileOrDirectoryException {
+        final String finalSerializedLocation = destinationDirectory + File.separator
+                + FilenameUtils.getBaseName(songLocation) + Modulo7Globals.EXTENSION_TO_SERIALIZED_FILES;
         AvroUtils.serialize(finalSerializedLocation, song);
         serializedSongLocationSet.put(songLocation, finalSerializedLocation);
     }
@@ -309,7 +307,8 @@ public class DatabaseEngine {
             final String fullLocation = entry.getKey();
             final Song song = entry.getValue();
 
-            final String finalSerializedLocation = destinationDirectory + File.separator + FilenameUtils.getBaseName(fullLocation) + ".m7";
+            final String finalSerializedLocation = destinationDirectory + File.separator
+                    + FilenameUtils.getBaseName(fullLocation) + Modulo7Globals.EXTENSION_TO_SERIALIZED_FILES;
             AvroUtils.serialize(finalSerializedLocation, song);
             serializedSongLocationSet.put(fullLocation, finalSerializedLocation);
         }
