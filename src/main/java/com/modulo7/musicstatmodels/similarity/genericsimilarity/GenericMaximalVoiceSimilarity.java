@@ -31,8 +31,9 @@ public class GenericMaximalVoiceSimilarity<T extends AbstractVoiceSimilarity> im
     public double getSimilarity(final Song first, final  Song second) {
         double bestSim = -Double.MAX_VALUE;
 
-        // Its expected that both voices would be of different lengths, if thats the case
-        // automatically apply an unequal similarity measurement criteria
+        // Its expected that both voices would be of different lengths, if that is the case
+        // automatically apply an unequal similarity measurement criteria,
+        // in our case the smith waterman similarity
         final SmithWatermanSimilarity<T> unequalSimilarity =
                 new SmithWatermanSimilarity<>(internalVoiceSimilarity);
 

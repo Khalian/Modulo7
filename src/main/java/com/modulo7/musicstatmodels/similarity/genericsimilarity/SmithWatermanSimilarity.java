@@ -14,12 +14,15 @@ public class SmithWatermanSimilarity<T extends AbstractVoiceSimilarity> implemen
     // An internal voice similarity measure
     private T internalVoiceSimilarityMeasure;
 
+    // The directions associated with the smith waterman computations
+    private Direction[][] directions;
+
     /**
      * Internal voice similarity is acquired in the constructor
      *
      * @param internalVoiceSimilarityMeasure ( the internal measure used for similarity computation)
      */
-    public SmithWatermanSimilarity(T internalVoiceSimilarityMeasure) {
+    public SmithWatermanSimilarity(final T internalVoiceSimilarityMeasure) {
         this.internalVoiceSimilarityMeasure = internalVoiceSimilarityMeasure;
     }
 
@@ -40,7 +43,7 @@ public class SmithWatermanSimilarity<T extends AbstractVoiceSimilarity> implemen
             shorterVoice = first;
         }
 
-        return computeSmithWaterSonBestSum(shorterVoice, longerVoice);
+        return computeSmithWatermanBestSum(shorterVoice, longerVoice);
     }
 
     /**
@@ -50,7 +53,7 @@ public class SmithWatermanSimilarity<T extends AbstractVoiceSimilarity> implemen
      * @param longerVoice
      * @return
      */
-    private double computeSmithWaterSonBestSum(final Voice shorterVoice, final Voice longerVoice) {
+    private double computeSmithWatermanBestSum(final Voice shorterVoice, final Voice longerVoice) {
 
         int longerLength = longerVoice.getNumVoiceInstantsOfVoice();
         int shorterLength = shorterVoice.getNumVoiceInstantsOfVoice();
@@ -101,4 +104,15 @@ public class SmithWatermanSimilarity<T extends AbstractVoiceSimilarity> implemen
 
         return newVoice;
     }
+}
+
+/**
+ * A helper enum for the direction of the smith waterman computations
+ * as defined in https://en.wikipedia.org/wiki/Smith%E2%80%93Waterman_algorithm
+ */
+enum Direction {
+    ZERO,
+    UP,
+    LEFT,
+    UP_AND_LEFT
 }

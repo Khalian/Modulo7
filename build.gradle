@@ -204,7 +204,6 @@ dependencies {
 }
 
 generateGrammarSource {
-    arguments += ["-visitor", "-long-messages"]
     outputs.upToDateWhen { false }
 
     doLast {

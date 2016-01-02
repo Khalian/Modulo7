@@ -47,7 +47,7 @@ public class SongContourSimilarity<T extends AbstractVoiceSimilarity, V extends 
             final Song firstContourRepSong = songRep.getContourizedSongRep(first);
             final Song secondContourRepSong = songRep.getContourizedSongRep(second);
 
-            GenericMaximalVoiceSimilarity<T> similarity = new GenericMaximalVoiceSimilarity<T>(internalVoiceSimilarity);
+            GMVoiceSimIgnoreLengths<T> similarity = new GMVoiceSimIgnoreLengths<>(internalVoiceSimilarity);
             return similarity.getSimilarity(firstContourRepSong, secondContourRepSong);
         } catch (Modulo7BadIntervalException | Modulo7WrongNoteType | Modulo7BadNoteException e) {
             logger.error(e.getMessage());

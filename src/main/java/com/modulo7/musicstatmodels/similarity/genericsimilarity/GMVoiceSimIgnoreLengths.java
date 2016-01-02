@@ -8,7 +8,7 @@ import com.modulo7.musicstatmodels.representation.polyphonic.Song;
 /**
  * Created by asanyal on 10/13/15.
  *
- * Similar to the genericmaximalvoicesimilarity, but here we dont care
+ * Similar to the generic maximalvoicesimilarity, but here we dont care
  * about unequal lengths of voices
  */
 public class GMVoiceSimIgnoreLengths <T extends AbstractVoiceSimilarity> implements AbstractSongSimilarity {

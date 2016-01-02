@@ -3,6 +3,7 @@ package com.modulo7.musicstatmodels.representation.buildingblocks;
 import com.modulo7.common.exceptions.Modulo7BadNoteException;
 import com.modulo7.common.exceptions.Modulo7InvalidOctaveRangeException;
 import com.modulo7.common.utils.FrequencyNoteMap;
+import com.modulo7.common.utils.Modulo7Globals;
 import com.modulo7.musicstatmodels.musictheorymodels.Interval;
 import com.modulo7.musicstatmodels.musictheorymodels.IntervalQuality;
 import com.modulo7.musicstatmodels.musictheorymodels.IntervalType;
@@ -16,6 +17,9 @@ import com.modulo7.musicstatmodels.musictheorymodels.IntervalType;
  * in octaves
  */
 public enum Note {
+
+    // Unknown note
+    UNKNOWN("U", Modulo7Globals.UNKNOWN),
 
     // All the notes
     A0("A", 0), ASHARP0("A#", 0), B0("B", 0), C0("C", 0), CSHARP0("C#", 0), D0("D", 0), DSHARP0("D#", 0), E0("E", 0),
@@ -124,7 +128,7 @@ public enum Note {
     }
 
     /**
-     * Get the octave number associated with this
+     * Get the octave number associated with this note
      * @return
      */
     public Integer getOctaveNumber() {
@@ -461,6 +465,13 @@ public enum Note {
         final int positionOne = noteMap.getPositionGivenNote(note);
         final int shiftPosition =  shiftInterval.getIntervalQuantity().getQuantity();
         final int sign = shiftInterval.getIntervalType().equals(IntervalType.ASCENDING) ? 1 : -1;
-        return noteMap.getNoteGivenPosition(positionOne + sign * shiftPosition);
+        final Note retNote =  noteMap.getNoteGivenPosition(positionOne + sign * shiftPosition);
+
+        if (retNote == null) {
+            // This happens when the shift is beyond the shift of the musical range of western music
+            return Note.UNKNOWN;
+        } else {
+            return retNote;
+        }
     }
 }

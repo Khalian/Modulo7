@@ -1,8 +1,6 @@
 package com.modulo7.common.interfaces.choices;
 
-import com.modulo7.musicstatmodels.similarity.voicesimilarity.GrossContourSimilarity;
-import com.modulo7.musicstatmodels.similarity.voicesimilarity.SCMNGramSimilarity;
-import com.modulo7.musicstatmodels.similarity.voicesimilarity.UkkonnenSimilarity;
+import com.modulo7.musicstatmodels.similarity.voicesimilarity.*;
 
 import java.util.HashMap;
 import java.util.HashSet;
@@ -18,8 +16,10 @@ import java.util.Set;
 public enum VoiceSimilarityChoices {
 
     GROSS_VOICE_CONTOUR_SIMILARITY("grossvoicecontour"),
+    COUNT_DISTANCE_SIMILARITY("countdistance"),
     SCM_TRIGRAM_VOICE_SIMILARITY("scmtrigram"),
-    UKKONNEN_VOICE_SIMILARITY("ukkonenmeasure");
+    UKKONNEN_VOICE_SIMILARITY("ukkonenmeasure"),
+    VOICE_TONAL_HISTOGRAM("voicetonalhistogram");
 
     private String voiceSimMeasure;
 
@@ -38,6 +38,8 @@ public enum VoiceSimilarityChoices {
         put("grossvoicecontour", GrossContourSimilarity.class);
         put("scmtrigram", SCMNGramSimilarity.class);
         put("ukkonenmeasure", UkkonnenSimilarity.class);
+        put("countdistance", CountDistanceSimilarity.class);
+        put("voicetonalhistogram", VoiceTonalHistogramSimilarity.class);
     }};
 
     /**

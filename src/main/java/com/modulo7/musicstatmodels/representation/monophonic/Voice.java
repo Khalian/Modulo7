@@ -85,6 +85,11 @@ public class Voice implements Serializable {
             if (!instant.isChord()) {
                 try {
                     final Note note = instant.getNote();
+
+                    if (note == null) {
+                        System.out.println("Its broken here");
+                    }
+
                     final String noteValue = note.getNoteValue();
                     noteString.append(noteValue);
                     noteString.append(" ");

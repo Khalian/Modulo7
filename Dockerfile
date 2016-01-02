@@ -11,9 +11,10 @@ RUN apt-get install -y software-properties-common
 RUN add-apt-repository -y "deb http://archive.ubuntu.com/ubuntu precise universe" && \
     add-apt-repository -y "deb http://archive.ubuntu.com/ubuntu precise main restricted universe multiverse" && \
     add-apt-repository -y "deb http://archive.ubuntu.com/ubuntu precise-updates main restricted universe multiverse" && \
-    add-apt-repository -y "deb http://archive.ubuntu.com/ubuntu precise-backports main restricted universe multiverse"
+    add-apt-repository -y "deb http://archive.ubuntu.com/ubuntu precise-backports main restricted universe multiverse" && \
+    add-apt-repository -y ppa:webupd8team/java
 
-Update and upgrade the repositories once
+# Update and upgrade the repositories once
 RUN apt-get -y update
 RUN apt-get -y upgrade
 
@@ -30,13 +31,14 @@ RUN apt-get -y install libfaac-dev libmp3lame-dev libopencore-amrnb-dev libopenc
 RUN apt-get -y install x264 v4l-utils ffmpeg
 RUN apt-get -y install libgtk2.0-dev
 
-# Install opencv on the image, its needed for the   
+# Install opencv on the image, its needed for the c++ code for omr
+RUN     apt-get -y install git
 RUN     git clone https://github.com/Khalian/Install-OpenCV
 RUN     chmod +x /Install-OpenCV/Ubuntu/2.4/opencv2_4_9.sh
 RUN	    sh /Install-OpenCV/Ubuntu/2.4/opencv2_4_9.sh
 
 # Install java
-RUN     apt-get -y install openjdk-7-jdk
+RUN	apt-get -y install oracle-java8-set-default
 
 # The installation of tessaract and audiveris prototypes, under construction
 RUN     apt-get -y install tesseract-ocr liblept4 libtesseract3 tesseract-ocr-deu tesseract-ocr-eng tesseract-ocr-fra tesseract-ocr-ita

@@ -137,11 +137,6 @@ public class Modulo7SQLParser extends Parser {
 		public void exitRule(ParseTreeListener listener) {
 			if ( listener instanceof Modulo7SQLListener ) ((Modulo7SQLListener)listener).exitSelect_clause(this);
 		}
-		@Override
-		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
-			if ( visitor instanceof Modulo7SQLVisitor ) return ((Modulo7SQLVisitor<? extends T>)visitor).visitSelect_clause(this);
-			else return visitor.visitChildren(this);
-		}
 	}
 
 	public final Select_clauseContext select_clause() throws RecognitionException {
@@ -205,11 +200,6 @@ public class Modulo7SQLParser extends Parser {
 		public void exitRule(ParseTreeListener listener) {
 			if ( listener instanceof Modulo7SQLListener ) ((Modulo7SQLListener)listener).exitFrom_clause(this);
 		}
-		@Override
-		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
-			if ( visitor instanceof Modulo7SQLVisitor ) return ((Modulo7SQLVisitor<? extends T>)visitor).visitFrom_clause(this);
-			else return visitor.visitChildren(this);
-		}
 	}
 
 	public final From_clauseContext from_clause() throws RecognitionException {
@@ -248,11 +238,6 @@ public class Modulo7SQLParser extends Parser {
 		@Override
 		public void exitRule(ParseTreeListener listener) {
 			if ( listener instanceof Modulo7SQLListener ) ((Modulo7SQLListener)listener).exitTable_name(this);
-		}
-		@Override
-		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
-			if ( visitor instanceof Modulo7SQLVisitor ) return ((Modulo7SQLVisitor<? extends T>)visitor).visitTable_name(this);
-			else return visitor.visitChildren(this);
 		}
 	}
 
@@ -293,11 +278,6 @@ public class Modulo7SQLParser extends Parser {
 		@Override
 		public void exitRule(ParseTreeListener listener) {
 			if ( listener instanceof Modulo7SQLListener ) ((Modulo7SQLListener)listener).exitInput_name(this);
-		}
-		@Override
-		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
-			if ( visitor instanceof Modulo7SQLVisitor ) return ((Modulo7SQLVisitor<? extends T>)visitor).visitInput_name(this);
-			else return visitor.visitChildren(this);
 		}
 	}
 
@@ -342,11 +322,6 @@ public class Modulo7SQLParser extends Parser {
 		public void exitRule(ParseTreeListener listener) {
 			if ( listener instanceof Modulo7SQLListener ) ((Modulo7SQLListener)listener).exitColumn_name_alias(this);
 		}
-		@Override
-		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
-			if ( visitor instanceof Modulo7SQLVisitor ) return ((Modulo7SQLVisitor<? extends T>)visitor).visitColumn_name_alias(this);
-			else return visitor.visitChildren(this);
-		}
 	}
 
 	public final Column_name_aliasContext column_name_alias() throws RecognitionException {
@@ -383,11 +358,6 @@ public class Modulo7SQLParser extends Parser {
 		@Override
 		public void exitRule(ParseTreeListener listener) {
 			if ( listener instanceof Modulo7SQLListener ) ((Modulo7SQLListener)listener).exitIndex_name(this);
-		}
-		@Override
-		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
-			if ( visitor instanceof Modulo7SQLVisitor ) return ((Modulo7SQLVisitor<? extends T>)visitor).visitIndex_name(this);
-			else return visitor.visitChildren(this);
 		}
 	}
 
@@ -434,11 +404,6 @@ public class Modulo7SQLParser extends Parser {
 		@Override
 		public void exitRule(ParseTreeListener listener) {
 			if ( listener instanceof Modulo7SQLListener ) ((Modulo7SQLListener)listener).exitInput_list_clause(this);
-		}
-		@Override
-		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
-			if ( visitor instanceof Modulo7SQLVisitor ) return ((Modulo7SQLVisitor<? extends T>)visitor).visitInput_list_clause(this);
-			else return visitor.visitChildren(this);
 		}
 	}
 
@@ -494,11 +459,6 @@ public class Modulo7SQLParser extends Parser {
 		public void exitRule(ParseTreeListener listener) {
 			if ( listener instanceof Modulo7SQLListener ) ((Modulo7SQLListener)listener).exitSelect_key(this);
 		}
-		@Override
-		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
-			if ( visitor instanceof Modulo7SQLVisitor ) return ((Modulo7SQLVisitor<? extends T>)visitor).visitSelect_key(this);
-			else return visitor.visitChildren(this);
-		}
 	}
 
 	public final Select_keyContext select_key() throws RecognitionException {
@@ -538,11 +498,6 @@ public class Modulo7SQLParser extends Parser {
 		@Override
 		public void exitRule(ParseTreeListener listener) {
 			if ( listener instanceof Modulo7SQLListener ) ((Modulo7SQLListener)listener).exitWhere_clause(this);
-		}
-		@Override
-		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
-			if ( visitor instanceof Modulo7SQLVisitor ) return ((Modulo7SQLVisitor<? extends T>)visitor).visitWhere_clause(this);
-			else return visitor.visitChildren(this);
 		}
 	}
 
@@ -593,11 +548,6 @@ public class Modulo7SQLParser extends Parser {
 		@Override
 		public void exitRule(ParseTreeListener listener) {
 			if ( listener instanceof Modulo7SQLListener ) ((Modulo7SQLListener)listener).exitExpression(this);
-		}
-		@Override
-		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
-			if ( visitor instanceof Modulo7SQLVisitor ) return ((Modulo7SQLVisitor<? extends T>)visitor).visitExpression(this);
-			else return visitor.visitChildren(this);
 		}
 	}
 
@@ -654,11 +604,6 @@ public class Modulo7SQLParser extends Parser {
 		public void exitRule(ParseTreeListener listener) {
 			if ( listener instanceof Modulo7SQLListener ) ((Modulo7SQLListener)listener).exitElement(this);
 		}
-		@Override
-		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
-			if ( visitor instanceof Modulo7SQLVisitor ) return ((Modulo7SQLVisitor<? extends T>)visitor).visitElement(this);
-			else return visitor.visitChildren(this);
-		}
 	}
 
 	public final ElementContext element() throws RecognitionException {
@@ -704,11 +649,6 @@ public class Modulo7SQLParser extends Parser {
 		public void exitRule(ParseTreeListener listener) {
 			if ( listener instanceof Modulo7SQLListener ) ((Modulo7SQLListener)listener).exitRight_element(this);
 		}
-		@Override
-		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
-			if ( visitor instanceof Modulo7SQLVisitor ) return ((Modulo7SQLVisitor<? extends T>)visitor).visitRight_element(this);
-			else return visitor.visitChildren(this);
-		}
 	}
 
 	public final Right_elementContext right_element() throws RecognitionException {
@@ -747,11 +687,6 @@ public class Modulo7SQLParser extends Parser {
 		@Override
 		public void exitRule(ParseTreeListener listener) {
 			if ( listener instanceof Modulo7SQLListener ) ((Modulo7SQLListener)listener).exitLeft_element(this);
-		}
-		@Override
-		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
-			if ( visitor instanceof Modulo7SQLVisitor ) return ((Modulo7SQLVisitor<? extends T>)visitor).visitLeft_element(this);
-			else return visitor.visitChildren(this);
 		}
 	}
 
@@ -792,11 +727,6 @@ public class Modulo7SQLParser extends Parser {
 		public void exitRule(ParseTreeListener listener) {
 			if ( listener instanceof Modulo7SQLListener ) ((Modulo7SQLListener)listener).exitTarget_element(this);
 		}
-		@Override
-		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
-			if ( visitor instanceof Modulo7SQLVisitor ) return ((Modulo7SQLVisitor<? extends T>)visitor).visitTarget_element(this);
-			else return visitor.visitChildren(this);
-		}
 	}
 
 	public final Target_elementContext target_element() throws RecognitionException {
@@ -836,11 +766,6 @@ public class Modulo7SQLParser extends Parser {
 		@Override
 		public void exitRule(ParseTreeListener listener) {
 			if ( listener instanceof Modulo7SQLListener ) ((Modulo7SQLListener)listener).exitRelational_op(this);
-		}
-		@Override
-		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
-			if ( visitor instanceof Modulo7SQLVisitor ) return ((Modulo7SQLVisitor<? extends T>)visitor).visitRelational_op(this);
-			else return visitor.visitChildren(this);
 		}
 	}
 
@@ -887,11 +812,6 @@ public class Modulo7SQLParser extends Parser {
 		public void exitRule(ParseTreeListener listener) {
 			if ( listener instanceof Modulo7SQLListener ) ((Modulo7SQLListener)listener).exitExpr_op(this);
 		}
-		@Override
-		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
-			if ( visitor instanceof Modulo7SQLVisitor ) return ((Modulo7SQLVisitor<? extends T>)visitor).visitExpr_op(this);
-			else return visitor.visitChildren(this);
-		}
 	}
 
 	public final Expr_opContext expr_op() throws RecognitionException {
@@ -935,11 +855,6 @@ public class Modulo7SQLParser extends Parser {
 		public void exitRule(ParseTreeListener listener) {
 			if ( listener instanceof Modulo7SQLListener ) ((Modulo7SQLListener)listener).exitBetween_op(this);
 		}
-		@Override
-		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
-			if ( visitor instanceof Modulo7SQLVisitor ) return ((Modulo7SQLVisitor<? extends T>)visitor).visitBetween_op(this);
-			else return visitor.visitChildren(this);
-		}
 	}
 
 	public final Between_opContext between_op() throws RecognitionException {
@@ -977,11 +892,6 @@ public class Modulo7SQLParser extends Parser {
 		@Override
 		public void exitRule(ParseTreeListener listener) {
 			if ( listener instanceof Modulo7SQLListener ) ((Modulo7SQLListener)listener).exitIs_or_is_not(this);
-		}
-		@Override
-		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
-			if ( visitor instanceof Modulo7SQLVisitor ) return ((Modulo7SQLVisitor<? extends T>)visitor).visitIs_or_is_not(this);
-			else return visitor.visitChildren(this);
 		}
 	}
 
@@ -1034,11 +944,6 @@ public class Modulo7SQLParser extends Parser {
 		@Override
 		public void exitRule(ParseTreeListener listener) {
 			if ( listener instanceof Modulo7SQLListener ) ((Modulo7SQLListener)listener).exitEither_true_or_false(this);
-		}
-		@Override
-		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
-			if ( visitor instanceof Modulo7SQLVisitor ) return ((Modulo7SQLVisitor<? extends T>)visitor).visitEither_true_or_false(this);
-			else return visitor.visitChildren(this);
 		}
 	}
 
@@ -1109,11 +1014,6 @@ public class Modulo7SQLParser extends Parser {
 		@Override
 		public void exitRule(ParseTreeListener listener) {
 			if ( listener instanceof Modulo7SQLListener ) ((Modulo7SQLListener)listener).exitSimple_expression(this);
-		}
-		@Override
-		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
-			if ( visitor instanceof Modulo7SQLVisitor ) return ((Modulo7SQLVisitor<? extends T>)visitor).visitSimple_expression(this);
-			else return visitor.visitChildren(this);
 		}
 	}
 
@@ -1187,11 +1087,6 @@ public class Modulo7SQLParser extends Parser {
 		public void exitRule(ParseTreeListener listener) {
 			if ( listener instanceof Modulo7SQLListener ) ((Modulo7SQLListener)listener).exitCriteria(this);
 		}
-		@Override
-		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
-			if ( visitor instanceof Modulo7SQLVisitor ) return ((Modulo7SQLVisitor<? extends T>)visitor).visitCriteria(this);
-			else return visitor.visitChildren(this);
-		}
 	}
 
 	public final CriteriaContext criteria() throws RecognitionException {
@@ -1231,11 +1126,6 @@ public class Modulo7SQLParser extends Parser {
 		@Override
 		public void exitRule(ParseTreeListener listener) {
 			if ( listener instanceof Modulo7SQLListener ) ((Modulo7SQLListener)listener).exitStatistic(this);
-		}
-		@Override
-		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
-			if ( visitor instanceof Modulo7SQLVisitor ) return ((Modulo7SQLVisitor<? extends T>)visitor).visitStatistic(this);
-			else return visitor.visitChildren(this);
 		}
 	}
 

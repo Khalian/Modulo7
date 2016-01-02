@@ -113,8 +113,6 @@ public class EchoNestBasicMP3Analyzer implements AbstractAnalyzer {
                  */
                 for (final Segment segment : analysis.getSegments()) {
                     VoiceInstant songInstant = ChromaAnalysis.getLineInstantFromVector(segment.getPitches(), segment.getDuration());
-                    // TODO : Figure out what to do with the timbral information
-                    // double[] timbreVector = segment.getTimbre();
                     voiceOfSong.addVoiceInstant(songInstant);
                 }
                 if (keySignature == null) {

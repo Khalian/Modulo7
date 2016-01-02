@@ -3,6 +3,7 @@ package musicstatmodelstests;
 import com.modulo7.common.exceptions.Modulo7BadIntervalException;
 import com.modulo7.musicstatmodels.musictheorymodels.Interval;
 import com.modulo7.musicstatmodels.musictheorymodels.IntervalQuantity;
+import com.modulo7.musicstatmodels.musictheorymodels.IntervalType;
 import com.modulo7.musicstatmodels.musictheorymodels.KKTonalityProfiles;
 import com.modulo7.musicstatmodels.representation.buildingblocks.ChordQuality;
 import com.modulo7.musicstatmodels.representation.buildingblocks.Note;
@@ -73,5 +74,20 @@ public class MusicTheoryModelsTest {
 
         Assert.assertArrayEquals(KKTonalityProfiles.MAJOR_CHORD_PROFILES.get("C#").
                 toArray(new Double[KKTonalityProfiles.MAJOR_CHORD_PROFILES.get("C#").size()]), array);
+    }
+
+    /**
+     * Test case for checking the shifted note logic and this is the case in which the shift logic would
+     * break
+     *
+     * @throws Modulo7BadIntervalException
+     */
+    @Test
+    public void shiftNoteTest() throws Modulo7BadIntervalException {
+        final Note note = Note.B0;
+        Interval shitfInterval = Interval.getInterval(-3);
+
+        Note shiftNote = Note.getShiftedNote(note, shitfInterval);
+        assert (shiftNote.equals(Note.UNKNOWN));
     }
 }
