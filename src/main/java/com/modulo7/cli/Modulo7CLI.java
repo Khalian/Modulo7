@@ -480,10 +480,10 @@ public class Modulo7CLI {
     }
 
     private static void alignmentProcess(final Scanner in) throws Modulo7NoSuchVoiceSimilarityMeasureException {
-        System.out.print("You are in the tonal alingment mode");
+        System.out.println("You are in the tonal alingment mode");
         System.out.println("In this mode, Modulo7 looks for various snippets of songs that are alignment with each other and print the alignments");
         System.out.println("We use smith waterman algorithm for the alignment, however an internal similarity measure is needed");
-        System.out.println("Enter a voice similarity measure");
+        System.out.print("Enter a voice similarity measure:");
 
         final String voiceSimilarity = in.next();
 
@@ -495,10 +495,15 @@ public class Modulo7CLI {
 
         try {
             AbstractVoiceSimilarity voiceSim = (AbstractVoiceSimilarity) voiceSimClass.newInstance();
-            TonalAlginmentEngine engine = new TonalAlginmentEngine(voiceSim);
-            engine.align(indexer.getDataBaseEngine());
 
-        } catch (InstantiationException | IllegalAccessException e) {
+            System.out.print("Enter the location of a song to rank the rest of the database against:");
+            final String candidateSongLocation = in.next();
+
+            final Song song = indexer.getSongObjectGivenLocation(candidateSongLocation);
+
+            TonalAlginmentEngine engine = new TonalAlginmentEngine(voiceSim);
+            engine.align(indexer.getDataBaseEngine(), song);
+        } catch (InstantiationException | IllegalAccessException | Modulo7DataBaseNotSerializedException e) {
             logger.error(e.getMessage());
         }
     }

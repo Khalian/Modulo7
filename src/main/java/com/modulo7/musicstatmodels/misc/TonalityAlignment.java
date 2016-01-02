@@ -14,21 +14,29 @@ public class TonalityAlignment {
     // Other string
     private String secondStr;
 
+    // Maximal alignment noticed
+    private int maxTonalCommonality;
+
     /**
      * Default constructor
      * @param firstStr
      * @param secondStr
+     * @param maxTonalCommonality
      */
-    public TonalityAlignment(String firstStr, String secondStr) {
+    public TonalityAlignment(String firstStr, String secondStr, final int maxTonalCommonality) {
         this.firstStr = firstStr;
         this.secondStr = secondStr;
+        this.maxTonalCommonality = maxTonalCommonality;
     }
 
     /**
      * Displays the alignment as determined by an alignment algorithm
      */
     public void displayAlignment() {
+        System.out.println("The alignment is displayed below");
         System.out.println(firstStr);
         System.out.println(secondStr);
+        System.out.println("The maximal alignment score" + maxTonalCommonality);
+
     }
 }

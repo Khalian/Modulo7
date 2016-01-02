@@ -120,10 +120,13 @@ public class SmithWatermanSimilarity<T extends AbstractVoiceSimilarity> implemen
         int rowIndex = directions.length - 1;
         int colIndex = directions[0].length - 1;
 
+        int maxTonalCommonality = 0;
+
         while (!directions[rowIndex][colIndex].equals(Direction.ZERO)) {
             if (directions[rowIndex][colIndex].equals(Direction.UP_AND_LEFT)) {
                 rowIndex--;
                 colIndex--;
+                maxTonalCommonality++;
             } else if (directions[rowIndex][colIndex].equals(Direction.LEFT)) {
                 secondDoc.set(colIndex, "-");
                 colIndex--;
@@ -136,7 +139,7 @@ public class SmithWatermanSimilarity<T extends AbstractVoiceSimilarity> implemen
         final String first = Modulo7Utils.buildStringOverList(firstDoc);
         final String second = Modulo7Utils.buildStringOverList(secondDoc);
 
-        alignment = new TonalityAlignment(first, second);
+        alignment = new TonalityAlignment(first, second, maxTonalCommonality);
     }
 
     /**
