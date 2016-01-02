@@ -1,4 +1,4 @@
-package com.modulo7.engine;
+package com.modulo7.engine.storage;
 
 import com.echonest.api.v4.EchoNestException;
 import com.modulo7.common.exceptions.*;
@@ -18,7 +18,6 @@ import org.apache.lucene.search.ScoreDoc;
 import org.apache.lucene.search.TopDocs;
 
 import javax.sound.midi.InvalidMidiDataException;
-import javax.tools.FileObject;
 import java.io.File;
 import java.io.IOException;
 import java.util.*;
@@ -32,7 +31,7 @@ import java.util.*;
 public class Modulo7Indexer {
 
     // Database engine
-    protected DatabaseEngine engine;
+    private DatabaseEngine engine;
 
     // Songs indexed on key signature
     private Map<KeySignature, Set<Song>> keySignatureIndex = new HashMap<>();
@@ -360,7 +359,7 @@ public class Modulo7Indexer {
      * Gets the database name of the internal database
      * @return
      */
-    protected String getInternalDBName() {
+    public String getInternalDBName() {
         return engine.getDatabaseName();
     }
 
@@ -368,7 +367,7 @@ public class Modulo7Indexer {
      * Gets handles all the songs from the internal database
      * @return
      */
-    protected Set<Song> getAllSongs() {
+    public Set<Song> getAllSongs() {
         return engine.getAllSongs();
     }
 
@@ -377,7 +376,7 @@ public class Modulo7Indexer {
      * @param songName
      * @return
      */
-    protected Song getSongObjectGivenSongName(final String songName) {
+    public Song getSongObjectGivenSongName(final String songName) {
         final Set<Song> allSongs = getAllSongs();
 
         for (Song song : allSongs) {
@@ -475,5 +474,13 @@ public class Modulo7Indexer {
         }
 
         return lyrics;
+    }
+
+    /**
+     * Access to the data base engine
+     * @return
+     */
+    public DatabaseEngine getDataBaseEngine() {
+        return engine;
     }
 }

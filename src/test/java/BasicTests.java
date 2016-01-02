@@ -1,4 +1,4 @@
-import com.modulo7.engine.Modulo7QueryProcessingEngine;
+import com.modulo7.engine.processing.Modulo7QueryProcessingEngine;
 import org.junit.Assert;
 import org.junit.Test;
 

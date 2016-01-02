@@ -93,9 +93,14 @@ public enum Note {
      * or not
      */
     private void validOctaveNumberCheck(final int octaveNumber) throws Modulo7InvalidOctaveRangeException {
-        if (octaveNumber >= 0 && octaveNumber <= 9) {
+        if (octaveNumber < 0 || octaveNumber > 9) {
 
-        } else {
+            // If the note is unknown, this could happen, example when gradient operations happen in the contour
+            // algorithms
+            if (octaveNumber == Modulo7Globals.UNKNOWN) {
+                return;
+            }
+
             throw new Modulo7InvalidOctaveRangeException("Octave Number :" + octaveNumber + " is not in range" +
                     "in between 0 and 9");
         }

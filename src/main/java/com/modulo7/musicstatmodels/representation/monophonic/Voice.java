@@ -85,11 +85,6 @@ public class Voice implements Serializable {
             if (!instant.isChord()) {
                 try {
                     final Note note = instant.getNote();
-
-                    if (note == null) {
-                        System.out.println("Its broken here");
-                    }
-
                     final String noteValue = note.getNoteValue();
                     noteString.append(noteValue);
                     noteString.append(" ");
@@ -107,6 +102,36 @@ public class Voice implements Serializable {
         }
 
         return noteString.toString().trim();
+    }
+
+    /**
+     * Returns the document representation of a voice as a consecutive list
+     * of document elements
+     * @return
+     */
+    public List<String> getDocumentElementsRepresentation() {
+
+        List<String> docElems = new ArrayList<>();
+
+        for (VoiceInstant instant : voiceSequence) {
+
+            if (!instant.isChord()) {
+                try {
+                    final Note note = instant.getNote();
+                    final String noteValue = note.getNoteValue();
+                    docElems.add(noteValue);
+                } catch (Modulo7WrongNoteType e) {
+                    logger.error(e.getMessage());
+                }
+            } else {
+                final Note chordRootNote = ChordQuality.getRootNoteFromChord(instant.getAllNotesofInstant());
+                final String chordRootNoteStringRep = chordRootNote.getNoteValue();
+                final String chordType = instant.getChordQuality().getStringRepresentation();
+                docElems.add(chordRootNoteStringRep + chordType);
+            }
+        }
+
+        return docElems;
     }
 
     /**

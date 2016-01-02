@@ -1,4 +1,4 @@
-package com.modulo7.engine;
+package com.modulo7.engine.storage;
 
 import com.echonest.api.v4.EchoNestException;
 import com.modulo7.acoustics.EchoNestBasicMP3Analyzer;

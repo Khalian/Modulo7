@@ -38,7 +38,9 @@ RUN     chmod +x /Install-OpenCV/Ubuntu/2.4/opencv2_4_9.sh
 RUN	    sh /Install-OpenCV/Ubuntu/2.4/opencv2_4_9.sh
 
 # Install java
-RUN	apt-get -y install oracle-java8-set-default
+RUN echo debconf shared/accepted-oracle-license-v1-1 select true | sudo debconf-set-selections
+RUN echo debconf shared/accepted-oracle-license-v1-1 seen true | sudo debconf-set-selections
+RUN	apt-get -y -f install oracle-java8-set-default
 
 # The installation of tessaract and audiveris prototypes, under construction
 RUN     apt-get -y install tesseract-ocr liblept4 libtesseract3 tesseract-ocr-deu tesseract-ocr-eng tesseract-ocr-fra tesseract-ocr-ita

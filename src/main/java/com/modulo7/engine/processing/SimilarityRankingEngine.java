@@ -1,6 +1,7 @@
-package com.modulo7.engine;
+package com.modulo7.engine.processing;
 
 import com.modulo7.common.interfaces.AbstractSongSimilarity;
+import com.modulo7.engine.storage.DatabaseEngine;
 import com.modulo7.musicstatmodels.representation.polyphonic.Song;
 
 import java.util.*;
@@ -14,7 +15,7 @@ import java.util.*;
  * the user can choose then to list all the relevant documetns he/she needs
  *
  */
-public class RankEngineOnSimilarity {
+public class SimilarityRankingEngine {
 
     private AbstractSongSimilarity abstractSimilarity;
 
@@ -22,7 +23,7 @@ public class RankEngineOnSimilarity {
      * Define a similarity engine by first inputting a similarity metric
      * @param similarity
      */
-    public RankEngineOnSimilarity(final AbstractSongSimilarity similarity) {
+    public SimilarityRankingEngine(final AbstractSongSimilarity similarity) {
         this.abstractSimilarity = similarity;
     }
 

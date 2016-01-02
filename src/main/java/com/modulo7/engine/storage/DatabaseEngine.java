@@ -1,4 +1,4 @@
-package com.modulo7.engine;
+package com.modulo7.engine.storage;
 
 import com.echonest.api.v4.EchoNestException;
 import com.modulo7.acoustics.EchoNestBasicMP3Analyzer;
@@ -13,7 +13,6 @@ import com.modulo7.image.AudiverisSheetAnalyzer;
 import com.modulo7.musicstatmodels.representation.polyphonic.Song;
 import com.modulo7.nlp.lyrics.Lyrics;
 import com.modulo7.othersources.BasicMusicXMLParser;
-import com.modulo7.pureresearch.MSDSongParser;
 import org.apache.commons.io.FilenameUtils;
 
 import javax.sound.midi.InvalidMidiDataException;
@@ -464,7 +463,7 @@ public class DatabaseEngine {
      * Getter for the entire song location map
      * @return
      */
-    protected Map<String, Song> getSongLocationMap() {
+    public Map<String, Song> getSongLocationMap() {
         return songLocationMap;
     }
 
@@ -472,7 +471,7 @@ public class DatabaseEngine {
      * Get the database name
      * @return
      */
-    protected String getDatabaseName() {
+    public String getDatabaseName() {
         return databaseName;
     }
 
@@ -480,7 +479,7 @@ public class DatabaseEngine {
      * Gets all the songs
      * @return
      */
-    protected Set<Song> getAllSongs() {
+    public Set<Song> getAllSongs() {
         return inverseSongLocationMap.keySet();
     }
 }

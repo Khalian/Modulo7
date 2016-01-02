@@ -26,35 +26,6 @@ import java.util.stream.Collectors;
 public class Modulo7Utils {
 
     /**
-     * Processes a text file and removes duplicates from the file
-     *
-     * This will be used to remove duplicate artists from crawled artists etc
-     *
-     * @param fileName
-     * @throws IOException
-     */
-    public static void removeDuplicateLinesFromFile(final String fileName) throws IOException {
-        File file = new File(fileName);
-
-        List<String> originalLines = FileUtils.readLines(file, "UTF-8");
-
-        Set<String> removedDuplicateLines = new HashSet<>();
-
-        for (String line : originalLines) {
-            if (!removedDuplicateLines.contains(line))
-                removedDuplicateLines.add(line);
-        }
-
-       file.delete();
-
-        File newFile = new File(fileName);
-
-        for (String newLine : removedDuplicateLines) {
-            FileUtils.writeStringToFile(newFile, newLine);
-        }
-    }
-
-    /**
      * Method that removes the duplicate files from a directory
      *
      * The method is powerful enough to remove all files inside subdirectories as well
@@ -300,7 +271,7 @@ public class Modulo7Utils {
     }
 
     /**
-     * Gets the length of a particular file in bytes
+     * Gets the length of a particular file in bytes, its used in the research code
      *
      * @param fileName
      * @return
@@ -313,5 +284,21 @@ public class Modulo7Utils {
         } else {
             throw new FileNotFoundException("File" + fileName + "not found");
         }
+    }
+
+    /**
+     * Build string from the list
+     * @param args
+     * @return
+     */
+    public static String buildStringOverList(final List<String> args) {
+        StringBuilder builder = new StringBuilder();
+
+        for (final String arg : args) {
+            builder.append(arg);
+            builder.append(" ");
+        }
+
+        return builder.toString();
     }
 }

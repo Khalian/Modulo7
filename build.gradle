@@ -116,7 +116,7 @@ jar {
     manifest {
         attributes 'Implementation-Title': 'Modulo7',
                    'Implementation-Version': 1.0,
-                    'Main-Class': 'com.modulo7.engine.Modulo7CLI'
+                    'Main-Class': 'com.modulo7.cli.Modulo7CLI'
     }
 
     // remove the security files (from mail.jar / activation.jar) so that the jar will be executable.

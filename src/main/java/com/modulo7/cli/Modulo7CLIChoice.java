@@ -1,4 +1,4 @@
-package com.modulo7.engine;
+package com.modulo7.cli;
 
 /**
  * Created by asanyal on 9/17/15.
@@ -17,9 +17,10 @@ public enum Modulo7CLIChoice {
     LIST_NUM_SONGS_INDEXED(6),
     INPUT_CUSTOM_QUERY(7),
     LYRICS_QUERY(8),
-    SERIALIZE_DATABASE(9),
-    PLAYBACK_SONG(10),
-    EXIT(11),
+    MELODIC_ALIGNMENT_ANALYSIS(9),
+    SERIALIZE_DATABASE(10),
+    PLAYBACK_SONG(11),
+    EXIT(12),
     INVALID_CHOICE(-1);
 
     final int choice;
@@ -43,9 +44,10 @@ public enum Modulo7CLIChoice {
             case 6: return LIST_NUM_SONGS_INDEXED;
             case 7: return INPUT_CUSTOM_QUERY;
             case 8: return LYRICS_QUERY;
-            case 9: return SERIALIZE_DATABASE;
-            case 10: return PLAYBACK_SONG;
-            case 11: return EXIT;
+            case 9: return MELODIC_ALIGNMENT_ANALYSIS;
+            case 10: return SERIALIZE_DATABASE;
+            case 11: return PLAYBACK_SONG;
+            case 12: return EXIT;
             default: return INVALID_CHOICE;
         }
     }

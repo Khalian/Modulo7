@@ -1,6 +1,6 @@
 package interactive;
 
-import com.modulo7.engine.Modulo7CLI;
+import com.modulo7.cli.Modulo7CLI;
 import org.junit.Test;
 
 /**

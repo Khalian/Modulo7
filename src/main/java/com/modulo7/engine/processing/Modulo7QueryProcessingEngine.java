@@ -1,4 +1,4 @@
-package com.modulo7.engine;
+package com.modulo7.engine.processing;
 
 import com.modulo7.common.exceptions.Modulo7MalformedM7SQLQuery;
 import com.modulo7.common.exceptions.Modulo7QueryProcessingException;
@@ -6,6 +6,7 @@ import com.modulo7.common.interfaces.AbstractCriteria;
 import com.modulo7.common.interfaces.AbstractStatistic;
 import com.modulo7.common.interfaces.choices.CriteriaChoice;
 import com.modulo7.common.interfaces.choices.StatisticChoice;
+import com.modulo7.engine.storage.Modulo7Indexer;
 import com.modulo7.modulo7SQL.Modulo7QueryComponents;
 import com.modulo7.modulo7SQL.Modulo7QueryParser;
 import com.modulo7.musicstatmodels.representation.polyphonic.Song;

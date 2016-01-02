@@ -2,8 +2,8 @@ package enginetests;
 
 import com.echonest.api.v4.EchoNestException;
 import com.modulo7.common.exceptions.*;
-import com.modulo7.engine.DatabaseEngine;
-import com.modulo7.engine.Modulo7Indexer;
+import com.modulo7.engine.storage.DatabaseEngine;
+import com.modulo7.engine.storage.Modulo7Indexer;
 import com.modulo7.musicstatmodels.representation.metadata.KeySignature;
 import com.modulo7.musicstatmodels.representation.metadata.ScaleType;
 import com.modulo7.musicstatmodels.representation.polyphonic.Song;
