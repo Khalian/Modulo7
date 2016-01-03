@@ -46,7 +46,7 @@ public enum MusicSources {
     }
 
     // Supported file extensions for the modulo7 platform
-    private static Set<String> SUPPORTED_FILE_EXTENSIONS = new HashSet<>(Arrays.asList("mid", "midi", "mp3", "png", "pdf", "jpeg", "xml", "h5", "m7"));
+    private static Set<String> SUPPORTED_FILE_EXTENSIONS = new HashSet<>(Arrays.asList("mid", "midi", "mp3", "png", "pdf", "jpeg", "xml", "m7"));
 
     /**
      * Check if modulo7 allows a particular file extension for

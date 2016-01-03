@@ -95,8 +95,6 @@ public class DatabaseEngine {
         this.sourceDirectory = sourceDirectory;
         this.databaseName = DEFAULT_ENGINE_NAME;
 
-        Modulo7Utils.removeDuplicateFilesFromDirectory(sourceDirectory);
-
         // Recursively descend and list all the files that
         Set<String> allSongLocations = Modulo7Utils.listAllFiles(sourceDirectory);
 
