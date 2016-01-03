@@ -42,11 +42,13 @@ public class PlaybackEngine {
                 AbstractPlayBack playBack = new MP3PlayBack(location);
                 playBack.play();
             } else if (song.getSource().equals(MusicSources.MUSIC_XML_FILE)) {
-                AbstractPlayBack playBack = new MusicXMLPlayBack(location);
+                AbstractPlayBack playBack = new MusicXMLPlayback(location);
                 playBack.play();
             } else if (song.getSource().equals(MusicSources.SHEET_MUSIC)) {
                 AbstractPlayBack playBack = new SheetMusicPlayBack(location);
                 playBack.play();
+            } else {
+                System.out.println("File format not supported for playback");
             }
         }
     }

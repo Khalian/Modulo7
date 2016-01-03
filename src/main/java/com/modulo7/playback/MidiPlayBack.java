@@ -1,12 +1,16 @@
 package com.modulo7.playback;
 
 import org.apache.log4j.Logger;
+import org.jfugue.midi.MidiParser;
+import org.jfugue.pattern.Pattern;
+import org.jfugue.player.Player;
+import org.staccato.StaccatoParserListener;
 
 import javax.sound.midi.InvalidMidiDataException;
 import javax.sound.midi.MidiSystem;
 import javax.sound.midi.MidiUnavailableException;
-import javax.sound.midi.Sequencer;
-import java.io.*;
+import java.io.File;
+import java.io.IOException;
 
 /**
  * Created by asanyal on 10/22/15.
@@ -25,16 +29,18 @@ public class MidiPlayBack implements AbstractPlayBack {
 
     @Override
     public void play() {
-        // Obtains the default Sequencer connected to a default device.
-        Sequencer sequencer;
+        MidiParser parser = new MidiParser();
+        StaccatoParserListener listener = new StaccatoParserListener();
+        parser.addParserListener(listener);
+
         try {
-            sequencer = MidiSystem.getSequencer();
-            sequencer.open();
-            InputStream is = new BufferedInputStream(new FileInputStream(midiFile));
-            sequencer.setSequence(is);
-            sequencer.start();
-        } catch (MidiUnavailableException | InvalidMidiDataException | IOException e) {
+            parser.parse(MidiSystem.getSequence(midiFile));
+        } catch (InvalidMidiDataException | IOException e) {
             logger.error(e.getMessage());
         }
+
+        Pattern staccatoPattern = listener.getPattern();
+        Player player = new Player();
+        player.play(staccatoPattern);
     }
 }

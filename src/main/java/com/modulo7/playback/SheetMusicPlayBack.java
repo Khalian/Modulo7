@@ -1,13 +1,12 @@
 package com.modulo7.playback;
 
 import com.modulo7.common.utils.JarRunner;
-import com.modulo7.common.utils.Modulo7Utils;
+import com.modulo7.image.AudiverisSheetAnalyzer;
 import nu.xom.ParsingException;
-import nu.xom.ValidityException;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.FilenameUtils;
 import org.apache.log4j.Logger;
-import org.jfugue.integration.MusicXmlParser;
+import org.jfugue.integration.MusicXmlParser_J;
 import org.jfugue.pattern.Pattern;
 import org.jfugue.player.Player;
 import org.staccato.StaccatoParserListener;
@@ -30,23 +29,8 @@ public class SheetMusicPlayBack implements AbstractPlayBack {
     // Intermediate music xml location
     private String intermediateMusicXMLLocation;
 
-    // Loaded audiveris jar
-    private static JarRunner jr;
-
     // Logger for sheet music analyzer
     private static Logger logger = Logger.getLogger(SheetMusicPlayBack.class);
-
-    /*
-     * The jar needs to be loaded exactly once on the class path
-     */
-    static {
-        final String audiverisJarLocation = Modulo7Utils.getAudiverisJarLocation() + File.separator + "audiveris.jar";
-        try {
-            jr = new JarRunner(new File(audiverisJarLocation));
-        } catch (ClassNotFoundException | IOException | NoSuchMethodException e) {
-            logger.error(e.getStackTrace());
-        }
-    }
 
     /**
      * Basic constructor for music xml playback
@@ -61,8 +45,9 @@ public class SheetMusicPlayBack implements AbstractPlayBack {
     @Override
     public void play() {
         try {
-            jr.run(new String[]{"-batch", "-input", sheetFileLocation, "-export", intermediateMusicXMLLocation });
-            MusicXmlParser parser = new MusicXmlParser();
+            JarRunner runner = AudiverisSheetAnalyzer.getAudiverisJarRunner();
+            runner.run(new String[]{"-batch", "-input", sheetFileLocation, "-export", intermediateMusicXMLLocation});
+            MusicXmlParser_J parser = new MusicXmlParser_J();
             StaccatoParserListener listener = new StaccatoParserListener();
             parser.addParserListener(listener);
             parser.parse(intermediateMusicXMLLocation);
@@ -71,6 +56,8 @@ public class SheetMusicPlayBack implements AbstractPlayBack {
             player.play(musicXMLPattern);
         } catch (IllegalAccessException | InvocationTargetException | ParserConfigurationException | IOException| ParsingException e) {
             logger.error(e.getMessage());
+        } finally {
+            FileUtils.deleteQuietly(new File(intermediateMusicXMLLocation));
         }
     }
 }

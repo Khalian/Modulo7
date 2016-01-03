@@ -120,25 +120,29 @@ public class SmithWatermanDistance {
         int colIndex = directions[0].length - 1;
 
         int maxTonalCommonality = 0;
+        int maxContigousTonalCommonality = 0;
 
         while (directions[rowIndex][colIndex] != Direction.ZERO) {
             if (directions[rowIndex][colIndex] == Direction.UP_AND_LEFT) {
                 rowIndex--;
                 colIndex--;
                 maxTonalCommonality++;
+                maxContigousTonalCommonality = Math.max(maxTonalCommonality, maxContigousTonalCommonality);
             } else if (directions[rowIndex][colIndex] == Direction.LEFT) {
                 secondDoc.set(colIndex, "-");
                 colIndex--;
+                maxTonalCommonality = 0;
             } else if (directions[rowIndex][colIndex] == Direction.UP) {
                 firstDoc.set(rowIndex, "-");
                 rowIndex--;
+                maxTonalCommonality = 0;
             }
         }
 
         final String first = Modulo7Utils.buildStringOverList(firstDoc);
         final String second = Modulo7Utils.buildStringOverList(secondDoc);
 
-        alignment = new TonalityAlignment(first, second, maxTonalCommonality);
+        alignment = new TonalityAlignment(first, second, maxContigousTonalCommonality);
     }
 
     /**

@@ -93,7 +93,7 @@ public class Modulo7CLI {
     // CLI spacing to separate discrete regions in descriptions
     private static final String CLI_SPACING = " : ";
 
-    // An engine to play back modules, TODO : Use the cache module to playback as the results are needed
+    // An engine to play back modules
     private static PlaybackEngine playBackEngine;
 
     // An indexer element for the Modulo7 CLI driver class
@@ -331,7 +331,7 @@ public class Modulo7CLI {
                      break;
 
             case PLAYBACK_SONG:
-                    System.out.println("Enter song location to play");
+                    System.out.print("Enter song location to play:");
                     final String playbackLocation = in.next();
                     playBackEngine.playSong(playbackLocation);
 

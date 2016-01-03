@@ -36,6 +36,5 @@ public class MP3PlayBack implements AbstractPlayBack {
         } catch (FileNotFoundException | JavaLayerException e) {
             logger.error(e.getMessage());
         }
-
     }
 }

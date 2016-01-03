@@ -1,35 +1,41 @@
 package com.modulo7.playback;
 
+import jdk.internal.org.xml.sax.InputSource;
 import nu.xom.ParsingException;
-import nu.xom.ValidityException;
 import org.apache.log4j.Logger;
-import org.jfugue.integration.MusicXmlParser;
+import org.jfugue.integration.MusicXmlParser_R;
 import org.jfugue.pattern.Pattern;
 import org.jfugue.player.Player;
 import org.staccato.StaccatoParserListener;
 
 import javax.xml.parsers.ParserConfigurationException;
-import java.io.IOException;
+import java.io.*;
 
 /**
  * Created by asanyal on 10/22/15.
  *
  * Playback for music xml
  */
-public class MusicXMLPlayBack implements AbstractPlayBack {
+public class MusicXMLPlayback implements AbstractPlayBack {
 
+    // File location of music xml file
     private String musicXMLFileName;
 
-    private static final Logger logger = Logger.getLogger(MusicXMLPlayBack.class);
+    // Logger for music xml playback
+    private static final Logger logger = Logger.getLogger(MusicXMLPlayback.class);
 
-    public MusicXMLPlayBack(final String fileName) {
+    /**
+     * Default constructor
+     * @param fileName
+     */
+    public MusicXMLPlayback(final String fileName) {
         this.musicXMLFileName = fileName;
     }
 
     @Override
     public void play() {
         try {
-            MusicXmlParser parser = new MusicXmlParser();
+            MusicXmlParser_R parser = new MusicXmlParser_R();
             StaccatoParserListener listener = new StaccatoParserListener();
             parser.addParserListener(listener);
             parser.parse(musicXMLFileName);

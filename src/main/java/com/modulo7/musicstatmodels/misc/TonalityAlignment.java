@@ -15,18 +15,18 @@ public class TonalityAlignment {
     private String secondStr;
 
     // Maximal alignment noticed
-    private int maxTonalCommonality;
+    private int maxContiguousTonalCommonality;
 
     /**
      * Default constructor
      * @param firstStr
      * @param secondStr
-     * @param maxTonalCommonality
+     * @param maxContiguousTonalCommonality
      */
-    public TonalityAlignment(String firstStr, String secondStr, final int maxTonalCommonality) {
+    public TonalityAlignment(String firstStr, String secondStr, final int maxContiguousTonalCommonality) {
         this.firstStr = firstStr;
         this.secondStr = secondStr;
-        this.maxTonalCommonality = maxTonalCommonality;
+        this.maxContiguousTonalCommonality = maxContiguousTonalCommonality;
     }
 
     /**
@@ -36,7 +36,6 @@ public class TonalityAlignment {
         System.out.println("The alignment is displayed below");
         System.out.println(firstStr);
         System.out.println(secondStr);
-        System.out.println("The maximal alignment score" + maxTonalCommonality);
-
+        System.out.println("The maximal contiguous alignment score" + maxContiguousTonalCommonality);
     }
 }

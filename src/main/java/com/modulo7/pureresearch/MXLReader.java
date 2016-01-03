@@ -8,9 +8,11 @@ import com.modulo7.musicstatmodels.representation.polyphonic.Song;
 import com.modulo7.othersources.BasicMusicXMLParser;
 import org.apache.commons.io.FileUtils;
 import org.apache.log4j.Logger;
-import org.jfugue.integration.MusicXmlParser;
 
-import java.io.*;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.io.IOException;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipInputStream;
 

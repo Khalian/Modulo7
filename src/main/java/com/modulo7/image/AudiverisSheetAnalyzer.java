@@ -76,4 +76,12 @@ public class AudiverisSheetAnalyzer implements AbstractAnalyzer {
         // Wont reach here but for the sake of completeness for compilation
         return null;
     }
+
+    /**
+     * Gets the jar runner that is loaded as a part of the audiveris sheet music analyzer
+     * @return
+     */
+    public static JarRunner getAudiverisJarRunner() {
+        return jr;
+    }
 }
