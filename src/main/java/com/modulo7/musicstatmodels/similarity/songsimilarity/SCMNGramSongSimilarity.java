@@ -1,6 +1,6 @@
 package com.modulo7.musicstatmodels.similarity.songsimilarity;
 
-import com.modulo7.musicstatmodels.similarity.genericsimilarity.GMVoiceSimIgnoreLengths;
+import com.modulo7.musicstatmodels.similarity.genericsimilarity.GeneralMaximalVoiceSimilarity;
 import com.modulo7.musicstatmodels.similarity.voicesimilarity.SCMNGramSimilarity;
 
 /**
@@ -8,7 +8,7 @@ import com.modulo7.musicstatmodels.similarity.voicesimilarity.SCMNGramSimilarity
  *
  * Song similarity version of scn n gram similarity
  */
-public class SCMNGramSongSimilarity extends GMVoiceSimIgnoreLengths<SCMNGramSimilarity> {
+public class SCMNGramSongSimilarity extends GeneralMaximalVoiceSimilarity<SCMNGramSimilarity> {
 
     /**
      * Basic constructor for SCMNGramSongSimilarity

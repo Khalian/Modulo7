@@ -8,10 +8,9 @@ import com.modulo7.musicstatmodels.representation.polyphonic.Song;
 /**
  * Created by asanyal on 10/13/15.
  *
- * Similar to the generic maximalvoicesimilarity, but here we dont care
- * about unequal lengths of voices
+ * Generic similarity where we do not care about unequal lengths of melodies
  */
-public class GMVoiceSimIgnoreLengths <T extends AbstractVoiceSimilarity> implements AbstractSongSimilarity {
+public class GeneralMaximalVoiceSimilarity<T extends AbstractVoiceSimilarity> implements AbstractSongSimilarity {
 
     // The internal voice similarity measure
     private T internalVoiceSimilarity;
@@ -20,7 +19,7 @@ public class GMVoiceSimIgnoreLengths <T extends AbstractVoiceSimilarity> impleme
      * Basic constructor for generic maximal similarity
      * @param similarityMeasure (The internal similarity measure used inside generic maximal voice similarity)
      */
-    public GMVoiceSimIgnoreLengths(final T similarityMeasure) {
+    public GeneralMaximalVoiceSimilarity(final T similarityMeasure) {
         internalVoiceSimilarity = similarityMeasure;
     }
 

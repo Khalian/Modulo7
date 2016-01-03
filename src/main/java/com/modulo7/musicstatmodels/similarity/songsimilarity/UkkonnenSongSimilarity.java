@@ -1,6 +1,6 @@
 package com.modulo7.musicstatmodels.similarity.songsimilarity;
 
-import com.modulo7.musicstatmodels.similarity.genericsimilarity.GMVoiceSimIgnoreLengths;
+import com.modulo7.musicstatmodels.similarity.genericsimilarity.GeneralMaximalVoiceSimilarity;
 import com.modulo7.musicstatmodels.similarity.voicesimilarity.UkkonnenSimilarity;
 
 /**
@@ -8,7 +8,7 @@ import com.modulo7.musicstatmodels.similarity.voicesimilarity.UkkonnenSimilarity
  *
  * Ukkonnen similarity measure
  */
-public class UkkonnenSongSimilarity extends GMVoiceSimIgnoreLengths<UkkonnenSimilarity> {
+public class UkkonnenSongSimilarity extends GeneralMaximalVoiceSimilarity<UkkonnenSimilarity> {
     /**
      * Basic constructor for UkkonnenSongSimilarity
      */

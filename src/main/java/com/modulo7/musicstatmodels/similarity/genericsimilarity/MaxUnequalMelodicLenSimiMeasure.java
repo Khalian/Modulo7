@@ -49,7 +49,7 @@ public class MaxUnequalMelodicLenSimiMeasure<T extends AbstractVoiceSimilarity> 
         /*
         for (int i = 0; i < longerLength - shorterLength; i++) {
             Voice subVoice = getSubVoice(longerVoice, i, i + shorterLength);
-            bestSim = Math.max(bestSim, internalVoiceSimilarityMeasure.getSimilarity(subVoice, shorterVoice));
+            bestSim = Math.max(bestSim, internalVoiceSimilarityMeasure.getSmithWatermanDistance(subVoice, shorterVoice));
         }
         */
 

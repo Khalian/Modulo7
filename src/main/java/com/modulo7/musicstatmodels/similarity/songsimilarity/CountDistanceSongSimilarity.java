@@ -1,6 +1,6 @@
 package com.modulo7.musicstatmodels.similarity.songsimilarity;
 
-import com.modulo7.musicstatmodels.similarity.genericsimilarity.GMVoiceSimIgnoreLengths;
+import com.modulo7.musicstatmodels.similarity.genericsimilarity.GeneralMaximalVoiceSimilarity;
 import com.modulo7.musicstatmodels.similarity.voicesimilarity.CountDistanceSimilarity;
 
 /**
@@ -8,7 +8,7 @@ import com.modulo7.musicstatmodels.similarity.voicesimilarity.CountDistanceSimil
  *
  * The count distance similarity measure extended for songs
  */
-public class CountDistanceSongSimilarity extends GMVoiceSimIgnoreLengths<CountDistanceSimilarity> {
+public class CountDistanceSongSimilarity extends GeneralMaximalVoiceSimilarity<CountDistanceSimilarity> {
 
     /**
      * Basic constructor for generic maximal similarity

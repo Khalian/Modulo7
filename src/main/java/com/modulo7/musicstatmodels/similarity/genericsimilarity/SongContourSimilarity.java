@@ -9,7 +9,6 @@ import com.modulo7.common.interfaces.AbstractVoiceSimilarity;
 import com.modulo7.common.utils.Modulo7Globals;
 import com.modulo7.musicstatmodels.representation.polyphonic.Song;
 import com.modulo7.musicstatmodels.vectorspacemodels.contour.ContourSongRep;
-import com.modulo7.musicstatmodels.vectorspacemodels.contour.voicecontour.NaturalContour;
 import org.apache.log4j.Logger;
 
 /**
@@ -47,7 +46,7 @@ public class SongContourSimilarity<T extends AbstractVoiceSimilarity, V extends 
             final Song firstContourRepSong = songRep.getContourizedSongRep(first);
             final Song secondContourRepSong = songRep.getContourizedSongRep(second);
 
-            GMVoiceSimIgnoreLengths<T> similarity = new GMVoiceSimIgnoreLengths<>(internalVoiceSimilarity);
+            GeneralMaximalVoiceSimilarity<T> similarity = new GeneralMaximalVoiceSimilarity<>(internalVoiceSimilarity);
             return similarity.getSimilarity(firstContourRepSong, secondContourRepSong);
         } catch (Modulo7BadIntervalException | Modulo7WrongNoteType | Modulo7BadNoteException e) {
             logger.error(e.getMessage());

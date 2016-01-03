@@ -1,6 +1,6 @@
 package com.modulo7.musicstatmodels.similarity.songsimilarity;
 
-import com.modulo7.musicstatmodels.similarity.genericsimilarity.GenericMaximalVoiceSimilarity;
+import com.modulo7.musicstatmodels.similarity.genericsimilarity.GeneralMaximalVoiceSimilarity;
 import com.modulo7.musicstatmodels.similarity.voicesimilarity.GrossContourSimilarity;
 
 /**
@@ -8,7 +8,7 @@ import com.modulo7.musicstatmodels.similarity.voicesimilarity.GrossContourSimila
  *
  * Maximal gross contour over the songs similarity measure
  */
-public class GrossSongContourSilimarity extends GenericMaximalVoiceSimilarity<GrossContourSimilarity> {
+public class GrossSongContourSilimarity extends GeneralMaximalVoiceSimilarity<GrossContourSimilarity> {
 
     /**
      * Basic constructor for gross contour similarity

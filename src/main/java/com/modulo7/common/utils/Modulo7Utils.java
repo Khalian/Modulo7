@@ -301,4 +301,62 @@ public class Modulo7Utils {
 
         return builder.toString();
     }
+
+    /**
+     * Custom implementation of the levenstein distance based on tokens instead of characters
+     * This is required because the tokens are non trivial sized strings, not just characters
+     * for an arbitrary voice (e.g a chord cMaj is a token and not a character)
+     *
+     * @param first
+     * @param second
+     * @return
+     */
+    public static int levensteinDistanceOnArbitraryTokens(final String[] first, final String[] second) {
+
+        int [] costs = new int [second.length + 1];
+
+        for (int j = 0; j < costs.length; j++)
+            costs[j] = j;
+
+        for (int i = 1; i <= first.length; i++) {
+            costs[0] = i;
+            int nw = i - 1;
+            for (int j = 1; j <= second.length; j++) {
+                int cj = Math.min(1 + Math.min(costs[j], costs[j - 1]), first[i - 1].equals(second[j - 1]) ? nw : nw + 1);
+                nw = costs[j];
+                costs[j] = cj;
+            }
+        }
+        return costs[second.length];
+    }
+
+    /**
+     * Same as the above levenstein distance but based on list<String> as args instead of string[]
+     * @param first
+     * @param second
+     * @return
+     */
+    public static int levensteinDistanceOnArbitraryTokens(final List<String> first, final List<String> second) {
+        final String[] firstElems = first.toArray(new String[first.size()]);
+        final String[] secondElems = second.toArray(new String[second.size()]);
+
+        return levensteinDistanceOnArbitraryTokens(firstElems, secondElems);
+    }
+
+    /**
+     * Same as the above levenstein similarity but based on list<String> as args instead of string[]
+     * Also includes a boost element which boosts a similar score and a penalty which penalizes a score
+     *
+     * @param first
+     * @param second
+     * @return
+     */
+    public static int levensteinSimilarity(final List<String> first, final List<String> second, final int boost, final int penalty) {
+        final int val =  levensteinDistanceOnArbitraryTokens(first, second);
+
+        if (val == 0)
+            return boost;
+        else
+            return penalty;
+    }
 }

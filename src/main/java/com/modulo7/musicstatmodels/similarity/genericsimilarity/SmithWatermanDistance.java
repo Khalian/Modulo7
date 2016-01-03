@@ -1,13 +1,10 @@
 package com.modulo7.musicstatmodels.similarity.genericsimilarity;
 
-import com.modulo7.common.interfaces.AbstractVoiceSimilarity;
 import com.modulo7.common.utils.Modulo7Utils;
 import com.modulo7.musicstatmodels.misc.TonalityAlignment;
 import com.modulo7.musicstatmodels.representation.monophonic.Voice;
 
 import java.util.List;
-import java.util.Map;
-import java.util.Set;
 
 /**
  * Created by asanyal on 10/14/15.
@@ -15,27 +12,27 @@ import java.util.Set;
  * Implementation for the smith waterman similarity measure
  * used typically for melody alignment
  */
-public class SmithWatermanSimilarity<T extends AbstractVoiceSimilarity> implements AbstractVoiceSimilarity {
-
-    // An internal voice similarity measure
-    private T internalVoiceSimilarityMeasure;
+public class SmithWatermanDistance {
 
     // Alignments for each pair of voices
     // An assumption is that the voices are not identical to each other in a song providing a simple
     // voice to voice directions mapping
     private TonalityAlignment alignment;
 
-    /**
-     * Internal voice similarity is acquired in the constructor
-     *
-     * @param internalVoiceSimilarityMeasure ( the internal measure used for similarity computation)
-     */
-    public SmithWatermanSimilarity(final T internalVoiceSimilarityMeasure) {
-        this.internalVoiceSimilarityMeasure = internalVoiceSimilarityMeasure;
-    }
+    // A boost score if the distance is zero
+    private static final int BOOST = 2;
 
-    @Override
-    public double getSimilarity(final Voice first, final Voice second) {
+    // A penalty score if distance is non zero
+    private static final int PENALTY = -1;
+
+
+    /**
+     * Gets the smith water man distance
+     * @param first
+     * @param second
+     * @return
+     */
+    public double getSmithWatermanDistance(final Voice first, final Voice second) {
 
         final Voice longerVoice;
         final Voice shorterVoice;
@@ -55,7 +52,8 @@ public class SmithWatermanSimilarity<T extends AbstractVoiceSimilarity> implemen
     }
 
     /**
-     * The main method which gives the answer to
+     * The main method which gives the answer to the best smith water man alignment and back
+     * pointers to the alignment in terms of the distance enumto
      *
      * @param shorterVoice
      * @param longerVoice
@@ -66,7 +64,7 @@ public class SmithWatermanSimilarity<T extends AbstractVoiceSimilarity> implemen
         int longerLength = longerVoice.getNumVoiceInstantsOfVoice();
         int shorterLength = shorterVoice.getNumVoiceInstantsOfVoice();
 
-        double[][] smithWaterSonMatrix = new double[shorterLength][longerLength];
+        int[][] smithWaterSonMatrix = new int[shorterLength][longerLength];
 
         Direction[][] directions = new Direction[shorterLength][longerLength];
 
@@ -86,16 +84,17 @@ public class SmithWatermanSimilarity<T extends AbstractVoiceSimilarity> implemen
                 final Voice instantAtI = getSubVoice(shorterVoice, i, i + 1);
                 final Voice instantAtJ = getSubVoice(longerVoice, j, j + 1);
 
-                double sIJ = internalVoiceSimilarityMeasure.getSimilarity(instantAtI, instantAtJ);
+                int sIJ = Modulo7Utils.levensteinSimilarity(instantAtI.getDocumentElementsRepresentation(),
+                        instantAtJ.getDocumentElementsRepresentation(), BOOST, PENALTY);
 
-                smithWaterSonMatrix[i][j] = Math.max(smithWaterSonMatrix[i - 1 ][j - 1]
+                smithWaterSonMatrix[i][j] = Math.max(smithWaterSonMatrix[i - 1][j - 1]
                         + sIJ, Math.max(smithWaterSonMatrix[i][j - 1] + 1, smithWaterSonMatrix[i - 1][j] + 1));
 
-                if (smithWaterSonMatrix[i][j] == smithWaterSonMatrix[i - 1][j - 1]) {
+                if (smithWaterSonMatrix[i][j] == smithWaterSonMatrix[i - 1][j - 1] + sIJ) {
                     directions[i][j] = Direction.UP_AND_LEFT;
                 } else if(smithWaterSonMatrix[i][j] == smithWaterSonMatrix[i][j - 1] + 1) {
                     directions[i][j] = Direction.LEFT;
-                } else if(smithWaterSonMatrix[i][j] == smithWaterSonMatrix[i - 1][j]) {
+                } else if(smithWaterSonMatrix[i][j] == smithWaterSonMatrix[i - 1][j] + 1) {
                     directions[i][j] = Direction.UP;
                 }
             }
@@ -122,15 +121,15 @@ public class SmithWatermanSimilarity<T extends AbstractVoiceSimilarity> implemen
 
         int maxTonalCommonality = 0;
 
-        while (!directions[rowIndex][colIndex].equals(Direction.ZERO)) {
-            if (directions[rowIndex][colIndex].equals(Direction.UP_AND_LEFT)) {
+        while (directions[rowIndex][colIndex] != Direction.ZERO) {
+            if (directions[rowIndex][colIndex] == Direction.UP_AND_LEFT) {
                 rowIndex--;
                 colIndex--;
                 maxTonalCommonality++;
-            } else if (directions[rowIndex][colIndex].equals(Direction.LEFT)) {
+            } else if (directions[rowIndex][colIndex] == Direction.LEFT) {
                 secondDoc.set(colIndex, "-");
                 colIndex--;
-            } else if (directions[rowIndex][colIndex].equals(Direction.UP)) {
+            } else if (directions[rowIndex][colIndex] == Direction.UP) {
                 firstDoc.set(rowIndex, "-");
                 rowIndex--;
             }

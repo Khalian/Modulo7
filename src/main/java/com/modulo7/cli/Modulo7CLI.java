@@ -10,7 +10,7 @@ import com.modulo7.engine.cache.Modulo7Cache;
 import com.modulo7.engine.processing.Modulo7QueryProcessingEngine;
 import com.modulo7.engine.processing.PlaybackEngine;
 import com.modulo7.engine.processing.SimilarityRankingEngine;
-import com.modulo7.engine.processing.TonalAlginmentEngine;
+import com.modulo7.engine.processing.TonalAlignmentEngine;
 import com.modulo7.engine.storage.Modulo7Indexer;
 import com.modulo7.musicstatmodels.representation.metadata.KeySignature;
 import com.modulo7.musicstatmodels.representation.metadata.ScaleType;
@@ -482,28 +482,17 @@ public class Modulo7CLI {
     private static void alignmentProcess(final Scanner in) throws Modulo7NoSuchVoiceSimilarityMeasureException {
         System.out.println("You are in the tonal alingment mode");
         System.out.println("In this mode, Modulo7 looks for various snippets of songs that are alignment with each other and print the alignments");
-        System.out.println("We use smith waterman algorithm for the alignment, however an internal similarity measure is needed");
-        System.out.print("Enter a voice similarity measure:");
+        System.out.println("We use smith waterman algorithm for the alignment");
 
-        final String voiceSimilarity = in.next();
-
-        Class voiceSimClass = VoiceSimilarityChoices.getVoiceSimilarityGivenChoice(voiceSimilarity);
-
-        if (voiceSimClass == null) {
-            throw new Modulo7NoSuchVoiceSimilarityMeasureException("No such voice similarity measure" + voiceSimilarity);
-        }
 
         try {
-            AbstractVoiceSimilarity voiceSim = (AbstractVoiceSimilarity) voiceSimClass.newInstance();
-
             System.out.print("Enter the location of a song to rank the rest of the database against:");
             final String candidateSongLocation = in.next();
-
             final Song song = indexer.getSongObjectGivenLocation(candidateSongLocation);
-
-            TonalAlginmentEngine engine = new TonalAlginmentEngine(voiceSim);
+            TonalAlignmentEngine engine = new TonalAlignmentEngine();
             engine.align(indexer.getDataBaseEngine(), song);
-        } catch (InstantiationException | IllegalAccessException | Modulo7DataBaseNotSerializedException e) {
+
+        } catch (Modulo7DataBaseNotSerializedException e) {
             logger.error(e.getMessage());
         }
     }
