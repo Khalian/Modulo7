@@ -53,5 +53,6 @@ RUN     wget https://services.gradle.org/distributions/gradle-2.5-bin.zip
 RUN     unzip gradle-2.5-bin.zip
 
 # Build the Modulo7 project
+RUN     echo Building the Modulo7 Project
 RUN     git clone https://github.com/Khalian/Modulo7
 RUN     export PATH=$PATH:/gradle-2.5/bin && cd Modulo7 && gradle build

@@ -1,6 +1,5 @@
 package com.modulo7.playback;
 
-import jdk.internal.org.xml.sax.InputSource;
 import nu.xom.ParsingException;
 import org.apache.log4j.Logger;
 import org.jfugue.integration.MusicXmlParser_R;
@@ -9,7 +8,7 @@ import org.jfugue.player.Player;
 import org.staccato.StaccatoParserListener;
 
 import javax.xml.parsers.ParserConfigurationException;
-import java.io.*;
+import java.io.IOException;
 
 /**
  * Created by asanyal on 10/22/15.
