@@ -25,7 +25,6 @@ public class SmithWatermanDistance {
     // A penalty score if distance is non zero
     private static final int PENALTY = -1;
 
-
     /**
      * Gets the smith water man distance
      * @param first
@@ -100,7 +99,7 @@ public class SmithWatermanDistance {
             }
         }
 
-        acuireAlignment(directions, shorterVoice, longerVoice);
+        acquireAlignment(directions, shorterVoice, longerVoice);
         return smithWaterSonMatrix[shorterLength - 1][longerLength - 1] / longerLength;
     }
 
@@ -112,7 +111,7 @@ public class SmithWatermanDistance {
      * @param shorterVoice
      * @param longerVoice
      */
-    private void acuireAlignment(final Direction[][] directions, final Voice shorterVoice, final Voice longerVoice) {
+    private void acquireAlignment(final Direction[][] directions, final Voice shorterVoice, final Voice longerVoice) {
         final List<String> firstDoc = shorterVoice.getDocumentElementsRepresentation();
         final List<String> secondDoc = longerVoice.getDocumentElementsRepresentation();
 

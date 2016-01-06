@@ -40,7 +40,7 @@ public class Modulo7QueryProcessingEngine {
     public static final Pattern CRITERIA_PATTERNS = Pattern.compile(CriteriaChoice.REGEXP_REP);
 
     // Regular expression pattern for statistics
-    public static final Pattern STATISTIC_PATTERNS = Pattern.compile(StatisticChoice.REGEXP_REP);
+    public static final Pattern STATISTIC_PATTERNS = Pattern.compile(StatisticChoice.STAT_REGEXP_REP);
 
     // Logger for the query processing engine
     public static final Logger logger = Logger.getLogger(Modulo7QueryProcessingEngine.class);

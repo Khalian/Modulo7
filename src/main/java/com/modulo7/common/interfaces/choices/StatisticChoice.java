@@ -22,12 +22,14 @@ public enum StatisticChoice {
     LONGESTCHORDPROGRESSION("longestchordprogression"),
     MAXRANGEOFSONG("maxrangeofsong"),
     LYRICALSEMANTICINTENT("lyricalsemanticintent"),
-    NUMVOICES("numvoices");
+    NUMVOICES("numvoices"),
+    MOST_FREQUENT_PITCH("mostfrequentpitch");
 
     // A list of all the statistic choices as defined
     private static final Set<String> STATISTIC_CHOICES = new HashSet<>();
 
-    public static final String REGEXP_REP;
+    // The regular expression representation of statistic choice
+    public static final String STAT_REGEXP_REP;
 
     static {
 
@@ -46,7 +48,7 @@ public enum StatisticChoice {
 
         builder.deleteCharAt(builder.length() - 1);
         builder.append(")");
-        REGEXP_REP = builder.toString();
+        STAT_REGEXP_REP = builder.toString();
     }
 
     // Statistic to class , useful for dynamically calling classes during similarity metric analysis
@@ -59,6 +61,7 @@ public enum StatisticChoice {
         put("longestchordprogression", LongestChordProgression.class);
         put("lyricalsemanticintent", LyricalSemanticIntent.class);
         put("numvoices", NumVoices.class);
+        put("mostfrequentpitch", MostFrequentPitch.class);
     }};
 
     private String choice;
@@ -67,6 +70,10 @@ public enum StatisticChoice {
         this.choice = choice;
     }
 
+    /**
+     * Gets the string representation of the choice element
+     * @return
+     */
     public String getChoice() {
         return choice;
     }
