@@ -23,7 +23,8 @@ public enum StatisticChoice {
     MAXRANGEOFSONG("maxrangeofsong"),
     LYRICALSEMANTICINTENT("lyricalsemanticintent"),
     NUMVOICES("numvoices"),
-    MOST_FREQUENT_PITCH("mostfrequentpitch");
+    MOST_FREQUENT_PITCH("mostfrequentpitch"),
+    AVERAGE_PITCH_DURATION("averagepitchduration");
 
     // A list of all the statistic choices as defined
     private static final Set<String> STATISTIC_CHOICES = new HashSet<>();
@@ -62,6 +63,7 @@ public enum StatisticChoice {
         put("lyricalsemanticintent", LyricalSemanticIntent.class);
         put("numvoices", NumVoices.class);
         put("mostfrequentpitch", MostFrequentPitch.class);
+        put("averagepitchduration", AveragePitchDuration.class);
     }};
 
     private String choice;

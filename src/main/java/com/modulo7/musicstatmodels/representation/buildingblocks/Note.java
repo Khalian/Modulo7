@@ -1,5 +1,6 @@
 package com.modulo7.musicstatmodels.representation.buildingblocks;
 
+import com.modulo7.common.exceptions.Modulo7BadIntervalException;
 import com.modulo7.common.exceptions.Modulo7BadNoteException;
 import com.modulo7.common.exceptions.Modulo7InvalidOctaveRangeException;
 import com.modulo7.common.utils.FrequencyNoteMap;
@@ -478,5 +479,23 @@ public enum Note {
         } else {
             return retNote;
         }
+    }
+
+    /**
+     * Gets the interval between basic note representations (when the string representations
+     * of notes are given
+     *
+     * @param thisNoteVal
+     * @param thatNoteVal
+     * @return
+     * @throws Modulo7BadNoteException
+     * @throws Modulo7BadIntervalException
+     */
+    public static Interval getInterval(final String thisNoteVal, final String thatNoteVal)
+            throws Modulo7BadNoteException, Modulo7BadIntervalException {
+        final Note note = Note.getNoteValue(thisNoteVal);
+        final Note baseNote = Note.getNoteValue(thatNoteVal);
+
+        return Interval.getInterval(note, baseNote);
     }
 }

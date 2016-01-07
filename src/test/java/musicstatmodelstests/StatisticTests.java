@@ -8,6 +8,7 @@ import com.modulo7.musicstatmodels.representation.buildingblocks.Note;
 import com.modulo7.musicstatmodels.representation.monophonic.Voice;
 import com.modulo7.musicstatmodels.representation.monophonic.VoiceInstant;
 import com.modulo7.musicstatmodels.representation.polyphonic.Song;
+import com.modulo7.musicstatmodels.statistics.AveragePitchDuration;
 import com.modulo7.musicstatmodels.statistics.MaxRangeOfSong;
 import com.modulo7.musicstatmodels.statistics.MostFrequentPitch;
 import com.modulo7.musicstatmodels.statistics.NumVoices;
@@ -74,5 +75,27 @@ public class StatisticTests {
         AbstractStatistic maxRangeTest = new MostFrequentPitch();
 
         Assert.assertEquals(maxRangeTest.getStatistic(newSong), 1.0, 0.0);
+    }
+
+    /**
+     * Test case for average pitch duration
+     *
+     * @throws Modulo7InvalidVoiceInstantSizeException
+     * @throws Modulo7BadNoteException
+     */
+    @Test
+    public void averagePitchDurationTest() throws Modulo7InvalidVoiceInstantSizeException, Modulo7BadNoteException {
+        Voice v1 = new Voice();
+
+        v1.addVoiceInstant(new VoiceInstant(Note.A0, 1.0));
+        v1.addVoiceInstant(new VoiceInstant(Note.B0, 2.0));
+        v1.addVoiceInstant(new VoiceInstant(Note.C0, 3.0));
+        v1.addVoiceInstant(new VoiceInstant(Note.A0, 4.0));
+
+        final Song newSong = new Song(v1, MusicSources.UNKNOWN);
+
+        AbstractStatistic averagePitchDuration = new AveragePitchDuration();
+        Assert.assertEquals(averagePitchDuration.getStatistic(newSong), 2.5, 0.0);
+
     }
 }
