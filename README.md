@@ -1,6 +1,7 @@
 # Modulo7
 
 [![Join the chat at https://gitter.im/Khalian/Modulo7](https://badges.gitter.im/Join%20Chat.svg)](https://gitter.im/Khalian/Modulo7?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
+[![Build Status](https://api.shippable.com/projects/567744611895ca447466aed8/badge?branchName=master)](https://app.shippable.com/projects/567744611895ca447466aed8/builds/latest)
 
 A semantic and technical analysis of musical scores based on Information Retrieval and SQL principles
 
