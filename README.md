@@ -33,7 +33,7 @@ Modulo7 has the following broad goals:-
 on which standard and customized rules based on music theory can be applied. Concepts like phrasing analysis,
 timber and pitch analysis and custom rules (e.g - a higher number of power chords implies chances of the music 
 song being a rock or metal song). The vector space model will include custom similarity measure
-and extensible similarity measures based on user input on complex music theory rules (STATUS : IMPLEMENTATION COMPLETED, TESTING ONGOING)
+and extensible similarity measures based on user input on complex music theory rules (STATUS : COMPLETED)
 THIS COMPONENT IS THE BULK OF THE WORK AND THE NOVELTY OF THE PROJECT.
 
 2. An acoustics source parser component. The acoustic parser takes files like (.mp3, .midi) etc
@@ -49,9 +49,9 @@ from them. (STATUS : COMPLETED)
 
 5. A lyrics analyzer : The lyrics analyzer will take its input from the crawling engine and then make objective
 analysis on the lyrics (e.g the vocabulary richness of the song, semantic intent based on context etc).
-(STATUS : COMPLETE. WORKING ON METADATA PREDICTION ENGINE)
+(STATUS : COMPLETED)
 
-7. A query Engine : This engine will parse a query and run it on top of Modulo7 representation (STATUS : COMPLETE)
+7. A query Engine : This engine will parse a query and run it on top of Modulo7 representation (STATUS : COMPLETED)
 
 8. A persistent store mechanism : This engine will support a persistent store(database) of the vector space models for music sources
-(STATUS : COMPLETE)
+(STATUS : COMPLETED)
