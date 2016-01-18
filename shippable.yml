@@ -1,0 +1,2 @@
+script:
+  - export PATH=$PATH:/gradle-2.5/bin && cd Modulo7 && gradle build
