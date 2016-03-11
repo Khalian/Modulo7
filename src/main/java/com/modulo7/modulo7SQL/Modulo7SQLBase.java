@@ -1,4 +1,4 @@
-// Generated from /home/asanyal/git_projects/Modulo7/src/main/antlr/Modulo7SQLBase.g4 by ANTLR 4.5.1
+// Generated from Modulo7SQLBase.g4 by ANTLR 4.5.1
 
     package  com.modulo7.modulo7SQL;
 
