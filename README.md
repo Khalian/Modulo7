@@ -25,7 +25,7 @@ e.g. ) select sheet_music from MUSIC_DATABASE where melodic_complexity > some va
 The measure melodic_complexity is a defined parameter for sheet music format and the above query will acquire all such
 songs from the database.
 
-(MODULO7 IS IN ACTIVE DEVELOPMENT AND NOT READY FOR PRODUCTION USAGE).
+(MODULO7 IS A RESERACH PROJECT AND FOR INTENDED FOR PRODUCTION USAGE).
 
 Modulo7 has the following broad goals:-
 
